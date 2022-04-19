@@ -1,5 +1,3 @@
-import os
-
 import environ
 
 from marketplace_app.settings import *
@@ -11,26 +9,13 @@ DEBUG = env.get_value('DEBUG')
 SECRET_KEY = env.get_value('SECRET_KEY')
 
 INSTALLED_APPS += (
-
+    'discount.apps.DiscountConfig',
+    'info.apps.InfoConfig',
+    'order.apps.OrderConfig',
+    'product.apps.ProductConfig',
+    'shop.apps.ShopConfig',
+    'user.apps.UserConfig',
 )
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 DATABASES = {
     'default': {
@@ -52,3 +37,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# обещаю так больше не делать
+print(f'Current DB: {DATABASES["default"]["NAME"]}')
