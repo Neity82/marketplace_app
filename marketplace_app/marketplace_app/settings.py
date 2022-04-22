@@ -52,11 +52,21 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'marketplace_app.urls'
 
+TEMPLATES_PRODUCT_DIR = os.path.join(BASE_DIR, "product", "templates")
+TEMPLATES_INFO_DIR = os.path.join(BASE_DIR, "info", "templates")
+TEMPLATES_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "templates")
+TEMPLATES_ORDER_DIR = os.path.join(BASE_DIR, "order", "templates")
+TEMPLATES_SHOP_DIR = os.path.join(BASE_DIR, "shop", "templates")
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
+            TEMPLATES_PRODUCT_DIR,
+            TEMPLATES_INFO_DIR,
+            TEMPLATES_DISCOUNT_DIR,
+            TEMPLATES_ORDER_DIR,
+            TEMPLATES_SHOP_DIR,
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -121,6 +131,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
