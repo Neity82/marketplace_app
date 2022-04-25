@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def sale(request, *args, **kwargs):
+    return render(request, 'discount/sale.html', {})
