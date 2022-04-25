@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def shop(request, *args, **kwargs):
+    return render(request, 'shop/shop.html', {})

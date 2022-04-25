@@ -1,3 +1,13 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def order(request, *args, **kwargs):
+    return render(request, 'order/order.html', {})
+
+
+def payment(request, *args, **kwargs):
+    return render(request, 'order/payment.html', {})
+
+
+def paymentsomeone(request, *args, **kwargs):
+    return render(request, 'order/paymentsomeone.html', {})
