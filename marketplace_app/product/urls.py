@@ -8,8 +8,9 @@ from product.views import index, product, compare, catalog
 app_name = 'product'
 
 urlpatterns = [
-    path('', index, name='index_page'),
-    path('catalog/', catalog, name='catalog_page'),
-    path('product/', product, name='product_page'),
-    path('compare/', compare, name='compare_page'),
+    path('', index, name='home'),
+    # пока catalog, когда появятся модели отделим на products и product/pk
+    path('catalog/', catalog, name='products_list'),
+    path('products/', product, name='products_detail'),
+    path('compare/', compare, name='compare_list'),
 ]
