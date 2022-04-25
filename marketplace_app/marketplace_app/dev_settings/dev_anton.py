@@ -1,30 +1,24 @@
 from marketplace_app.settings import *
 
 
-SECRET_KEY = os.getenv(
-    'SECRET_KEY',
-    default='foo'
-)
-DEBUG = os.getenv('DEBUG', default=False)
+SECRET_KEY = os.getenv("SECRET_KEY", default="foo")
+DEBUG = os.getenv("DEBUG", default=False)
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', default='').split(' ')
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
 INSTALLED_APPS += (
-    'discount.apps.DiscountConfig',
-    'info.apps.InfoConfig',
-    'order.apps.OrderConfig',
-    'product.apps.ProductConfig',
-    'shop.apps.ShopConfig',
-    'user.apps.UserConfig',
+    "discount.apps.DiscountConfig",
+    "info.apps.InfoConfig",
+    "order.apps.OrderConfig",
+    "product.apps.ProductConfig",
+    "shop.apps.ShopConfig",
+    "user.apps.UserConfig",
 )
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('SQL_ENGINE', default='django.db.backends.sqlite3'),
-        'NAME': os.getenv(
-            'SQL_DATABASE',
-            default=os.path.join(BASE_DIR, 'db.sqlite3')
-        ),
+    "default": {
+        "ENGINE": os.getenv("SQL_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": os.getenv("SQL_DATABASE", default=os.path.join(BASE_DIR, "db.sqlite3")),
         "USER": os.environ.get("SQL_USER", "user"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
         "HOST": os.environ.get("SQL_HOST", "localhost"),
@@ -32,12 +26,14 @@ DATABASES = {
     }
 }
 
+STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
+
 # STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
+STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
 
+
+# print(STATICFILES_DIRS)
 
 # LOGIN_URL = '/login/'
 # LOGIN_REDIRECT_URL = '/'
