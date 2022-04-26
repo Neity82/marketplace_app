@@ -11,8 +11,14 @@ DEBUG = env.get_value('DEBUG')
 SECRET_KEY = env.get_value('SECRET_KEY')
 
 INSTALLED_APPS += (
+    'discount.apps.DiscountConfig',
+    'info.apps.InfoConfig',
+    'order.apps.OrderConfig',
+    'product.apps.ProductConfig',
+    'shop.apps.ShopConfig',
     'user.apps.UserConfig',
 )
+
 
 TEMPLATES = [
     {
@@ -46,7 +52,6 @@ DATABASES = {
 LANGUAGE_CODE = 'ru'
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # LOGIN_URL = '/login/'
 # LOGIN_REDIRECT_URL = '/'

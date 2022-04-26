@@ -902,6 +902,15 @@ select + select {
   font-size: 14px;
   color: #f26d7d;
 }
+.form-error .errorlist{
+  margin: 0;
+}
+.form-group p {
+  margin-bottom: 0;
+}
+.form-error + .form-input {
+  border-color: #f26d7d;
+}
 .form-label {
   display: block;
   color: #71747a;

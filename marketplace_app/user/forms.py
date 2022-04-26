@@ -19,7 +19,7 @@ class UserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError(_("Passwords don't match"))
         return password2
 
     def save(self, commit=True):
@@ -38,8 +38,8 @@ class UserChangeForm(forms.ModelForm):
 
     password = ReadOnlyPasswordHashField(
         label=_('Password'),
-        help_text="Raw passwords are not saved, so there is no way to see this user's password, "
-                  "but you can change the password using <a href='{}'>this form</a>.",
+        help_text=_("Raw passwords are not saved, so there is no way to see this user's password, "
+                    "but you can change the password using <a href='{}'>this form</a>."),
     )
 
     class Meta:
@@ -58,3 +58,37 @@ class UserChangeForm(forms.ModelForm):
     def clean_password(self):
         return self.initial['password']
 
+
+class UserProfileForm(forms.ModelForm):
+    full_name = forms.CharField(label=_('full name').capitalize(),
+                                widget=forms.TextInput(attrs={'class': 'form-input'}),
+                                required=False)
+    phone = forms.CharField(label=_('phone').capitalize(),
+                            widget=forms.TextInput(attrs={'class': 'form-input'}))
+    email = forms.CharField(label=_('e-mail').capitalize(),
+                            widget=forms.TextInput(attrs={'class': 'form-input'}))
+    password1 = forms.CharField(label=_('password').capitalize(),
+                                widget=forms.TextInput(attrs={
+                                    'class': 'form-input',
+                                    'placeholder': _('Here you can change the password')
+                                }),
+                                required=False)
+    password2 = forms.CharField(label=_('confirm password').capitalize(),
+                                widget=forms.TextInput(attrs={
+                                    'class': 'form-input',
+                                    'placeholder': _('Enter the password again')
+                                }),
+                                required=False)
+
+    class Meta:
+        model = CustomUser
+        fields = ('avatar', 'full_name', 'phone', 'email', 'password1', 'password2')
+
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and not password2:
+            raise forms.ValidationError(_("Required to fill in"))
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(_("Passwords don't match"))
+        return password2

@@ -97,8 +97,11 @@ a(href="http://browsehappy.com/") Выберите новую версию
             <nav class="row-block">
               <div class="row ControlPanel-rowSplit">
                 <div class="row-block">
-                  <a class="ControlPanel-title" href="customer_account">Login / Register
-                  </a>
+                  {% if user.is_authenticated %}
+                  <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">Account</a>
+                  {% else %}
+                  <a class="ControlPanel-title" href="customer_account">Login</a> / <a class="ControlPanel-title" href="customer_account">Register</a>
+                  {% endif %}
                 </div>
               </div>
             </nav>

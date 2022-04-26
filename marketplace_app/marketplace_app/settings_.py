@@ -59,6 +59,8 @@ TEMPLATES_INFO_DIR = os.path.join(BASE_DIR, "info", "templates")
 TEMPLATES_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "templates")
 TEMPLATES_ORDER_DIR = os.path.join(BASE_DIR, "order", "templates")
 TEMPLATES_SHOP_DIR = os.path.join(BASE_DIR, "shop", "templates")
+TEMPLATES_USER_DIR = os.path.join(BASE_DIR, "user", "templates")
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -69,6 +71,7 @@ TEMPLATES = [
             TEMPLATES_DISCOUNT_DIR,
             TEMPLATES_ORDER_DIR,
             TEMPLATES_SHOP_DIR,
+            TEMPLATES_USER_DIR
         ],
         'APP_DIRS': True,
         'OPTIONS': {
