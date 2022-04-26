@@ -22,9 +22,9 @@ class CustomUser(AbstractUser):
 
     username = None
     email = models.EmailField(verbose_name=_('email'), unique=True)
-    first_name = models.CharField(_('first name'), max_length=150)
-    middle_name = models.CharField(_('middle name'), max_length=150)
-    last_name = models.CharField(_('last name'), max_length=150)
+    first_name = models.CharField(verbose_name=_('first name'), max_length=150)
+    middle_name = models.CharField(verbose_name=_('middle name'), max_length=150)
+    last_name = models.CharField(verbose_name=_('last name'), max_length=150)
     phone = models.CharField(verbose_name=_('phone'),
                              validators=[phone_regex],
                              max_length=16,
@@ -47,6 +47,8 @@ class CustomUser(AbstractUser):
         full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
         return full_name.strip()
 
-
+    # def get_absolute_url(self):
+    #     """Генерирует ссылку для детального просмотра пользователя"""
+    #     return reverse('user_account', kwargs={'pk': self.pk})
 
 
