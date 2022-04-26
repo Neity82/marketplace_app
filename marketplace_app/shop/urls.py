@@ -1,10 +1,9 @@
-"""marketplace_app.shop URL Configuration
-"""
 from django.urls import path
-from shop.views import shop
+
+from .views import ShopDetailView
+
 
 app_name = 'shop'
-
 urlpatterns = [
-    path('shops/', shop, name='shops_detail'),
+    path('shops/<int:pk>', ShopDetailView.as_view(), name='detail')
 ]

@@ -1,10 +1,14 @@
 {% extends "base.html" %}
+
 {% load static %}
+
 {% block title %}
 {{seo.title}}
 {% endblock %}
+
 {% block header_slider %}
 {% endblock %}
+
 {% block middle %}
 <div class="Middle Middle_top">
   <div class="Middle-top">
@@ -86,10 +90,10 @@
               <img src="{% static 'assets/img/icons/contacts/phone.svg' %}" alt="phone.svg"/>
             </div>
             <div class="media-content">Phone:&#32;
-              <nobr>+8 (200) 800-2000-600
+              <nobr>{{ shop.phone }}
               </nobr>
               <br>Mobile:&#32;
-              <nobr>+8 (200) 800-2000-650
+              <nobr>{{ shop.mobile }}
               </nobr>
             </div>
           </div>
@@ -100,9 +104,7 @@
               <img src="{% static 'assets/img/icons/contacts/address.svg' %}" alt="address.svg"/>
             </div>
             <div class="media-content">
-              Megano Business Center,
-              0012 United States, Los Angeles
-              Creative Street 15/4
+                {{ shop.address }}
             </div>
           </div>
         </div>
@@ -111,8 +113,8 @@
             <div class="media-image">
               <img src="{% static 'assets/img/icons/contacts/mail.svg' %}" alt="mail.svg"/>
             </div>
-            <div class="media-content">General: hello@ninzio.com
-              <br>Editor: editor@ninzio.com
+            <div class="media-content">General: {{ shop.email_general }}
+              <br>Editor: {{ shop.email_editor }}
             </div>
           </div>
         </div>
@@ -149,13 +151,13 @@
         <div class="row row_verticalCenter row_maxHalf">
           <div class="row-block">
             <div class="pict">
-              <img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png"/>
+              <img src="{{ shop.image }}" alt="{{ shop.name }}"/>
             </div>
           </div>
           <div class="row-block">
-            <h2>Megano Store Hystory
+            <h2>{{ shop.name }}
             </h2>
-            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem.
+            <p>{{ shop.description }}
             </p>
             <ul>
               <li>Lorem ipsum dolor sit amet, consectetuer
@@ -177,6 +179,9 @@
           <h2 class="Section-title">Popular Products
           </h2>
         </header>
+
+          {# TODO: цикл с моделями Product #}
+
         <div class="Cards">
           {% for _ in '123456'|make_list %}
           <div class="Card">
