@@ -1,12 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}
-{{seo.title}}
+  {{seo.title}}
 {% endblock %}
-{% block header_slider %}
+
+{% block head %}
+  {% include "head.html" %}
 {% endblock %}
+
+{% block header %}
+  <header class="Header">
+    {% include "header.html" %}
+  </header>
+{% endblock %}
+
 {% block middle %}
-<div class="Middle Middle_top">
+  <div class="Middle Middle_top">
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
@@ -126,12 +135,12 @@
         <div class="Cards">
           {% for ind in '1234'|make_list %}
           <div class="Card">
-            <a class="Card-picture" href="{% url 'product:products_detail' %}">
+            <a class="Card-picture" href="{% url 'product:detail' %}">
               <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="{% url 'product:products_detail' %}">Corsair Carbide Series Arctic White Steel
+                <a href="{% url 'product:detail' %}">Corsair Carbide Series Arctic White Steel
                 </a>
               </strong>
               <div class="Card-description">
@@ -162,12 +171,12 @@
           {% endfor %}
           {% for ind in '12'|make_list %}
           <div class="Card hide_md">
-            <a class="Card-picture" href="{% url 'product:products_detail' %}">
+            <a class="Card-picture" href="{% url 'product:detail' %}">
               <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="{% url 'product:products_detail' %}">Corsair Carbide Series Arctic White Steel
+                <a href="{% url 'product:detail' %}">Corsair Carbide Series Arctic White Steel
                 </a>
               </strong>
               <div class="Card-description">
@@ -198,12 +207,12 @@
           {% endfor %}
           {% for ind in '12'|make_list %}
           <div class="Card hide_md hide_1450">
-            <a class="Card-picture" href="{% url 'product:products_detail' %}">
+            <a class="Card-picture" href="{% url 'product:detail' %}">
               <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="{% url 'product:products_detail' %}">Mavic PRO Mini Drones Hobby RC Quadcopter
+                <a href="{% url 'product:detail' %}">Mavic PRO Mini Drones Hobby RC Quadcopter
                 </a>
               </strong>
               <div class="Card-description">
@@ -259,4 +268,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+  {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+  {% include "scripts.html" %}
 {% endblock %}

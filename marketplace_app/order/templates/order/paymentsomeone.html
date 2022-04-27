@@ -1,10 +1,19 @@
-{% extends "base.html" %}
+{{% extends "base.html" %}
 {% load static %}
 {% block title %}
-{{seo.title}}
+  {{seo.title}}
 {% endblock %}
-{% block header_slider %}
+
+{% block head %}
+  {% include "head.html" %}
 {% endblock %}
+
+{% block header %}
+  <header class="Header">
+    {% include "header.html" %}
+  </header>
+{% endblock %}
+
 {% block middle %}
 <div class="Middle Middle_top">
   <div class="Middle-top">
@@ -47,4 +56,12 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block footer %}
+  {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+  {% include "scripts.html" %}
 {% endblock %}
