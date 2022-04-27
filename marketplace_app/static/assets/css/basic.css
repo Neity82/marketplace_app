@@ -908,7 +908,7 @@ select + select {
 .form-group p {
   margin-bottom: 0;
 }
-.form-error + .form-input {
+.errorlist + .form-input {
   border-color: #f26d7d;
 }
 .form-label {

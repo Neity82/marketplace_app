@@ -12,15 +12,39 @@ from user.utils import full_name_analysis
 
 
 class UserAccount(LoginRequiredMixin, generic.DetailView):
+    """
+    Представление страницы account.html
+
+    - информация о пользователе;
+    - информация о последнем заказе;
+    - последние просмотренные товары
+    """
+
     model = CustomUser
     template_name = 'user/account.html'
     context_object_name = 'user'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_active'] = 'account_active'
+        return context
+
 
 class UserProfile(LoginRequiredMixin, generic.UpdateView):
+    """
+    Представление страницы profile.html
+
+    - форма для редактирования данных пользователя
+    """
+
     model = CustomUser
     form_class = UserProfileForm
     template_name = 'user/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_active'] = 'profile_active'
+        return context
 
     def form_valid(self, form):
         user = form.save(commit=False)
