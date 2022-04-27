@@ -60,6 +60,11 @@ class UserChangeForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
+    """
+    Форма для редактирования профиля пользователя,
+    а так же для смены пароля
+    """
+
     full_name = forms.CharField(label=_('full name').capitalize(),
                                 widget=forms.TextInput(attrs={'class': 'form-input'}),
                                 required=False)

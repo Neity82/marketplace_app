@@ -888,5 +888,14 @@ Categories().init();
 
     });
 
-
 })(jQuery);
+
+document.querySelectorAll('.NavigateProfile__item').forEach(function(e) {
+    e.addEventListener('click', function(event) {
+        document.querySelectorAll('.NavigateProfile__item').forEach(function(elem) {
+            elem.classList.remove('menu-item_ACTIVE')
+        })
+        
+        event.target.classList.add('menu-item_ACTIVE')
+    })
+})

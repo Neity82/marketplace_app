@@ -10,14 +10,14 @@ ALLOWED_HOSTS = ["*"]
 DEBUG = env.get_value('DEBUG')
 SECRET_KEY = env.get_value('SECRET_KEY')
 
-INSTALLED_APPS += (
-    'discount.apps.DiscountConfig',
-    'info.apps.InfoConfig',
-    'order.apps.OrderConfig',
-    'product.apps.ProductConfig',
-    'shop.apps.ShopConfig',
-    'user.apps.UserConfig',
-)
+# INSTALLED_APPS += (
+#     'discount.apps.DiscountConfig',
+#     'info.apps.InfoConfig',
+#     'order.apps.OrderConfig',
+#     'product.apps.ProductConfig',
+#     'shop.apps.ShopConfig',
+#     'user.apps.UserConfig',
+# )
 
 
 TEMPLATES = [
