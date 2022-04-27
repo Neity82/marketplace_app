@@ -66,7 +66,7 @@ class CustomUser(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         """Возвращает first_name, middle_name и last_name с пробелом между ними."""
 
         full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
@@ -101,12 +101,13 @@ class View(models.Model):
         verbose_name_plural = _('views')
         ordering = ['-datetime']
 
-    def __str__(self):
-        return self.product_id
+    def __str__(self) -> str:
+        return f'{self.product_id}'
 
 
 class Compare(models.Model):
     """Модель товаров для сравнения"""
+
     user_id = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
@@ -126,5 +127,5 @@ class Compare(models.Model):
         verbose_name = _('Compare')
         verbose_name_plural = _('Compares')
 
-    def __str__(self):
-        return self.product_id
+    def __str__(self) -> str:
+        return f'{self.product_id}'
