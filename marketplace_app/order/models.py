@@ -45,8 +45,8 @@ class Delivery(models.Model):
         return f'{self.name}'
 
 
-class OrderInfo(models.Model):
-    """Модель информация о заказе"""
+class Order(models.Model):
+    """Модель заказ"""
 
     user_id = models.ForeignKey(
         CustomUser,

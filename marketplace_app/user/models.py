@@ -73,7 +73,7 @@ class CustomUser(AbstractUser):
         return full_name.strip()
 
 
-class View(models.Model):
+class UserProductView(models.Model):
     """Модель просмотренных пользователем товаров"""
 
     user_id = models.ForeignKey(
