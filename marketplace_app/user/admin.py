@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils.translation import gettext as _
 
-from user.models import CustomUser, View, Compare
+from user.models import CustomUser, UserProductView, Compare
 
 
 @admin.register(CustomUser)
@@ -40,8 +40,8 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
-@admin.register(View)
-class ViewAdmin(admin.ModelAdmin):
+@admin.register(UserProductView)
+class UserProductViewAdmin(admin.ModelAdmin):
     """Представление модели просмотренных товаров в интерфейсе администратора"""
 
     list_display = ['id', 'user_id', 'product_id']
