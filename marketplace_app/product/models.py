@@ -220,6 +220,13 @@ class DailyOffer(models.Model):
     )
     select_date = models.DateField(default=date.today)
 
+    text = models.TextField(
+        verbose_name=_('promo text'),
+        help_text=_('Daily offer promo content'),
+        max_length=1500,
+        default=''
+    )
+
     class Meta:
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
@@ -256,8 +263,8 @@ class Stock(models.Model):
         return f'Stock: product: {getattr(self.product, "title")} shop: {getattr(self.shop, "name", None)}'
 
 
-class UserProductView(models.Model):
-    """Модель: История просмотра"""
+class ProductReview(models.Model):
+    """Модель: Отзыв о продукте"""
 
     product = models.ForeignKey(
         'Product',
@@ -273,13 +280,20 @@ class UserProductView(models.Model):
         related_name='user_product_view',
         help_text=_('Preview\'s user'),
     )
-    datetime = models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
+
+    text = models.TextField(
+        verbose_name=_('review content'),
+        help_text=_(''),
+        max_length=1500,
+        default=''
+    )
 
     class Meta:
         verbose_name = _('user product view')
         verbose_name_plural = _('user product views')
 
     def __str__(self) -> str:
-        return f'{self.datetime}: user: {self.user} product: {getattr(self.product, "title")}'
+        return f'{self.date}: user: {self.user} product: {getattr(self.product, "title")}'
 
 
