@@ -1,5 +1,5 @@
 {% load static %}
-<script src="{% static 'assets/plg/jQuery/jquery-3.5.0.slim.min.js' %}">
+<script src="{% static 'assets/js/jquery-3.2.1.min.js' %}">
 </script>
 <script src="{% static 'assets/plg/form/jquery.form.js' %}">
 </script>
@@ -10,4 +10,22 @@
 <script src="{% static 'assets/plg/Slider/slick.min.js' %}">
 </script>
 <script src="{% static 'assets/js/scripts.js' %}">
+</script>
+<script src="{% static 'assets/js/bootstrap.min.js' %}">
+</script>
+<script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}">
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#login_btn").modalForm({
+                formURL: "{% url 'user:login' %}"
+              });
+
+    });
+    $(document).ready(function() {
+        $("#sign_up_btn").modalForm({
+                formURL: "{% url 'user:signup' %}"
+              });
+
+    });
 </script>

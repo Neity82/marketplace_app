@@ -1,5 +1,6 @@
+from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin, PopRequestMixin
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from django.utils.translation import gettext as _
 
 from user.models import CustomUser
@@ -97,3 +98,23 @@ class UserProfileForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError(_("Passwords don't match"))
         return password2
+
+
+class CustomAuthenticationForm(AuthenticationForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password']
+
+
+class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreationForm):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'email',
+            'phone',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'password1',
+            'password2',
+        ]

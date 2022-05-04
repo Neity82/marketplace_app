@@ -10,7 +10,7 @@ app_name = 'product'
 urlpatterns = [
     path('', index, name='home'),
     # пока catalog, когда появятся модели отделим на products и product/pk
-    path('catalog/', catalog, name='products_list'),
-    path('products/', product, name='products_detail'),
+    path('catalog/', catalog, name='list'),
+    path('products/', product, name='detail'),
     path('compare/', compare, name='compare_list'),
 ]
