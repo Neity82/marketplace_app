@@ -3,12 +3,14 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from user.forms import UserProfileForm
+from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
 from user.models import CustomUser
 from user.utils import full_name_analysis
+
+from bootstrap_modal_forms.generic import BSModalLoginView, BSModalCreateView
 
 
 class UserAccount(LoginRequiredMixin, generic.DetailView):
@@ -78,3 +80,17 @@ def user_orders(request, *args, **kwargs):
 
 def user_views(request, *args, **kwargs):
     return render(request, 'user/historyview.html', {})
+
+
+class CustomLoginView(BSModalLoginView):
+    authentication_form = CustomAuthenticationForm
+    template_name = 'user/login.html'
+    success_message = 'Success: You were successfully logged in.'
+    success_url = reverse_lazy('product:home')
+
+
+class SignUpView(BSModalCreateView):
+    form_class = CustomUserCreationForm
+    template_name = 'user/signup.html'
+    success_message = 'Success: Sign up succeeded. You can now Log in.'
+    success_url = reverse_lazy('product:home')
