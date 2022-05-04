@@ -32,16 +32,19 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(
         verbose_name=_('first name'),
         max_length=150,
+        blank=True,
         help_text=_('User first name')
     )
     middle_name = models.CharField(
         verbose_name=_('middle name'),
         max_length=150,
+        blank=True,
         help_text=_('User middle name')
     )
     last_name = models.CharField(
         verbose_name=_('last name'),
         max_length=150,
+        blank=True,
         help_text=_('User last name')
     )
     phone = models.CharField(
@@ -49,7 +52,8 @@ class CustomUser(AbstractUser):
         validators=[phone_regex],
         help_text=_('User phone'),
         max_length=16,
-        unique=True)
+        blank=True
+    )
     avatar = models.ImageField(
         verbose_name=_('avatar'),
         help_text=_('User avatar'),
@@ -66,14 +70,14 @@ class CustomUser(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def get_full_name(self):
+    def get_full_name(self) -> str:
         """Возвращает first_name, middle_name и last_name с пробелом между ними."""
 
         full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
         return full_name.strip()
 
 
-class View(models.Model):
+class UserProductView(models.Model):
     """Модель просмотренных пользователем товаров"""
 
     user_id = models.ForeignKey(
@@ -97,16 +101,17 @@ class View(models.Model):
     )
 
     class Meta:
-        verbose_name = _('view')
-        verbose_name_plural = _('views')
+        verbose_name = _('viewed product')
+        verbose_name_plural = _('viewed products')
         ordering = ['-datetime']
 
-    def __str__(self):
-        return self.product_id
+    def __str__(self) -> str:
+        return f'{self.product_id}'
 
 
 class Compare(models.Model):
     """Модель товаров для сравнения"""
+
     user_id = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
@@ -126,5 +131,5 @@ class Compare(models.Model):
         verbose_name = _('Compare')
         verbose_name_plural = _('Compares')
 
-    def __str__(self):
-        return self.product_id
+    def __str__(self) -> str:
+        return f'{self.product_id}'

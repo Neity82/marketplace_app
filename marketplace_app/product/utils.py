@@ -13,6 +13,3 @@ def product_image_path(instance, filename) -> str:
     return "product/{id}.{extension}".format(
         id=instance.id, extension=extension
     )
-
-
-
