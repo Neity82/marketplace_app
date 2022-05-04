@@ -32,16 +32,19 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(
         verbose_name=_('first name'),
         max_length=150,
+        blank=True,
         help_text=_('User first name')
     )
     middle_name = models.CharField(
         verbose_name=_('middle name'),
         max_length=150,
+        blank=True,
         help_text=_('User middle name')
     )
     last_name = models.CharField(
         verbose_name=_('last name'),
         max_length=150,
+        blank=True,
         help_text=_('User last name')
     )
     phone = models.CharField(
@@ -49,7 +52,8 @@ class CustomUser(AbstractUser):
         validators=[phone_regex],
         help_text=_('User phone'),
         max_length=16,
-        unique=True)
+        blank=True
+    )
     avatar = models.ImageField(
         verbose_name=_('avatar'),
         help_text=_('User avatar'),
@@ -97,8 +101,8 @@ class UserProductView(models.Model):
     )
 
     class Meta:
-        verbose_name = _('view')
-        verbose_name_plural = _('views')
+        verbose_name = _('viewed product')
+        verbose_name_plural = _('viewed products')
         ordering = ['-datetime']
 
     def __str__(self) -> str:

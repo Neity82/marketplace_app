@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext as _
 
+from product.models import Stock
 from user.models import CustomUser
 
 
@@ -65,6 +66,7 @@ class Order(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         verbose_name=_('delivery'),
+        related_name='order_delivery',
         help_text=_('Order delivery')
     )
     payment = models.CharField(
@@ -103,13 +105,44 @@ class Order(models.Model):
     )
 
     class Meta:
-        verbose_name = _('info about order')
-        verbose_name_plural = _('info about orders')
+        verbose_name = _('order')
+        verbose_name_plural = _('orders')
         ordering = ['-id']
 
     def __str__(self) -> str:
-        return f'{self.pk}'
+        return f'Order №{self.pk}'
 
 
+class OrderEntity(models.Model):
+    """Модель товара в заказе"""
+
+    stock_id = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        verbose_name=_('stock'),
+        related_name='order_entity_stock',
+        help_text=_('OrderEntity stock')
+    )
+    order_id = models.ForeignKey(
+        Order,
+        on_delete=models.CASCADE,
+        verbose_name=_('order'),
+        related_name='order_entity_order',
+        help_text=_('OrderEntity order')
+    )
+    price = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_('price'),
+        help_text=_('OrderEntity price')
+    )
+    count = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_('count'),
+        help_text=_('OrderEntity count')
+    )
+
+    class Meta:
+        verbose_name = _('order entity')
+        verbose_name_plural = _('orders entity')
 
 
