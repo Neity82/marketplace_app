@@ -67,11 +67,6 @@ class CustomUser(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
-    def validate_unique(self, exclude=None):
-        qs = CustomUser.objects.filter(phone=self.phone)
-        if qs:
-            raise ValidationError('Phone must be unique per site')
-
 
     def get_full_name(self):
         """Возвращает first_name, middle_name и last_name с пробелом между ними."""
