@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from user.models import CustomUser
 
 
-class CustomUserCreationForm(UserCreationForm):
+class CustomUserAddForm(UserCreationForm):
     """Форма для создания нового пользователя."""
 
     class Meta:

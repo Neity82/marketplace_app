@@ -115,7 +115,7 @@
                 {% if last_product_view %}
                 {% for item in last_product_view %}
                 <div class="Card">
-                  <a class="Card-picture" href="{% url 'product:products_detail' %}">
+                  <a class="Card-picture" href="{% url 'product:detail' %}">
                     {% if item.product_id.image %}
                     <img src="{{ item.product_id.image.url }}" alt="card.jpg"/>
                     {% else %}
@@ -124,7 +124,7 @@
                   </a>
                   <div class="Card-content">
                     <strong class="Card-title">
-                      <a href="{% url 'product:products_detail' %}">{{ item.product_id.short_description }}</a>
+                      <a href="{% url 'product:detail' %}">{{ item.product_id.short_description }}</a>
                     </strong>
                     <div class="Card-description">
                       <div class="Card-cost">
