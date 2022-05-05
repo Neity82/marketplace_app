@@ -160,6 +160,7 @@ sup {
  */
 img {
   border-style: none;
+  vertical-align: initial;
 }
 /**
  * Hide the overflow in IE.
@@ -1693,6 +1694,20 @@ label.toggle {
     overflow: hidden;
   }
 }
+/*.modal {*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  display: none;*/
+/*  position: fixed;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  top: 0;*/
+/*  bottom: 0;*/
+/*  z-index: 1010;*/
+/*  padding-bottom: 20px;*/
+/*  padding-top: 20px;*/
+/*  overflow: auto;*/
+/*}*/
 .modal {
   justify-content: center;
   align-items: center;
@@ -1702,10 +1717,10 @@ label.toggle {
   right: 0;
   top: 0;
   bottom: 0;
-  z-index: 1010;
+  z-index: 1050;
   padding-bottom: 20px;
   padding-top: 20px;
-  overflow: auto;
+  outline: 0;
 }
 @media screen and (max-width: 990px) {
   .modal {
@@ -2092,6 +2107,9 @@ label.toggle {
   display: flex;
   justify-content: space-between;
   flex: 0 0 100%;
+  flex-wrap: initial;
+  margin-right: 0;
+  margin-left: 0;
 }
 .row:before,
 .row:after {
@@ -2328,6 +2346,7 @@ body {
   background: #fff;
   display: flex;
   flex-direction: column;
+  font-family: Roboto, Verdana, Arial, "Helvetica CY", Helvetica, "Nimbus Sans L", sans-serif;
 }
 * {
   box-sizing: border-box;
@@ -2465,7 +2484,7 @@ table tr:first-child th {
   }
 }
 button.link {
-  border: none;
+  border: 1px solid transparent;
   background: none;
 }
 .link_dk,

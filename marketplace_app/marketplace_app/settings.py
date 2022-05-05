@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'discount.apps.DiscountConfig',
+    'bootstrap_modal_forms',
+    'widget_tweaks',
     'info.apps.InfoConfig',
     'order.apps.OrderConfig',
     'product.apps.ProductConfig',
@@ -151,3 +153,5 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.CustomUser'
+
+LOGIN_REDIRECT_URL = '/'
