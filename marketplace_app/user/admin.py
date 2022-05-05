@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext as _
 
-from user.forms import CustomUserChangeForm, CustomUserCreationForm
+from user.forms import CustomUserChangeForm, CustomUserAddForm
 from user.models import CustomUser, UserProductView, Compare
 
 
@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     """Представление модели пользователь в интерфейсе администратора"""
 
     form = CustomUserChangeForm
-    add_form = CustomUserCreationForm
+    add_form = CustomUserAddForm
     save_on_top = True
 
     list_display = ['id', 'email', 'last_name', 'first_name', 'middle_name']

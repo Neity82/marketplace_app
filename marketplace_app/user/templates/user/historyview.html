@@ -40,7 +40,7 @@
         <div class="Cards">
           {% for view in views_list %}
           <div class="Card">
-            <a class="Card-picture" href="{% url 'product:products_detail' %}">
+            <a class="Card-picture" href="{% url 'product:detail' %}">
               {% if view.product_id.image %}
               <img src="{{ view.product_id.image.url }}" alt="card.jpg"/>
               {% else %}
@@ -48,7 +48,7 @@
               {% endif %}
             </a>
             <div class="Card-content">
-              <strong class="Card-title"><a href="{% url 'product:products_detail' %}">{{ view.product_id.short_description }}</a>
+              <strong class="Card-title"><a href="{% url 'product:detail' %}">{{ view.product_id.short_description }}</a>
               </strong>
               <div class="Card-description">
                 <div class="Card-cost">

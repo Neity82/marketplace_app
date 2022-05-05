@@ -7,8 +7,9 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
+from order.models import Order
 from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
-from user.models import CustomUser
+from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis
 
 from bootstrap_modal_forms.generic import BSModalLoginView, BSModalCreateView
@@ -140,10 +141,6 @@ class CompareProduct(generic.ListView):
     model = Compare
     template_name = 'user/compare.html'
     context_object_name = 'compare_list'
-
-
-def user_views(request, *args, **kwargs):
-    return render(request, 'user/historyview.html', {})
 
 
 class CustomLoginView(BSModalLoginView):
