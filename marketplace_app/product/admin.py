@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
@@ -49,14 +50,14 @@ class AttributeAdmin(admin.ModelAdmin):
 """
 
 
-class AttributeInLine(SuperInlineModelAdmin, admin.StackedInline):
-    model = models.Attribute
-    inlines = [AttributeValueInLine]
+# class AttributeInLine(SuperInlineModelAdmin, admin.StackedInline):
+#     model = models.Attribute
+#     inlines = [AttributeValueInLine]
 
 
 @admin.register(models.Category)
 class CategoryAdmin(SuperModelAdmin):
-    list_display = ('id', 'title', 'parent')
+    list_display = ('id', 'display_icon', 'title', 'parent')
     list_display_links = (
         'id',
         'title',
@@ -67,7 +68,11 @@ class CategoryAdmin(SuperModelAdmin):
         'parent',
     )
     fields = ('title', 'parent', 'icon')
-    inlines = [AttributeInLine]
+    # inlines = [AttributeInLine]
+
+    @staticmethod
+    def display_icon(obj):
+        return mark_safe(f'<img src="{obj.icon.url}"  height="15" />')
 
 
 @admin.register(models.Product)
@@ -75,7 +80,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'title',
-        'image',
+        'image_display',
         'short_description',
         'is_limited',
         'tags_display',
@@ -100,6 +105,11 @@ class ProductAdmin(admin.ModelAdmin):
         'category',
         'created_at',
     )
+
+    list_filter = (
+        'category',
+    )
+
     readonly_fields = (
         'rating',
         'created_at',
@@ -107,6 +117,10 @@ class ProductAdmin(admin.ModelAdmin):
 
     def tags_display(self, obj) -> str:
         return ", ".join([tag.title for tag in obj.tags.all()])
+
+    @staticmethod
+    def image_display(obj):
+        return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
     tags_display.short_description = _('Tags')
 
@@ -153,6 +167,10 @@ class StockAdmin(admin.ModelAdmin):
     fields = (
         'price',
         'count',
+        'shop',
+        'product',
+    )
+    list_filter = (
         'shop',
         'product',
     )
