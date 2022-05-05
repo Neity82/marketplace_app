@@ -5,23 +5,33 @@ from product.models import Stock
 from user.models import CustomUser
 
 
-PAYMENT_CHOICES = [
-    ('card', _('Card')),
-    ('some accounts', _('Some accounts')),
-]
+class Cart(models.Model):
+    """Модель корзины"""
 
-STATE_CHOICES = [
-    ('paid', _('Paid')),
-    ('not paid', _('Not paid')),
-    ('delivered', _('Delivered')),
-    ('received', _('Received')),
-]
+    user_id = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('cart'),
+        related_name='cart_user',
+        help_text=_('Cart user')
+    )
+    stock_id = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        verbose_name=_('stock'),
+        related_name='cart_stock',
+        help_text=_('Cart stock')
+    )
+    count = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_('count'),
+        help_text=_('Cart count')
+    )
 
-ERROR_CHOICES = [
-    ('error1', _('Payment has not been completed, because you are suspected of intolerance')),
-    ('error2', _('There are not enough funds in your account')),
-    ('error3', _('Oops... Something went wrong'))
-]
+    class Meta:
+        verbose_name = _('cart')
+        verbose_name_plural = _('carts')
+        ordering = ['-id']
 
 
 class Delivery(models.Model):
@@ -47,7 +57,7 @@ class Delivery(models.Model):
 
 
 class Order(models.Model):
-    """Модель заказ"""
+    """Модель заказа"""
 
     user_id = models.ForeignKey(
         CustomUser,
@@ -69,9 +79,14 @@ class Order(models.Model):
         related_name='order_delivery',
         help_text=_('Order delivery')
     )
+
+    class Payment(models.TextChoices):
+        CARD = 'card', _('Card')
+        SOME_ACCOUNTS = 'account', _('Some accounts')
+
     payment = models.CharField(
         max_length=50,
-        choices=PAYMENT_CHOICES,
+        choices=Payment.choices,
         verbose_name=_('payment'),
         help_text=_('Order payment')
     )
@@ -90,15 +105,29 @@ class Order(models.Model):
         verbose_name=_('comment'),
         help_text=_('Order comment')
     )
+
+    class State(models.TextChoices):
+        PAID = 'paid', _('Paid')
+        NOT_PAID = 'not paid', _('Not paid')
+        DELIVERY = 'delivered', _('Delivered')
+        RECEIVED = 'received', _('Received')
+
     state = models.CharField(
         max_length=50,
-        choices=STATE_CHOICES,
+        choices=State.choices,
+        default=State.NOT_PAID,
         verbose_name=_('state'),
         help_text=_('Order state')
     )
+
+    class Error(models.TextChoices):
+        ERROR_1 = 'error1', _('Payment has not been completed, because you are suspected of intolerance')
+        ERROR_2 = 'error2', _('There are not enough funds in your account')
+        ERROR_3 = 'error3', _('Oops... Something went wrong')
+
     error = models.CharField(
         max_length=250,
-        choices=ERROR_CHOICES,
+        choices=Error.choices,
         blank=True,
         verbose_name=_('error'),
         help_text=_('Order error')
@@ -134,6 +163,12 @@ class OrderEntity(models.Model):
         default=0,
         verbose_name=_('price'),
         help_text=_('OrderEntity price')
+    )
+    price_with_discount = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        verbose_name=_('price with discount'),
+        help_text=_('OrderEntity price with discount')
     )
     count = models.PositiveIntegerField(
         default=0,

@@ -1,6 +1,14 @@
 from django.shortcuts import render
 
 
+def cart(request, *args, **kwargs):
+    return render(request, 'order/cart.html', {})
+
+
+def order_detail(request, *args, **kwargs):
+    return render(request, 'order/oneorder.html', {})
+
+
 def order(request, *args, **kwargs):
     return render(request, 'order/order.html', {})
 

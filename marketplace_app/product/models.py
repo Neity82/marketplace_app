@@ -27,7 +27,7 @@ class Tag(models.Model):
 class Category(models.Model):
     """Модель: категория"""
 
-    SEP = '->'
+    SEP = ' / '
 
     parent = models.ForeignKey(
         'Category',

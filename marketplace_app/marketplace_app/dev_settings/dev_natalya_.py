@@ -11,7 +11,7 @@ DEBUG = env.get_value('DEBUG')
 SECRET_KEY = env.get_value('SECRET_KEY')
 
 # INSTALLED_APPS += (
-#     'discount.apps.DiscountConfig',
+#     'debug_toolbar',
 #     'info.apps.InfoConfig',
 #     'order.apps.OrderConfig',
 #     'product.apps.ProductConfig',
@@ -19,6 +19,9 @@ SECRET_KEY = env.get_value('SECRET_KEY')
 #     'user.apps.UserConfig',
 # )
 
+# MIDDLEWARE += (
+#     'debug_toolbar.middleware.DebugToolbarMiddleware',
+# )
 
 TEMPLATES = [
     {
@@ -60,3 +63,6 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
