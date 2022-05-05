@@ -58,9 +58,17 @@
             <div class="Account-column Account-column_full">
               <div class="Order Order_anons">
                 <div class="Order-personal">
+                  {% if last_order %}
                   <div class="row">
-                    <div class="row-block"><a class="Order-title" href="{% url 'order:order_detail' %}">Заказ&#32;<span class="Order-numberOrder">№{{ last_order.id }}</span>&#32;от&#32;<span class="Order-dateOrder">{{ last_order.datetime.date|date:"d.m.Y" }}</span></a>
-                      <div class="Account-editLink"><a href="{% url 'user:user_orders_list' request.user.id %}">История заказов</a>
+                    <div class="row-block">
+                      <a class="Order-title" href="{% url 'order:order_detail' %}">
+                        Заказ&#32;
+                        <span class="Order-numberOrder">№{{ last_order.id }}</span>
+                        &#32;от&#32;
+                        <span class="Order-dateOrder">{{ last_order.datetime.date|date:"d.m.Y" }}</span>
+                      </a>
+                      <div class="Account-editLink">
+                        <a href="{% url 'user:user_orders_list' request.user.id %}">История заказов</a>
                       </div>
                     </div>
                     <div class="row-block">
@@ -100,6 +108,9 @@
                       {% endif %}
                     </div>
                   </div>
+                  {% else %}
+                  <div class="row-block">У вас нет заказов</div>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -110,9 +121,9 @@
                 <h2 class="Section-title">История просмотров
                 </h2>
               </header>
+              {% if last_product_view %}
               <div class="Cards Cards_account">
                 
-                {% if last_product_view %}
                 {% for item in last_product_view %}
                 <div class="Card">
                   <a class="Card-picture" href="{% url 'product:detail' %}">
@@ -149,10 +160,10 @@
                   {% endif %}
                 </div>
                 {% endfor %}
-                {% endif %}
               </div>
               <div class="Account-editLink Account-editLink_view"><a href="{% url 'user:user_views' request.user.id %}">Перейти на полный список</a>
               </div>
+              {% endif %}
             </div>
           </div>
         </div>

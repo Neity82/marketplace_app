@@ -29,11 +29,13 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
-        last_order = Order.objects.filter(user_id=self.request.user).earliest('datetime')
+        order_list = Order.objects.filter(user_id=self.request.user)
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
-        context['last_order'] = last_order
-        context['sum_last_order'] = last_order.order_entity_order.aggregate(sum=Sum('price'))
+        if order_list:
+            last_order = order_list.earliest('datetime')
+            context['last_order'] = last_order
+            context['sum_last_order'] = last_order.order_entity_order.aggregate(sum=Sum('price'))
         context['last_product_view'] = UserProductView.objects.filter(
             user_id=self.request.user
         )[:3].select_related('product_id', 'product_id__category')
