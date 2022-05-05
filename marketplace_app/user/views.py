@@ -1,13 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
+from order.models import Order
 from user.forms import UserProfileForm
-from user.models import CustomUser
+from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis
 
 
@@ -25,8 +27,14 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
+        last_order = Order.objects.filter(user_id=self.request.user).earliest('datetime')
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
+        context['last_order'] = last_order
+        context['sum_last_order'] = last_order.order_entity_order.aggregate(sum=Sum('price'))
+        context['last_product_view'] = UserProductView.objects.filter(
+            user_id=self.request.user
+        )[:3].select_related('product_id', 'product_id__category')
         return context
 
 
@@ -72,9 +80,64 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
 
 
-def user_orders(request, *args, **kwargs):
-    return render(request, 'user/historyorder.html', {})
+class HistoryOrders(LoginRequiredMixin, generic.ListView):
+    """
+    Представление страницы historyorder.html
+
+    - список заказов пользователя
+    """
+
+    model = Order
+    template_name = 'user/historyorder.html'
+    context_object_name = 'orders_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_active'] = 'historyorder_active'
+        return context
+
+    def get_queryset(self):
+        orders_list = Order.objects.filter(user_id=self.request.user)
+        return orders_list
 
 
-def user_views(request, *args, **kwargs):
-    return render(request, 'user/historyview.html', {})
+class HistoryViews(LoginRequiredMixin, generic.ListView):
+    """
+    Представление страницы historyview.html
+
+    - список просмотренных товаров,
+    ограничен 20 последними просмотрами
+    """
+
+    model = UserProductView
+    template_name = 'user/historyview.html'
+    context_object_name = 'views_list'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_active'] = 'historyview_active'
+        return context
+
+    def get_queryset(self):
+        views_list = UserProductView.objects.filter(
+            user_id=self.request.user
+        )[:20].select_related(
+            'product_id',
+            'product_id__category'
+        )
+        return views_list
+
+
+class CompareProduct(generic.ListView):
+    """
+        Представление страницы compare.html
+
+        - список товаров для сравнения,
+        ограничен 4 товарами
+    """
+
+    model = Compare
+    template_name = 'user/compare.html'
+    context_object_name = 'compare_list'
+
+

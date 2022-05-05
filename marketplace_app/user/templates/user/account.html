@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
+{% load l10n %}
+{% load user_tags %}
+{% load order_tags %}
 
 {% block title %}
   {{seo.title}}
@@ -33,7 +36,7 @@
   </div>  
   <div class="Section Section_column Section_columnLeft">
     <div class="wrap">
-      {% include 'inc/_navigate_profile.html' %}
+      {% include 'user/inc/_navigate_profile.html' %}
       <div class="Section-content">
         <div class="Account">
           <div class="Account-group">
@@ -48,7 +51,7 @@
             </div>
             <div class="Account-column">
               <div class="Account-name">{{ user.get_full_name }}
-              </div><a class="Account-editLink" href="{% url 'user:user_profile' request.user.id %}">Редактировать профиль</a>
+              </div><a class="Account-editLink" href="{% url 'user:user_profile' user.id %}">Редактировать профиль</a>
             </div>
           </div>
           <div class="Account-group">
@@ -56,35 +59,45 @@
               <div class="Order Order_anons">
                 <div class="Order-personal">
                   <div class="row">
-                    <div class="row-block"><a class="Order-title" href="oneorder.html">Заказ&#32;<span class="Order-numberOrder">№200</span>&#32;от&#32;<span class="Order-dateOrder">21.07.2020</span></a>
-                      <div class="Account-editLink"><a href="historyorder.html">История заказов</a>
+                    <div class="row-block"><a class="Order-title" href="{% url 'order:order_detail' %}">Заказ&#32;<span class="Order-numberOrder">№{{ last_order.id }}</span>&#32;от&#32;<span class="Order-dateOrder">{{ last_order.datetime.date|date:"d.m.Y" }}</span></a>
+                      <div class="Account-editLink"><a href="{% url 'user:user_orders_list' request.user.id %}">История заказов</a>
                       </div>
                     </div>
                     <div class="row-block">
                       <div class="Order-info Order-info_delivery">
                         <div class="Order-infoType">Тип доставки:
                         </div>
-                        <div class="Order-infoContent">Обычная доставка
+                        <div class="Order-infoContent">{{ last_order.delivery_id }}
                         </div>
                       </div>
                       <div class="Order-info Order-info_pay">
                         <div class="Order-infoType">Оплата:
                         </div>
-                        <div class="Order-infoContent">Онлайн картой
+                        <div class="Order-infoContent">{{ last_order.get_payment_display }}
                         </div>
                       </div>
                       <div class="Order-info">
                         <div class="Order-infoType">Общая стоимость:
                         </div>
-                        <div class="Order-infoContent">200.99$
-                        </div>
+                        {% sum_order last_order as sum_order %}
+                        {% if sum_order.sum_order_with_discount == 0 %}
+                        <div class="Order-infoContent">{{ sum_order.sum_order }}$</div>
+                        {% else %}
+                        <div class="Order-infoContent">{{ sum_order.sum_order_with_discount }}$</div>
+                        {% endif %}
                       </div>
                       <div class="Order-info Order-info_status">
                         <div class="Order-infoType">Статус:
                         </div>
-                        <div class="Order-infoContent">Не оплачен
+                        <div class="Order-infoContent">{{ last_order.get_state_display }}
                         </div>
                       </div>
+                      {% if last_order.error %}
+                      <div class="Order-info Order-info_error">
+                        <div class="Order-infoType">Оплата не прошла:</div>
+                        <div class="Order-infoContent">{{ last_order.get_error_display }}</div>
+                      </div>
+                      {% endif %}
                     </div>
                   </div>
                 </div>
@@ -98,56 +111,47 @@
                 </h2>
               </header>
               <div class="Cards Cards_account">
-                <div class="Card"><a class="Card-picture" href="#"><img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/></a>
+                
+                {% if last_product_view %}
+                {% for item in last_product_view %}
+                <div class="Card">
+                  <a class="Card-picture" href="{% url 'product:products_detail' %}">
+                    {% if item.product_id.image %}
+                    <img src="{{ item.product_id.image.url }}" alt="card.jpg"/>
+                    {% else %}
+                    <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
+                    {% endif %}
+                  </a>
                   <div class="Card-content">
-                    <strong class="Card-title"><a href="#">Corsair Carbide Series Arctic White Steel</a>
+                    <strong class="Card-title">
+                      <a href="{% url 'product:products_detail' %}">{{ item.product_id.short_description }}</a>
                     </strong>
                     <div class="Card-description">
-                      <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$85.00</span>
+                      <div class="Card-cost">
+                        {% get_avg_price item as avg_price_list %}
+                        {% if avg_price_list.avg_price_new %}
+                        <span class="Card-priceOld">${{ avg_price_list.avg_price }}</span>
+                        <span class="Card-price">${{ avg_price_list.avg_price_new }}</span>
+                        {% else %}
+                        <span class="Card-price">${{ avg_price_list.avg_price }}</span>
+                        {% endif %}
                       </div>
-                      <div class="Card-category">Games / xbox
-                      </div>
-                      <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
+                      <div class="Card-category">{{ item.product_id.category }}</div>
+                      <div class="Card-hover">
+                        <a class="Card-btn" href="{% url 'user:user_views' request.user.id %}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a>
+                        <a class="Card-btn" href="{% url 'order:cart' %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
+                        <a class="Card-btn" href="{% url 'product:compare_list' %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
                       </div>
                     </div>
                   </div>
-                  <div class="Card-sale">-60%
-                  </div>
+                  {% if avg_price_list.max_discount %}
+                  <div class="Card-sale">-{{ avg_price_list.max_discount }}%</div>
+                  {% endif %}
                 </div>
-                <div class="Card hide_700"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
-                  <div class="Card-content">
-                    <strong class="Card-title"><a href="#">Barand New Phone Smart Business</a>
-                    </strong>
-                    <div class="Card-description">
-                      <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$85.00</span>
-                      </div>
-                      <div class="Card-category">Games / xbox
-                      </div>
-                      <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="Card-sale">-60%
-                  </div>
-                </div>
-                <div class="Card hide_md"><a class="Card-picture" href="#"><img src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
-                  <div class="Card-content">
-                    <strong class="Card-title"><a href="#">Mavic PRO Mini Drones Hobby RC Quadcopter</a>
-                    </strong>
-                    <div class="Card-description">
-                      <div class="Card-cost"><span class="Card-priceOld">$115.00</span><span class="Card-price">$185.00</span>
-                      </div>
-                      <div class="Card-category">Digital / xbox
-                      </div>
-                      <div class="Card-hover"><a class="Card-btn" href="#"><img src="assets/img/icons/card/bookmark.svg" alt="bookmark.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/cart.svg" alt="cart.svg"/></a><a class="Card-btn" href="#"><img src="assets/img/icons/card/change.svg" alt="change.svg"/></a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="Card-sale">-60%
-                  </div>
-                </div>
+                {% endfor %}
+                {% endif %}
               </div>
-              <div class="Account-editLink Account-editLink_view"><a href="historyview.html">Перейти на полный список</a>
+              <div class="Account-editLink Account-editLink_view"><a href="{% url 'user:user_views' request.user.id %}">Перейти на полный список</a>
               </div>
             </div>
           </div>

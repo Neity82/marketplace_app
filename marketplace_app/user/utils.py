@@ -1,10 +1,15 @@
+import os
 from typing import Tuple, List
 
 
 def avatar_directory_path(instance, filename) -> str:
     """Функция формирует путь для размещения фотографии/аватара пользователя"""
 
-    return 'avatar/user_{id}/{filename}'.format(id=instance.id, filename=filename)
+    extension = os.path.splitext(filename)
+    return 'avatar/user_{id}/{extension}'.format(
+        id=instance.id,
+        extension=extension
+    )
 
 
 def full_name_analysis(name: List[str]) -> Tuple[str, str, str]:
