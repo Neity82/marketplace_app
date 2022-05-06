@@ -205,7 +205,12 @@ class Product(models.Model):
         verbose_name_plural = _('product')
 
     def __str__(self) -> str:
-        return getattr(self, 'title')
+        category = getattr(self, "category", None)
+        return (
+            f"({getattr(category, 'title')}) {getattr(self, 'title')}"
+            if category
+            else f"{getattr(self, 'title')}"
+        )
 
 
 class DailyOffer(models.Model):
