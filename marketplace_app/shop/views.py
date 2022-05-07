@@ -7,6 +7,12 @@ from .models import Shop
 Product = apps.get_model(app_label='product', model_name='Product')
 
 
+class ShopListView(generic.ListView):
+    model = Shop
+    queryset = Shop.objects.all()
+    context_object_name = 'shops'
+
+
 class ShopDetailView(generic.DetailView):
     model = Shop
     queryset = Shop.objects.all()
