@@ -10,8 +10,9 @@ register = template.Library()
 @register.simple_tag(name='sum_order')
 def get_sum_order(order) -> Dict[str, Optional[int]]:
     """
-    Функция принимает заказ, возвращает общую сумму заказа
-     с учетом сидок на товары в заказе
+    Функция принимает заказ,
+    возвращает общую сумму заказа без скидок
+    и с учетом сидок на товары в заказе
     """
 
     sum_order = 0
@@ -23,9 +24,6 @@ def get_sum_order(order) -> Dict[str, Optional[int]]:
             sum_order_with_discount += product.price_with_discount * product.count
         else:
             sum_order_with_discount += product.price * product.count
-
-    print('!!!!!!!!!', sum_order)
-    print('!!!!!!!!!', sum_order_with_discount)
 
     return {
         'sum_order': sum_order,

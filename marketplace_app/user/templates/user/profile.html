@@ -45,10 +45,15 @@
                   <div class="form-error">{{ form.avatar.errors }}</div>
                   <div class="Profile-avatar Profile-avatar_noimg">
                     <div class="Profile-img">
-                      {{ form.avatar }}
+                      {% if form.instance.avatar %}
+                      <img src="{{ form.instance.avatar.url }}" alt="">
+                      {% else %}
+                      <label class="Profile-fileLabel" for="{{ form.avatar.id_for_label }}">Выберите аватар
+                      </label>
+                      <img src="{{ form.instance.avatar }}" alt="">
+                      {% endif %}
                     </div>
-                    <label class="Profile-fileLabel" for="{{ form.avatar.id_for_label }}">Выберите аватар
-                    </label>
+                    
                     <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar"/>
                   </div>
                 </div>

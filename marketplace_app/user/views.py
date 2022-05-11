@@ -58,6 +58,15 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         context['page_active'] = 'profile_active'
         return context
 
+    def get_form_kwargs(self):
+        kwargs = super(UserProfile, self).get_form_kwargs()
+        kwargs.update({
+            'initial': {
+                'full_name': self.request.user.get_full_name,
+            }
+        })
+        return kwargs
+
     def form_valid(self, form):
         user = form.save(commit=False)
 
@@ -146,6 +155,13 @@ class CompareProduct(generic.ListView):
 
 
 class CustomLoginView(BSModalLoginView):
+    """
+    Представление страницы login.html
+
+    - аутентификация пользователя, представляет собой
+    всплывающее окно
+    """
+
     authentication_form = CustomAuthenticationForm
     template_name = 'user/login.html'
     success_message = 'Success: You were successfully logged in.'
@@ -153,6 +169,13 @@ class CustomLoginView(BSModalLoginView):
 
 
 class SignUpView(BSModalCreateView):
+    """
+        Представление страницы signup.html
+
+        - регистрация пользователя, представляет собой
+        всплывающее окно
+    """
+
     form_class = CustomUserCreationForm
     template_name = 'user/signup.html'
     success_message = 'Success: Sign up succeeded. You can now Log in.'
