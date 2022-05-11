@@ -212,6 +212,11 @@ class Product(models.Model):
             else f"{getattr(self, 'title')}"
         )
 
+    @classmethod
+    def get_popular(cls, limit: int = 8):
+        # TODO метод-заглушка для получения n популярных товаров
+        return Product.objects.all()[:limit]
+
 
 class DailyOffer(models.Model):
     """Модель: предложение дня"""
