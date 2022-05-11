@@ -19,15 +19,19 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">About Megano
+        <h1 class="Middle-title">{{ shop.name }}
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">home
+            <a href="{% url 'product:home' %}">Home
             </a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>About Us
+            <a href="{% url 'shop:list' %}">Shops
+            </a>
+          </li>
+          <li class="breadcrumbs-item breadcrumbs-item_current">
+            <span>{{ shop.name }}
             </span>
           </li>
         </ul>
@@ -164,6 +168,9 @@
             </h2>
             <p>{{ shop.description }}
             </p>
+
+            {# TODO: Что это ? #}
+
             <ul>
               <li>Lorem ipsum dolor sit amet, consectetuer
               </li>
@@ -184,14 +191,14 @@
           <h2 class="Section-title">Popular Products
           </h2>
         </header>
-
-        {# TODO: цикл с моделями Product #}
-
         <div class="Cards">
           {% for product in products %}
           <div class="Card">
+
+            {# TODO: url 'product:detail' pk=product.pk #}
+
             <a class="Card-picture" href="{% url 'product:detail' %}">
-              <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
+              <img src="{{ product.image }}" alt="{{ product.title }}"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
@@ -200,63 +207,30 @@
               </strong>
               <div class="Card-description">
                 <div class="Card-cost">
-                  <span class="Card-priceOld">$115.00
+                  <span class="Card-priceOld">{{ product.price }}
                   </span>
-                  <span class="Card-price">$85.00
+                  <span class="Card-price">{{ product.discounted_price }}
                   </span>
                 </div>
                 <div class="Card-category">{{ product.category }}
                 </div>
                 <div class="Card-hover">
+
+                    {# TODO: скорректировать ссылки #}
+
                   <a class="Card-btn" href="add_bookmark">
                     <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
                   </a>
-                  <a class="Card-btn" href="{% url 'product:products_detail' %}">
+                  <a class="Card-btn" href="{% url 'product:detail' %}">
                     <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                   </a>
-                  <a class="Card-btn" href="{% url 'product:compare_list' %}">
+                  <a class="Card-btn" href="{% url 'user:compare_list' %}">
                     <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
                   </a>
                 </div>
               </div>
             </div>
-            <div class="Card-sale">-60%
-            </div>
-          </div>
-          {% endfor %}
-          {% for _ in '12'|make_list %}
-          <div class="Card hide_md hide_1450">
-            <a class="Card-picture" href="#">
-              <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
-            </a>
-            <div class="Card-content">
-              <strong class="Card-title">
-                <a href="#">Mavic PRO Mini Drones Hobby RC Quadcopter
-                </a>
-              </strong>
-              <div class="Card-description">
-                <div class="Card-cost">
-                  <span class="Card-priceOld">$115.00
-                  </span>
-                  <span class="Card-price">$185.00
-                  </span>
-                </div>
-                <div class="Card-category">Digital / xbox
-                </div>
-                <div class="Card-hover">
-                  <a class="Card-btn" href="add_bookmark">
-                    <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
-                  </a>
-                  <a class="Card-btn" href="{% url 'product:products_detail' %}">
-                    <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
-                  </a>
-                  <a class="Card-btn" href="{% url 'product:compare_list' %}">
-                    <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="Card-sale">-60%
+            <div class="Card-sale">{{ product.discount }}
             </div>
           </div>
           {% endfor %}

@@ -212,10 +212,46 @@ class Product(models.Model):
             else f"{getattr(self, 'title')}"
         )
 
+    @property
+    def discount(self):
+        # TODO:
+        #  Необходимо реализовать получение актуального
+        #   значения скидки на данный товар в процентах.
+        #  Сейчас возвращает значение из шаблона.
+        discount_value = 60
+        return f"-{discount_value}%"
+
+    @property
+    def price(self):
+        # TODO:
+        #  Необходимо реализовать получение актуальной
+        #   цены для продукта с учетом того, что в бд
+        #   может быть несколько вхождений с разной ценой.
+        #  Сейчас реализовано по методу FIFO.
+        entity = self.stock.filter(count__gt=0).reverse().first()
+        return entity.price
+
+    @property
+    def discounted_price(self):
+        # TODO:
+        #  Необходимо реализовать получение
+        #   цены продукта с учетом скидки.
+        #  Сейчас возвращает актуальную цену без скидки.
+        return self.price
+
     @classmethod
-    def get_popular(cls, limit: int = 8):
+    def get_popular(cls, shop=None, limit: int = 8):
         # TODO метод-заглушка для получения n популярных товаров
-        return Product.objects.all()[:limit]
+        queryset = Product.objects.prefetch_related(
+            'stock'
+        ).filter(
+            stock__count__gt=0
+        )
+
+        if shop:
+            queryset = queryset.filter(stock__shop=shop)
+
+        return queryset[:limit]
 
 
 class DailyOffer(models.Model):
