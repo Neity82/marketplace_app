@@ -3,7 +3,7 @@
 from django.http import request
 from django.shortcuts import render
 from django.urls import path
-from product.views import index, product, compare, catalog
+from product.views import index, product, catalog
 
 app_name = 'product'
 
@@ -12,5 +12,4 @@ urlpatterns = [
     # пока catalog, когда появятся модели отделим на products и product/pk
     path('catalog/', catalog, name='list'),
     path('products/', product, name='detail'),
-    path('compare/', compare, name='compare_list'),
 ]

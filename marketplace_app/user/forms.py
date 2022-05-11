@@ -1,8 +1,9 @@
 from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin, PopRequestMixin
 from django import forms
-from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.translation import gettext as _
+
 from user.models import CustomUser
 
 
@@ -41,6 +42,9 @@ class UserProfileForm(forms.ModelForm):
     а так же для смены пароля
     """
 
+    avatar = forms.CharField(label=_('avatar').capitalize(),
+                             widget=forms.FileInput(attrs={'class': 'form-input'}),
+                             required=False)
     full_name = forms.CharField(label=_('full name').capitalize(),
                                 widget=forms.TextInput(attrs={'class': 'form-input'}),
                                 required=False)
@@ -76,12 +80,16 @@ class UserProfileForm(forms.ModelForm):
 
 
 class CustomAuthenticationForm(AuthenticationForm):
+    """Форма для аутентификации пользователей"""
+
     class Meta:
         model = CustomUser
         fields = ['username', 'password']
 
 
 class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreationForm):
+    """Форма для регистрации пользователей"""
+
     class Meta:
         model = CustomUser
         fields = [
@@ -93,3 +101,9 @@ class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreatio
             'password1',
             'password2',
         ]
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if phone and CustomUser.objects.filter(phone=phone):
+            raise forms.ValidationError(_('A user with such a phone is already registered'))
+        return phone

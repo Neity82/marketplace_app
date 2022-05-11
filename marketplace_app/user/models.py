@@ -131,5 +131,5 @@ class Compare(models.Model):
         verbose_name = _('Compare')
         verbose_name_plural = _('Compares')
 
-    def __str__(self) -> str:
+    def __str__(self):
         return f'{self.product_id}'

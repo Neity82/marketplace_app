@@ -3786,9 +3786,9 @@ a.Cart-title {
   border: 1px solid #e0e0e0;
   position: relative;
 }
-.Profile-avatar_noimg .Profile-img {
+/* .Profile-avatar_noimg .Profile-img {
   display: none;
-}
+} */
 .Profile-success {
   color: #3cb878;
   display: block;
@@ -3809,6 +3809,7 @@ a.Cart-title {
   position: relative;
 }
 .Profile-img img {
+  z-index: 1;
   max-height: 100%;
   height: auto;
   width: auto;

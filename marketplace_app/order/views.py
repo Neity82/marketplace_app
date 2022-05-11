@@ -1,8 +1,19 @@
 from django.shortcuts import render
+from django.views import generic
+
+from order.models import Cart
 
 
-def cart(request, *args, **kwargs):
-    return render(request, 'order/cart.html', {})
+class CartView(generic.ListView):
+    """
+        Представление страницы Cart.html
+
+        - список товаров в корзине пользователя
+    """
+
+    model = Cart
+    template_name = 'order/cart.html'
+    context_object_name = 'products'
 
 
 def order_detail(request, *args, **kwargs):

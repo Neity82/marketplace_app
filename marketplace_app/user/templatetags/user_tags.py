@@ -67,3 +67,25 @@ def get_average_price(product_view) -> Dict[str, str]:
         'avg_price_new': avg_price_new_str,
         'max_discount': max_discount_str
     }
+
+
+@register.simple_tag(name='stars')
+def get_rating(rating: int) -> range:
+    """
+    Функция принимает рейтинг товара и возвращает range
+    для отрисовки количества звезд в шаблоне
+    """
+
+    return range(rating)
+
+
+@register.simple_tag(name='not_stars')
+def get_rating(rating: int) -> range:
+    """
+    Функция принимает рейтинг товара и возвращает range
+    для отрисовки неактивных звезд в шаблоне
+    """
+
+    count = 5 - rating
+    return range(count)
+
