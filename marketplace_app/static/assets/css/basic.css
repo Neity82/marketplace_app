@@ -2111,6 +2111,9 @@ label.toggle {
   margin-right: 0;
   margin-left: 0;
 }
+.row--column {
+  flex-direction: column;
+}
 .row:before,
 .row:after {
   content: "";

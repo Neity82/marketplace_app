@@ -4181,6 +4181,9 @@ a.Cart-title {
   line-height: 1.67em;
   width: 100%;
 }
+.Section-content--p0 {
+  padding-left: 0 !important;
+}
 .Section-content .Section-header {
   margin-right: 0;
 }
