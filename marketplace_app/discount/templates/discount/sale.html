@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static %}
 {% block title %}
   {{seo.title}}
@@ -15,20 +16,20 @@
   </header>
 {% endblock %}
 
+
 {% block middle %}
 <div class="Middle Middle_top">
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Megano Blog
-        </h1>
+        <h1 class="Middle-title">{% translate "DISCOUNTS" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">home
+            <a href="{% url 'product:home' %}">{% translate "home" %}
             </a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>Blog
+            <span>{% translate "discounts" %}
             </span>
           </li>
         </ul>
@@ -38,26 +39,35 @@
   <div class="Section">
     <div class="wrap">
       <div class="Cards Cards_blog">
-        {% for _ in '123456789012'|make_list %}
+        {% for sale in sales %}
         <div class="Card">
-          <a class="Card-picture" href="{% url 'product:products_detail' %}">
-            <img src="{% static 'assets/img/content/sale/product.png' %}" alt="product.png"/>
-          </a>
+          {% comment %} <a class="Card-picture" href="{% url 'product:detail' %}"> {% endcomment %}
+            {% if sale.discount_type == "PD" %}
+            <img src="{% static 'discount/img/percent_sale.jpg' %}" alt="{% translate "percent sale" %}"/>
+            {% elif sale.discount_type == "BD" %}
+            <img src="{% static 'discount/img/basket_sale.jpg' %}" alt="{% translate "basket sale" %}"/>
+            {% elif sale.discount_type == "SD" %}
+            <img src="{% static 'discount/img/set_sale.jpg' %}" alt="{% translate "set sale" %}"/>
+            {% else %}
+            <img src="{% static 'discount/img/base.jpg' %}" alt="{% translate "unknown sale type" %}"/>
+            {% endif %}
+          {% comment %} </a> {% endcomment %}
           <div class="Card-date">
-            <strong class="Card-date-number">24
-            </strong>
-            <span class="Card-date-month">nov
-            </span>
+            <strong class="Card-date-number">{{ sale.start_at|date:'j' }}
+            </strong><span class="Card-date-month">{{ sale.start_at|date:'b' }}</span>
           </div>
-          <div class="Card-pin">
+          {% if sale.finish_at %}
+          <div class="Card-date Card-date_to">
+            <strong class="Card-date-number">{{ sale.finish_at|date:"j" }}
+            </strong><span class="Card-date-month">{{ sale.finish_at|date:"b" }}</span>
           </div>
+          {% endif %}
+          {% comment %} <div class="Card-pin"></div> {% endcomment %}
           <div class="Card-content">
-            <strong class="Card-title">
-              <a href="{% url 'product:products_detail' %}">Basic Time Management Advanced Course
-              </a>
-            </strong>
-            <div class="Card-description">Lorem ipsum dolor sit amet consectetuer adipiscing elit sed diam nonummy nibh euismod tincid  unt ut laoreet dolore
-            </div>
+            {% comment %} <strong class="Card-title"> {% endcomment %}
+              {% comment %} <a href="{% url 'product:detail' %}">Basic Time Management Advanced Course</a> {% endcomment %}
+            {% comment %} </strong> {% endcomment %}
+            <div class="Card-description">{{ sale.description }}</div>
           </div>
         </div>
         {% endfor %}
@@ -67,24 +77,27 @@
 </div>
 <div class="Pagination">
   <div class="Pagination-ins">
-    <a class="Pagination-element Pagination-element_prev" href="#">
-      <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
-    </a>
-    <a class="Pagination-element Pagination-element_current" href="#">
-      <span class="Pagination-text">1
+    {% comment %} {% if page_obj.pages_num > 1 %} {% endcomment %}
+      {% if page_obj.has_previous %}
+        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
+          <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="<<"/>
+        </a>
+        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
+          <span class="Pagination-text">{{ page_obj.previous_page_number }}</span>
+        </a>
+      {% endif %}
+      <span class="Pagination-element Pagination-element_current">
+        <span class="Pagination-text">{{ page_obj.number }}</span>
       </span>
-    </a>
-    <a class="Pagination-element" href="#">
-      <span class="Pagination-text">2
-      </span>
-    </a>
-    <a class="Pagination-element" href="#">
-      <span class="Pagination-text">3
-      </span>
-    </a>
-    <a class="Pagination-element Pagination-element_prev" href="#">
-      <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
-    </a>
+      {% if page_obj.has_next %}
+        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
+          <span class="Pagination-text">{{ page_obj.next_page_number }}</span>
+        </a>
+        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
+          <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt=">>"/>
+        </a>
+      {% endif %}
+    {% comment %} {% endif %} {% endcomment %}
   </div>
 </div>
 {% endblock %}

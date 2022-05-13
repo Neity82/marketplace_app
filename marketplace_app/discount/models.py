@@ -60,7 +60,13 @@ class Discount(models.Model):
     finish_at = models.DateTimeField(
         verbose_name=_("finish at"),
         help_text=_("Discount finish date"),
+        blank=True,
+        null=True,
+        default=None,
     )
+
+    def __str__(self) -> str:
+        return f"{self.description}"
 
 
 class ProductDiscount(models.Model):

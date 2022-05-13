@@ -6,15 +6,6 @@ DEBUG = os.getenv("DEBUG", default=False)
 
 ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 
-INSTALLED_APPS += (
-    "discount.apps.DiscountConfig",
-    "info.apps.InfoConfig",
-    "order.apps.OrderConfig",
-    "product.apps.ProductConfig",
-    "shop.apps.ShopConfig",
-    "user.apps.UserConfig",
-)
-
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("SQL_ENGINE", default="django.db.backends.sqlite3"),
@@ -28,7 +19,7 @@ DATABASES = {
 
 STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
 
-# STATIC_URL = '/static/'
+STATIC_URL = '/static/'
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
 
@@ -39,5 +30,5 @@ STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
 # LOGIN_REDIRECT_URL = '/'
 # LOGOUT_REDIRECT_URL = '/login/'
 
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

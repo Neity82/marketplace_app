@@ -23,7 +23,14 @@ class DiscountAdmin(admin.ModelAdmin):
     class Media:
         js = (
             "https://code.jquery.com/jquery-3.5.1.min.js",
-            "js/change_inlines.js",
+            "discount/js/change_inlines.js",
         )
-
+    list_display = (
+        "description",
+        "is_active",
+        "discount_mechanism",
+        "discount_value",
+        "start_at",
+        "finish_at"
+    )
     inlines = [ProductDiscountInline, SetDiscountInline, BasketDiscountInline]
