@@ -1,10 +1,10 @@
 """marketplace_app.discount URL Configuration
 """
 from django.urls import path
-from discount.views import sale
+from discount.views import SalesListView
 
 app_name = 'discount'
 
 urlpatterns = [
-    path('sales/', sale, name='sales_list'),
+    path('sales/', SalesListView.as_view(), name='list'),
 ]

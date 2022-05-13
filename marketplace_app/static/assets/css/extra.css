@@ -3181,6 +3181,7 @@ a.Cart-title {
   text-align: center;
   line-height: 1.2em;
   color: #9c9fa6;
+  cursor: pointer;
 }
 .Pagination-element:after,
 .Pagination-element:before {
@@ -3203,6 +3204,7 @@ a.Cart-title {
 .Pagination-element a,
 .Pagination-element + .Pagination-element {
   margin-left: 12px;
+  text-decoration: none;
 }
 .Pagination-element_current {
   background: #0063d1;
