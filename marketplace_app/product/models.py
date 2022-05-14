@@ -54,6 +54,12 @@ class Category(models.Model):
         upload_to=category_icon_path,
     )
 
+    sort_index = models.SmallIntegerField(
+        verbose_name=_('sort index'),
+        help_text=_('Sort index'),
+        default=0
+    )
+
     # TODO в качестве привязки аттрибутов к категории
     #  рассмотреть EAV:
     #   - https://pypi.org/project/eav-django/
@@ -196,6 +202,12 @@ class Product(models.Model):
         help_text=_('Product rating'),
         choices=Rating.choices,
         default=Rating.ZERO,
+    )
+
+    sort_index = models.SmallIntegerField(
+        verbose_name=_('sort index'),
+        help_text=_('Sort index'),
+        default=0
     )
 
     objects = models.Manager()

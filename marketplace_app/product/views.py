@@ -1,4 +1,6 @@
+from django.views import generic
 from django.shortcuts import render
+from .models import Product
 
 
 def index(request, *args, **kwargs):
@@ -13,5 +15,8 @@ def product(request, *args, **kwargs):
     return render(request, 'product/product.html', {})
 
 
-def catalog(request, *args, **kwargs):
-    return render(request, 'product/catalog.html', {})
+class ProductListView(generic.ListView):
+    template_name: str = "product/catalog.html"
+
+    def get_queryset(self):
+        return Product.objects.all()
