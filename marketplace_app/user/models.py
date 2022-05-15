@@ -108,6 +108,8 @@ class UserProductView(models.Model):
     def __str__(self) -> str:
         return f'{self.product_id}'
 
+    objects = models.Manager()
+
 
 class Compare(models.Model):
     """Модель товаров для сравнения"""
@@ -133,3 +135,5 @@ class Compare(models.Model):
 
     def __str__(self):
         return f'{self.product_id}'
+
+    objects = models.Manager()

@@ -9,18 +9,15 @@ from product.models import Stock
 register = template.Library()
 
 
-@register.simple_tag(name='get_avg_price')
-def get_average_price(product_view) -> Dict[str, str]:
+@register.simple_tag
+def get_average_price(product) -> Dict[str, str]:
     """
-    Функция принимает объект модели UserProductView
-    (просмотренный пользователем товар) и возвращает словарь со значениями
-    средней цены за товар, средней цены за товар с учетом скидки и
-    размер максимальной скидки
+    Функция принимает объект модели DailyOffer
+    (товар дня) и возвращает словарь со значениями
+    средней цены за товар и средней цены за товар с учетом скидки
     """
 
-    product = product_view.product_id
     avg_price_new_str = None
-    max_discount_str = None
 
     avg_price_dict = Stock.objects.filter(product=product).aggregate(avg=Avg('price'))
     avg_price = avg_price_dict['avg']
@@ -60,34 +57,9 @@ def get_average_price(product_view) -> Dict[str, str]:
         if avg_price_new <= 0:
             avg_price_new = 1
 
-        max_discount = round((1 - avg_price_new / float(avg_price)) * 100)
-
-        max_discount_str = str(max_discount)
         avg_price_new_str = '{:.2f}'.format(avg_price_new)
 
     return {
         'avg_price': avg_price_str,
-        'avg_price_new': avg_price_new_str,
-        'max_discount': max_discount_str
+        'avg_price_new': avg_price_new_str
     }
-
-
-@register.simple_tag(name='stars')
-def get_rating(rating: int) -> range:
-    """
-    Функция принимает рейтинг товара и возвращает range
-    для отрисовки количества звезд в шаблоне
-    """
-
-    return range(rating)
-
-
-@register.simple_tag(name='not_stars')
-def get_rating(rating: int) -> range:
-    """
-    Функция принимает рейтинг товара и возвращает range
-    для отрисовки неактивных звезд в шаблоне
-    """
-
-    count = 5 - rating
-    return range(count)

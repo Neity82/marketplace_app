@@ -108,6 +108,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     list_filter = (
         'category',
+        'is_limited',
     )
 
     readonly_fields = (

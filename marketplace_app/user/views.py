@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext as _
 from django.views import generic
 
 from order.models import Order
@@ -72,6 +73,12 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
         if self.request.FILES:
             avatar = self.request.FILES['avatar']
+            if avatar.size > 2 * 1024 * 1024:
+                messages.error(self.request, _('Image file too large ( > 2mb )'), extra_tags='error')
+                return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
+            user.avatar = avatar
+        else:
+            avatar = self.request.user.avatar
             user.avatar = avatar
 
         full_name = form.cleaned_data.get('full_name').split()
@@ -88,7 +95,7 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         user.save()
         login(self.request, user)
 
-        messages.success(self.request, f'Профиль успешно сохранен')
+        messages.success(self.request, f'Профиль успешно сохранен', extra_tags='success')
 
         return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
 

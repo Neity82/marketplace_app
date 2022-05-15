@@ -33,6 +33,8 @@ class Cart(models.Model):
         verbose_name_plural = _('carts')
         ordering = ['-id']
 
+    objects = models.Manager()
+
 
 class Delivery(models.Model):
     """Модель вид доставки"""
@@ -54,6 +56,8 @@ class Delivery(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name}'
+
+    objects = models.Manager()
 
 
 class Order(models.Model):
@@ -141,6 +145,8 @@ class Order(models.Model):
     def __str__(self) -> str:
         return f'Order №{self.pk}'
 
+    objects = models.Manager()
+
 
 class OrderEntity(models.Model):
     """Модель товара в заказе"""
@@ -179,5 +185,7 @@ class OrderEntity(models.Model):
     class Meta:
         verbose_name = _('order entity')
         verbose_name_plural = _('orders entity')
+
+    objects = models.Manager()
 
 

@@ -1,0 +1,24 @@
+[
+{
+  "model": "info.banner",
+  "pk": 1,
+  "fields": {
+    "title": "Серия Xiaomi 12",
+    "text": "Оформите предзаказ смартфона Xiaomi 12 или Xiaomi 12 Pro с выгодой до 20 000 ₽, часы Xiaomi S1 Active или Watch S1 в подарок.",
+    "image": "1.jpg",
+    "url": "https://www.mvideo.ru/promo/xiaomi-12-series?from=hb",
+    "is_active": true
+  }
+},
+{
+  "model": "info.banner",
+  "pk": 2,
+  "fields": {
+    "title": "HUAWEI nova 9 SE",
+    "text": "Выгода 8 000 рублей\r\nБудь вдохновлен. Будь nova.",
+    "image": "2.jpg",
+    "url": "https://www.mvideo.ru/promo/nova9-se?from=hb",
+    "is_active": true
+  }
+}
+]

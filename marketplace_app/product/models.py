@@ -232,6 +232,8 @@ class DailyOffer(models.Model):
         default=''
     )
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
@@ -259,6 +261,8 @@ class Stock(models.Model):
     )
     price = models.DecimalField(max_digits=9, decimal_places=2)
     count = models.PositiveIntegerField(default=0)
+
+    objects = models.Manager()
 
     class Meta:
         verbose_name = _('stock')

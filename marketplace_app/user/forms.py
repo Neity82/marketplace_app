@@ -1,7 +1,9 @@
+from PIL import Image
 from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin, PopRequestMixin
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from user.models import CustomUser
