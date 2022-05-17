@@ -1,0 +1,57 @@
+[
+{
+  "model": "info.banner",
+  "pk": 1,
+  "fields": {
+    "title": "Серия Xiaomi 12",
+    "text": "Оформите предзаказ смартфона Xiaomi 12 или Xiaomi 12 Pro с выгодой до 20 000 ₽, часы Xiaomi S1 Active или Watch S1 в подарок.",
+    "image": "1.jpg",
+    "url": "https://www.mvideo.ru/promo/xiaomi-12-series?from=hb",
+    "is_active": true
+  }
+},
+{
+  "model": "info.banner",
+  "pk": 2,
+  "fields": {
+    "title": "HUAWEI nova 9 SE",
+    "text": "Выгода 8 000 рублей\r\nБудь вдохновлен. Будь nova.",
+    "image": "2.jpg",
+    "url": "https://www.mvideo.ru/promo/nova9-se?from=hb",
+    "is_active": true
+  }
+},
+{
+  "model": "info.banner",
+  "pk": 3,
+  "fields": {
+    "title": "Mavic Pro 5  mini Drone",
+    "text": "Get the best phoneyou ever seen with modern Windows OS plus 70% Off this summer.",
+    "image": "banner/2022-05-12_130448.075463_Mavic_Pro_5__mini_Drone.3_.png",
+    "url": "https://www.mvideo.ru/promo",
+    "is_active": true
+  }
+},
+{
+  "model": "info.banner",
+  "pk": 4,
+  "fields": {
+    "title": "Майские суперцены",
+    "text": "Праздничные скидки до 90%\r\nЭлектроника и Бытовая техника",
+    "image": "banner/2022-05-12_130918.331011_Майские_суперцены.big_electro_12_05_22_.jpg",
+    "url": "https://www.mvideo.ru/promo",
+    "is_active": true
+  }
+},
+{
+  "model": "info.banner",
+  "pk": 5,
+  "fields": {
+    "title": "Ловите выгоду",
+    "text": "Скидка на весь товар при первой покупке 10%",
+    "image": "banner/2022-05-12_132715.322678_Ловите_выгоду.maxresdefault_.jpg",
+    "url": "https://www.mvideo.ru/promo",
+    "is_active": true
+  }
+}
+]

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum, F
 from django.utils.translation import gettext as _
 
 from product.models import Stock
@@ -33,6 +34,8 @@ class Cart(models.Model):
         verbose_name_plural = _('carts')
         ordering = ['-id']
 
+    objects = models.Manager()
+
 
 class Delivery(models.Model):
     """Модель вид доставки"""
@@ -54,6 +57,8 @@ class Delivery(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name}'
+
+    objects = models.Manager()
 
 
 class Order(models.Model):
@@ -138,8 +143,50 @@ class Order(models.Model):
         verbose_name_plural = _('orders')
         ordering = ['-id']
 
+    objects = models.Manager()
+
     def __str__(self) -> str:
         return f'Order №{self.pk}'
+
+    @property
+    def sum_order(self) -> str:
+        """Получение общей суммы заказа без учета скидки"""
+
+        sum_order: int = 0
+        order_entity = OrderEntity.objects.filter(
+            order_id=self.pk
+        ).annotate(
+            sum=F('price') * F('count')
+        )
+        for sum_entity in order_entity:
+            sum_order += sum_entity.sum
+        return '{:.2f}'.format(sum_order)
+
+    @property
+    def discounted_sum_order(self) -> str:
+        """Получение общей суммы заказа с учетом скидки"""
+
+        discounted_sum_order: int = 0
+        order_entity = OrderEntity.objects.filter(
+            order_id=self.pk
+        ).annotate(
+            discounted_sum=F('discounted_price') * F('count'),
+            sum=F('price') * F('count')
+        )
+        for sum_entity in order_entity:
+            if sum_entity.discounted_sum is None:
+                discounted_sum_order += sum_entity.sum
+            else:
+                discounted_sum_order += sum_entity.discounted_sum
+        return '{:.2f}'.format(discounted_sum_order)
+
+    @classmethod
+    def get_last_order(cls, user):
+        """Метод для получения последнего оформленного заказа"""
+
+        if Order.objects.filter(user_id=user).exists():
+            last_order = Order.objects.filter(user_id=user).earliest('datetime')
+            return last_order
 
 
 class OrderEntity(models.Model):
@@ -164,11 +211,11 @@ class OrderEntity(models.Model):
         verbose_name=_('price'),
         help_text=_('OrderEntity price')
     )
-    price_with_discount = models.PositiveIntegerField(
+    discounted_price = models.PositiveIntegerField(
         blank=True,
         null=True,
-        verbose_name=_('price with discount'),
-        help_text=_('OrderEntity price with discount')
+        verbose_name=_('discounted price'),
+        help_text=_('OrderEntity discounted price')
     )
     count = models.PositiveIntegerField(
         default=0,
@@ -180,4 +227,4 @@ class OrderEntity(models.Model):
         verbose_name = _('order entity')
         verbose_name_plural = _('orders entity')
 
-
+    objects = models.Manager()

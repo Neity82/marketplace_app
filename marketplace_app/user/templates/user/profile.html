@@ -42,7 +42,7 @@
               <div class="row-block">
                 <div class="form-group">
                   <label class="form-label" for="{{ form.avatar.id_for_label }}">{{ form.avatar.label }}</label>
-                  <div class="form-error">{{ form.avatar.errors }}</div>
+                  
                   <div class="Profile-avatar Profile-avatar_noimg">
                     <div class="Profile-img">
                       {% if form.instance.avatar %}
@@ -56,6 +56,21 @@
                     
                     <input class="Profile-file form-input" id="avatar" name="avatar" type="file" data-validate="onlyImgAvatar"/>
                   </div>
+                  <div class="Profile-error">
+                    <!-- Профиль успешно сохранен -->
+                    {% if messages %}
+                    <ul class="messages">
+                      {% for message in messages %}
+                        {% if message.extra_tags == 'error' %}
+                        <li class="{{ message.tags }}">
+                          {{ message|safe }}
+                        </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                    {% endif %}
+                  </div>
+                  <!-- <div class="form-error">{{ form.avatar.errors }}</div> -->
                 </div>
                 <div class="form-group">
                   <p>
@@ -111,9 +126,11 @@
                     {% if messages %}
                     <ul class="messages">
                       {% for message in messages %}
+                        {% if message.extra_tags == 'success' %}
                         <li class="{{ message.tags }}">
                           {{ message|safe }}
                         </li>
+                        {% endif %}
                       {% endfor %}
                     </ul>
                     {% endif %}

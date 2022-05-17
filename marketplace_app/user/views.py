@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext as _
 from django.views import generic
 
 from order.models import Order
@@ -29,16 +30,10 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
-        order_list = Order.objects.filter(user_id=self.request.user)
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
-        if order_list:
-            last_order = order_list.earliest('datetime')
-            context['last_order'] = last_order
-            context['sum_last_order'] = last_order.order_entity_order.aggregate(sum=Sum('price'))
-        context['last_product_view'] = UserProductView.objects.filter(
-            user_id=self.request.user
-        )[:3].select_related('product_id', 'product_id__category')
+        context['last_order'] = Order.get_last_order(user=self.request.user)
+        context['last_product_view'] = UserProductView.get_product_view(user=self.request.user, limit=3)
         return context
 
 
@@ -72,6 +67,12 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
         if self.request.FILES:
             avatar = self.request.FILES['avatar']
+            if avatar.size > 2 * 1024 * 1024:
+                messages.error(self.request, _('Image file too large ( > 2mb )'), extra_tags='error')
+                return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
+            user.avatar = avatar
+        else:
+            avatar = self.request.user.avatar
             user.avatar = avatar
 
         full_name = form.cleaned_data.get('full_name').split()
@@ -88,7 +89,7 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         user.save()
         login(self.request, user)
 
-        messages.success(self.request, f'Профиль успешно сохранен')
+        messages.success(self.request, f'Профиль успешно сохранен', extra_tags='success')
 
         return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
 
@@ -132,12 +133,7 @@ class HistoryViews(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        views_list = UserProductView.objects.filter(
-            user_id=self.request.user
-        )[:20].select_related(
-            'product_id',
-            'product_id__category'
-        )
+        views_list = UserProductView.get_product_view(user=self.request.user, limit=20)
         return views_list
 
 

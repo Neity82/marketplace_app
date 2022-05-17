@@ -18,28 +18,11 @@ SECRET_KEY = env.get_value('SECRET_KEY')
 #     'shop.apps.ShopConfig',
 #     'user.apps.UserConfig',
 # )
-
+# 
 # MIDDLEWARE += (
 #     'debug_toolbar.middleware.DebugToolbarMiddleware',
 # )
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
 
 DATABASES = {
     'default': {
@@ -66,3 +49,6 @@ MEDIA_URL = '/media/'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+import _locale
+_locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])

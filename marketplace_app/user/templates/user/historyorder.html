@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load order_tags %}
 
 {% block title %}
   {{seo.title}}
@@ -24,9 +23,11 @@
         <h1 class="Middle-title">История заказов
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">home</a>
+          <li class="breadcrumbs-item">
+            <a href="{% url 'product:home' %}">home</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>История заказов</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current">
+            <span>История заказов</span>
           </li>
         </ul>
       </div>
@@ -57,13 +58,14 @@
                   <div class="Order-info">
                     <div class="Order-infoType">Общая стоимость:</div>
                     <div class="Order-infoContent">
-                      {% sum_order order as sum_order %}
-                      {% if sum_order.sum_order_with_discount == 0 %}
-                      <span class="Order-price">{{ sum_order.sum_order }}$</span>
+                      {% with order.discounted_sum_order as discounted_sum_order and order.sum_order as sum_order %}
+                      {% if discounted_sum_order == sum_order %}
+                      <span class="Order-price">{{ sum_order }}$</span>
                       {% else %}
-                      <span class="Order-price">{{ sum_order.sum_order_with_discount }}$</span>
-                      <span class="Order-price_old">{{ sum_order.sum_order }}$</span>
+                      <span class="Order-price">{{ discounted_sum_order }}$</span>
+                      <span class="Order-price_old">{{ sum_order }}$</span>
                       {% endif %}
+                      {% endwith %}
                     </div>
                   </div>
                   <div class="Order-info Order-info_status">
