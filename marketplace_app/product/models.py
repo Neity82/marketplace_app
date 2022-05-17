@@ -2,8 +2,10 @@ from datetime import date, datetime
 import pytz
 from decimal import Decimal
 from typing import Dict, List, Union, TYPE_CHECKING
+import random
 
 from django.db import models
+from django.db.models import Q, Avg, Func, Min
 from django.utils.translation import gettext_lazy as _
 from .utils import category_icon_path, product_image_path
 
@@ -90,6 +92,21 @@ class Category(models.Model):
         parent = getattr(self, "parent")
         return (f'{parent.get_category_recur()}{self.SEP}{title}'
                 if parent else title)
+
+    @classmethod
+    def get_popular(cls, limit: int = 3):
+        # TODO метод-заглушка для получения n избранных категорий товаров
+        queryset = Category.objects.prefetch_related(
+            'product'
+        ).filter(
+            product__stock__count__gt=0,
+        ).distinct().annotate(
+            min_price=Min('product__stock__price')
+        ).order_by(
+            '-sort_index'
+        )
+
+        return queryset[:limit]
 
 
 class Attribute(models.Model):
@@ -309,6 +326,15 @@ class Product(models.Model):
             "price": min_discounted_price
         }
 
+    # @property
+    # def average_price(self):
+    #     """Метод для получения средней цены"""
+    #     avg_price = Stock.objects.filter(
+    #         product=self.pk,
+    #         count__gt=0
+    #     ).aggregate(avg=Avg('price'))['avg']
+    #     return '{:.2f}'.format(avg_price)
+
     @classmethod
     def get_popular(cls, shop=None, limit: int = 8):
         # TODO метод-заглушка для получения n популярных товаров
@@ -316,10 +342,51 @@ class Product(models.Model):
             'stock'
         ).filter(
             stock__count__gt=0
+        ).distinct().annotate(
+            avg_price=Avg('stock__price')
+        ).order_by(
+            'sort_index'
         )
 
         if shop:
             queryset = queryset.filter(stock__shop=shop)
+
+        return queryset[:limit]
+
+    @classmethod
+    def get_limited_edition(cls, daily_offer=None, limit: int = 16):
+        """Метод для получения списка товаров ограниченного тиража"""
+
+        queryset = Product.objects.prefetch_related(
+            'stock'
+        ).filter(
+            is_limited=True, stock__count__gt=0
+        ).distinct().annotate(
+            avg_price=Avg('stock__price')
+        ).order_by('?').select_related('category__parent')
+
+        if daily_offer:
+            queryset = queryset.exclude(
+                id=daily_offer.product_id)
+
+        return queryset[:limit]
+
+    @classmethod
+    def get_product_with_discount(cls, limit: int = 9):
+        """
+        Метод для получения списка случайных товаров,
+        на которые действует какая-нибудь акция в количестве limit
+        """
+
+        queryset = Product.objects.prefetch_related(
+            'stock',
+            'product_discount'
+        ).filter(
+            stock__count__gt=0,
+            product_discount__discount_id__is_active=True
+        ).distinct().annotate(
+            avg_price=Avg('stock__price')
+        ).order_by('?').select_related('category__parent')
 
         return queryset[:limit]
 
@@ -343,6 +410,8 @@ class DailyOffer(models.Model):
         default=''
     )
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
@@ -352,6 +421,18 @@ class DailyOffer(models.Model):
             f'Daily offer: product: {getattr(self.product, "title")}',
             f'on: {self.select_date}'
         )
+
+    @classmethod
+    def get_daily_offer(cls):
+        """Метод для получения предложения дня"""
+
+        queryset = DailyOffer.objects.filter(select_date=date.today()).annotate(
+            avg_price=Avg('product__stock__price')
+        ).select_related('product__category')
+
+        if queryset.exists():
+            daily_offer = queryset.latest('select_date')
+            return daily_offer
 
 
 class Stock(models.Model):
@@ -373,6 +454,8 @@ class Stock(models.Model):
     )
     price = models.DecimalField(max_digits=9, decimal_places=2)
     count = models.PositiveIntegerField(default=0)
+
+    objects = models.Manager()
 
     class Meta:
         verbose_name = _('stock')
@@ -416,7 +499,4 @@ class ProductReview(models.Model):
         verbose_name_plural = _('user product views')
 
     def __str__(self) -> str:
-        return (
-            f'{self.date}: user: {self.user}',
-            f'product: {getattr(self.product, "title")}'
-        )
+        return f'{self.date}: user: {self.user} product: {getattr(self.product, "title")}'

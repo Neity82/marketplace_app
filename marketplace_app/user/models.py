@@ -105,8 +105,22 @@ class UserProductView(models.Model):
         verbose_name_plural = _('viewed products')
         ordering = ['-datetime']
 
+    objects = models.Manager()
+
     def __str__(self) -> str:
         return f'{self.product_id}'
+
+    @classmethod
+    def get_product_view(cls, user, limit: int = None):
+        """Метод получения списка просмотренных товаров"""
+
+        queryset = UserProductView.objects.filter(
+            user_id=user
+        ).select_related(
+            'product_id',
+            'product_id__category'
+        )
+        return queryset[:limit]
 
 
 class Compare(models.Model):
@@ -133,3 +147,5 @@ class Compare(models.Model):
 
     def __str__(self):
         return f'{self.product_id}'
+
+    objects = models.Manager()

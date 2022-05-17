@@ -160,7 +160,7 @@
         <div class="row row_verticalCenter row_maxHalf">
           <div class="row-block">
             <div class="pict">
-              <img src="{{ shop.image }}" alt="{{ shop.name }}"/>
+              <img src="/media/{{ shop.image }}" alt="{{ shop.name }}"/>
             </div>
           </div>
           <div class="row-block">
@@ -198,7 +198,7 @@
             {# TODO: url 'product:detail' pk=product.pk #}
 
             <a class="Card-picture" href="{% url 'product:detail' %}">
-              <img src="{{ product.image }}" alt="{{ product.title }}"/>
+              <img src="/media/{{ product.image }}" alt="{{ product.title }}"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">

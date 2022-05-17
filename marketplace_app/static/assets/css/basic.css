@@ -900,7 +900,8 @@ select + select {
 .form .form-btn {
   margin-top: 20px;
 }
-.form-error {
+.form-error,
+.Profile-error {
   font-size: 14px;
   color: #f26d7d;
 }

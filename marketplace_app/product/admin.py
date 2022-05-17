@@ -58,7 +58,7 @@ class AttributeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Category)
 class CategoryAdmin(SuperModelAdmin):
-    list_display = ('id', 'display_icon', 'title', 'parent')
+    list_display = ('id', 'display_icon', 'title', 'parent', 'sort_index')
     list_display_links = (
         'id',
         'title',
@@ -68,7 +68,7 @@ class CategoryAdmin(SuperModelAdmin):
         'title',
         'parent',
     )
-    fields = ('title', 'parent', 'icon')
+    fields = ('title', 'parent', 'icon', 'sort_index')
     # inlines = [AttributeInLine]
 
     @staticmethod
@@ -87,6 +87,7 @@ class ProductAdmin(admin.ModelAdmin):
         'tags_display',
         'category',
         'created_at',
+        'sort_index'
     )
     list_display_links = (
         'id',
@@ -109,6 +110,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     list_filter = (
         'category',
+        'is_limited',
     )
 
     readonly_fields = (

@@ -1,7 +1,7 @@
 from typing import Dict
 
 from django import template
-from django.db.models import Avg, Max, Min
+from django.db.models import Avg, Max, Min, Q
 
 from discount.models import ProductDiscount
 from product.models import Stock
@@ -26,9 +26,12 @@ def get_average_price(product_view) -> Dict[str, str]:
     avg_price = avg_price_dict['avg']
     avg_price_str = '{:.2f}'.format(avg_price)
 
-    discount_list = ProductDiscount.objects.filter(product_id=product,
-                                                   discount_id__discount_type='PD',
-                                                   discount_id__is_active=True
+    discount_list = ProductDiscount.objects.filter(Q(product_id=product,
+                                                     discount_id__discount_type='PD',
+                                                     discount_id__is_active=True) |
+                                                   Q(category_id=product.category,
+                                                     discount_id__discount_type='PD',
+                                                     discount_id__is_active=True)
                                                    ).select_related('discount_id')
 
     if discount_list.exists():
@@ -88,4 +91,3 @@ def get_rating(rating: int) -> range:
 
     count = 5 - rating
     return range(count)
-

@@ -660,7 +660,7 @@
     "model": "product.category",
     "pk": 11,
     "fields": {
-      "parent": 9,
+      "parent": null,
       "title": "kitchen",
       "icon": "category/2022-05-05_204951.678953_kitchen.kitchen_.png"
     }
