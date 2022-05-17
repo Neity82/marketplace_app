@@ -41,11 +41,11 @@ INSTALLED_APPS = [
     'discount.apps.DiscountConfig',
     'bootstrap_modal_forms',
     'widget_tweaks',
-    # 'info.apps.InfoConfig',
-    # 'order.apps.OrderConfig',
-    # 'product.apps.ProductConfig',
-    # 'shop.apps.ShopConfig',
-    # 'user.apps.UserConfig',
+    'info.apps.InfoConfig',
+    'order.apps.OrderConfig',
+    'product.apps.ProductConfig',
+    'shop.apps.ShopConfig',
+    'user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [

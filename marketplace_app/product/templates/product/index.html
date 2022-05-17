@@ -69,7 +69,7 @@
               <div class="BannersHomeBlock-block">
                 <div class="BannersHomeBlock-img">
                   {% if category.icon %}
-                  <img src="{{ category.icon.url }}" alt="{{ category }}"/>
+                  <img src="{{ category.icon.url }}" alt="{{ category.title }}"/>
                   {% else %}
                   <img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png"/>
                   {% endif %}
