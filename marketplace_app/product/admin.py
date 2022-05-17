@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from modeltranslation.admin import TranslationAdmin
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
 from product import models
@@ -174,4 +175,3 @@ class StockAdmin(admin.ModelAdmin):
         'shop',
         'product',
     )
-

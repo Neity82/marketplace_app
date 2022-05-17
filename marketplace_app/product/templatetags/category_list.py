@@ -41,3 +41,15 @@ def get_categories():
                 )
                 break
     return parent_categories
+
+
+@register.filter(name="update_page")
+def update_page(get_dict: dict, page: int):
+    get_dict["page"] = page
+    return "&".join([f"{key}={value}" for key, value in get_dict.items()])
+
+
+@register.filter(name='get_items')
+def get(list_: list, index: str):
+    start_idx_str, stop_idx_str = index.split(sep=":")
+    return list_[int(start_idx_str):int(stop_idx_str)]

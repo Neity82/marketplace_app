@@ -757,6 +757,9 @@
 }
 .Card-picture img {
   width: 100%;
+  max-width: 208px;
+  max-height: 138px;
+  object-fit: scale-down;
   margin: 0;
 }
 .Card-date {

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load static %}
+{% load category_list %}
+
 {% block title %}
   {{seo.title}}
 {% endblock %}
@@ -21,15 +23,15 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Catalog Megano
+        <h1 class="Middle-title">{% translate "Catalog" %}
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="index.html">home
+            <a href="/">{% translate "home" %}
             </a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>Catalog
+            <span>{% translate "Catalog" %}
             </span>
           </li>
         </ul>
@@ -135,24 +137,24 @@
           </div>
         </div>
         <div class="Cards">
-          {% for ind in '1234'|make_list %}
+          {% for product in products|get_items:"0:4" %}
+          {% url 'product:detail' product.id as product_url %}
           <div class="Card">
-            <a class="Card-picture" href="{% url 'product:detail' %}">
-              <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
+            <a class="Card-picture" href="{{ product_url }}">
+              <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="{% url 'product:detail' %}">Corsair Carbide Series Arctic White Steel
-                </a>
+                <a href="{{ product_url }}">{{ product.title }}</a>
               </strong>
               <div class="Card-description">
                 <div class="Card-cost">
-                  <span class="Card-priceOld">$115.00
-                  </span>
-                  <span class="Card-price">$85.00
-                  </span>
+                  {% if product.discount.type %}
+                  <span class="Card-priceOld">${{ product.price }}</span>
+                  {% endif %}
+                  <span class="Card-price">${{ product.discount.price}}</span>
                 </div>
-                <div class="Card-category">Games / xbox
+                <div class="Card-category">{{ product.category }}
                 </div>
                 <div class="Card-hover">
                   <a class="Card-btn" href="add_bookmark">
@@ -167,28 +169,35 @@
                 </div>
               </div>
             </div>
-            <div class="Card-sale">-60%
-            </div>
+            {% if product.discount.type %}
+              {% if product.discount.type == "P" %}
+                <div class="Card-sale">-{{ product.discount.value }}%</div>
+              {% elif product.discount.type == "S" %}
+                <div class="Card-sale">-{{ product.discount.value }}$</div>
+              {% elif product.discount.type == "F"  %}
+                <div class="Card-sale">FIX</div>
+              {% endif %}
+            {% endif %}
           </div>
           {% endfor %}
-          {% for ind in '12'|make_list %}
+          {% for product in products|get_items:"4:6" %}
+          {% url 'product:detail' product.id as product_url %}
           <div class="Card hide_md">
-            <a class="Card-picture" href="{% url 'product:detail' %}">
-              <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
+            <a class="Card-picture" href="{{ product_url }}">
+              <img src="{{ product.image.url }}" alt="product.title"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="{% url 'product:detail' %}">Corsair Carbide Series Arctic White Steel
-                </a>
+                <a href="{{ product_url}}">{{ product.title}}</a>
               </strong>
               <div class="Card-description">
                 <div class="Card-cost">
-                  <span class="Card-priceOld">$115.00
-                  </span>
-                  <span class="Card-price">$85.00
-                  </span>
+                  {% if product.discount.type %}
+                  <span class="Card-priceOld">${{ product.price }}</span>
+                  {% endif %}
+                  <span class="Card-price">${{ product.discount.price}}</span>
                 </div>
-                <div class="Card-category">Games / xbox
+                <div class="Card-category">{{ product.category }}
                 </div>
                 <div class="Card-hover">
                   <a class="Card-btn" href="add_bookmark">
@@ -203,28 +212,35 @@
                 </div>
               </div>
             </div>
-            <div class="Card-sale">-60%
-            </div>
+            {% if product.discount.type %}
+              {% if product.discount.type == "P" %}
+                <div class="Card-sale">-{{ product.discount.value }}%</div>
+              {% elif product.discount.type == "S" %}
+                <div class="Card-sale">-{{ product.discount.value }}$</div>
+              {% elif product.discount.type == "F"  %}
+                <div class="Card-sale">FIX</div>
+              {% endif %}
+            {% endif %}
           </div>
           {% endfor %}
-          {% for ind in '12'|make_list %}
+          {% for product in products|get_items:"6:8" %}
+          {% url 'product:detail' product.id as product_url %}
           <div class="Card hide_md hide_1450">
-            <a class="Card-picture" href="{% url 'product:detail' %}">
-              <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
+            <a class="Card-picture" href="{{ product_url }}">
+              <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
             </a>
             <div class="Card-content">
               <strong class="Card-title">
-                <a href="{% url 'product:detail' %}">Mavic PRO Mini Drones Hobby RC Quadcopter
-                </a>
+                <a href="{{ product_url }}">{{ product.title }}</a>
               </strong>
               <div class="Card-description">
                 <div class="Card-cost">
-                  <span class="Card-priceOld">$115.00
-                  </span>
-                  <span class="Card-price">$185.00
-                  </span>
+                  {% if product.discount.type %}
+                  <span class="Card-priceOld">${{ product.price }}</span>
+                  {% endif %}
+                  <span class="Card-price">${{ product.discount.price}}</span>
                 </div>
-                <div class="Card-category">Digital / xbox
+                <div class="Card-category">{{ product.category }}
                 </div>
                 <div class="Card-hover">
                   <a class="Card-btn" href="add_bookmark">
@@ -239,31 +255,39 @@
                 </div>
               </div>
             </div>
-            <div class="Card-sale">-60%
-            </div>
+            {% if product.discount.type %}
+              {% if product.discount.type == "P" %}
+                <div class="Card-sale">-{{ product.discount.value }}%</div>
+              {% elif product.discount.type == "S" %}
+                <div class="Card-sale">-{{ product.discount.value }}$</div>
+              {% elif product.discount.type == "F"  %}
+                <div class="Card-sale">FIX</div>
+              {% endif %}
+            {% endif %}
           </div>
           {% endfor %}
         </div>
         <div class="Pagination">
           <div class="Pagination-ins">
-            <a class="Pagination-element Pagination-element_prev" href="#">
-              <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="prevPagination.svg"/>
-            </a>
-            <a class="Pagination-element Pagination-element_current" href="#">
-              <span class="Pagination-text">1
-              </span>
-            </a>
-            <a class="Pagination-element" href="#">
-              <span class="Pagination-text">2
-              </span>
-            </a>
-            <a class="Pagination-element" href="#">
-              <span class="Pagination-text">3
-              </span>
-            </a>
-            <a class="Pagination-element Pagination-element_prev" href="#">
-              <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt="nextPagination.svg"/>
-            </a>
+            {% if page_obj.has_previous %}
+              <a class="Pagination-element Pagination-element_prev" href="?{{ request.GET.dict|update_page:page_obj.previous_page_number }}">
+                <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="<<"/>
+              </a>
+              <a class="Pagination-element Pagination-element_prev" href="?{{ request.GET.dict|update_page:page_obj.previous_page_number }}">
+                <span class="Pagination-text">{{ page_obj.previous_page_number }}</span>
+              </a>
+            {% endif %}
+            <span class="Pagination-element Pagination-element_current">
+              <span class="Pagination-text">{{ page_obj.number }}</span>
+            </span>
+            {% if page_obj.has_next %}
+              <a class="Pagination-element Pagination-element_prev" href="?{{ request.GET.dict|update_page:page_obj.next_page_number }}">
+                <span class="Pagination-text">{{ page_obj.next_page_number }}</span>
+              </a>
+              <a class="Pagination-element Pagination-element_prev" href="?{{ request.GET.dict|update_page:page_obj.next_page_number }}">
+                <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt=">>"/>
+              </a>
+            {% endif %}
           </div>
         </div>
       </div>
