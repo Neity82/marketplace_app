@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 {% load category_list %}
 
@@ -94,7 +95,7 @@
           <li class="menu-item">
             <span class="menu-label menu-label_success">Hot
             </span>
-            <a class="menu-link" href="discount:list">Discounts
+            <a class="menu-link" href="{% url 'discount:list' %}">Discounts
             </a>
           </li>
           <li class="menu-item">
@@ -151,30 +152,54 @@
         </div>
 
         <div class="CategoriesButton-content">
-        {% for category, subcategories in categories.items %}
+        {% for category in categories %}
           <div class="CategoriesButton-link">
-            <a href="#">
+            <a href="/catalog/?category={{ category.parent.id }}">
               <div class="CategoriesButton-icon">
-                <img src="{{ category.icon.url }}" alt="1.svg"/>
+                <img src="{{ category.parent.icon.url }}" alt=""/>
               </div>
-              <span class="CategoriesButton-text">{{ category.title }}
+              <span class="CategoriesButton-text">
+                {% comment %} {% blocktrans %} {% endcomment %}
+                {{ category.parent.title|capfirst }}
+                {% comment %} {% endblocktrans %} {% endcomment %}
               </span>
             </a>
-            <a class="CategoriesButton-arrow" href="#">
-            </a>
+            {% if category.childs %}
+            <a class="CategoriesButton-arrow" href="/catalog/?category={{ category.parent.id }}"></a>
             <div class="CategoriesButton-submenu">
-              {% for subcategory in subcategories %}
-                <a class="CategoriesButton-link" href="#">
+              {% for subcategory in category.childs %}
+                <a class="CategoriesButton-link" href="/catalog/?category={{ subcategory.parent.id }}">
                   <div class="CategoriesButton-icon">
-                    <img src="{{ subcategory.icon.url }}" alt="1.svg"/>
+                      <img src="{{ subcategory.parent.icon.url }}" alt=""/>
                   </div>
-                  <span class="CategoriesButton-text">{{ subcategory.title }}
+                  <span class="CategoriesButton-text">
+                    {% comment %} {% blocktrans %} {% endcomment %}
+                    {{ subcategory.parent.title|capfirst }}
+                    {% comment %} {% endblocktrans %} {% endcomment %}
                   </span>
                 </a>
+                {% if subcategory.childs %}
+                  <a class="CategoriesButton-arrow" href="/catalog/?category={{ subcategory.parent.id }}"></a>
+                  <div class="CategoriesButton-subsubmenu">
+                  {% for subsubcategory in subcategory.childs %}
+                    <a class="CategoriesButton-link" href="/catalog/?category={{ subsubcategory.id }}">
+                      <div class="CategoriesButton-icon">
+                          <img src="{{ subsubcategory.icon.url }}" alt=""/>
+                      </div>
+                      <span class="CategoriesButton-text">
+                        {% comment %} {% blocktrans %} {% endcomment %}
+                        {{ subsubcategory.title|capfirst }}
+                        {% comment %} {% endblocktrans %} {% endcomment %}
+                      </span>
+                    </a>
+                  {% endfor %}
+                  </div>
+                {% endif %}
               {% endfor %}
-            </div>
+              </div>
+            {% endif %}
           </div>
-          {% endfor %}
+        {% endfor %}
         </div>
       </div>
     </div>

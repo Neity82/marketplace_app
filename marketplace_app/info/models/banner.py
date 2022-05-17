@@ -35,9 +35,16 @@ class Banner(models.Model):
         verbose_name = _("banner")
         verbose_name_plural = _("banners")
 
+    objects = models.Manager()
+
     def __str__(self):
         return "{title}".format(
             title=self.title
         )
 
-    objects = models.Manager()
+    @classmethod
+    def get_banners(cls, limit: int = 3):
+        queryset = Banner.objects.filter(
+            is_active=True
+        ).order_by('?')
+        return queryset[:limit]

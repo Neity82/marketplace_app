@@ -1865,6 +1865,10 @@ a.Cart-title {
     margin-left: 0;
     display: block !important;
   }
+  .CategoriesButton-submenu:hover .CategoriesButton-subsubmenu {
+    margin-left: 0;
+    display: block !important;
+  }
 }
 .CategoriesButton-link a {
   align-items: center;
@@ -1876,6 +1880,7 @@ a.Cart-title {
   padding-bottom: 12.5px;
   font-size: 16px;
   font-weight: 400;
+  text-decoration: none;
 }
 @media screen and (min-width: 990px) {
   .CategoriesButton-link a:hover {
@@ -1939,8 +1944,24 @@ a.Cart-title {
   display: none;
   z-index: 10;
 }
+.CategoriesButton-subsubmenu {
+  position: absolute;
+  left: 100%;
+  margin-left: 15px;
+  top: 0;
+  background: #fff;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+  display: none;
+  z-index: 10;
+}
 @media screen and (max-width: 700px) {
   .CategoriesButton-submenu {
+    left: 0;
+    margin-left: 10px;
+    margin-top: 10px;
+    top: 100%;
+  }
+  .CategoriesButton-subsubmenu {
     left: 0;
     margin-left: 10px;
     margin-top: 10px;
@@ -3181,6 +3202,7 @@ a.Cart-title {
   text-align: center;
   line-height: 1.2em;
   color: #9c9fa6;
+  cursor: pointer;
 }
 .Pagination-element:after,
 .Pagination-element:before {
@@ -3203,6 +3225,7 @@ a.Cart-title {
 .Pagination-element a,
 .Pagination-element + .Pagination-element {
   margin-left: 12px;
+  text-decoration: none;
 }
 .Pagination-element_current {
   background: #0063d1;
@@ -4180,6 +4203,9 @@ a.Cart-title {
   font-size: 18px;
   line-height: 1.67em;
   width: 100%;
+}
+.Section-content--p0 {
+  padding-left: 0 !important;
 }
 .Section-content .Section-header {
   margin-right: 0;

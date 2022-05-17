@@ -2,7 +2,6 @@
 {% load static %}
 {% load l10n %}
 {% load user_tags %}
-{% load order_tags %}
 
 {% block title %}
   {{seo.title}}
@@ -73,32 +72,20 @@
                     </div>
                     <div class="row-block">
                       <div class="Order-info Order-info_delivery">
-                        <div class="Order-infoType">Тип доставки:
-                        </div>
-                        <div class="Order-infoContent">{{ last_order.delivery_id }}
-                        </div>
+                        <div class="Order-infoType">Тип доставки:</div>
+                        <div class="Order-infoContent">{{ last_order.delivery_id }}</div>
                       </div>
                       <div class="Order-info Order-info_pay">
-                        <div class="Order-infoType">Оплата:
-                        </div>
-                        <div class="Order-infoContent">{{ last_order.get_payment_display }}
-                        </div>
+                        <div class="Order-infoType">Оплата:</div>
+                        <div class="Order-infoContent">{{ last_order.get_payment_display }}</div>
                       </div>
                       <div class="Order-info">
-                        <div class="Order-infoType">Общая стоимость:
-                        </div>
-                        {% sum_order last_order as sum_order %}
-                        {% if sum_order.sum_order_with_discount == 0 %}
-                        <div class="Order-infoContent">{{ sum_order.sum_order }}$</div>
-                        {% else %}
-                        <div class="Order-infoContent">{{ sum_order.sum_order_with_discount }}$</div>
-                        {% endif %}
+                        <div class="Order-infoType">Общая стоимость:</div>
+                        <div class="Order-infoContent">{{ last_order.discounted_sum_order }}$</div> 
                       </div>
                       <div class="Order-info Order-info_status">
-                        <div class="Order-infoType">Статус:
-                        </div>
-                        <div class="Order-infoContent">{{ last_order.get_state_display }}
-                        </div>
+                        <div class="Order-infoType">Статус:</div>
+                        <div class="Order-infoContent">{{ last_order.get_state_display }}</div>
                       </div>
                       {% if last_order.error %}
                       <div class="Order-info Order-info_error">
@@ -141,10 +128,10 @@
                       <div class="Card-cost">
                         {% get_avg_price item as avg_price_list %}
                         {% if avg_price_list.avg_price_new %}
-                        <span class="Card-priceOld">${{ avg_price_list.avg_price }}</span>
+                        <span class="Card-priceOld">${{ item.product_id.average_price }}</span>
                         <span class="Card-price">${{ avg_price_list.avg_price_new }}</span>
                         {% else %}
-                        <span class="Card-price">${{ avg_price_list.avg_price }}</span>
+                        <span class="Card-price">${{ item.product_id.average_price }}</span>
                         {% endif %}
                       </div>
                       <div class="Card-category">{{ item.product_id.category }}</div>

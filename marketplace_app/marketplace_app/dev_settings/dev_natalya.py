@@ -10,18 +10,18 @@ ALLOWED_HOSTS = ["*"]
 DEBUG = env.get_value('DEBUG')
 SECRET_KEY = env.get_value('SECRET_KEY')
 
-# INSTALLED_APPS += (
-#     'debug_toolbar',
-#     'info.apps.InfoConfig',
-#     'order.apps.OrderConfig',
-#     'product.apps.ProductConfig',
-#     'shop.apps.ShopConfig',
-#     'user.apps.UserConfig',
-# )
+INSTALLED_APPS += (
+    'debug_toolbar',
+    'info.apps.InfoConfig',
+    'order.apps.OrderConfig',
+    'product.apps.ProductConfig',
+    'shop.apps.ShopConfig',
+    'user.apps.UserConfig',
+)
 
-# MIDDLEWARE += (
-#     'debug_toolbar.middleware.DebugToolbarMiddleware',
-# )
+MIDDLEWARE += (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+)
 
 
 DATABASES = {

@@ -9,19 +9,35 @@ def get_categories():
     """
     Формируем словарь списков из категорий
     """
-    categories = Category.objects.all()
-    categories_dict = {}
-    for category in categories:
-        # Основная категория
-        if category.parent_id is None:
-            if category not in categories_dict:
-                categories_dict[category] = []
-            continue
+    parent_categories = [
+        {"parent": item, "childs": []}
+        for item
+        in Category.objects.filter(parent_id=None)
+                           .order_by("sort_index", "title")
+    ]
+    child_categories = [
+        item
+        for item
+        in Category.objects.filter(parent_id__isnull=False)
+                           .order_by("sort_index", "title")
+    ]
 
-        # Распределение подкатегорий
-        parent = Category.objects.filter(id=category.parent_id).first()
-        if parent in categories_dict:
-            categories_dict[parent].append(category)
-        else:
-            categories_dict[parent] = [category]
-    return categories_dict
+    while child_categories:
+        parent_id = child_categories[0].parent_id
+        for idx in range(len(parent_categories)):
+            if parent_categories[idx]["childs"]:
+                for child in parent_categories[idx]["childs"]:
+                    if child["parent"].id == parent_id:
+                        child["childs"].append(
+                            child_categories.pop(0)
+                        )
+                        break
+            if parent_categories[idx]["parent"].id == parent_id:
+                parent_categories[idx]["childs"].append(
+                    {
+                        "parent": child_categories.pop(0),
+                        "childs": []
+                    }
+                )
+                break
+    return parent_categories

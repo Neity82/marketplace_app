@@ -18,8 +18,8 @@ class ShopDetailView(generic.DetailView):
     queryset = Shop.objects.all()
     context_object_name = 'shop'
 
-    # TODO: необходимо отфильтровать products_queryset по
-    #  признаку принадлежности к конкретному магазину (pk из request) и
-    #  по признаку "популярности" продукта
-    products_queryset = Product.objects.all()[:8]
-    extra_context = {'products': products_queryset}
+    def get_context_data(self, **kwargs):
+        kwargs.setdefault('view', self)
+        kwargs.update({'shop': self.get_object()})
+        kwargs.update({'products': Product.get_popular(shop=self.get_object())})
+        return kwargs

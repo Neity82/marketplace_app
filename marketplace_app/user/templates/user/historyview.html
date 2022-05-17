@@ -21,12 +21,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">История просмотра
-        </h1>
+        <h1 class="Middle-title">История просмотра</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">home</a>
+          <li class="breadcrumbs-item">
+            <a href="{% url 'product:home' %}">home</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>История просмотра</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current">
+            <span>История просмотра</span>
           </li>
         </ul>
       </div>
@@ -54,10 +55,10 @@
                 <div class="Card-cost">
                 {% get_avg_price view as avg_price_list %}
                   {% if avg_price_list.avg_price_new %}
-                  <span class="Card-priceOld">${{ avg_price_list.avg_price }}</span>
+                  <span class="Card-priceOld">${{ view.product_id.average_price }}</span>
                   <span class="Card-price">${{ avg_price_list.avg_price_new }}</span>
                   {% else %}
-                  <span class="Card-price">${{ avg_price_list.avg_price }}</span>
+                  <span class="Card-price">${{ view.product_id.average_price }}</span>
                   {% endif %}
                 </div>
                 <div class="Card-category">{{ view.product_id.category }}</div>
