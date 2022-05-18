@@ -106,7 +106,7 @@
                 <div class="Card-description">
                   <div class="Card-cost">
                     <span class="Card-priceOld">${% price_format daily_offer.avg_price %}</span>
-                    <span class="Card-price">${{ product.discounted_price }}</span>
+                    <span class="Card-price">${{ product.discount.price }}</span>
                   </div>
                   <div class="Card-category">{{ product.category }}
                   </div>
@@ -174,7 +174,7 @@
                 <div class="Card-description">
                   <div class="Card-cost">
                     <span class="Card-priceOld">${% price_format product.avg_price %}</span>
-                    <span class="Card-price">${{ product.discounted_price }}</span>
+                    <span class="Card-price">${{ product.discount.price }}</span>
                   </div>
                   <div class="Card-category">{{ product.category }}</div>
                   <div class="Card-hover">
@@ -190,7 +190,9 @@
                   </div>
                 </div>
               </div>
-              <div class="Card-sale">{{ product.discount }}</div>
+              {% if product.discount.value %}
+              <div class="Card-sale">-{{ product.discount.value }}%</div>
+              {% endif %}
             </div>
             {% endfor %}
             {% endif %}
@@ -229,7 +231,7 @@
                         <div class="Card-cost">
                           
                           <span class="Card-priceOld">${% price_format product.avg_price %}</span>
-                          <span class="Card-price">${{ product.discounted_price }}</span>
+                          <span class="Card-price">${{ product.discount.price }}</span>
                         </div>
                         <div class="Card-category">{{ product.category }}</div>
                         <div class="Card-hover">
@@ -245,7 +247,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="Card-sale">{{ product.discount }}</div>
+                    {% if product.discount.value %}
+                    <div class="Card-sale">-{{ product.discount.value }}%</div>
+                    {% endif %}
                   </div>
                 </div>
               </div>

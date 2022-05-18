@@ -1,5 +1,7 @@
+from datetime import datetime
 from typing import Dict
 
+import pytz
 from django import template
 from django.db.models import Avg, Max, Min, Q
 
@@ -18,6 +20,8 @@ def get_average_price(product_view) -> Dict[str, str]:
     размер максимальной скидки
     """
 
+    today: datetime = pytz.UTC.localize(datetime.today())
+
     product = product_view.product_id
     avg_price_new_str = None
     max_discount_str = None
@@ -26,13 +30,20 @@ def get_average_price(product_view) -> Dict[str, str]:
     avg_price = avg_price_dict['avg']
     avg_price_str = '{:.2f}'.format(avg_price)
 
-    discount_list = ProductDiscount.objects.filter(Q(product_id=product,
-                                                     discount_id__discount_type='PD',
-                                                     discount_id__is_active=True) |
-                                                   Q(category_id=product.category,
-                                                     discount_id__discount_type='PD',
-                                                     discount_id__is_active=True)
-                                                   ).select_related('discount_id')
+    discount_list = ProductDiscount.objects.select_related('discount_id').filter((Q(product_id=product,
+                                                                                    discount_id__discount_type='PD',
+                                                                                    discount_id__is_active=True) |
+                                                                                  Q(category_id=product.category,
+                                                                                    discount_id__discount_type='PD',
+                                                                                    discount_id__is_active=True) |
+                                                                                  Q(category_id=product.category.parent,
+                                                                                    discount_id__discount_type='PD',
+                                                                                    discount_id__is_active=True)) &
+                                                                                 (Q(discount_id__start_at__lte=today,
+                                                                                    discount_id__finish_at=None) |
+                                                                                  Q(discount_id__start_at__lte=today,
+                                                                                    discount_id__finish_at__gte=today))
+                                                                                 )
 
     if discount_list.exists():
         avg_price_minus_percent, avg_price_minus_sum, avg_price_fix = None, None, None
