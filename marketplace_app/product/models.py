@@ -1,16 +1,15 @@
 from datetime import date, datetime
 import pytz
 from decimal import Decimal
-from typing import Dict, List, Union, TYPE_CHECKING
-import random
+from typing import Dict, List, Union
 
 from django.db import models
-from django.db.models import Q, Avg, Func, Min
-from django.utils.translation import gettext_lazy as _
-from .utils import category_icon_path, product_image_path
+from django.db.models import Q, Avg, Min
 
-if TYPE_CHECKING:
-    from discount.models import Discount
+from .utils import category_icon_path, product_image_path
+from django.utils.translation import gettext_lazy as _
+from discount.models import Discount
+from discount.models import ProductDiscount
 
 
 class Tag(models.Model):
@@ -249,22 +248,16 @@ class Product(models.Model):
 
     @property
     def price(self) -> Decimal:
-        entity: List[Decimal] = [
-            item.price
-            for item
-            in self.stock.only("price")
-        ]
-        return round(sum(entity) / len(entity), 2)
+        """Метод для получения средней цены
 
-    # TODO Метод для получения средней цены
-    # @property
-    # def average_price(self):
-    #     """Метод для получения средней цены"""
-    #     avg_price = Stock.objects.filter(
-    #         product=self.pk,
-    #         count__gt=0
-    #     ).aggregate(avg=Avg('price'))['avg']
-    #     return '{:.2f}'.format(avg_price)
+        :return: Значение средней цены
+        :rtype: Decimal
+        """
+        avg_price = Stock.objects.filter(
+            product=self.pk,
+            count__gt=0
+        ).aggregate(avg=Avg('price'))['avg']
+        return Decimal(round(avg_price, 2))
 
     def _get_discounted_price(self, discount: 'Discount') -> Decimal:
         """Метод получения скидочной цены
@@ -275,11 +268,24 @@ class Product(models.Model):
         :rtype: Decimal
         """
         if discount.discount_mechanism == "P":
-            return round(
-                (self.price * (100 - discount.discount_value) / 100), 2
+            return Decimal(
+                round(
+                    (
+                        self.price *
+                        (100 - discount.discount_value) / 100
+                    ),
+                    2
+                )
             )
         elif discount.discount_mechanism == "S":
-            return round((self.price - discount.discount_value), 2)
+            result: Decimal = (
+                Decimal(
+                    round((self.price - discount.discount_value), 2)
+                )
+                if self.price - discount.discount_value >= 1
+                else Decimal("1.00")
+            )
+            return result
         elif discount.discount_mechanism == "F":
             return Decimal(discount.discount_value)
         return Decimal('NaN')
@@ -291,122 +297,70 @@ class Product(models.Model):
         :return: Словарь с механизмом скидки и скидочной стоимостью
         :rtype: Dict[str, Union[str, Decimal]]
         """
-        discount_objects: List['Discount'] = []
-        for item in self.product_discount.all():
-            discount_objects.append(item.discount_id)
-        for item in self.category.product_discount.all():
-            discount_objects.append(item.discount_id)
-        if self.category.parent_id:
-            parent_category: Category = \
-                Category.objects.get(id=self.category.parent_id)
-            for item in parent_category.product_discount.all():
-                discount_objects.append(item.discount_id)
-            if parent_category.parent_id:
-                root_category: Category = \
-                    Category.objects.get(id=parent_category.parent_id)
-                for item in root_category.product_discount.all():
-                    discount_objects.append(item.discount_id)
-        if not discount_objects:
-            return {
-                "type": None,
-                "value": None,
-                "price": self.price
-            }
         today: datetime = pytz.UTC.localize(datetime.today())
-        for idx in range(len(discount_objects) - 1, -1, -1):
-            if (not discount_objects[idx].is_active or
-                    discount_objects[idx].start_at > today or
-                    (discount_objects[idx].finish_at and
-                     discount_objects[idx].finish_at < today)):
-                del discount_objects[idx]
-        min_discount: 'Discount' = discount_objects.pop()
-        min_discounted_price: Decimal = \
-            self._get_discounted_price(min_discount)
-        while discount_objects:
-            current_discount: 'Discount' = discount_objects.pop()
-            current_discount_price: Decimal = \
-                self._get_discounted_price(current_discount)
-            if current_discount_price < min_discounted_price:
-                min_discount = current_discount
-                min_discounted_price = current_discount_price
-        return {
-            "type": min_discount.discount_mechanism,
-            "value": min_discount.discount_value,
-            "price": min_discounted_price
+        categories_list: list = [self.category_id]
+        if self.category.parent_id is not None:
+            categories_list += [self.category.parent_id]
+        discounts: List[ProductDiscount] = ProductDiscount.objects\
+            .select_related("discount_id").filter(
+                (
+                    Q(
+                        product_id=self,
+                        discount_id__discount_type='PD',
+                        discount_id__is_active=True
+                    ) | Q(
+                        category_id__in=categories_list,
+                        discount_id__discount_type='PD',
+                        discount_id__is_active=True
+                    )
+                ) & (
+                    Q(
+                        discount_id__start_at__lte=today,
+                        discount_id__finish_at=None
+                    ) | Q(
+                        discount_id__start_at__lte=today,
+                        discount_id__finish_at__gt=today
+                    )
+                )
+            )
+        result: Dict[str, Union[str, int, Decimal, None]] = {
+            "type": None,
+            "value": None,
+            "price": self.price
         }
-
-    # TODO мой вариант
-
-    # TODO 1. одним запросом получаем список скидок
-    # discount_list = ProductDiscount.objects.select_related(
-    #     'discount_id'
-    # ).filter(
-    #     (Q(product_id=self,
-    #        discount_id__discount_type='PD',
-    #        discount_id__is_active=True) |
-    #      Q(category_id=self.category,
-    #        discount_id__discount_type='PD',
-    #        discount_id__is_active=True) |
-    #      Q(category_id=self.category.parent,
-    #        discount_id__discount_type='PD',
-    #        discount_id__is_active=True)) &
-    #     (Q(discount_id__start_at__lte=today,
-    #        discount_id__finish_at=None) |
-    #      Q(discount_id__start_at__lte=today,
-    #        discount_id__finish_at__gte=today))
-    # )
-    # if not discount_list.exists():
-    #     return {
-    #         "type": None,
-    #         "value": None,
-    #         "avg_price": self.average_price,
-    #         "discounted_price": None
-    #     }
-    # TODO 2. вычисляем максимальную скидку в каждом виде скидок
-
-    # obj_max_discount_percent = discount_list.filter(
-    #     discount_id__discount_mechanism='P'
-    # ).order_by(
-    #     '-discount_id__discount_value'
-    # )
-    # obj_max_discount_sum = discount_list.filter(
-    #     discount_id__discount_mechanism='S'
-    # ).order_by(
-    #     '-discount_id__discount_value'
-    # )
-    # obj_max_discount_fix = discount_list.filter(
-    #     discount_id__discount_mechanism='F'
-    # ).order_by(
-    #     'discount_id__discount_value'
-    # )
-
-    # TODO 3. получаем лист из максимальной скидки в каждом виде (процент, сумма, fix-цена)
-    # max_discount_list = [
-    #         obj_max_discount_percent[0] if obj_max_discount_percent.exists() else None,
-    #         obj_max_discount_sum[0] if obj_max_discount_sum.exists() else None,
-    #         obj_max_discount_fix[0] if obj_max_discount_fix.exists() else None
-    #     ]
-
-    # TODO 4. заполняем словарь с данными
-    # data = {
-    #     "type": None,
-    #     "value": None,
-    #     "avg_price": self.average_price,
-    #     "discounted_price": None
-    # }
-    # for obj in max_discount_list:
-    #     if obj is not None:
-    #         discounted_price = self._get_discounted_price(obj.discount_id)
-    #         if data["discounted_price"] is None or discounted_price < data["discounted_price"]:
-    #             data["type"] = obj.discount_id.discount_mechanism
-    #             data["discounted_price"] = discounted_price
-
-    #             if data["type"] in ['S', 'F']:
-    #                 value = round((1 - data["discounted_price"] / data["avg_price"]) * 100)
-    #                 data["value"] = value
-    #
-
-    # return data
+        if not discounts:
+            return result
+        discount_percent: ProductDiscount = discounts.filter(
+            discount_id__discount_mechanism='P'
+        ).order_by(
+            '-discount_id__discount_value'
+        ).first()
+        discount_sum: ProductDiscount = discounts.filter(
+            discount_id__discount_mechanism='S'
+        ).order_by(
+            '-discount_id__discount_value'
+        ).first()
+        discount_fix: ProductDiscount = discounts.filter(
+            discount_id__discount_mechanism='F'
+        ).order_by(
+            'discount_id__discount_value'
+        ).first()
+        max_discount_list = [
+            discount_percent,
+            discount_sum,
+            discount_fix
+        ]
+        if self.id == 59:
+            print("")
+        for obj in max_discount_list:
+            if obj is None:
+                continue
+            discounted_price = self._get_discounted_price(obj.discount_id)
+            if discounted_price < result["price"]:
+                result["type"] = obj.discount_id.discount_mechanism
+                result["price"] = discounted_price
+                result["value"] = obj.discount_id.discount_value
+        return result
 
     @classmethod
     def get_popular(cls, shop=None, limit: int = 8):
@@ -499,9 +453,9 @@ class DailyOffer(models.Model):
     def get_daily_offer(cls):
         """Метод для получения предложения дня"""
 
-        queryset = DailyOffer.objects.filter(select_date=date.today()).annotate(
-            avg_price=Avg('product__stock__price')
-        ).select_related('product__category')
+        queryset = DailyOffer.objects.filter(select_date=date.today())\
+            .annotate(avg_price=Avg('product__stock__price'))\
+            .select_related('product__category')
 
         if queryset.exists():
             daily_offer = queryset.latest('select_date')
@@ -572,4 +526,7 @@ class ProductReview(models.Model):
         verbose_name_plural = _('user product views')
 
     def __str__(self) -> str:
-        return f'{self.date}: user: {self.user} product: {getattr(self.product, "title")}'
+        return (
+            f'{self.date}: user: {self.user}',
+            f'product: {getattr(self.product, "title")}'
+        )

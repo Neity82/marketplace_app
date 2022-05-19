@@ -148,49 +148,32 @@
         </div>
 
         <div class="CategoriesButton-content">
-        {% for category in categories %}
+        {% for category in categories.values %}
           <div class="CategoriesButton-link">
-            <a href="/catalog/?category={{ category.parent.id }}">
+            <a href="/catalog/?category={{ category.object.id }}">
               <div class="CategoriesButton-icon">
-                <img src="{{ category.parent.icon.url }}" alt=""/>
+                <img src="{{ category.object.icon.url }}" alt=""/>
               </div>
               <span class="CategoriesButton-text">
                 {% comment %} {% blocktrans %} {% endcomment %}
-                {{ category.parent.title }}
+                {{ category.object.title }}
                 {% comment %} {% endblocktrans %} {% endcomment %}
               </span>
             </a>
             {% if category.childs %}
-            <a class="CategoriesButton-arrow" href="/catalog/?category={{ category.parent.id }}"></a>
+            <a class="CategoriesButton-arrow" href="/catalog/?category={{ category.object.id }}"></a>
             <div class="CategoriesButton-submenu">
               {% for subcategory in category.childs %}
-                <a class="CategoriesButton-link" href="/catalog/?category={{ subcategory.parent.id }}">
+                <a class="CategoriesButton-link" href="/catalog/?category={{ subcategory.id }}">
                   <div class="CategoriesButton-icon">
-                      <img src="{{ subcategory.parent.icon.url }}" alt=""/>
+                      <img src="{{ subcategory.icon.url }}" alt=""/>
                   </div>
                   <span class="CategoriesButton-text">
                     {% comment %} {% blocktrans %} {% endcomment %}
-                    {{ subcategory.parent.title }}
+                    {{ subcategory.title }}
                     {% comment %} {% endblocktrans %} {% endcomment %}
                   </span>
                 </a>
-                {% if subcategory.childs %}
-                  <a class="CategoriesButton-arrow" href="/catalog/?category={{ subcategory.parent.id }}"></a>
-                  <div class="CategoriesButton-subsubmenu">
-                  {% for subsubcategory in subcategory.childs %}
-                    <a class="CategoriesButton-link" href="/catalog/?category={{ subsubcategory.id }}">
-                      <div class="CategoriesButton-icon">
-                          <img src="{{ subsubcategory.icon.url }}" alt=""/>
-                      </div>
-                      <span class="CategoriesButton-text">
-                        {% comment %} {% blocktrans %} {% endcomment %}
-                        {{ subsubcategory.title }}
-                        {% comment %} {% endblocktrans %} {% endcomment %}
-                      </span>
-                    </a>
-                  {% endfor %}
-                  </div>
-                {% endif %}
               {% endfor %}
               </div>
             {% endif %}

@@ -5,7 +5,6 @@ from django.shortcuts import redirect, render
 from datetime import date, timedelta
 from info.models import Banner
 from product.models import DailyOffer, Product, Category
-from .models import Category, Product
 
 
 class IndexView(generic.TemplateView):
@@ -65,13 +64,13 @@ class ProductListView(generic.ListView):
             category = 0
         if category:
             categories_list: list = [category]
-            for subcategory in Category.objects.filter(parent_id=category):
-                subcategory_id: int = subcategory.id
-                categories_list.append(subcategory_id)
-                for subsubcategory in (
-                    Category.objects.filter(parent_id=subcategory.id)
-                ):
-                    categories_list.append(subsubcategory.id)
+            categories_list += [
+                item[0]
+                for item
+                in Category.objects.only("id")
+                                   .filter(parent_id=category)
+                                   .values_list("id")
+            ]
             result = result.filter(category__id__in=categories_list)
         result = result.order_by("sort_index", "title", "id")
         return result

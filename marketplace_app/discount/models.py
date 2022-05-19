@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from product.models import Product, Category
 
 
 class Discount(models.Model):
@@ -83,7 +82,7 @@ class ProductDiscount(models.Model):
     )
 
     product_id = models.ManyToManyField(
-        Product,
+        "product.Product",
         verbose_name=_("product(s) id"),
         help_text=_("Product(s) id"),
         related_name="product_discount",
@@ -92,7 +91,7 @@ class ProductDiscount(models.Model):
     )
 
     category_id = models.ManyToManyField(
-        Category,
+        "product.Category",
         verbose_name=_("category(ies) id"),
         help_text=_("Category(ies) id"),
         related_name="product_discount",
@@ -115,7 +114,7 @@ class SetDiscount(models.Model):
     )
 
     product_id_1 = models.ManyToManyField(
-        Product,
+        "product.Product",
         verbose_name=_("product(s) 1 id"),
         help_text=_("Product(s) 1 id"),
         related_name="set_discount_1",
@@ -124,7 +123,7 @@ class SetDiscount(models.Model):
     )
 
     category_id_1 = models.ManyToManyField(
-        Category,
+        "product.Category",
         verbose_name=_("category(ies) 1 id"),
         help_text=_("Category(ies) 1 id"),
         related_name="set_discount_1",
@@ -133,7 +132,7 @@ class SetDiscount(models.Model):
     )
 
     product_id_2 = models.ManyToManyField(
-        Product,
+        "product.Product",
         verbose_name=_("product(s) 2 id"),
         help_text=_("Product(s) 2 id"),
         related_name="set_discount_2",
@@ -142,7 +141,7 @@ class SetDiscount(models.Model):
     )
 
     category_id_2 = models.ManyToManyField(
-        Category,
+        "product.Category",
         verbose_name=_("category(ies) 2 id"),
         help_text=_("Category(ies) 2 id"),
         related_name="set_discount_2",
