@@ -29,3 +29,10 @@
 
     });
 </script>
+
+<script src="{% static 'js/jquery.inputmask.min.js' %}"></script>
+<script>
+  $(document).ready(function(){
+    $(".phone").inputmask("+7 (999) 999-99-99");
+});
+</script>

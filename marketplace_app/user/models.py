@@ -19,7 +19,7 @@ class CustomUser(AbstractUser):
     """
 
     phone_regex = RegexValidator(
-        regex=r"^\+?1?\d{8,15}$",
+        regex=r"^\d{10}$",
         message=_('Invalid format')
     )
 
@@ -75,6 +75,14 @@ class CustomUser(AbstractUser):
 
         full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
         return full_name.strip()
+
+    def __str__(self) -> str:
+        first_name = getattr(self, "first_name")
+        first_name = first_name[0] + '.' if first_name else ''
+        middle_name = getattr(self, "middle_name")
+        middle_name = middle_name[0] if middle_name else ''
+        short_name = f'{getattr(self, "last_name")} {first_name}{middle_name}'
+        return short_name
 
 
 class UserProductView(models.Model):

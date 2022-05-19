@@ -24,6 +24,11 @@ def get_average_price(product_view) -> Dict[str, str]:
 
     avg_price_dict = Stock.objects.filter(product=product).aggregate(avg=Avg('price'))
     avg_price = avg_price_dict['avg']
+    if avg_price is None:
+        avg_price_str = 'Товар закончился'
+        return {
+            'avg_price': avg_price_str
+        }
     avg_price_str = '{:.2f}'.format(avg_price)
 
     discount_list = ProductDiscount.objects.filter(Q(product_id=product,

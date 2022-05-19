@@ -51,7 +51,8 @@ class UserProfileForm(forms.ModelForm):
                                 widget=forms.TextInput(attrs={'class': 'form-input'}),
                                 required=False)
     phone = forms.CharField(label=_('phone').capitalize(),
-                            widget=forms.TextInput(attrs={'class': 'form-input'}))
+                            widget=forms.TextInput(attrs={'class': 'form-input phone'}),
+                            required=False)
     email = forms.CharField(label=_('e-mail').capitalize(),
                             widget=forms.TextInput(attrs={'class': 'form-input'}))
     password1 = forms.CharField(label=_('password').capitalize(),
@@ -69,7 +70,19 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('avatar', 'full_name', 'phone', 'email', 'password1', 'password2')
+        fields = ('avatar', 'full_name', 'email', 'phone', 'password1', 'password2')
+
+    def clean_phone(self):
+        phone_clean = self.cleaned_data.get('phone')
+
+        if not phone_clean:
+            return phone_clean
+
+        phone = int(''.join([i for i in phone_clean if i.isdigit()])[1:])
+        user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
+        if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
+            raise forms.ValidationError(_('A user with such a phone is already registered'))
+        return phone
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
