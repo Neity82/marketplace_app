@@ -3,6 +3,11 @@ from django.contrib import admin
 from order.models import Delivery, Order, OrderEntity, Cart
 
 
+class OrderEntityInline(admin.StackedInline):
+    model = OrderEntity
+    extra = 1
+
+
 @admin.register(Delivery)
 class DeliveryAdmin(admin.ModelAdmin):
     pass
@@ -10,7 +15,8 @@ class DeliveryAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'datetime', 'user_id', 'state', 'error']
+    inlines = [OrderEntityInline]
 
 
 @admin.register(OrderEntity)

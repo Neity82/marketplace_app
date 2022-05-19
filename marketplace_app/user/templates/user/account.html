@@ -127,11 +127,15 @@
                     <div class="Card-description">
                       <div class="Card-cost">
                         {% get_avg_price item as avg_price_list %}
+                        {% if avg_price_list.avg_price == 'Товар закончился' %}
+                        <span class="Card-price">{{ avg_price_list.avg_price }}</span>
+                        {% else %}
                         {% if avg_price_list.avg_price_new %}
                         <span class="Card-priceOld">${{ item.product_id.average_price }}</span>
                         <span class="Card-price">${{ avg_price_list.avg_price_new }}</span>
                         {% else %}
                         <span class="Card-price">${{ item.product_id.average_price }}</span>
+                        {% endif %}
                         {% endif %}
                       </div>
                       <div class="Card-category">{{ item.product_id.category }}</div>
