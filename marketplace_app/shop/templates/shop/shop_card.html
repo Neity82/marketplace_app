@@ -1,0 +1,11 @@
+{% load static %}
+{% load i18n %}
+
+<a class="Card-picture" href="{% url 'shop:detail' pk=shop.pk %}">
+  <img src="{{ shop.image.url }}" alt="{{ shop.name }}"/>
+</a>
+<div class="Card-content">
+  <strong class="Card-title">
+    <a href="{% url 'shop:detail' pk=shop.pk %}">{{ shop.name }}</a>
+  </strong>
+</div>
