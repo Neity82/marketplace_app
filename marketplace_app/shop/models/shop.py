@@ -11,6 +11,10 @@ class Shop(models.Model):
     mobile = models.CharField(_("mobile"), max_length=12, blank=True)
     email_general = models.EmailField(_("general email"), blank=True)
     email_editor = models.EmailField(_("editor email"), blank=True)
+    shipping_policy = models.CharField(_("shipping and returns policy"), max_length=25, blank=True)
+    refund_policy = models.CharField(_("refund policy"), max_length=25, blank=True)
+    support_policy = models.CharField(_("support policy"), max_length=25, blank=True)
+    quality_policy = models.CharField(_("quality policy"), max_length=25, blank=True)
 
     class Meta:
         ordering = ('name',)

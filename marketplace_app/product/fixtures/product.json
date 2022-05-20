@@ -4,13 +4,17 @@
     "pk": 990,
     "fields": {
       "name": "Electronic Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus posuere fringilla. Cras tristique ex luctus massa consectetur fermentum. Nullam metus nunc, porttitor a blandit venenatis, gravida id ex. Aenean leo urna, iaculis ut posuere sed, pulvinar eget dui. Cras nec dui semper velit porta tempus id et libero. Suspendisse pharetra orci tortor, eu lacinia sapien fermentum condimentum. Donec congue eget dui sed fringilla. Aenean malesuada ipsum ut tempus egestas. Duis finibus augue nec odio congue iaculis. Suspendisse blandit pulvinar felis eget ultrices. Praesent id mattis diam, nec venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras faucibus eros quis tincidunt porta. Morbi convallis felis et fringilla eleifend.",
+      "description": "Официальный сайт сети магазинов бытовой техники и электроники Electronic Shop. Тщательно отбираем лучшие товары и помогаем сделать правильный выбор с 1993 года.",
       "image": "electronic_shop.png",
       "address": "Street:  Gagarina Ul. (S. Troitskoe), bld. 38,  City:  Lipetsk",
       "phone": "+74742893166",
       "mobile": "+74742893167",
       "email_general": "electronic.shop@mail.shop",
-      "email_editor": "electronic.shop.editor@mail.shop"
+      "email_editor": "electronic.shop.editor@mail.shop",
+      "shipping_policy": "Доставка по России",
+      "refund_policy": "Возврат в течение 30 дней",
+      "support_policy": "Круглосуточно",
+      "quality_policy": "Лучшее качество"
     }
   },
   {
@@ -18,13 +22,17 @@
     "pk": 991,
     "fields": {
       "name": "Cookware Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus posuere fringilla. Cras tristique ex luctus massa consectetur fermentum. Nullam metus nunc, porttitor a blandit venenatis, gravida id ex. Aenean leo urna, iaculis ut posuere sed, pulvinar eget dui. Cras nec dui semper velit porta tempus id et libero. Suspendisse pharetra orci tortor, eu lacinia sapien fermentum condimentum. Donec congue eget dui sed fringilla. Aenean malesuada ipsum ut tempus egestas. Duis finibus augue nec odio congue iaculis. Suspendisse blandit pulvinar felis eget ultrices. Praesent id mattis diam, nec venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras faucibus eros quis tincidunt porta. Morbi convallis felis et fringilla eleifend.",
+      "description": "В каталоге представлена продукция мировых брендов премиум класса для кухни и дома. Различный ассортимент с доставкой по всей России.",
       "image": "cookware-shop-logo-kitchen-utensils-on-white-vector-34486777.jpg",
       "address": "Street:  Volkova Ul., bld. 84, appt. 2,  City:  Kazan",
       "phone": "+78434633152",
       "mobile": "+78434633166",
       "email_general": "cookware.shop@mail.com",
-      "email_editor": "cookware.shop.editor@mail.com"
+      "email_editor": "cookware.shop.editor@mail.com",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -32,13 +40,17 @@
     "pk": 992,
     "fields": {
       "name": "Clothing Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus posuere fringilla. Cras tristique ex luctus massa consectetur fermentum. Nullam metus nunc, porttitor a blandit venenatis, gravida id ex. Aenean leo urna, iaculis ut posuere sed, pulvinar eget dui. Cras nec dui semper velit porta tempus id et libero. Suspendisse pharetra orci tortor, eu lacinia sapien fermentum condimentum. Donec congue eget dui sed fringilla. Aenean malesuada ipsum ut tempus egestas. Duis finibus augue nec odio congue iaculis. Suspendisse blandit pulvinar felis eget ultrices. Praesent id mattis diam, nec venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras faucibus eros quis tincidunt porta. Morbi convallis felis et fringilla eleifend.",
+      "description": "В интернет-магазине одежды и обуви Clothing Shop Вас ждут ТЫСЯЧИ моделей модной брендовой мужской, женской и детской обуви и одежды разных размеров!",
       "image": "clothing-store-logo-design-inspiration-vector-illustration_500223-481.webp",
       "address": "Street:  Sagita Agisha, bld. 10/1, appt. 155 , City:  Ufa",
       "phone": "+73479585444",
       "mobile": "+73479587777",
       "email_general": "clothing.shop@mail.ru",
-      "email_editor": "clothing.shop.editor@mail.ru"
+      "email_editor": "clothing.shop.editor@mail.ru",
+      "shipping_policy": "Доставка по России",
+      "refund_policy": "Возврат в течение 30 дней",
+      "support_policy": "Круглосуточно",
+      "quality_policy": "Лучшее качество"
     }
   },
   {
@@ -46,13 +58,17 @@
     "pk": 993,
     "fields": {
       "name": "Computer Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus posuere fringilla. Cras tristique ex luctus massa consectetur fermentum. Nullam metus nunc, porttitor a blandit venenatis, gravida id ex. Aenean leo urna, iaculis ut posuere sed, pulvinar eget dui. Cras nec dui semper velit porta tempus id et libero. Suspendisse pharetra orci tortor, eu lacinia sapien fermentum condimentum. Donec congue eget dui sed fringilla. Aenean malesuada ipsum ut tempus egestas. Duis finibus augue nec odio congue iaculis. Suspendisse blandit pulvinar felis eget ultrices. Praesent id mattis diam, nec venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras faucibus eros quis tincidunt porta. Morbi convallis felis et fringilla eleifend.",
+      "description": "Computer Shop - интернет магазин компьютеров. Лучшая сборка системных блоков для игр. Продажа мощных игровых ПК.",
       "image": "computes_shop.jpg",
       "address": "Street:  Bardina Akademika Ul., bld. 23, appt. 95,  City:  Ekaterinburg",
       "phone": "+73431656921",
       "mobile": "+7343165699",
       "email_general": "computer.shop@mail.ru",
-      "email_editor": "computer.shop.editor@mail.ru"
+      "email_editor": "computer.shop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -60,13 +76,17 @@
     "pk": 994,
     "fields": {
       "name": "Furniture Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus posuere fringilla. Cras tristique ex luctus massa consectetur fermentum. Nullam metus nunc, porttitor a blandit venenatis, gravida id ex. Aenean leo urna, iaculis ut posuere sed, pulvinar eget dui. Cras nec dui semper velit porta tempus id et libero. Suspendisse pharetra orci tortor, eu lacinia sapien fermentum condimentum. Donec congue eget dui sed fringilla. Aenean malesuada ipsum ut tempus egestas. Duis finibus augue nec odio congue iaculis. Suspendisse blandit pulvinar felis eget ultrices. Praesent id mattis diam, nec venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras faucibus eros quis tincidunt porta. Morbi convallis felis et fringilla eleifend.",
+      "description": "Furniture Shop Более 25000 товаров для кухни, спальни, гостиной, детской комнаты и не только. Бесплатные дизайн-проекты. Покупайте онлайн с доставкой по России.",
       "image": "furniture_shop.jpg",
       "address": "Street:  Narodnaya Ul., bld. 37, appt. 67,  City:  Pskov",
       "phone": "+78112295768",
       "mobile": "+78112297918",
       "email_general": "furniture.shop@mail.ru",
-      "email_editor": "furniture.shop.editor@mail.ru"
+      "email_editor": "furniture.shop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -74,13 +94,17 @@
     "pk": 995,
     "fields": {
       "name": "Light Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dapibus posuere fringilla. Cras tristique ex luctus massa consectetur fermentum. Nullam metus nunc, porttitor a blandit venenatis, gravida id ex. Aenean leo urna, iaculis ut posuere sed, pulvinar eget dui. Cras nec dui semper velit porta tempus id et libero. Suspendisse pharetra orci tortor, eu lacinia sapien fermentum condimentum. Donec congue eget dui sed fringilla. Aenean malesuada ipsum ut tempus egestas. Duis finibus augue nec odio congue iaculis. Suspendisse blandit pulvinar felis eget ultrices. Praesent id mattis diam, nec venenatis tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras faucibus eros quis tincidunt porta. Morbi convallis felis et fringilla eleifend.",
+      "description": "«Light Shop» – интернет-магазин светильников и люстр с доставкой по Москве, Санкт-Петербургу и всей России.",
       "image": "logo-lightshop-lamp-store-template-design-light-shop-lighting-products-197857981.jpg",
       "address": "Street:  Kozueva Ul., bld. 79, appt. 15,  City:  Kostroma",
       "phone": "+74942870798",
       "mobile": "+74942870711",
       "email_general": "lightshop@mail.ru",
-      "email_editor": "lightshop.editor@mail.ru"
+      "email_editor": "lightshop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -88,13 +112,17 @@
     "pk": 996,
     "fields": {
       "name": "Universal Shop",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sodales accumsan eros. Praesent pharetra ut augue vel fermentum. Proin malesuada elementum pulvinar. Integer metus metus, bibendum in erat sed, mattis iaculis massa. Vivamus venenatis ornare convallis. Vestibulum nec ullamcorper est, nec lacinia mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Etiam ac mauris sed justo mollis gravida. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla vel eros eget leo molestie condimentum. Donec a risus a augue tincidunt gravida. Sed vel tortor at mauris viverra tempor. Sed mauris purus, bibendum et elementum non, sagittis ut magna. Fusce interdum, ex vitae tempor fermentum, sapien felis mollis arcu, ut semper erat risus vel metus. Vivamus fringilla enim lectus, ac venenatis leo luctus sed.",
+      "description": "Повседневные товары, электроника и тысячи других товаров со скидками, акциями.",
       "image": "universal.png",
       "address": "Street:  Traktorostroiteley Pr, bld. 24, appt. 120,  City:  Cheboksary",
       "phone": "+78352375230",
       "mobile": "+78352375211",
       "email_general": "universal.shop@mail.ru",
-      "email_editor": "universal.shop.editor@mail.ru"
+      "email_editor": "universal.shop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
