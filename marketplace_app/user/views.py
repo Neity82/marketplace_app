@@ -33,7 +33,7 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
         context['last_order'] = Order.get_last_order(user=self.request.user)
-        context['last_product_view'] = UserProductView.get_product_view(user=self.request.user, limit=3)
+        context['product_view'] = UserProductView.get_product_view(user=self.request.user, limit=3)
         return context
 
 

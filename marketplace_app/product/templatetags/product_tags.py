@@ -1,5 +1,6 @@
 from django import template
 
+from product.models import Product
 
 register = template.Library()
 
@@ -12,3 +13,9 @@ def price_format(price: int) -> str:
     Пример: int(633,33333333) -> str(633.33)
     """
     return '{:.2f}'.format(price)
+
+
+@register.simple_tag(name='get_image')
+def get_image(category):
+    product = Product.objects.filter(category=category).first()
+    return product.image

@@ -185,7 +185,7 @@ class Order(models.Model):
         """Метод для получения последнего оформленного заказа"""
 
         if Order.objects.filter(user_id=user).exists():
-            last_order = Order.objects.filter(user_id=user).earliest('datetime')
+            last_order = Order.objects.filter(user_id=user).latest('datetime')
             return last_order
 
 

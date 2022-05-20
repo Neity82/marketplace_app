@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load static %}
 {% load product_tags %}
+{% load category_list %}
 
 {% block title %}
   {{seo.title}}
@@ -68,8 +70,9 @@
               </div>
               <div class="BannersHomeBlock-block">
                 <div class="BannersHomeBlock-img">
-                  {% if category.icon %}
-                  <img src="{{ category.icon.url }}" alt="{{ category.title }}"/>
+                  {% get_image category as image %}
+                  {% if image %}
+                  <img src="{{ image.url }}" alt="{{ category.title }}"/>
                   {% else %}
                   <img src="{% static 'assets/img/content/home/videoca.png' %}" alt="videoca.png"/>
                   {% endif %}
@@ -92,7 +95,8 @@
               <strong class="Section-columnTitle">Limited Deals</strong>
             </header>
             <div class="Card">
-              <a class="Card-picture" href="{% url 'product:detail' %}">
+              {% url 'product:detail' product.id as product_url %}
+              <a class="Card-picture" href="{{ product_url }}">
                 {% if product.image %}
                 <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
                 {% else %}
@@ -101,12 +105,14 @@
               </a>
               <div class="Card-content">
                 <strong class="Card-title">
-                  <a href="{% url 'product:detail' %}">{{ product.title }}</a>
+                  <a href="{{ product_url }}">{{ product.title }}</a>
                 </strong>
                 <div class="Card-description">
                   <div class="Card-cost">
-                    <span class="Card-priceOld">${% price_format daily_offer.avg_price %}</span>
-                    <span class="Card-price">${{ product.discount.price }}</span>
+                    {% if product.discount.type %}
+                    <span class="Card-priceOld">${{ product.price }}</span>
+                    {% endif %}
+                    <span class="Card-price">${{ product.discount.price}}</span>
                   </div>
                   <div class="Card-category">{{ product.category }}
                   </div>
@@ -158,14 +164,27 @@
           </header>
           <div class="Cards">
             {% if popular_products %}
-            {% for product in popular_products %}
+            {% for product in popular_products|get_items:"0:4" %}
               {% url 'product:detail' product.id as product_url %}
               <div class="Card">
                 {% include "card.html" %}
               </div>
             {% endfor %}
+            {% for product in popular_products|get_items:"4:6" %}
+              {% url 'product:detail' product.id as product_url %}
+              <div class="Card hide_md">
+                {% include "card.html" %}
+              </div>
+            {% endfor %}
+            {% for product in popular_products|get_items:"6:8" %}
+              {% url 'product:detail' product.id as product_url %}
+              <div class="Card hide_md hide_1450">
+                {% include "card.html" %}
+              </div>
+            {% endfor %}
             {% endif %}
           </div>
+          
         </div>
       </div>
     </div>
@@ -182,43 +201,11 @@
             <div class="Slider-box Cards Cards_hz">
               {% if hot_offers %}
               {% for product in hot_offers %}
+              {% url 'product:detail' product.id as product_url %}
               <div class="Slider-item">
                 <div class="Slider-content">
                   <div class="Card" style="max-height: 202px;">
-                    <a class="Card-picture" style="width: 30%;" href="{% url 'product:detail' %}">
-                      {% if product.image %}
-                      <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
-                      {% else %}
-                      <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
-                      {% endif %}
-                    </a>
-                    <div class="Card-content">
-                      <strong class="Card-title">
-                        <a href="{% url 'product:detail' %}">{{ product.title }}</a>
-                      </strong>
-                      <div class="Card-description">
-                        <div class="Card-cost">
-                          
-                          <span class="Card-priceOld">${% price_format product.avg_price %}</span>
-                          <span class="Card-price">${{ product.discount.price }}</span>
-                        </div>
-                        <div class="Card-category">{{ product.category }}</div>
-                        <div class="Card-hover">
-                          <a class="Card-btn" href="add_bookmark">
-                            <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
-                          </a>
-                          <a class="Card-btn" href="{% url 'product:detail' %}">
-                            <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
-                          </a>
-                          <a class="Card-btn" href="{% url 'user:compare_list' %}">
-                            <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    {% if product.discount.value %}
-                    <div class="Card-sale">-{{ product.discount.value }}%</div>
-                    {% endif %}
+                    {% include "card.html" %}
                   </div>
                 </div>
               </div>
