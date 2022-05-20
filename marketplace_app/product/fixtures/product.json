@@ -10,7 +10,11 @@
       "phone": "+74742893166",
       "mobile": "+74742893167",
       "email_general": "electronic.shop@mail.shop",
-      "email_editor": "electronic.shop.editor@mail.shop"
+      "email_editor": "electronic.shop.editor@mail.shop",
+      "shipping_policy": "Доставка по России",
+      "refund_policy": "Возврат в течение 30 дней",
+      "support_policy": "Круглосуточно",
+      "quality_policy": "Лучшее качество"
     }
   },
   {
@@ -24,7 +28,11 @@
       "phone": "+78434633152",
       "mobile": "+78434633166",
       "email_general": "cookware.shop@mail.com",
-      "email_editor": "cookware.shop.editor@mail.com"
+      "email_editor": "cookware.shop.editor@mail.com",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -38,7 +46,11 @@
       "phone": "+73479585444",
       "mobile": "+73479587777",
       "email_general": "clothing.shop@mail.ru",
-      "email_editor": "clothing.shop.editor@mail.ru"
+      "email_editor": "clothing.shop.editor@mail.ru",
+      "shipping_policy": "Доставка по России",
+      "refund_policy": "Возврат в течение 30 дней",
+      "support_policy": "Круглосуточно",
+      "quality_policy": "Лучшее качество"
     }
   },
   {
@@ -52,7 +64,11 @@
       "phone": "+73431656921",
       "mobile": "+7343165699",
       "email_general": "computer.shop@mail.ru",
-      "email_editor": "computer.shop.editor@mail.ru"
+      "email_editor": "computer.shop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -66,7 +82,11 @@
       "phone": "+78112295768",
       "mobile": "+78112297918",
       "email_general": "furniture.shop@mail.ru",
-      "email_editor": "furniture.shop.editor@mail.ru"
+      "email_editor": "furniture.shop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -80,7 +100,11 @@
       "phone": "+74942870798",
       "mobile": "+74942870711",
       "email_general": "lightshop@mail.ru",
-      "email_editor": "lightshop.editor@mail.ru"
+      "email_editor": "lightshop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {
@@ -94,7 +118,11 @@
       "phone": "+78352375230",
       "mobile": "+78352375211",
       "email_general": "universal.shop@mail.ru",
-      "email_editor": "universal.shop.editor@mail.ru"
+      "email_editor": "universal.shop.editor@mail.ru",
+      "shipping_policy": "Коротко о доставке",
+      "refund_policy": "Коротко о возвратах",
+      "support_policy": "Коротко о поддержке",
+      "quality_policy": "Коротко о качестве"
     }
   },
   {

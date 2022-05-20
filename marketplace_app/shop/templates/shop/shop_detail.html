@@ -49,7 +49,7 @@
             <div class="media-content">
               <strong class="media-title">Shipping & Returns
               </strong>
-              <p class="media-text">World wide shipping
+              <p class="media-text">{{ shop.shipping_policy }}
               </p>
             </div>
           </div>
@@ -62,7 +62,7 @@
             <div class="media-content">
               <strong class="media-title">Money Back
               </strong>
-              <p class="media-text">Guaranted payments
+              <p class="media-text">{{ shop.refund_policy }}
               </p>
             </div>
           </div>
@@ -75,7 +75,7 @@
             <div class="media-content">
               <strong class="media-title">Support Policy
               </strong>
-              <p class="media-text">Fast support team
+              <p class="media-text">{{ shop.support_policy }}
               </p>
             </div>
           </div>
@@ -88,7 +88,7 @@
             <div class="media-content">
               <strong class="media-title">Quality Guarantee
               </strong>
-              <p class="media-text">Best guaranted items
+              <p class="media-text">{{ shop.quality_policy }}
               </p>
             </div>
           </div>
@@ -160,7 +160,7 @@
         <div class="row row_verticalCenter row_maxHalf">
           <div class="row-block">
             <div class="pict">
-              <img src="/media/{{ shop.image }}" alt="{{ shop.name }}"/>
+              <img src="{{ shop.image.url }}" alt="{{ shop.name }}"/>
             </div>
           </div>
           <div class="row-block">
@@ -168,23 +168,20 @@
             </h2>
             <p>{{ shop.description }}
             </p>
-
-            {# TODO: Что это ? #}
-
-            <ul>
-              <li>Lorem ipsum dolor sit amet, consectetuer
-              </li>
-              <li>adipiscing elit doli. Aenean commodo ligula
-              </li>
-              <li>eget dolor. Aenean massa. Cumtipsu sociis
-              </li>
-              <li>natoque penatibus et magnis dis parturient
-              </li>
-              <li>montesti, nascetur ridiculus mus. Donec
-              </li>
-              <li>quam felis, ultricies nec, pellentesque eutu
-              </li>
-            </ul>
+{#            <ul>#}
+{#              <li>Lorem ipsum dolor sit amet, consectetuer#}
+{#              </li>#}
+{#              <li>adipiscing elit doli. Aenean commodo ligula#}
+{#              </li>#}
+{#              <li>eget dolor. Aenean massa. Cumtipsu sociis#}
+{#              </li>#}
+{#              <li>natoque penatibus et magnis dis parturient#}
+{#              </li>#}
+{#              <li>montesti, nascetur ridiculus mus. Donec#}
+{#              </li>#}
+{#              <li>quam felis, ultricies nec, pellentesque eutu#}
+{#              </li>#}
+{#            </ul>#}
           </div>
         </div>
         <header class="Section-header">
@@ -192,48 +189,14 @@
           </h2>
         </header>
         <div class="Cards">
-          {% for product in products %}
-          <div class="Card">
-
-            {# TODO: url 'product:detail' pk=product.pk #}
-
-            <a class="Card-picture" href="{% url 'product:detail' %}">
-              <img src="/media/{{ product.image }}" alt="{{ product.title }}"/>
-            </a>
-            <div class="Card-content">
-              <strong class="Card-title">
-                <a href="{% url 'product:detail' %}">{{ product.title }}
-                </a>
-              </strong>
-              <div class="Card-description">
-                <div class="Card-cost">
-                  <span class="Card-priceOld">{{ product.price }}
-                  </span>
-                  <span class="Card-price">{{ product.discounted_price }}
-                  </span>
+          {% if products %}
+            {% for product in products %}
+              {% url 'product:detail' product.id as product_url %}
+                <div class="Card">
+                  {% include "card.html" %}
                 </div>
-                <div class="Card-category">{{ product.category }}
-                </div>
-                <div class="Card-hover">
-
-                    {# TODO: скорректировать ссылки #}
-
-                  <a class="Card-btn" href="add_bookmark">
-                    <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
-                  </a>
-                  <a class="Card-btn" href="{% url 'product:detail' %}">
-                    <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
-                  </a>
-                  <a class="Card-btn" href="{% url 'user:compare_list' %}">
-                    <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="Card-sale">{{ product.discount }}
-            </div>
-          </div>
-          {% endfor %}
+            {% endfor %}
+          {% endif %}
         </div>
       </div>
     </div>
