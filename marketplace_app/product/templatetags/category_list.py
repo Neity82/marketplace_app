@@ -1,3 +1,5 @@
+from typing import Dict, List, Union, OrderedDict
+import collections
 from django import template
 from product.models import Category
 
@@ -9,13 +11,15 @@ def get_categories():
     """
     Формируем словарь списков из категорий
     """
-    parent_categories = [
-        {"parent": item, "childs": []}
-        for item
-        in Category.objects.filter(parent_id=None)
-                           .order_by("sort_index", "title")
-    ]
-    child_categories = [
+    categories: OrderedDict[int, Dict[str, Union[Category, List[Category]]]] =\
+        collections.OrderedDict()
+    for item in (Category.objects.filter(parent_id=None)
+                 .order_by("sort_index", "title")):
+        categories[item.id] = {
+            "object": item,
+            "childs": []
+        }
+    child_categories: List[Category] = [
         item
         for item
         in Category.objects.filter(parent_id__isnull=False)
@@ -23,21 +27,18 @@ def get_categories():
     ]
 
     while child_categories:
-        parent_id = child_categories[0].parent_id
-        for idx in range(len(parent_categories)):
-            if parent_categories[idx]["childs"]:
-                for child in parent_categories[idx]["childs"]:
-                    if child["parent"].id == parent_id:
-                        child["childs"].append(
-                            child_categories.pop(0)
-                        )
-                        break
-            if parent_categories[idx]["parent"].id == parent_id:
-                parent_categories[idx]["childs"].append(
-                    {
-                        "parent": child_categories.pop(0),
-                        "childs": []
-                    }
-                )
-                break
-    return parent_categories
+        child: Category = child_categories.pop(0)
+        categories[child.parent_id]["childs"].append(child)
+    return categories
+
+
+@register.filter(name="update_page")
+def update_page(get_dict: dict, page: int):
+    get_dict["page"] = page
+    return "&".join([f"{key}={value}" for key, value in get_dict.items()])
+
+
+@register.filter(name='get_items')
+def get(list_: list, index: str):
+    start_idx_str, stop_idx_str = index.split(sep=":")
+    return list_[int(start_idx_str):int(stop_idx_str)]

@@ -1,10 +1,15 @@
-import random
-from datetime import date
+from datetime import date, datetime
+import pytz
+from decimal import Decimal
+from typing import Dict, List, Union
 
 from django.db import models
-from django.db.models import Q, Avg, Func, Min
-from django.utils.translation import gettext_lazy as _
+from django.db.models import Q, Avg, Min
+
 from .utils import category_icon_path, product_image_path
+from django.utils.translation import gettext_lazy as _
+from discount.models import Discount
+from discount.models import ProductDiscount
 
 
 class Tag(models.Model):
@@ -242,40 +247,120 @@ class Product(models.Model):
         )
 
     @property
-    def discount(self):
-        # TODO:
-        #  Необходимо реализовать получение актуального
-        #   значения скидки на данный товар в процентах.
-        #  Сейчас возвращает значение из шаблона.
-        discount_value = 60
-        return f"-{discount_value}%"
+    def price(self) -> Decimal:
+        """Метод для получения средней цены
+
+        :return: Значение средней цены
+        :rtype: Decimal
+        """
+        avg_price = Stock.objects.filter(
+            product=self.pk,
+            count__gt=0
+        ).aggregate(avg=Avg('price'))['avg']
+        return Decimal(round(avg_price, 2))
+
+    def _get_discounted_price(self, discount: 'Discount') -> Decimal:
+        """Метод получения скидочной цены
+
+        :param discount: Объект скидки
+        :type discount: Discount
+        :return: Скидочная стоимость
+        :rtype: Decimal
+        """
+        if discount.discount_mechanism == "P":
+            return Decimal(
+                round(
+                    (
+                        self.price *
+                        (100 - discount.discount_value) / 100
+                    ),
+                    2
+                )
+            )
+        elif discount.discount_mechanism == "S":
+            result: Decimal = (
+                Decimal(
+                    round((self.price - discount.discount_value), 2)
+                )
+                if self.price - discount.discount_value >= 1
+                else Decimal("1.00")
+            )
+            return result
+        elif discount.discount_mechanism == "F":
+            return Decimal(discount.discount_value)
+        return Decimal('NaN')
 
     @property
-    def price(self):
-        # TODO:
-        #  Необходимо реализовать получение актуальной
-        #   цены для продукта с учетом того, что в бд
-        #   может быть несколько вхождений с разной ценой.
-        #  Сейчас реализовано по методу FIFO.
-        entity = self.stock.filter(count__gt=0).reverse().first()
-        return entity.price
+    def discount(self) -> Dict[str, Union[str, Decimal]]:
+        """Свойство для хранения механизма скидки и скидочной стоимости
 
-    @property
-    def discounted_price(self):
-        # TODO:
-        #  Необходимо реализовать получение
-        #   цены продукта с учетом скидки.
-        #  Сейчас возвращает актуальную цену без скидки.
-        return self.price
-
-    # @property
-    # def average_price(self):
-    #     """Метод для получения средней цены"""
-    #     avg_price = Stock.objects.filter(
-    #         product=self.pk,
-    #         count__gt=0
-    #     ).aggregate(avg=Avg('price'))['avg']
-    #     return '{:.2f}'.format(avg_price)
+        :return: Словарь с механизмом скидки и скидочной стоимостью
+        :rtype: Dict[str, Union[str, Decimal]]
+        """
+        today: datetime = pytz.UTC.localize(datetime.today())
+        categories_list: list = [self.category_id]
+        if self.category.parent_id is not None:
+            categories_list += [self.category.parent_id]
+        discounts: List[ProductDiscount] = ProductDiscount.objects\
+            .select_related("discount_id").filter(
+                (
+                    Q(
+                        product_id=self,
+                        discount_id__discount_type='PD',
+                        discount_id__is_active=True
+                    ) | Q(
+                        category_id__in=categories_list,
+                        discount_id__discount_type='PD',
+                        discount_id__is_active=True
+                    )
+                ) & (
+                    Q(
+                        discount_id__start_at__lte=today,
+                        discount_id__finish_at=None
+                    ) | Q(
+                        discount_id__start_at__lte=today,
+                        discount_id__finish_at__gt=today
+                    )
+                )
+            )
+        result: Dict[str, Union[str, int, Decimal, None]] = {
+            "type": None,
+            "value": None,
+            "price": self.price
+        }
+        if not discounts:
+            return result
+        discount_percent: ProductDiscount = discounts.filter(
+            discount_id__discount_mechanism='P'
+        ).order_by(
+            '-discount_id__discount_value'
+        ).first()
+        discount_sum: ProductDiscount = discounts.filter(
+            discount_id__discount_mechanism='S'
+        ).order_by(
+            '-discount_id__discount_value'
+        ).first()
+        discount_fix: ProductDiscount = discounts.filter(
+            discount_id__discount_mechanism='F'
+        ).order_by(
+            'discount_id__discount_value'
+        ).first()
+        max_discount_list = [
+            discount_percent,
+            discount_sum,
+            discount_fix
+        ]
+        if self.id == 59:
+            print("")
+        for obj in max_discount_list:
+            if obj is None:
+                continue
+            discounted_price = self._get_discounted_price(obj.discount_id)
+            if discounted_price < result["price"]:
+                result["type"] = obj.discount_id.discount_mechanism
+                result["price"] = discounted_price
+                result["value"] = obj.discount_id.discount_value
+        return result
 
     @classmethod
     def get_popular(cls, shop=None, limit: int = 8):
@@ -358,16 +443,19 @@ class DailyOffer(models.Model):
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
 
-    def __str__(self) -> str:
-        return f'Daily offer: product: {getattr(self.product, "title")} on: {self.select_date}'
+    # def __str__(self) -> str:
+    #     return (
+    #         f'Daily offer: product: {getattr(self.product, "title")}',
+    #         f'on: {self.select_date}'
+    #     )
 
     @classmethod
     def get_daily_offer(cls):
         """Метод для получения предложения дня"""
 
-        queryset = DailyOffer.objects.filter(select_date=date.today()).annotate(
-            avg_price=Avg('product__stock__price')
-        ).select_related('product__category')
+        queryset = DailyOffer.objects.filter(select_date=date.today())\
+            .annotate(avg_price=Avg('product__stock__price'))\
+            .select_related('product__category')
 
         if queryset.exists():
             daily_offer = queryset.latest('select_date')
@@ -401,7 +489,10 @@ class Stock(models.Model):
         verbose_name_plural = _('stocks')
 
     def __str__(self):
-        return f'Stock: product: {getattr(self.product, "title")} shop: {getattr(self.shop, "name", None)}'
+        return (
+            f'Stock: product: {getattr(self.product, "title")}',
+            f'shop: {getattr(self.shop, "name", None)}'
+        )
 
 
 class ProductReview(models.Model):
@@ -435,4 +526,7 @@ class ProductReview(models.Model):
         verbose_name_plural = _('user product views')
 
     def __str__(self) -> str:
-        return f'{self.date}: user: {self.user} product: {getattr(self.product, "title")}'
+        return (
+            f'{self.date}: user: {self.user}',
+            f'product: {getattr(self.product, "title")}'
+        )

@@ -1,3 +1,4 @@
+import os
 from marketplace_app.settings import *
 
 
@@ -9,26 +10,12 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", default="").split(" ")
 DATABASES = {
     "default": {
         "ENGINE": os.getenv("SQL_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": os.getenv("SQL_DATABASE", default=os.path.join(BASE_DIR, "db.sqlite3")),
+        "NAME": os.getenv(
+            "SQL_DATABASE", default=os.path.join(BASE_DIR, "db.sqlite3")
+        ),
         "USER": os.environ.get("SQL_USER", "user"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
         "HOST": os.environ.get("SQL_HOST", "localhost"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
-
-STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
-
-STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
-
-
-# print(STATICFILES_DIRS)
-
-# LOGIN_URL = '/login/'
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL = '/login/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'

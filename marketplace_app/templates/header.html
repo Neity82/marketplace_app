@@ -10,11 +10,11 @@
       <div class="row-block">
         <div class="row ControlPanel-rowSplit">
           <div class="row-block">
-            <a class="ControlPanel-title" href="free_delivery">Free Delivery
+            <a class="ControlPanel-title" href="free_delivery">{% translate "Free Delivery" %}
             </a>
           </div>
           <div class="row-block hide_700">
-            <span class="ControlPanel-title">Follow Us
+            <span class="ControlPanel-title">{% translate "Follow Us" %}
             </span>
             <ul class="menu menu_img menu_smallImg ControlPanel-menu">
               <li class="menu-item">
@@ -50,16 +50,16 @@
         <div class="row ControlPanel-rowSplit">
           <div class="row-block">
             {% if user.is_authenticated %}
-            <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">Account
+            <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">{% translate "Account" %}
             </a>
             <span class="ControlPanel-title"> / </span>
-            <a class="ControlPanel-title" href="{% url 'user:logout' %}">Log Out
+            <a class="ControlPanel-title" href="{% url 'user:logout' %}">{% translate "Log Out" %}
             </a>
             {% else %}
-            <button id="login_btn" class="ControlPanel-title link" id='login'>Login
+            <button id="login_btn" class="ControlPanel-title link" id='login'>{% translate "Login" %}
             </button>
             <span class="ControlPanel-title"> / </span>
-            <button id="sign_up_btn" class="ControlPanel-title link" id='sign_up'>Register
+            <button id="sign_up_btn" class="ControlPanel-title link" id='sign_up'>{% translate "Register" %}
             </button>
             {% endif %}
           </div>
@@ -79,27 +79,27 @@
       <div class="menuModal" id="navigate">
         <ul class="menu menu_main">
           <li class="menu-item">
-            <a class="menu-link" href="{% url 'product:home' %}">Home
+            <a class="menu-link" href="{% url 'product:home' %}">{% translate "Home" %}
             </a>
           </li>
           <li class="menu-item">
             <span class="menu-label menu-label_danger">New
             </span>
-            <a class="menu-link" href="{% url 'product:list' %}">Catalog
+            <a class="menu-link" href="{% url 'product:list' %}">{% translate "Catalog" %}
             </a>
           </li>
           <li class="menu-item">
-            <a class="menu-link" href="{% url 'shop:list' %}">Shops
+            <a class="menu-link" href="{% url 'shop:list' %}">{% translate "Shops" %}
             </a>
           </li>
           <li class="menu-item">
             <span class="menu-label menu-label_success">Hot
             </span>
-            <a class="menu-link" href="{% url 'discount:list' %}">Discounts
+            <a class="menu-link" href="{% url 'discount:list' %}">{% translate "Discounts" %}
             </a>
           </li>
           <li class="menu-item">
-            <a class="menu-link" href="contacts_page">Contacts
+            <a class="menu-link" href="contacts_page">{% translate "Contacts" %}
             </a>
           </li>
         </ul>
@@ -125,14 +125,10 @@
     </div>
     <div class="row-block Header-trigger">
       <a class="menuTrigger" href="#navigate">
-        <div class="menuTrigger-content">Показать навигацию
-        </div>
-        <span>
-        </span>
-        <span>
-        </span>
-        <span>
-        </span>
+        <div class="menuTrigger-content">Показать навигацию</div>
+        <span></span>
+        <span></span>
+        <span></span>
       </a>
     </div>
   </div>
@@ -145,56 +141,39 @@
           <div class="CategoriesButton-icon">
             <img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg"/>
           </div>
-          <span class="CategoriesButton-text">All Departments
+          <span class="CategoriesButton-text">{% translate "All Departments" %}
           </span>
           <div class="CategoriesButton-arrow">
           </div>
         </div>
 
         <div class="CategoriesButton-content">
-        {% for category in categories %}
+        {% for category in categories.values %}
           <div class="CategoriesButton-link">
-            <a href="/catalog/?category={{ category.parent.id }}">
+            <a href="/catalog/?category={{ category.object.id }}">
               <div class="CategoriesButton-icon">
-                <img src="{{ category.parent.icon.url }}" alt=""/>
+                <img src="{{ category.object.icon.url }}" alt=""/>
               </div>
               <span class="CategoriesButton-text">
                 {% comment %} {% blocktrans %} {% endcomment %}
-                {{ category.parent.title|capfirst }}
+                {{ category.object.title }}
                 {% comment %} {% endblocktrans %} {% endcomment %}
               </span>
             </a>
             {% if category.childs %}
-            <a class="CategoriesButton-arrow" href="/catalog/?category={{ category.parent.id }}"></a>
+            <a class="CategoriesButton-arrow" href="/catalog/?category={{ category.object.id }}"></a>
             <div class="CategoriesButton-submenu">
               {% for subcategory in category.childs %}
-                <a class="CategoriesButton-link" href="/catalog/?category={{ subcategory.parent.id }}">
+                <a class="CategoriesButton-link" href="/catalog/?category={{ subcategory.id }}">
                   <div class="CategoriesButton-icon">
-                      <img src="{{ subcategory.parent.icon.url }}" alt=""/>
+                      <img src="{{ subcategory.icon.url }}" alt=""/>
                   </div>
                   <span class="CategoriesButton-text">
                     {% comment %} {% blocktrans %} {% endcomment %}
-                    {{ subcategory.parent.title|capfirst }}
+                    {{ subcategory.title }}
                     {% comment %} {% endblocktrans %} {% endcomment %}
                   </span>
                 </a>
-                {% if subcategory.childs %}
-                  <a class="CategoriesButton-arrow" href="/catalog/?category={{ subcategory.parent.id }}"></a>
-                  <div class="CategoriesButton-subsubmenu">
-                  {% for subsubcategory in subcategory.childs %}
-                    <a class="CategoriesButton-link" href="/catalog/?category={{ subsubcategory.id }}">
-                      <div class="CategoriesButton-icon">
-                          <img src="{{ subsubcategory.icon.url }}" alt=""/>
-                      </div>
-                      <span class="CategoriesButton-text">
-                        {% comment %} {% blocktrans %} {% endcomment %}
-                        {{ subsubcategory.title|capfirst }}
-                        {% comment %} {% endblocktrans %} {% endcomment %}
-                      </span>
-                    </a>
-                  {% endfor %}
-                  </div>
-                {% endif %}
               {% endfor %}
               </div>
             {% endif %}
@@ -208,10 +187,11 @@
     </div>
     <div class="Header-search">
       <div class="search">
-        <form class="form form_search" action="#" method="post">
-          <input class="search-input" id="query" name="query" type="text" placeholder="What are you looking for ..."/>
+        <form class="form form_search" action="/catalog/" method="post">
+          {% csrf_token %}
+          <input class="search-input" id="query" name="query" type="text" placeholder="{% translate "What are you looking for ..." %}"/>
           <button class="search-button" type="submit" name="search" id="search">
-            <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>Search
+            <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>{% translate "Search" %}
           </button>
         </form>
       </div>

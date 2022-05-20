@@ -77,27 +77,25 @@
 </div>
 <div class="Pagination">
   <div class="Pagination-ins">
-    {% comment %} {% if page_obj.pages_num > 1 %} {% endcomment %}
-      {% if page_obj.has_previous %}
-        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
-          <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="<<"/>
-        </a>
-        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
-          <span class="Pagination-text">{{ page_obj.previous_page_number }}</span>
-        </a>
-      {% endif %}
-      <span class="Pagination-element Pagination-element_current">
-        <span class="Pagination-text">{{ page_obj.number }}</span>
-      </span>
-      {% if page_obj.has_next %}
-        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
-          <span class="Pagination-text">{{ page_obj.next_page_number }}</span>
-        </a>
-        <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
-          <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt=">>"/>
-        </a>
-      {% endif %}
-    {% comment %} {% endif %} {% endcomment %}
+    {% if page_obj.has_previous %}
+      <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
+        <img src="{% static 'assets/img/icons/prevPagination.svg' %}" alt="<<"/>
+      </a>
+      <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.previous_page_number }}">
+        <span class="Pagination-text">{{ page_obj.previous_page_number }}</span>
+      </a>
+    {% endif %}
+    <span class="Pagination-element Pagination-element_current">
+      <span class="Pagination-text">{{ page_obj.number }}</span>
+    </span>
+    {% if page_obj.has_next %}
+      <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
+        <span class="Pagination-text">{{ page_obj.next_page_number }}</span>
+      </a>
+      <a class="Pagination-element Pagination-element_prev" href="?page={{ page_obj.next_page_number }}">
+        <img src="{% static 'assets/img/icons/nextPagination.svg' %}" alt=">>"/>
+      </a>
+    {% endif %}
   </div>
 </div>
 {% endblock %}

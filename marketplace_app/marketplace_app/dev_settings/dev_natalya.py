@@ -35,8 +35,6 @@ DATABASES = {
     }
 }
 
-LANGUAGE_CODE = 'ru'
-
 STATIC_URL = '/static/'
 
 # LOGIN_URL = '/login/'

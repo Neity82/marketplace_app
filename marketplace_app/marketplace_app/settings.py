@@ -46,11 +46,13 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
+    # 'modeltranslation',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -137,14 +139,23 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = [
+    ('en', 'English'),
+    ('ru', 'Русский'),
+]
+
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'),]
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
+    STATIC_DISCOUNT_DIR,
 ]
 
 STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
@@ -161,4 +172,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'user.CustomUser'
 
+# LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/login/'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
