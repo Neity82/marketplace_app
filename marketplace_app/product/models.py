@@ -1,7 +1,7 @@
 from datetime import date, datetime
 import pytz
 from decimal import Decimal
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 from django.db import models
 from django.db.models import Q, Avg, Min, Sum
@@ -102,7 +102,10 @@ class Category(models.Model):
             product__stock__count__gt=0,
         ).distinct().annotate(
             min_price=Min('product__stock__price'),
-            selling=Coalesce(Sum('product__stock__order_entity_stock__count'), 0)
+            selling=Coalesce(
+                Sum('product__stock__order_entity_stock__count'),
+                0
+            )
         ).order_by(
             '-sort_index',
             '-selling'
@@ -251,35 +254,38 @@ class Product(models.Model):
         )
 
     @property
-    def price(self):
+    def _price(self) -> Optional['Decimal']:
         """Метод для получения средней цены
 
         :return: Значение средней цены
-        :rtype: Decimal
+        :rtype: Optional[Decimal]
         """
         avg_price = Stock.objects.filter(
             product=self.pk,
             count__gt=0
         ).aggregate(avg=Avg('price'))['avg']
+        print('!!!!!!', avg_price)
         if avg_price is None:
             return None
-        print('!!!!!!', avg_price)
         return Decimal(round(avg_price, 2))
 
-    def _get_discounted_price(self, discount: 'Discount') -> Decimal:
+    def _get_discounted_price(
+        self, base_price: 'Decimal', discount: 'Discount'
+    ) -> Decimal:
         """Метод получения скидочной цены
 
+        :param base_price: Базовая цена
+        :type base_price: Decimal
         :param discount: Объект скидки
         :type discount: Discount
         :return: Скидочная стоимость
         :rtype: Decimal
         """
-        price = self.price
         if discount.discount_mechanism == "P":
             return Decimal(
                 round(
                     (
-                        price *
+                        base_price *
                         (100 - discount.discount_value) / 100
                     ),
                     2
@@ -288,9 +294,9 @@ class Product(models.Model):
         elif discount.discount_mechanism == "S":
             result: Decimal = (
                 Decimal(
-                    round((price - discount.discount_value), 2)
+                    round((base_price - discount.discount_value), 2)
                 )
-                if price - discount.discount_value >= 1
+                if base_price - discount.discount_value >= 1
                 else Decimal("1.00")
             )
             return result
@@ -305,6 +311,15 @@ class Product(models.Model):
         :return: Словарь с механизмом скидки и скидочной стоимостью
         :rtype: Dict[str, Union[str, Decimal]]
         """
+        base_price = self._price
+        result: Dict[str, Union[str, int, Decimal, None]] = {
+            "type": None,
+            "value": None,
+            "price": base_price,
+            "base": base_price
+        }
+        if base_price is None:
+            return result
         today: datetime = pytz.UTC.localize(datetime.today())
         categories_list: list = [self.category_id]
         if self.category.parent_id is not None:
@@ -331,12 +346,7 @@ class Product(models.Model):
                     )
                 )
             )
-        result: Dict[str, Union[str, int, Decimal, None]] = {
-            "type": None,
-            "value": None,
-            "price": self.price,
-        }
-        if result["price"] is None or not discounts:
+        if not discounts:
             return result
         discount_percent: ProductDiscount = discounts.filter(
             discount_id__discount_mechanism='P'
@@ -358,12 +368,12 @@ class Product(models.Model):
             discount_sum,
             discount_fix
         ]
-        if self.id == 59:
-            print("")
         for obj in max_discount_list:
             if obj is None:
                 continue
-            discounted_price = self._get_discounted_price(obj.discount_id)
+            discounted_price = self._get_discounted_price(
+                base_price, obj.discount_id
+            )
             if discounted_price < result["price"]:
                 result["type"] = obj.discount_id.discount_mechanism
                 result["price"] = discounted_price

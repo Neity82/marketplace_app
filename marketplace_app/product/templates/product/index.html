@@ -90,6 +90,7 @@
         <div class="Section-column">
           {% if daily_offer %}
           {% with daily_offer.product as product %}
+          {% with product.discount as discount %}
           <div class="Section-columnSection Section-columnSection_mark">
             <header class="Section-columnHeader">
               <strong class="Section-columnTitle">Limited Deals</strong>
@@ -110,9 +111,9 @@
                 <div class="Card-description">
                   <div class="Card-cost">
                     {% if product.discount.type %}
-                    <span class="Card-priceOld">${{ product.price }}</span>
+                    <span class="Card-priceOld">${{ discount.base }}</span>
                     {% endif %}
-                    <span class="Card-price">${{ product.discount.price}}</span>
+                    <span class="Card-price">${{ discount.price}}</span>
                   </div>
                   <div class="Card-category">{{ product.category }}
                   </div>
@@ -155,6 +156,7 @@
             </div>
           </div>
           {% endwith %}
+          {% endwith %}
           {% endif %}
         </div>
         <div class="Section-content">
@@ -165,19 +167,16 @@
           <div class="Cards">
             {% if popular_products %}
             {% for product in popular_products|get_items:"0:4" %}
-              {% url 'product:detail' product.id as product_url %}
               <div class="Card">
                 {% include "card.html" %}
               </div>
             {% endfor %}
             {% for product in popular_products|get_items:"4:6" %}
-              {% url 'product:detail' product.id as product_url %}
               <div class="Card hide_md">
                 {% include "card.html" %}
               </div>
             {% endfor %}
             {% for product in popular_products|get_items:"6:8" %}
-              {% url 'product:detail' product.id as product_url %}
               <div class="Card hide_md hide_1450">
                 {% include "card.html" %}
               </div>
@@ -201,7 +200,6 @@
             <div class="Slider-box Cards Cards_hz">
               {% if hot_offers %}
               {% for product in hot_offers %}
-              {% url 'product:detail' product.id as product_url %}
               <div class="Slider-item">
                 <div class="Slider-content">
                   <div class="Card" style="max-height: 202px;">
@@ -284,7 +282,6 @@
               {% for product in limited_edition %}
               <div class="Slider-item">
                 <div class="Slider-content">
-                  {% url 'product:detail' product.id as product_url %}
                   <div class="Card">
                     {% include "card.html" %}
                   </div>

@@ -1,6 +1,7 @@
 {% load static %}
 {% load i18n %}
 
+{% url 'product:detail' product.id as product_url %}
 {% with product.discount as discount %}
 <a class="Card-picture" href="{{ product_url }}">
   <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
@@ -12,12 +13,12 @@
   <div class="Card-description">
     <div class="Card-cost">
       {% if discount.type %}
-        <span class="Card-priceOld">${{ product.price }}</span>
+        <span class="Card-priceOld">${{ discount.base }}</span>
       {% endif %}
-      {% if product.price == None %}
-      <span class="Card-price">Товар закончился</span>
-      {% else %}
+      {% if discount.base %}
       <span class="Card-price">${{ discount.price}}</span>
+      {% else %}
+      <span class="Card-price">Товар закончился</span>
       {% endif %}
     </div>
     <div class="Card-category">{{ product.category }}</div>
