@@ -264,7 +264,6 @@ class Product(models.Model):
             product=self.pk,
             count__gt=0
         ).aggregate(avg=Avg('price'))['avg']
-        print('!!!!!!', avg_price)
         if avg_price is None:
             return None
         return Decimal(round(avg_price, 2))
