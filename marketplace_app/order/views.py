@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
 
-from order.models import Cart
+from order.models import Cart, Order
 
 
 class CartView(generic.ListView):
@@ -16,8 +16,17 @@ class CartView(generic.ListView):
     context_object_name = 'products'
 
 
-def order_detail(request, *args, **kwargs):
-    return render(request, 'order/oneorder.html', {})
+class OrderDetail(generic.DetailView):
+    """
+        Представление страницы oneorder.html
+
+        - детальная информация заказа
+        - возможность оплатить заказ, если не оплачен
+    """
+
+    model = Order
+    template_name = 'order/oneorder.html'
+    context_object_name = 'order'
 
 
 def order(request, *args, **kwargs):

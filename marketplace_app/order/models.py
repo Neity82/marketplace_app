@@ -1,3 +1,6 @@
+from decimal import Decimal
+from typing import List
+
 from django.db import models
 from django.db.models import Sum, F
 from django.utils.translation import gettext as _
@@ -149,25 +152,52 @@ class Order(models.Model):
         return f'Order №{self.pk}'
 
     @property
-    def sum_order(self) -> str:
-        """Получение общей суммы заказа без учета скидки"""
+    def get_order_entity(self) -> List['OrderEntity']:
+        """Метод получения товаров в заказе
 
-        sum_order: int = 0
-        order_entity = OrderEntity.objects.filter(
+        :return: Товары в заказе
+        :rtype: List['OrderEntity']
+        """
+
+        result: List[OrderEntity] = OrderEntity.objects.filter(
+            order_id=self
+        ).select_related(
+            'stock_id',
+            'stock_id__product'
+        )
+        return result
+
+    @property
+    def sum_order(self) -> Decimal:
+        """
+        Получение общей суммы заказа без учета скидки
+
+        :return: Значение суммы заказа
+        :rtype: Decimal
+        """
+
+        sum_order: Decimal = Decimal(0)
+        order_entity: List[OrderEntity] = OrderEntity.objects.filter(
             order_id=self.pk
         ).annotate(
             sum=F('price') * F('count')
         )
         for sum_entity in order_entity:
             sum_order += sum_entity.sum
-        return '{:.2f}'.format(sum_order)
+
+        return Decimal(round(sum_order, 2))
 
     @property
-    def discounted_sum_order(self) -> str:
-        """Получение общей суммы заказа с учетом скидки"""
+    def discounted_sum_order(self) -> Decimal:
+        """
+        Получение общей суммы заказа с учетом скидки
 
-        discounted_sum_order: int = 0
-        order_entity = OrderEntity.objects.filter(
+        :return: Значение суммы заказа со скидкой
+        :rtype: Decimal
+        """
+
+        discounted_sum_order: Decimal = Decimal(0)
+        order_entity: List[OrderEntity] = OrderEntity.objects.filter(
             order_id=self.pk
         ).annotate(
             discounted_sum=F('discounted_price') * F('count'),
@@ -178,14 +208,21 @@ class Order(models.Model):
                 discounted_sum_order += sum_entity.sum
             else:
                 discounted_sum_order += sum_entity.discounted_sum
-        return '{:.2f}'.format(discounted_sum_order)
+        return Decimal(round(discounted_sum_order, 2))
 
     @classmethod
-    def get_last_order(cls, user):
-        """Метод для получения последнего оформленного заказа"""
+    def get_last_order(cls, user: CustomUser):
+        """
+        Метод для получения последнего оформленного заказа
 
-        if Order.objects.filter(user_id=user).exists():
-            last_order = Order.objects.filter(user_id=user).latest('datetime')
+        :param user: CustomUser
+        :type user: CustomUser
+        :return: Последний заказ
+        :rtype: Order
+        """
+
+        if cls.objects.filter(user_id=user).exists():
+            last_order: Order = Order.objects.filter(user_id=user).latest('datetime')
             return last_order
 
 

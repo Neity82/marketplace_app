@@ -70,6 +70,7 @@ class CustomUser(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    @property
     def get_full_name(self) -> str:
         """Возвращает first_name, middle_name и last_name с пробелом между ними."""
 
