@@ -1,5 +1,8 @@
 {% extends "base.html" %}
+
 {% load static %}
+{% load i18n %}
+
 {% block title %}
   {{seo.title}}
 {% endblock %}
@@ -19,15 +22,15 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Shops
+        <h1 class="Middle-title">{% translate "Shops" %}
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">Home
+            <a href="{% url 'product:home' %}">{% translate "Home" %}
             </a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>Shops
+            <span>{% translate "Shops" %}
             </span>
           </li>
         </ul>
@@ -37,30 +40,48 @@
   <div class="Section Section_column Section_columnLeft Section_columnWide">
     <div class="wrap">
       <div class="Section-content Section-content--p0">
-        <div class="row row--column row_verticalCenter row_maxHalf">
-            {% if shops %}
-                {% for shop in shops %}
-                  <div class="row-block">
-                    <div class="pict">
-                      <img src="{{ shop.image.url }}" alt="{{ shop.name }}"/>
-                    </div>
-                  </div>
-                  <div class="row-block">
-                    <h2><a href="{% url 'shop:detail' pk=shop.pk %}">{{ shop.name }}</a>
-                    </h2>
-                    <p>{{ shop.description }}
-                    </p>
-                  </div>
-                {% endfor %}
-            {% else %}
+        <div class="Cards">
+          {% if shops %}
+            {% for shop in shops %}
+                <div class="Card">
+                  {% include "shop/shop_card.html" %}
+                </div>
+            {% endfor %}
+          {% else %}
+            <div class="row row--column row_verticalCenter row_maxHalf">
               <div class="row-block">
-                <h2>There is no shops yet
+                <h2>{% translate "There is no shops yet" %}
                 </h2>
-                <p>But soon there will be
+                <p>{% translate "But soon there will be" %}
                 </p>
               </div>
-            {% endif %}
+            </div>
+          {% endif %}
         </div>
+{#        <div class="row row--column row_verticalCenter row_maxHalf">#}
+{#            {% if shops %}#}
+{#                {% for shop in shops %}#}
+{#                  <div class="row-block">#}
+{#                    <div class="pict">#}
+{#                      <img src="{{ shop.image.url }}" alt="{{ shop.name }}"/>#}
+{#                    </div>#}
+{#                  </div>#}
+{#                  <div class="row-block">#}
+{#                    <h2><a href="{% url 'shop:detail' pk=shop.pk %}">{{ shop.name }}</a>#}
+{#                    </h2>#}
+{#                    <p>{{ shop.description }}#}
+{#                    </p>#}
+{#                  </div>#}
+{#                {% endfor %}#}
+{#            {% else %}#}
+{#              <div class="row-block">#}
+{#                <h2>There is no shops yet#}
+{#                </h2>#}
+{#                <p>But soon there will be#}
+{#                </p>#}
+{#              </div>#}
+{#            {% endif %}#}
+{#        </div>#}
       </div>
     </div>
   </div>
