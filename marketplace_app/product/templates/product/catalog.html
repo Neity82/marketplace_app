@@ -138,19 +138,16 @@
         </div>
         <div class="Cards">
           {% for product in products|get_items:"0:4" %}
-          {% url 'product:detail' product.id as product_url %}
           <div class="Card">
             {% include "card.html" %}
           </div>
           {% endfor %}
           {% for product in products|get_items:"4:6" %}
-          {% url 'product:detail' product.id as product_url %}
           <div class="Card hide_md">
             {% include "card.html" %}
           </div>
           {% endfor %}
           {% for product in products|get_items:"6:8" %}
-          {% url 'product:detail' product.id as product_url %}
           <div class="Card hide_md hide_1450">
             {% include "card.html" %}
           </div>

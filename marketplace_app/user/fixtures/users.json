@@ -1,6 +1,26 @@
 [
 {
   "model": "user.customuser",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$260000$RQDnvO8VePK2bYanv92VZT$VNOLIFKICARPaEoyOmdKg592LRegr6ipxWCy9F71Gfw=",
+    "last_login": "2022-05-20T11:02:33Z",
+    "is_superuser": true,
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2022-05-20T11:02:16Z",
+    "email": "admin@mail.ru",
+    "first_name": "",
+    "middle_name": "",
+    "last_name": "",
+    "phone": "",
+    "avatar": "",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "user.customuser",
   "pk": 16,
   "fields": {
     "password": "pbkdf2_sha256$260000$RQDnvO8VePK2bYanv92VZT$VNOLIFKICARPaEoyOmdKg592LRegr6ipxWCy9F71Gfw=",
@@ -288,6 +308,42 @@
     "user_id": 21,
     "product_id": 64,
     "datetime": "2022-05-19T12:19:38.792Z"
+  }
+},
+{
+  "model": "user.userproductview",
+  "pk": 28,
+  "fields": {
+    "user_id": 1,
+    "product_id": 42,
+    "datetime": "2022-05-20T11:29:45.277Z"
+  }
+},
+{
+  "model": "user.userproductview",
+  "pk": 29,
+  "fields": {
+    "user_id": 1,
+    "product_id": 49,
+    "datetime": "2022-05-20T11:29:49.659Z"
+  }
+},
+{
+  "model": "user.userproductview",
+  "pk": 33,
+  "fields": {
+    "user_id": 1,
+    "product_id": 87,
+    "datetime": "2022-05-20T18:16:10.205Z"
+  }
+},
+{
+  "model": "user.userproductview",
+  "pk": 34,
+  "fields": {
+    "user_id": 1,
+    "product_id": 44,
+    "datetime": "2022-05-20T18:16:37.341Z"
   }
 }
 ]

@@ -1,6 +1,8 @@
 {% load static %}
 {% load i18n %}
 
+{% url 'product:detail' product.id as product_url %}
+{% with product.discount as discount %}
 <a class="Card-picture" href="{{ product_url }}">
   <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
 </a>
@@ -10,10 +12,14 @@
   </strong>
   <div class="Card-description">
     <div class="Card-cost">
-      {% if product.discount.type %}
-        <span class="Card-priceOld">${{ product.price }}</span>
+      {% if discount.type %}
+        <span class="Card-priceOld">${{ discount.base }}</span>
       {% endif %}
-      <span class="Card-price">${{ product.discount.price}}</span>
+      {% if discount.base %}
+      <span class="Card-price">${{ discount.price}}</span>
+      {% else %}
+      <span class="Card-price">Товар закончился</span>
+      {% endif %}
     </div>
     <div class="Card-category">{{ product.category }}</div>
     <div class="Card-hover">
@@ -29,12 +35,13 @@
     </div>
   </div>
 </div>
-{% if product.discount.type %}
-{% if product.discount.type == "P" %}
-    <div class="Card-sale">-{{ product.discount.value }}%</div>
-{% elif product.discount.type == "S" %}
-    <div class="Card-sale">-{{ product.discount.value }}$</div>
-{% elif product.discount.type == "F"  %}
+{% if discount.type %}
+{% if discount.type == "P" %}
+    <div class="Card-sale">-{{ discount.value }}%</div>
+{% elif discount.type == "S" %}
+    <div class="Card-sale">-{{ discount.value }}$</div>
+{% elif discount.type == "F"  %}
     <div class="Card-sale">FIX</div>
 {% endif %}
 {% endif %}
+{% endwith %}
