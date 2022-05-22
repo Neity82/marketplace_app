@@ -1,10 +1,18 @@
 from django.db.models import QuerySet, Sum
+from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest, QueryDict
+from django.urls import reverse
 from django.views import generic
 from django.shortcuts import redirect, render
 from datetime import date, timedelta
+
+from django.views.generic import DetailView
+from django.views.generic.edit import FormMixin
+
 from info.models import Banner
-from product.models import DailyOffer, Product, Category
+from product.forms import ProductReviewForm
+from product.models import DailyOffer, Product, Category, AttributeValue, ProductImage, \
+    ProductReview, Stock
 
 
 class IndexView(generic.TemplateView):
@@ -33,7 +41,8 @@ class IndexView(generic.TemplateView):
 
         context['daily_offer'] = DailyOffer.get_daily_offer()
         context['hot_offers'] = Product.get_product_with_discount()
-        context['limited_edition'] = Product.get_limited_edition(daily_offer=context['daily_offer'])
+        context['limited_edition'] = Product.get_limited_edition(
+            daily_offer=context['daily_offer'])
 
         return context
 
@@ -68,8 +77,8 @@ class ProductListView(generic.ListView):
                 item[0]
                 for item
                 in Category.objects.only("id")
-                                   .filter(parent_id=category)
-                                   .values_list("id")
+                    .filter(parent_id=category)
+                    .values_list("id")
             ]
             result = result.filter(category__id__in=categories_list)
         result = result.order_by("sort_index", "title", "id")
@@ -81,3 +90,37 @@ class ProductListView(generic.ListView):
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
+
+
+class ProductDetailView(FormMixin, DetailView):
+    model = Product
+    template_name = 'product/product.html'
+    context_object_name = 'product'
+    form_class = ProductReviewForm
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDetailView, self).get_context_data()
+        product_on_page = self.get_object()
+        context['images'] = ProductImage.get_product_pics(product_on_page)
+        context['attributes'] = AttributeValue.get_all_attributes_of_product(product_on_page)
+        context['comments'] = ProductReview.get_comments(product_on_page)
+        context['stocks'] = Stock.get_products_in_stock(product_on_page)
+        context['price'] = Product.get_price_with_discount(product_on_page)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        product_item = self.get_object()
+        post_data = request.POST.copy()
+        post_data['product'] = product_item
+        post_data['user'] = self.request.user
+        form = ProductReviewForm(post_data)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(
+            reverse(
+                'product:detail',
+                kwargs={
+                    'pk': product_item.id,
+                }
+            )
+        )

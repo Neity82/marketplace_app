@@ -289,6 +289,10 @@
 .Article img,
 .Product .Tabs-block img {
   margin-top: 20px;
+  width: 100%;
+  max-width: 330px;
+  max-height: 330px;
+  object-fit: scale-down;
 }
 .Article .pict img,
 .Product .Tabs-block .pict img {
@@ -3529,7 +3533,7 @@ a.Cart-title {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 600px;
+  max-height: 600px;
   height: 100%;
   border: 1px solid #e0e0e0;
   padding: 30px;

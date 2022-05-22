@@ -1,10 +1,12 @@
+from __future__ import annotations
 from datetime import date, datetime
 import pytz
 from decimal import Decimal
 from typing import Dict, List, Union
 
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Q, Avg, Min
+from django.db.models import Q, Avg, Min, QuerySet
 
 from .utils import category_icon_path, product_image_path
 from django.utils.translation import gettext_lazy as _
@@ -107,6 +109,25 @@ class Category(models.Model):
         return queryset[:limit]
 
 
+class Unit(models.Model):
+    """Модель: Единица измерения для атрибута"""
+    unit = models.CharField(
+        max_length=16,
+        verbose_name=_('unit'),
+        blank=False,
+        null=False,
+    )
+    unit_description = models.CharField(
+        max_length=128,
+        verbose_name=_('unit description'),
+        blank=False,
+        null=False,
+    )
+
+    def __str__(self) -> str:
+        return getattr(self, "unit")
+
+
 class Attribute(models.Model):
     """
     Модель: характеристика
@@ -124,6 +145,17 @@ class Attribute(models.Model):
         on_delete=models.CASCADE,
     )
 
+    rank = models.IntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0),
+        ],
+        help_text=_('Rank of importance. 100 - most important'),
+    )
+
     help_text = models.CharField(max_length=150)
     objects = models.Manager()
 
@@ -139,13 +171,38 @@ class AttributeValue(models.Model):
     """
     Модель: значение характеристики
     """
-    value = models.CharField(max_length=255, verbose_name=_('value'))
+    value = models.CharField(
+        max_length=255,
+        verbose_name=_('value'),
+        blank=True,
+        null=True,
+    )
 
-    attribute = models.OneToOneField(
-        'Attribute',
-        verbose_name=_('attribute\'s value'),
-        related_name='attribute_value',
+    unit = models.ForeignKey(
+        'Unit',
+        verbose_name=_('unit'),
+        related_name='value_unit',
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        default=None,
+    )
+
+    attribute = models.ForeignKey(
+        'Attribute',
+        verbose_name=_('product\'s attribute'),
+        related_name='product_attribute',
+        on_delete=models.CASCADE,
+    )
+
+    product = models.ForeignKey(
+        'Product',
+        verbose_name=_('product item'),
+        related_name='product_item',
+        on_delete=models.CASCADE,
+        default=None,
+        blank=False,
+        null=False,
     )
 
     class Meta:
@@ -153,7 +210,13 @@ class AttributeValue(models.Model):
         verbose_name_plural = _("attribute values")
 
     def __str__(self) -> str:
-        return getattr(self, "value")
+        return str(getattr(self, "value"))
+
+    objects = models.Manager()
+
+    @classmethod
+    def get_all_attributes_of_product(cls, product: Product) -> QuerySet[AttributeValue]:
+        return AttributeValue.objects.filter(product=product).order_by('-attribute__rank')
 
 
 class Product(models.Model):
@@ -417,6 +480,23 @@ class Product(models.Model):
 
         return queryset[:limit]
 
+    @classmethod
+    def get_price_with_discount(cls, product: Product) -> QuerySet:
+        """
+        Метод для получения цены со скидкой
+        """
+
+        queryset = Product.objects.prefetch_related(
+            'stock',
+            'product_discount'
+        ).filter(
+            pk=product.pk,
+        ).distinct().annotate(
+            avg_price=Avg('stock__price')
+        ).first()
+
+        return queryset
+
 
 class DailyOffer(models.Model):
     """Модель: предложение дня"""
@@ -494,6 +574,11 @@ class Stock(models.Model):
             f'shop: {getattr(self.shop, "name", None)}'
         )
 
+    @classmethod
+    def get_products_in_stock(cls, product: Product) -> QuerySet[Stock]:
+        product_in_stock = Stock.objects.filter(product=product)
+        return product_in_stock
+
 
 class ProductReview(models.Model):
     """Модель: Отзыв о продукте"""
@@ -521,6 +606,8 @@ class ProductReview(models.Model):
         default=''
     )
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name = _('user product view')
         verbose_name_plural = _('user product views')
@@ -530,3 +617,43 @@ class ProductReview(models.Model):
             f'{self.date}: user: {self.user}',
             f'product: {getattr(self.product, "title")}'
         )
+
+    @classmethod
+    def get_comments(cls, product: Product) -> QuerySet[ProductReview]:
+        return ProductReview.objects.filter(product=product)
+
+
+class ProductImage(models.Model):
+    """Модель: Изображения продукта """
+
+    product = models.ForeignKey(
+        Product,
+        related_name='product',
+        verbose_name=_('product of image'),
+        help_text=_('Product image'),
+        on_delete=models.CASCADE,
+    )
+    image = models.ImageField(
+        verbose_name=_('image'),
+        help_text=_('Product image'),
+        upload_to=product_image_path,
+        blank=True,
+    )
+    objects = models.Manager()
+
+    class Meta:
+        verbose_name = _('product image')
+        verbose_name_plural = _('product images')
+
+    @classmethod
+    def get_product_pics(cls, product: Product) -> List[ProductImage]:
+        product_images = ProductImage.objects.filter(product=product).all()
+        images_list = list(product_images)
+        default_pic = ProductImage(
+            product=product,
+            image=product.image,
+        )
+        while len(images_list) < 1:
+            images_list.append(default_pic)
+
+        return images_list
