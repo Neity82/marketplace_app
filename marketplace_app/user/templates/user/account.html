@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% load l10n %}
-{% load user_tags %}
 {% load category_list %}
 
 {% block title %}
@@ -23,13 +22,10 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Account
-        </h1>
+        <h1 class="Middle-title">Account</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">home</a>
-          </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Account</span>
-          </li>
+          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">home</a></li>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Account</span></li>
         </ul>
       </div>
     </div>
@@ -51,7 +47,7 @@
             </div>
             <div class="Account-column">
               <div class="Account-name">{{ user.get_full_name }}
-              </div><a class="Account-editLink" href="{% url 'user:user_profile' user.id %}">Edit Profile</a>
+              </div><a class="Account-editLink" href="{% url 'user:user_profile' pk=user.id %}">Edit Profile</a>
             </div>
           </div>
           <div class="Account-group">
@@ -61,7 +57,7 @@
                   {% if last_order %}
                   <div class="row">
                     <div class="row-block">
-                      <a class="Order-title" href="{% url 'order:order_detail' %}">
+                      <a class="Order-title" href="{% url 'order:order_detail' pk=last_order.pk %}">
                         Заказ&#32;
                         <span class="Order-numberOrder">№{{ last_order.id }}</span>
                         &#32;от&#32;
@@ -113,7 +109,7 @@
               <div class="Cards Cards_account">
                 {% if product_view.0 %}
                   {% with product_view.0.product_id as product %}
-                  {% url 'product:detail' product.id as product_url %}
+                  
                   <div class="Card">
                     {% include "card.html" %}
                   </div>
@@ -121,7 +117,7 @@
                 {% endif %}
                 {% if product_view.1 %}
                   {% with product_view.1.product_id as product %}
-                  {% url 'product:detail' product.id as product_url %}
+                  
                   <div class="Card hide_700">
                     {% include "card.html" %}
                   </div>
@@ -129,7 +125,7 @@
                 {% endif %}
                 {% if product_view.2 %}
                   {% with product_view.2.product_id as product %}
-                  {% url 'product:detail' product.id as product_url %}
+                  
                   <div class="Card hide_md">
                     {% include "card.html" %}
                   </div>
@@ -137,7 +133,7 @@
                 {% endif %}
               </div>
               <div class="Account-editLink Account-editLink_view">
-                <a href="{% url 'user:user_views' request.user.id %}">Перейти на полный список</a>
+                <a href="{% url 'user:user_views' request.user.id %}">Go to the full list</a>
               </div>
               {% endif %}
             </div>

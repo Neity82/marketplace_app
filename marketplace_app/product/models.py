@@ -553,6 +553,6 @@ class ProductReview(models.Model):
 
     def __str__(self) -> str:
         return (
-            f'{self.date}: user: {self.user}',
+            f'{self.date}: user: {self.user}, '
             f'product: {getattr(self.product, "title")}'
         )

@@ -33,7 +33,9 @@ class IndexView(generic.TemplateView):
 
         context['daily_offer'] = DailyOffer.get_daily_offer()
         context['hot_offers'] = Product.get_product_with_discount()
-        context['limited_edition'] = Product.get_limited_edition(daily_offer=context['daily_offer'])
+        context['limited_edition'] = Product.get_limited_edition(
+            daily_offer=context['daily_offer']
+        )
 
         return context
 
@@ -48,8 +50,9 @@ class ProductListView(generic.ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        result: QuerySet = (Product.objects.annotate(total_count=Sum("stock"))
-                            .filter(total_count__gt=0))
+        result: QuerySet = (Product.objects.annotate(
+            total_count=Sum("stock")
+        ).filter(total_count__gt=0))
         query: str = (
             QueryDict(self.request.GET.urlencode()).dict().get("query", "")
         )
