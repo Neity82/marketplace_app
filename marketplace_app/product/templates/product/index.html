@@ -4,10 +4,6 @@
 {% load product_tags %}
 {% load category_list %}
 
-{% block title %}
-  {{seo.title}}
-{% endblock %}
-
 {% block head %}
   {% include "head.html" %}
 {% endblock %}
@@ -60,7 +56,7 @@
         <div class="BannersHome">
           {% if popular_category %}
           {% for category in popular_category %}
-          <a class="BannersHomeBlock" href="{% url 'product:detail' %}">
+          <a class="BannersHomeBlock" href="#">
             <div class="BannersHomeBlock-row">
               <div class="BannersHomeBlock-block">
                 <strong class="BannersHomeBlock-title">{{ category.title }}</strong>

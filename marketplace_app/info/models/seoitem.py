@@ -16,6 +16,8 @@ class SEOItem(models.Model):
         blank=True,
     )
 
+    objects = models.Manager()
+
     class Meta:
         ordering = ('path_name',)
         verbose_name = _("SEO item")

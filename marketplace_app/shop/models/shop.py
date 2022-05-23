@@ -16,6 +16,8 @@ class Shop(models.Model):
     support_policy = models.CharField(_("support policy"), max_length=50, blank=True)
     quality_policy = models.CharField(_("quality policy"), max_length=50, blank=True)
 
+    objects = models.Manager()
+
     class Meta:
         ordering = ('name',)
         verbose_name = _("shop")
