@@ -11,6 +11,5 @@ urlpatterns = [
     path('', IndexView.as_view(), name='home'),
     # пока catalog, когда появятся модели отделим на products и product/pk
     path('catalog/', ProductListView.as_view(), name='list'),
-    path('products/', product, name='detail'),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='detail'),
 ]
