@@ -64,6 +64,8 @@ class Discount(models.Model):
         default=None,
     )
 
+    objects = models.Manager()
+
     def __str__(self) -> str:
         return f"{self.description}"
 
@@ -98,6 +100,8 @@ class ProductDiscount(models.Model):
         blank=True,
         default="",
     )
+
+    objects = models.Manager()
 
 
 class SetDiscount(models.Model):

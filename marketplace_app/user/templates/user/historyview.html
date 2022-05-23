@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load user_tags %}
 
 {% block title %}
   {{seo.title}}
@@ -21,13 +20,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">История просмотра</h1>
+        <h1 class="Middle-title">Viewing history</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
             <a href="{% url 'product:home' %}">home</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>История просмотра</span>
+            <span>Viewing history</span>
           </li>
         </ul>
       </div>
@@ -40,39 +39,11 @@
       {% if views_list %}
         <div class="Cards">
           {% for view in views_list %}
+          {% with view.product_id as product %}
           <div class="Card">
-            <a class="Card-picture" href="{% url 'product:detail' %}">
-              {% if view.product_id.image %}
-              <img src="{{ view.product_id.image.url }}" alt="card.jpg"/>
-              {% else %}
-              <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
-              {% endif %}
-            </a>
-            <div class="Card-content">
-              <strong class="Card-title"><a href="{% url 'product:detail' %}">{{ view.product_id.title }}</a>
-              </strong>
-              <div class="Card-description">
-                <div class="Card-cost">
-                {% get_avg_price view as avg_price_list %}
-                  {% if avg_price_list.avg_price_new %}
-                  <span class="Card-priceOld">${{ view.product_id.average_price }}</span>
-                  <span class="Card-price">${{ avg_price_list.avg_price_new }}</span>
-                  {% else %}
-                  <span class="Card-price">${{ view.product_id.average_price }}</span>
-                  {% endif %}
-                </div>
-                <div class="Card-category">{{ view.product_id.category }}</div>
-                <div class="Card-hover">
-                  <a class="Card-btn" href="{% url 'user:user_views' request.user.id %}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a>
-                  <a class="Card-btn" href="{% url 'order:cart' %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
-                  <a class="Card-btn" href="{% url 'user:compare_list' %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
-                </div>
-              </div>
-            </div>
-            {% if avg_price_list.max_discount %}
-            <div class="Card-sale">-{{ avg_price_list.max_discount }}%</div>
-            {% endif %}
+            {% include "card.html" %}
           </div>
+          {% endwith %}
           {% endfor %}
         </div>
       {% endif %}

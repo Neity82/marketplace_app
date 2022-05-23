@@ -21,8 +21,9 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(OrderEntity)
 class OrderEntityAdmin(admin.ModelAdmin):
-    list_display = ['order_id', 'stock_id']
-    list_display_links = ['order_id']
+    list_display = ['id', 'order_id', 'stock_id']
+    list_display_links = ['id', 'order_id']
+    pass
 
 
 @admin.register(Cart)

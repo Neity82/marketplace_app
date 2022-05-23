@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load l10n %}
-{% load user_tags %}
+{% load category_list %}
 
 {% block title %}
   {{seo.title}}
@@ -22,13 +22,10 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Личный кабинет
-        </h1>
+        <h1 class="Middle-title">Account</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">home</a>
-          </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Личный кабинет</span>
-          </li>
+          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">home</a></li>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Account</span></li>
         </ul>
       </div>
     </div>
@@ -50,7 +47,7 @@
             </div>
             <div class="Account-column">
               <div class="Account-name">{{ user.get_full_name }}
-              </div><a class="Account-editLink" href="{% url 'user:user_profile' user.id %}">Редактировать профиль</a>
+              </div><a class="Account-editLink" href="{% url 'user:user_profile' pk=user.id %}">Edit Profile</a>
             </div>
           </div>
           <div class="Account-group">
@@ -60,43 +57,43 @@
                   {% if last_order %}
                   <div class="row">
                     <div class="row-block">
-                      <a class="Order-title" href="{% url 'order:order_detail' %}">
+                      <a class="Order-title" href="{% url 'order:order_detail' pk=last_order.pk %}">
                         Заказ&#32;
                         <span class="Order-numberOrder">№{{ last_order.id }}</span>
                         &#32;от&#32;
                         <span class="Order-dateOrder">{{ last_order.datetime.date|date:"d.m.Y" }}</span>
                       </a>
                       <div class="Account-editLink">
-                        <a href="{% url 'user:user_orders_list' request.user.id %}">История заказов</a>
+                        <a href="{% url 'user:user_orders_list' request.user.id %}">Order history</a>
                       </div>
                     </div>
                     <div class="row-block">
                       <div class="Order-info Order-info_delivery">
-                        <div class="Order-infoType">Тип доставки:</div>
+                        <div class="Order-infoType">Type of delivery:</div>
                         <div class="Order-infoContent">{{ last_order.delivery_id }}</div>
                       </div>
                       <div class="Order-info Order-info_pay">
-                        <div class="Order-infoType">Оплата:</div>
+                        <div class="Order-infoType">Payment:</div>
                         <div class="Order-infoContent">{{ last_order.get_payment_display }}</div>
                       </div>
                       <div class="Order-info">
-                        <div class="Order-infoType">Общая стоимость:</div>
+                        <div class="Order-infoType">Total cost:</div>
                         <div class="Order-infoContent">{{ last_order.discounted_sum_order }}$</div> 
                       </div>
                       <div class="Order-info Order-info_status">
-                        <div class="Order-infoType">Статус:</div>
+                        <div class="Order-infoType">Status:</div>
                         <div class="Order-infoContent">{{ last_order.get_state_display }}</div>
                       </div>
                       {% if last_order.error %}
                       <div class="Order-info Order-info_error">
-                        <div class="Order-infoType">Оплата не прошла:</div>
+                        <div class="Order-infoType">Payment failed:</div>
                         <div class="Order-infoContent">{{ last_order.get_error_display }}</div>
                       </div>
                       {% endif %}
                     </div>
                   </div>
                   {% else %}
-                  <div class="row-block">У вас нет заказов</div>
+                  <div class="row-block">You don't have any orders</div>
                   {% endif %}
                 </div>
               </div>
@@ -105,54 +102,38 @@
           <div class="Account-group">
             <div class="Account-column Account-column_full">
               <header class="Section-header">
-                <h2 class="Section-title">История просмотров
+                <h2 class="Section-title">Viewing history
                 </h2>
               </header>
-              {% if last_product_view %}
+              {% if product_view %}
               <div class="Cards Cards_account">
-                
-                {% for item in last_product_view %}
-                <div class="Card">
-                  <a class="Card-picture" href="{% url 'product:detail' %}">
-                    {% if item.product_id.image %}
-                    <img src="{{ item.product_id.image.url }}" alt="card.jpg"/>
-                    {% else %}
-                    <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>
-                    {% endif %}
-                  </a>
-                  <div class="Card-content">
-                    <strong class="Card-title">
-                      <a href="{% url 'product:detail' %}">{{ item.product_id.title }}</a>
-                    </strong>
-                    <div class="Card-description">
-                      <div class="Card-cost">
-                        {% get_avg_price item as avg_price_list %}
-                        {% if avg_price_list.avg_price == 'Товар закончился' %}
-                        <span class="Card-price">{{ avg_price_list.avg_price }}</span>
-                        {% else %}
-                        {% if avg_price_list.avg_price_new %}
-                        <span class="Card-priceOld">${{ avg_price_list.avg_price }}</span>
-                        <span class="Card-price">${{ avg_price_list.avg_price_new }}</span>
-                        {% else %}
-                        <span class="Card-price">${{ avg_price_list.avg_price }}</span>
-                        {% endif %}
-                        {% endif %}
-                      </div>
-                      <div class="Card-category">{{ item.product_id.category }}</div>
-                      <div class="Card-hover">
-                        <a class="Card-btn" href="{% url 'user:user_views' request.user.id %}"><img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/></a>
-                        <a class="Card-btn" href="{% url 'order:cart' %}"><img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/></a>
-                        <a class="Card-btn" href="{% url 'user:compare_list' %}"><img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/></a>
-                      </div>
-                    </div>
+                {% if product_view.0 %}
+                  {% with product_view.0.product_id as product %}
+                  
+                  <div class="Card">
+                    {% include "card.html" %}
                   </div>
-                  {% if avg_price_list.max_discount %}
-                  <div class="Card-sale">-{{ avg_price_list.max_discount }}%</div>
-                  {% endif %}
-                </div>
-                {% endfor %}
+                  {% endwith %}
+                {% endif %}
+                {% if product_view.1 %}
+                  {% with product_view.1.product_id as product %}
+                  
+                  <div class="Card hide_700">
+                    {% include "card.html" %}
+                  </div>
+                  {% endwith %}
+                {% endif %}
+                {% if product_view.2 %}
+                  {% with product_view.2.product_id as product %}
+                  
+                  <div class="Card hide_md">
+                    {% include "card.html" %}
+                  </div>
+                  {% endwith %}
+                {% endif %}
               </div>
-              <div class="Account-editLink Account-editLink_view"><a href="{% url 'user:user_views' request.user.id %}">Перейти на полный список</a>
+              <div class="Account-editLink Account-editLink_view">
+                <a href="{% url 'user:user_views' request.user.id %}">Go to the full list</a>
               </div>
               {% endif %}
             </div>
