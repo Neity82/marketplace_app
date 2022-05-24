@@ -13,6 +13,7 @@ class ShopListView(generic.ListView):
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = 'shops'
+    paginate_by = 24
 
 
 class ShopDetailView(generic.DetailView):
