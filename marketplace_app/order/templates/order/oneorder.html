@@ -18,16 +18,16 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Order №{{ order.id }}</h1>
+        <h1 class="Middle-title">{% trans "Order" %} №{{ order.id }}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">home</a>
+            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
           </li>
           <li class="breadcrumbs-item">
-            <a href="{% url 'user:user_orders_list' pk=user.pk %}">Order history</a>
+            <a href="{% url 'user:user_orders_list' pk=user.pk %}">{% trans "Order history" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>Order №{{ order.id }}</span>
+            <span>{% trans "Order" %} №{{ order.id }}</span>
           </li>
         </ul>
       </div>
@@ -43,50 +43,50 @@
               <div class="row">
                 <div class="row-block">
                   <div class="Order-info Order-info_date">
-                    <div class="Order-infoType">Order date:</div>
+                    <div class="Order-infoType">{% trans "Order date" %}:</div>
                     <div class="Order-infoContent">{{ order.datetime|date:"d.m.y" }}</div>
                   </div>
                   {% with order.user_id as user %}
                   <div class="Order-info">
-                    <div class="Order-infoType">Full name:</div>
+                    <div class="Order-infoType">{% trans "Full name" %}:</div>
                     <div class="Order-infoContent">{{ user.get_full_name }}</div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">Phone:</div>
+                    <div class="Order-infoType">{% trans "Phone" %}:</div>
                     {% phone_normalize phone=user.phone as phone %}
                     <div class="Order-infoContent">{{ phone }}
                     </div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">E-mail:</div>
+                    <div class="Order-infoType">{% trans "E-mail" %}:</div>
                     <div class="Order-infoContent">{{ user.email }}</div>
                     {% endwith %}
                   </div>
                 </div>
                 <div class="row-block">
                   <div class="Order-info Order-info_delivery">
-                    <div class="Order-infoType">Type of delivery:</div>
+                    <div class="Order-infoType">{% trans "Type of delivery" %}:</div>
                     <div class="Order-infoContent">{{ order.delivery_id }}</div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">City:</div>
+                    <div class="Order-infoType">{% trans "City" %}:</div>
                     <div class="Order-infoContent">{{ order.city }}</div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">Address:</div>
+                    <div class="Order-infoType">{% trans "Address" %}:</div>
                     <div class="Order-infoContent">{{ order.address }}</div>
                   </div>
                   <div class="Order-info Order-info_pay">
-                    <div class="Order-infoType">Payment:</div>
+                    <div class="Order-infoType">{% trans "Payment" %}:</div>
                     <div class="Order-infoContent">{{ order.get_payment_display }}</div>
                   </div>
                   <div class="Order-info Order-info_status">
-                    <div class="Order-infoType">Status:</div>
+                    <div class="Order-infoType">{% trans "Status" %}:</div>
                     <div class="Order-infoContent">{{ order.get_state_display }}</div>
                   </div>
                   {% if order.error %}
                   <div class="Order-info Order-info_error">
-                    <div class="Order-infoType">Payment failed:</div>
+                    <div class="Order-infoType">{% trans "Payment failed" %}:</div>
                     <div class="Order-infoContent">{{ order.get_error_display }}</div>
                   </div>
                   {% endif %}
@@ -151,7 +151,7 @@
                 </div>
                 {% if order.state == 'not paid' %}
                 <div class="Cart-block">
-                  <a class="btn btn_primary btn_lg" href="#">To pay</a>
+                  <a class="btn btn_primary btn_lg" href="#">{% trans "To pay" %}</a>
                 </div>
                 {% endif %}
               </div>

@@ -3,7 +3,6 @@ from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin, PopRequestMixin
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from user.models import CustomUser
@@ -31,7 +30,7 @@ class CustomUserChangeForm(UserChangeForm):
         phone = self.cleaned_data.get('phone')
         user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
         if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
-            raise forms.ValidationError(_('A user with such a phone is already registered'))
+            raise forms.ValidationError(_('User with this phone already exists.'))
         return phone
 
     def clean_password(self):
@@ -81,7 +80,7 @@ class UserProfileForm(forms.ModelForm):
         phone = int(''.join([i for i in phone_clean if i.isdigit()])[1:])
         user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
         if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
-            raise forms.ValidationError(_('A user with such a phone is already registered'))
+            raise forms.ValidationError(_('User with this phone already exists.'))
         return phone
 
     def clean_password2(self):
@@ -120,5 +119,5 @@ class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreatio
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         if phone and CustomUser.objects.filter(phone=phone):
-            raise forms.ValidationError(_('A user with such a phone is already registered'))
+            raise forms.ValidationError(_('User with this phone already exists.'))
         return phone

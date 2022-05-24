@@ -88,8 +88,8 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
         user.save()
         login(self.request, user)
-
-        messages.success(self.request, f'Профиль успешно сохранен', extra_tags='success')
+        messages_text = _('Profile saved successfully')
+        messages.success(self.request, messages_text, extra_tags='success')
 
         return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
 
@@ -137,7 +137,7 @@ class HistoryViews(LoginRequiredMixin, generic.ListView):
         return views_list
 
 
-class CompareProduct(generic.ListView):
+class CompareProduct(LoginRequiredMixin, generic.ListView):
     """
         Представление страницы compare.html
 

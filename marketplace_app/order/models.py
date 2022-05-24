@@ -2,7 +2,7 @@ from decimal import Decimal
 from typing import List
 
 from django.db import models
-from django.db.models import Sum, F
+from django.db.models import F
 from django.utils.translation import gettext as _
 
 from product.models import Stock
@@ -211,7 +211,7 @@ class Order(models.Model):
         return Decimal(round(discounted_sum_order, 2))
 
     @classmethod
-    def get_last_order(cls, user: CustomUser):
+    def get_last_order(cls, user: CustomUser) -> 'Order':
         """
         Метод для получения последнего оформленного заказа
 

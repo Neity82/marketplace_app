@@ -1,3 +1,5 @@
+from typing import List
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
@@ -81,7 +83,7 @@ class CustomUser(AbstractUser):
         first_name = getattr(self, "first_name")
         first_name = first_name[0] + '.' if first_name else ''
         middle_name = getattr(self, "middle_name")
-        middle_name = middle_name[0] if middle_name else ''
+        middle_name = middle_name[0] + '.' if middle_name else ''
         short_name = f'{getattr(self, "last_name")} {first_name}{middle_name}'
         return short_name
 
@@ -120,10 +122,19 @@ class UserProductView(models.Model):
         return f'{self.product_id}'
 
     @classmethod
-    def get_product_view(cls, user, limit: int = None):
-        """Метод получения списка просмотренных товаров"""
+    def get_product_view(cls, user: CustomUser, limit: int = None) -> List['UserProductView']:
+        """
+        Метод получения списка просмотренных товаров
 
-        queryset = UserProductView.objects.filter(
+        :param user: Пользователь
+        :type user: CustomUser
+        :param limit: Необходимое количество просмотренных товаров
+        :type limit: int
+        :return: Список просмотренных товаров
+        :rtype: List[UserProductView]
+        """
+
+        queryset: List[UserProductView] = UserProductView.objects.filter(
             user_id=user
         ).select_related(
             'product_id',
@@ -158,3 +169,33 @@ class Compare(models.Model):
         return f'{self.product_id}'
 
     objects = models.Manager()
+
+    @classmethod
+    def get_compare_list(cls, user: CustomUser) -> List['Compare']:
+        """
+        Список товаров для сравнения
+
+        :param user: Пользователь
+        :type user: CustomUser
+        :return: Список товаров
+        :rtype: List['Compare']
+        """
+
+        result: List[Compare] = cls.objects.filter(
+            user_id=user
+        )
+        return result
+
+    @classmethod
+    def get_count(cls, user: CustomUser) -> int:
+        """
+        Количество товаров для сравнения
+
+        :param user: Пользователь
+        :type user: CustomUser
+        :return: Количество товаров для сравнения
+        :rtype: int
+        """
+
+        result: int = len(cls.get_compare_list(user=user))
+        return result

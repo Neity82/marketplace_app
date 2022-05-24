@@ -1,11 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% load l10n %}
+{% load i18n %}
 {% load user_tags %}
-
-{% block title %}
-  {{seo.title}}
-{% endblock %}
 
 {% block head %}
   {% include "head.html" %}
@@ -22,12 +19,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Сравнение товаров
-        </h1>
+        <h1 class="Middle-title">{% trans "Comparison of products" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="index.html">home</a>
+          <li class="breadcrumbs-item">
+            <a href="index.html">{% trans "home" %}</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Сравнение товаров</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current">
+            {% trans "Comparison of products" %}<span></span>
           </li>
         </ul>
       </div>
