@@ -1,12 +1,46 @@
 from decimal import Decimal
 from typing import List
 
-from django.db import models
-from django.db.models import Sum, F
+from django.core.handlers.wsgi import WSGIRequest
+from django.db import models, transaction
+from django.db.models import Sum, F, Q
+from django.http import Http404
 from django.utils.translation import gettext as _
 
 from product.models import Stock
 from user.models import CustomUser
+
+
+class CartEntity(models.Model):
+    """Модель элемента корзины"""
+    stock = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        related_name='cart_entity',
+        help_text=_('Cart stock'),
+        blank=True
+    )
+
+    cart = models.ForeignKey(
+        'Cart',
+        on_delete=models.CASCADE,
+        related_name='cart_entity',
+        verbose_name=_('cart\'s ')
+    )
+    quantity = models.PositiveSmallIntegerField(
+        default=1,
+    )
+
+    class Meta:
+        verbose_name = _('cart entity')
+        verbose_name_plural = _('cart entities')
+        ordering = ['-id']
+
+    objects = models.Manager()
+
+    def __str__(self) -> str:
+        user = getattr(self.cart, 'user_id') if getattr(self.cart, 'user_id') else 'Unknown'
+        return f'Cart entity: user {user}, stock: {self.stock}'
 
 
 class Cart(models.Model):
@@ -17,25 +51,213 @@ class Cart(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_('user'),
         related_name='cart_user',
-        help_text=_('Cart user')
+        help_text=_('Cart user'),
+        blank=True,
+        null=True
     )
-    stock_id = models.ForeignKey(
-        Stock,
-        on_delete=models.CASCADE,
-        verbose_name=_('stock'),
-        related_name='cart_stock',
-        help_text=_('Cart stock')
-    )
-    count = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_('count'),
-        help_text=_('Cart count')
+
+    device = models.CharField(
+        max_length=255,
+        help_text=_('cookie device value'),
+        blank=True,
+        null=True
     )
 
     class Meta:
         verbose_name = _('cart')
         verbose_name_plural = _('carts')
         ordering = ['-id']
+
+    def __str__(self) -> str:
+        user = getattr(self, 'user_id') if getattr(self, 'user_id') else 'Unknown'
+        return f'Cart: user: {user}, device: {self.device}'
+
+    @property
+    def count(self) -> int:
+        field = 'quantity'
+        aggregation_field = 'quantity__sum'
+        count = CartEntity.objects.filter(cart=self).aggregate(Sum(field)).get(aggregation_field)
+        return count
+
+    @property
+    def pk(self) -> int:
+        return getattr(self, 'id')
+
+    def __len__(self) -> int:
+        return self.count
+
+    def add_to_cart(self, stock_id: int) -> None:
+        """
+        Добавляем товар в корзину:
+        создаем новый CartEntity или обновляем quantity у старого
+        :param stock_id: id товара (складского остатка)
+        :return:
+        """
+        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
+        if cart_entity:
+            if cart_entity.stock.count > cart_entity.quantity:
+                cart_entity.quantity = F('quantity') + 1
+                cart_entity.save()
+        else:
+            CartEntity.objects.create(cart_id=self.pk, stock_id=stock_id)
+
+    def remove_from_cart(self, stock_id: int) -> None:
+        """
+        Удаляем элемент корзины из корзины
+        :param stock_id: id товара (складского остатка)
+        :return: None
+        """
+        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
+        if cart_entity:
+            cart_entity.delete()
+
+    def update_quantity(self, stock_id: int, quantity: int) -> None:
+        """
+        Обновляем количество у элемента корзины, если количество равно 0 - удаляем
+        :param stock_id: id товара (складского остатка)
+        :param quantity: новое количество
+        :return:
+        """
+        stock = Stock.objects.filter(id=stock_id).first()
+        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock.pk).first()
+        if cart_entity:
+            if quantity:
+                if stock.count >= quantity:
+                    cart_entity.quantity = quantity
+                    cart_entity.save(update_fields=['quantity'])
+            else:
+                self.remove_from_cart(stock_id=stock_id)
+        else:
+            raise Http404
+
+    def change_shop_by_id(self, stock_id: int, shop_id: int):
+        """
+        Меняем продавца у товара, если такой товар уже есть в корзине складываем их количество
+        :param stock_id: id товара (складского остатка)
+        :param shop_id: id продавца (магазина)
+        :return:
+        """
+        with transaction.atomic():
+
+            stock = Stock.objects.filter(id=stock_id).first()
+            cart_entity = CartEntity.objects.filter(
+                cart_id=self.pk, stock=stock
+            ).first()
+
+            if cart_entity:
+                new_stock = Stock.objects.filter(product_id=stock.product.id, shop_id=shop_id).first()
+
+                if new_stock not in Stock.objects.filter(cart_entity__cart=self):
+                    if cart_entity.quantity >= new_stock.count:
+                        new_quantity = new_stock.count
+                    else:
+                        new_quantity = cart_entity.quantity
+
+                    cart_entity.stock = new_stock
+                    cart_entity.quantity = new_quantity
+                    cart_entity.save(update_fields=['stock', 'quantity', ])
+                else:
+                    new_cart_entity = CartEntity.objects.filter(
+                        stock_id=new_stock.id, cart_id=self.pk
+                    ).first()
+
+                    if new_cart_entity.stock.count >= (
+                            new_cart_entity.quantity + cart_entity.quantity
+                    ):
+                        new_cart_entity.quantity = F('quantity') + cart_entity.quantity
+                    else:
+                        new_cart_entity.quantity = (
+                                F('quantity')
+                                - new_cart_entity.quantity
+                                + cart_entity.quantity
+                        )
+                    new_cart_entity.save()
+                    cart_entity.delete()
+
+    def _get_sums(self) -> (Decimal, Decimal):
+        """
+        Получаем суммы без скидок и со скидкой
+        :return: tuple(сумма без скидок, сумма со скидкой)
+        """
+        old_sum = Decimal(0.0)
+        discount_sum = Decimal(0.0)
+
+        for cart_entity in CartEntity.objects.filter(cart=self).select_related("stock"):
+            old_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
+            if cart_entity.stock.product.discount:
+                discount_sum += (
+                        Decimal(cart_entity.stock.product.discount.get("price"))
+                        * cart_entity.quantity
+                )
+            else:
+                discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
+        return old_sum, discount_sum
+
+    def get_min_sum(self) -> Decimal:
+        """Возвращаем минимальную сумму стоимости товаров"""
+        return min(self._get_sums())
+
+    def total_sums(self) -> dict:
+        """Возвращаем суммы без скидок и со скидкой в виде словаря"""
+        old_sum, discount_sum = self._get_sums()
+        total = {'old_sum': old_sum, }
+        if old_sum != discount_sum:
+            total.update(discount_sum=discount_sum)
+        return total
+
+    @staticmethod
+    def update_instance(instance: 'Cart', **kwargs) -> None:
+        """Обновляем объект корзины из kwargs """
+        updated = False
+        for attr, value in kwargs.items():
+            if getattr(instance, attr) != value:
+                setattr(instance, attr, value)
+                updated = True
+        if updated:
+            instance.save()
+
+    @classmethod
+    def _get_anonymous_cart(cls, device: str) -> 'Cart':
+        """
+        Получаем или создаем корзину для анонимного пользователя
+        :return: объект Корзины
+        """
+        instance = Cart.objects.filter(device=device).first()
+        if instance is None:
+            instance = Cart.objects.create(device=device)
+        return instance
+
+    @classmethod
+    def _get_user_cart(cls, user: CustomUser, device: str) -> 'Cart':
+        """
+        Получаем или создаем корзину для авторизованного пользователя
+        :return: объект Корзины
+        """
+        instance = Cart.objects.filter(Q(user_id=user) | Q(device=device)).first()
+        if instance is None:
+            instance = Cart.objects.create(device=device, user_id=user)
+        else:
+            cls.update_instance(instance, device=device, user_id=user)
+        return instance
+
+    @classmethod
+    def get_cart(cls, request: WSGIRequest) -> 'Cart':
+        """
+        Получаем объект корзины из реквеста пользователя, проверяя cookie
+        :param request: django wsgi реквест
+        :return: объект Корзины
+        """
+        user = getattr(request, 'user', None)
+        device = request.COOKIES.get('device', None)
+
+        assert user, 'can\'t get user from request!'
+        assert device, 'no "device", check static!'
+
+        if user.is_anonymous:
+            instance = cls._get_anonymous_cart(device=device)
+        else:
+            instance = cls._get_user_cart(user=user, device=device)
+        return instance
 
     objects = models.Manager()
 

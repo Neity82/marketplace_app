@@ -16,7 +16,7 @@
         <span class="Card-priceOld">${{ discount.base }}</span>
       {% endif %}
       {% if discount.base %}
-      <span class="Card-price">${{ discount.price}}</span>
+      <span class="Card-price">${{ discount.price }}</span>
       {% else %}
       <span class="Card-price">The product is over</span>
       {% endif %}
@@ -26,7 +26,7 @@
       <a class="Card-btn" href="add_bookmark">
         <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
       </a>
-      <a class="Card-btn" href="customer_cart">
+      <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add_to_cart' product.id %}">
         <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
       </a>
       <a class="Card-btn" href="#">
