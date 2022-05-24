@@ -13,7 +13,7 @@ class BannerAdmin(admin.ModelAdmin):
 
 @admin.register(Settings)
 class SettingsAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__str__', 'value')
 
 
 def get_choices():

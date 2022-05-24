@@ -3,15 +3,17 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Settings(models.Model):
-    name = models.CharField(_("name"), max_length=50)
-    value = models.PositiveIntegerField(_("value"), default=0)
+    name = models.CharField(_("name"), max_length=50, unique=True)
+    description = models.CharField(_("description"), max_length=50)
+    value = models.CharField(_("value"), max_length=150)
 
     class Meta:
-        ordering = ('name',)
+        ordering = ('description',)
         verbose_name = _("settings")
         verbose_name_plural = _("settings")
 
     def __str__(self):
-        return "{name}".format(
-            name=self.name
+        return "{descr} ({name})".format(
+            name=self.name,
+            descr=self.description
         )
