@@ -1,7 +1,7 @@
 [
 {
   "model": "user.customuser",
-  "pk": 15,
+  "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$260000$RQDnvO8VePK2bYanv92VZT$VNOLIFKICARPaEoyOmdKg592LRegr6ipxWCy9F71Gfw=",
     "last_login": "2022-05-20T11:02:33Z",
