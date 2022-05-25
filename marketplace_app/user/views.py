@@ -1,9 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -33,7 +31,8 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
         context['last_order'] = Order.get_last_order(user=self.request.user)
-        context['product_view'] = UserProductView.get_product_view(user=self.request.user, limit=3)
+        context['product_view'] = UserProductView.get_product_view(user=self.request.user,
+                                                                   limit=3)
         return context
 
 

@@ -7,8 +7,11 @@ from user.utils import avatar_directory_path
 
 
 class CustomUserModelTests(TestCase):
+    """Тесты для модели CustomUser"""
 
     def test_create_user(self):
+        """Тест на добавление пользователя"""
+
         user = CustomUser.objects.create_user(
             email='normal@user.com',
             password='1234pass'
@@ -29,6 +32,8 @@ class CustomUserModelTests(TestCase):
             CustomUser.objects.create_user(email='', password="1234pass")
 
     def test_create_superuser(self):
+        """Тест на добавление суперпользователя"""
+
         admin_user = CustomUser.objects.create_superuser(
             email='super@user.com',
             password='1234pass'
@@ -49,6 +54,11 @@ class CustomUserModelTests(TestCase):
             )
 
     def test_avatar_directory_path(self):
+        """
+        Тест функции avatar_directory_path,
+        создание пути для сохранения аватарки
+        """
+
         user = CustomUser.objects.create_user(
             email='test@test.com',
             password='1234pass'
@@ -89,6 +99,8 @@ class CustomUserModelTests(TestCase):
         )
 
     def test_str(self):
+        """Тест строкового представления объекта"""
+
         user = CustomUser.objects.create_user(
             email='test@test.com',
             password='1234pass',
@@ -99,6 +111,8 @@ class CustomUserModelTests(TestCase):
         self.assertEqual(str(user), 'Last F.M.')
 
     def test_get_full_name(self):
+        """Тест функции get_full_name, получение полного ФИО пользователя"""
+
         user1 = CustomUser.objects.create_user(
             email='test1@test.com',
             password='1234pass'
@@ -122,6 +136,8 @@ class CustomUserModelTests(TestCase):
 
 
 class BaseModelTests(TestCase):
+    """Базовые данные для тестирования"""
+
     @classmethod
     def setUpTestData(cls):
         cls.user = CustomUser.objects.create_user(
@@ -138,7 +154,11 @@ class BaseModelTests(TestCase):
 
 
 class UserProductViewModelTests(BaseModelTests):
+    """Тест модели UserProductView"""
+
     def test_create_user_product_view(self):
+        """Тест на добавление нового объекта модели"""
+
         UserProductView.objects.create(
             user_id=self.user,
             product_id=Product.objects.first()
@@ -164,6 +184,8 @@ class UserProductViewModelTests(BaseModelTests):
         )
 
     def test_str(self):
+        """Тест строкового представления объекта"""
+
         product_view = UserProductView.objects.create(
             user_id=self.user,
             product_id=Product.objects.first()
@@ -171,6 +193,11 @@ class UserProductViewModelTests(BaseModelTests):
         self.assertEqual(str(product_view), str(product_view.product_id))
 
     def test_get_product_view(self):
+        """
+        Тест функции get_product_view,
+        получение списка просмотренных товаров
+        """
+
         for item in Product.objects.all():
             UserProductView.objects.create(
                 user_id=self.user,
@@ -178,13 +205,31 @@ class UserProductViewModelTests(BaseModelTests):
             )
         count = UserProductView.objects.count()
         self.assertEqual(count, self.count_item)
-        self.assertEqual(len(UserProductView.get_product_view(user=self.user)), self.count_item)
-        self.assertEqual(len(UserProductView.get_product_view(user=self.user, limit=2)), 2)
-        self.assertEqual(len(UserProductView.get_product_view(user=self.user, limit=10)), self.count_item)
+
+        # Не задан параметр limit, получаем весь список
+        self.assertEqual(
+            len(UserProductView.get_product_view(user=self.user)),
+            self.count_item
+        )
+        # Параметр limit = 2, получаем список из двух объектов
+        self.assertEqual(
+            len(UserProductView.get_product_view(user=self.user, limit=2)),
+            2
+        )
+        # Параметр limit = 10 (больше чем существует объектов в модели,
+        # получаем список из всех имеющихся объектов модели
+        self.assertEqual(
+            len(UserProductView.get_product_view(user=self.user, limit=10)),
+            self.count_item
+        )
 
 
 class CompareModelTests(BaseModelTests):
+    """Тесты модели Compare"""
+
     def test_create_compare(self):
+        """Тест на добавление нового объекта модели"""
+
         Compare.objects.create(
             user_id=self.user,
             product_id=Product.objects.first()
@@ -206,13 +251,20 @@ class CompareModelTests(BaseModelTests):
         )
 
     def test_str(self):
+        """Тест строкового представления объекта"""
+
         compare = Compare.objects.create(
             user_id=self.user,
             product_id=Product.objects.first()
         )
         self.assertEqual(str(compare), str(compare.product_id))
 
-    def test_get_compare_list(self):
+    def test_get_compare_lis(self):
+        """
+        Тест функции get_compare_list,
+        получение списка товаров для сравнения
+        """
+
         for item in Product.objects.all():
             Compare.objects.create(
                 user_id=self.user,
@@ -222,6 +274,11 @@ class CompareModelTests(BaseModelTests):
         self.assertEqual(len(compare_list), self.count_item)
 
     def test_get_count(self):
+        """
+        Тест функции get_count,
+        получение количества товаров для сравнения
+        """
+
         for item in Product.objects.all():
             Compare.objects.create(
                 user_id=self.user,
@@ -229,4 +286,3 @@ class CompareModelTests(BaseModelTests):
             )
         count = Compare.get_count(user=self.user)
         self.assertEqual(count, self.count_item)
-

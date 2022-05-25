@@ -1,28 +1,41 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, Client
 from django.urls import reverse
 
 from order.models import Order, Delivery
 from product.models import Category, Product
-from user.forms import UserProfileForm
 from user.models import CustomUser, UserProductView
 
 
+TEST_EMAIL = 'normal@user.com'
+TEST_PASS = 'test1793'
+
+
 class BaseViewTests(TestCase):
+    """Базовые данные для тестирования"""
 
     @classmethod
     def setUpTestData(cls):
-        avatar = SimpleUploadedFile("avatar.jpg", b"file_content", content_type="image/jpeg")
+        avatar = SimpleUploadedFile(
+            "avatar.jpg",
+            b"file_content",
+            content_type="image/jpeg"
+        )
         cls.user = CustomUser.objects.create_user(
-            email='normal@user.com',
-            password='test1793',
+            email=TEST_EMAIL,
+            password=TEST_PASS,
             phone=9991112233,
             avatar=avatar,
             last_name='Last',
             first_name='First',
             middle_name='Middle'
         )
-        icon = SimpleUploadedFile("icon.jpg", b"file_content", content_type="image/jpeg")
+
+        icon = SimpleUploadedFile(
+            "icon.jpg",
+            b"file_content",
+            content_type="image/jpeg"
+        )
         category = Category.objects.create(
             title='category',
             icon=icon
@@ -51,14 +64,18 @@ class BaseViewTests(TestCase):
 
 
 class UserAccountViewTests(BaseViewTests):
-    def test_url_exists_at_desired_location(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+    """Тесты представления UserAccount"""
 
+    def test_url_exists_at_desired_location(self):
+        response = self.client.get(f'/user/{self.user.id}/account/')
+        self.assertEqual(response.status_code, 404)
+
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/account/')
         self.assertEqual(response.status_code, 200)
 
     def test_correct_template(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
 
         response = self.client.get(f'/user/{self.user.id}/account/')
         self.assertTemplateUsed(response, 'user/account.html')
@@ -69,35 +86,42 @@ class UserAccountViewTests(BaseViewTests):
 
 
 class UserProfileViewTests(BaseViewTests):
-    def test_url_exists_at_desired_location(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+    """Тесты представления UserProfile"""
 
+    def test_url_exists_at_desired_location(self):
+        response = self.client.get(f'/user/{self.user.id}/profile/')
+        self.assertEqual(response.status_code, 404)
+
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/profile/')
         self.assertEqual(response.status_code, 200)
 
     def test_correct_template(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
 
         response = self.client.get(f'/user/{self.user.id}/profile/')
         self.assertTemplateUsed(response, 'user/profile.html')
         self.assertTrue('page_active' in response.context)
         self.assertEqual(response.context['page_active'], 'profile_active')
-        self.assertEqual(response.context['form'].initial['full_name'], 'Last First Middle')
-
-    def test_form(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
-        response = self.client.get(f'/user/{self.user.id}/profile/')
+        self.assertEqual(
+            response.context['form'].initial['full_name'],
+            'Last First Middle'
+        )
 
 
 class HistoryOrderTests(BaseViewTests):
-    def test_url_exists_at_desired_location(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+    """Тесты представления HistoryOrder"""
 
+    def test_url_exists_at_desired_location(self):
+        response = self.client.get(f'/user/{self.user.id}/orders/')
+        self.assertEqual(response.status_code, 404)
+
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/orders/')
         self.assertEqual(response.status_code, 200)
 
     def test_correct_template(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
 
         response = self.client.get(f'/user/{self.user.id}/orders/')
         self.assertTemplateUsed(response, 'user/historyorder.html')
@@ -113,14 +137,18 @@ class HistoryOrderTests(BaseViewTests):
 
 
 class HistoryViewTests(BaseViewTests):
-    def test_url_exists_at_desired_location(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+    """Тесты представления HistoryView"""
 
+    def test_url_exists_at_desired_location(self):
+        response = self.client.get(f'/user/{self.user.id}/views/')
+        self.assertEqual(response.status_code, 404)
+
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/views/')
         self.assertEqual(response.status_code, 200)
 
     def test_correct_template(self):
-        self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
 
         response = self.client.get(f'/user/{self.user.id}/views/')
         self.assertTemplateUsed(response, 'user/historyview.html')
@@ -145,6 +173,8 @@ class HistoryViewTests(BaseViewTests):
 
 
 class LoginTests(BaseViewTests):
+    """Тесты представления CustomLoginView"""
+
     def test_url_exists_at_desired_location(self):
         response = self.client.get('/login/')
         self.assertEqual(response.status_code, 200)
@@ -154,12 +184,14 @@ class LoginTests(BaseViewTests):
         self.assertTemplateUsed(response, 'user/login.html')
 
     def test_login(self):
-        self.assertTrue(self.client.login(username='normal@user.com', password='test1793'))
+        self.assertTrue(self.client.login(username=TEST_EMAIL, password=TEST_PASS))
         self.assertFalse(self.client.login(username='Test', password='password'))
         self.assertTrue(self.user.is_authenticated)
 
 
 class SignUpTests(BaseViewTests):
+    """Тесты представления SignUpView"""
+
     def test_url_exists_at_desired_location(self):
         response = self.client.get('/signup/')
         self.assertEqual(response.status_code, 200)
@@ -175,6 +207,6 @@ class SignUpTests(BaseViewTests):
             'password2': 'test1379',
         }
         self.assertEqual(CustomUser.objects.count(), 1)
-        response = self.client.post(reverse('user:signup'), data)
+        self.client.post(reverse('user:signup'), data)
         self.assertEqual(CustomUser.objects.count(), 2)
 
