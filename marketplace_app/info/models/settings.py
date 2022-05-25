@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Settings(models.Model):
     name = models.CharField(_("name"), max_length=50, unique=True)
-    description = models.CharField(_("description"), max_length=50)
+    description = models.CharField(_("description"), max_length=250)
     value = models.CharField(_("value"), max_length=150)
 
     class Meta:

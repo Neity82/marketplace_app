@@ -141,24 +141,29 @@
             <h2 class="Section-title">{% translate "Contact Form" %}
             </h2>
           </header>
-          <form class="form form_contacts" action="/contacts/" method="post">
+          <form class="form form_contacts" action="/contacts/" method="post" name="feedback">
             <div class="form-group">
               <div class="row">
                 <div class="row-block">
-                  <input class="form-input" id="name" name="name" type="text" placeholder="{% translate "Name" %}"/>
+                  {% csrf_token %}
+                  {{ form.name.errors}}
+                  {{ form.name }}
                 </div>
                 <div class="row-block">
-                  <input class="form-input" id="mail" name="mail" type="text" placeholder="{% translate "Email" %}"/>
+                  {{ form.email.errors}}
+                  {{ form.email }}
                 </div>
                 <div class="row-block">
-                  <input class="form-input" id="site" name="site" type="text" placeholder="{% translate "Website" %}"/>
+                  {{ form.site.errors}}
+                  {{ form.site }}
                 </div>
               </div>
             </div>
             <div class="form-group">
-              <textarea class="form-textarea" name="message" id="message" placeholder="{% translate "Message" %}"></textarea>
+              {{ form.message.errors}}
+              {{ form.message }}
             </div>
-            <div class="form-group" onClick="javascript:this.form.submit();">
+            <div class="form-group" onClick="javascript:document.feedback.submit();">
               <a class="btn btn_muted form-btn">{% translate "Send Message" %}</a>
             </div>
           </form>

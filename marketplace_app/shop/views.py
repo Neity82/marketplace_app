@@ -1,9 +1,8 @@
 from django.apps import apps
+from django.urls import reverse
 from django.views import generic
-from django.shortcuts import get_object_or_404
-
-
 from .models import Shop
+from .forms import FeedBackForm
 
 
 Product = apps.get_model(app_label='product', model_name='Product')
@@ -29,13 +28,69 @@ class ShopDetailView(generic.DetailView):
         return kwargs
 
 
-class ContactsView(generic.detail.SingleObjectMixin, generic.TemplateView):
-    template_name = "shop/contacts_detail.html"
+class ContactsDetailView(generic.DetailView):
+    """Класс рендеринта страницы контактов по запросу методом GET
+    """
+    template_name: str = "shop/contacts_detail.html"
     context_object_name = 'shop'
 
     def get_object(self, queryset=None):
+        """Метод получения объекта магазина для вывода контактов
+        """
         return Shop.objects.get(name='megano')
 
-    def get(self, request, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        """Метод формирования контекста страницы (дабавление формы)
+        """
+        context = super().get_context_data(**kwargs)
+        context['form'] = FeedBackForm()
+        return context
+
+
+class ContactsFormView(generic.detail.SingleObjectMixin, generic.FormView):
+    """Класс рендеринга страницы контактов магазина по запросу методом POST
+    """
+    template_name: str = "shop/contacts_detail.html"
+    context_object_name = 'shop'
+    form_class = FeedBackForm
+
+    def get_object(self, queryset=None):
+        """Метод получения объекта магазина для вывода контактов
+        """
+        return Shop.objects.get(name='megano')
+
+    def get_success_url(self) -> str:
+        """Метод получения страницы редиректа при успешной обработке формы
+        """
+        return reverse('shop:contacts_detail')
+
+    def form_valid(self, form):
+        """Метод обработки валидной формы
+        """
+        form.send_email()
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return super().get(request, *args, **kwargs)
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+class ContactsView(generic.View):
+    """Общий класс для рендеринга страницы контактов с формой
+    """
+
+    def get(self, request, *args, **kwargs):
+        """Метод перенаправления на класс при запросе типа GET
+        """
+        view = ContactsDetailView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """Метод перенаправления на класс при запросе типа POST
+        """
+        view = ContactsFormView.as_view()
+        return view(request, *args, **kwargs)
