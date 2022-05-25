@@ -1,12 +1,17 @@
-from PIL import Image
 from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin, PopRequestMixin
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
 from user.models import CustomUser
+
+MESSAGES = {
+    'clean_phone': _('User with this phone already exists.'),
+    'clean_password1': _("Required to fill in"),  # not password2
+    'clean_password2': _("Passwords don't match"),  # password1 != password2
+
+}
 
 
 class CustomUserAddForm(UserCreationForm):
@@ -31,7 +36,7 @@ class CustomUserChangeForm(UserChangeForm):
         phone = self.cleaned_data.get('phone')
         user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
         if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
-            raise forms.ValidationError(_('A user with such a phone is already registered'))
+            raise forms.ValidationError(MESSAGES['clean_phone'])
         return phone
 
     def clean_password(self):
@@ -81,16 +86,16 @@ class UserProfileForm(forms.ModelForm):
         phone = int(''.join([i for i in phone_clean if i.isdigit()])[1:])
         user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
         if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
-            raise forms.ValidationError(_('A user with such a phone is already registered'))
+            raise forms.ValidationError(MESSAGES['clean_phone'])
         return phone
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
         if password1 and not password2:
-            raise forms.ValidationError(_("Required to fill in"))
+            raise forms.ValidationError(MESSAGES['clean_password1'])
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError(_("Passwords don't match"))
+            raise forms.ValidationError(MESSAGES['clean_password2'])
         return password2
 
 
@@ -120,5 +125,5 @@ class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreatio
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         if phone and CustomUser.objects.filter(phone=phone):
-            raise forms.ValidationError(_('A user with such a phone is already registered'))
+            raise forms.ValidationError(MESSAGES['clean_phone'])
         return phone

@@ -14,5 +14,5 @@ def product_image_path(instance, filename) -> str:
     """Функция формирует путь для размещения изображения товара"""
 
     extension = os.path.splitext(filename)
-    return f'product/{datetime.datetime.now()}_{instance.title}.{extension}'
+    return f'product/{datetime.datetime.now()}_{instance.product.title}.{extension}'
 

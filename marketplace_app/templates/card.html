@@ -4,7 +4,9 @@
 {% url 'product:detail' product.id as product_url %}
 {% with product.discount as discount %}
 <a class="Card-picture" href="{{ product_url }}">
+  {% if product.image %}
   <img src="{{ product.image.url }}" alt="{{ product.title }}"/>
+  {% endif %}
 </a>
 <div class="Card-content">
   <strong class="Card-title">

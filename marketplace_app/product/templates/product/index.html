@@ -56,7 +56,7 @@
         <div class="BannersHome">
           {% if popular_category %}
           {% for category in popular_category %}
-          <a class="BannersHomeBlock" href="#">
+          <a class="BannersHomeBlock" href="/catalog/?category={{ category.id }}">
             <div class="BannersHomeBlock-row">
               <div class="BannersHomeBlock-block">
                 <strong class="BannersHomeBlock-title">{{ category.title }}</strong>

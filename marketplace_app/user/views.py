@@ -1,9 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
 from django.views import generic
@@ -33,7 +31,8 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
         context['last_order'] = Order.get_last_order(user=self.request.user)
-        context['product_view'] = UserProductView.get_product_view(user=self.request.user, limit=3)
+        context['product_view'] = UserProductView.get_product_view(user=self.request.user,
+                                                                   limit=3)
         return context
 
 
@@ -88,8 +87,8 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
         user.save()
         login(self.request, user)
-
-        messages.success(self.request, f'Профиль успешно сохранен', extra_tags='success')
+        messages_text = _('Profile saved successfully')
+        messages.success(self.request, messages_text, extra_tags='success')
 
         return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
 
@@ -137,7 +136,7 @@ class HistoryViews(LoginRequiredMixin, generic.ListView):
         return views_list
 
 
-class CompareProduct(generic.ListView):
+class CompareProduct(LoginRequiredMixin, generic.ListView):
     """
         Представление страницы compare.html
 
