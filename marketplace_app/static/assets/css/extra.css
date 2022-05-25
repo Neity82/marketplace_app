@@ -926,6 +926,11 @@
   justify-content: center;
   align-items: center;
 }
+
+.product {
+
+}
+
 .Card-btn + .Card-btn {
   margin-left: 12px;
 }
@@ -1036,6 +1041,14 @@ a.Cart-title {
   margin-top: 5px;
   color: #71747a;
 }
+
+.Cart-quantity {
+  font-size: 12px;
+  display: block;
+  margin-top: 5px;
+  color: #71747a;
+}
+
 .Cart-block + .Cart-block {
   margin-left: 20px;
 }

@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 {% load l10n %}
+{% load i18n %}
+
+{% block title %}
+  {{seo.title}}
+{% endblock %}
 
 {% block head %}
   {% include "head.html" %}
@@ -31,137 +36,87 @@
   <div class="Section">
     <div class="wrap">
       <form class="form Cart" action="#" method="post">
-        <div class="Cart-product">
+        {% for cart_entity in cart.cart_entity.all %}
+          <div class="Cart-product">
+
           <div class="Cart-block Cart-block_row">
-            <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
+            <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="{{ cart_entity.stock.product.image.url }}" alt="card.jpg"/></a>
             </div>
-            <div class="Cart-block Cart-block_info"><a class="Cart-title" href="#">Ноутбук</a>
-              <div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра
+            <div class="Cart-block Cart-block_info"><a class="Cart-title" href="#">{{ cart_entity.stock.product.title }}</a>
+              <div class="Cart-desc">{{ cart_entity.stock.product.short_description }}
+              </div>
+              <div class="Cart-quantity">{% translate "In stock" %}: {{ cart_entity.stock.count }}
               </div>
             </div>
             <div class="Cart-block Cart-block_price">
-              <div class="Cart-price">80.00$
-              </div>
+              {% if cart_entity.stock.product.discount.type %}
+                <div class="Cart-price Cart-price_old">{{ cart_entity.stock.price }}$
+                </div>
+
+                <div class="Cart-price">{{ cart_entity.stock.product.discount.price }}$
+                </div>
+              {% else %}
+                <div class="Cart-price">{{ cart_entity.stock.price }}$
+                </div>
+              {% endif %}
             </div>
           </div>
           <div class="Cart-block Cart-block_row">
             <div class="Cart-block Cart-block_seller">
-              <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
               <select class="form-select">
-                <option value="good" selected="selected">shop good
-                </option>
-                <option value="kke">shop kke
-                </option>
-                <option value="sssssl">market sssssl
-                </option>
+                {% for shop in cart_entity.stock.product.get_shops %}
+                  {% if cart_entity.stock.shop.id == shop.id %}
+                    <option value="{{ shop.id }}" selected="selected" class="Cart-block-seller-option">
+                      {{ shop.name }}
+                    </option>
+                  {% else %}
+                    <option value="{{ shop.id }}" class="Cart-block-seller-option">
+                      {{ shop.name }}
+                    </option>
+                  {% endif %}
+                {% endfor %}
               </select>
             </div>
             <div class="Cart-block Cart-block_amount">
               <div class="Cart-amount">
                 <div class="Amount">
-                  <button class="Amount-remove" type="button">
+                  <button class="Amount-remove" value="{{ cart_entity.stock.id }}" type="button" href="{% url 'order:cart' %}" >
                   </button>
-                  <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                  <button class="Amount-add" type="button">
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="Cart-block Cart-block_delete"><a class="Cart-delete" href="#"><img src="assets/img/icons/card/delete.svg" alt="delete.svg"/></a>
-            </div>
-          </div>
-        </div>
-        <div class="Cart-product">
-          <div class="Cart-block Cart-block_row">
-            <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="assets/img/content/sale/product.png" alt="product.png"/></a>
-            </div>
-            <div class="Cart-block Cart-block_info"><a class="Cart-title" href="#">Планшет</a>
-              <div class="Cart-desc">Это планшет с современным железом. Процессор последнего поколения
-              </div>
-            </div>
-            <div class="Cart-block Cart-block_price">
-              <div class="Cart-price Cart-price_old">51.00$
-              </div>
-              <div class="Cart-price">40.99$
-              </div>
-            </div>
-          </div>
-          <div class="Cart-block Cart-block_row">
-            <div class="Cart-block Cart-block_seller">
-              <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-              <select class="form-select">
-                <option value="good">shop good
-                </option>
-                <option value="kke" selected="selected">shop kke
-                </option>
-                <option value="sssssl">market sssssl
-                </option>
-              </select>
-            </div>
-            <div class="Cart-block Cart-block_amount">
-              <div class="Cart-amount">
-                <div class="Amount">
-                  <button class="Amount-remove" type="button">
-                  </button>
-                  <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                  <button class="Amount-add" type="button">
+                  <input class="Amount-input form-input" name="amount" type="text" value="{{ cart_entity.quantity }}" max="{{ cart_entity.stock.count }}"/>
+                  <button class="Amount-add" value="{{ cart_entity.stock.id }}" type="button" href="{% url 'order:cart' %}">
                   </button>
                 </div>
               </div>
             </div>
-            <div class="Cart-block Cart-block_delete"><a class="Cart-delete" href="#"><img src="assets/img/icons/card/delete.svg" alt="delete.svg"/></a>
+            <div class="Cart-block Cart-block_delete">
+              <a class="Cart-delete" href="{% url 'order:remove_from_cart' cart_entity.stock.id %}">
+                <img src="assets/img/icons/card/delete.svg" alt="delete.svg"/>
+              </a>
             </div>
           </div>
         </div>
-        <div class="Cart-product">
-          <div class="Cart-block Cart-block_row">
-            <div class="Cart-block Cart-block_pict"><a class="Cart-pict" href="#"><img class="Cart-img" src="assets/img/content/home/card.jpg" alt="card.jpg"/></a>
-            </div>
-            <div class="Cart-block Cart-block_info"><a class="Cart-title" href="#">Ноутбук</a>
-              <div class="Cart-desc">Это супер ноутбук, 3 гб. 4 ядра
-              </div>
-            </div>
-            <div class="Cart-block Cart-block_price">
-              <div class="Cart-price">80.00$
-              </div>
-            </div>
-          </div>
-          <div class="Cart-block Cart-block_row">
-            <div class="Cart-block Cart-block_seller">
-              <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-              <select class="form-select">
-                <option value="good" selected="selected">shop good
-                </option>
-                <option value="kke">shop kke
-                </option>
-                <option value="sssssl">market sssssl
-                </option>
-              </select>
-            </div>
-            <div class="Cart-block Cart-block_amount">
-              <div class="Cart-amount">
-                <div class="Amount">
-                  <button class="Amount-remove" type="button">
-                  </button>
-                  <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                  <button class="Amount-add" type="button">
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="Cart-block Cart-block_delete"><a class="Cart-delete" href="#"><img src="assets/img/icons/card/delete.svg" alt="delete.svg"/></a>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
         <div class="Cart-total">
           <div class="Cart-block Cart-block_total">
             <strong class="Cart-title">Итого:
-            </strong><span class="Cart-price">200.99$</span><span class="Cart-price_old">250.99$</span>
+            {% if total.discount_sum %}
+              </strong><span class="Cart-price">{{ total.discount_sum }}$</span><span class="Cart-price_old">{{ total.old_sum }}$</span>
+            {% else %}
+              </strong><span class="Cart-price">{{ total.old_sum }}$</span>
+            {% endif %}
           </div>
-          <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
+          {% if request.user.is_anonymous %}
+            <div class="Cart-block"><a class="btn btn_success btn_lg disabled" href="order.html">Оформить заказ</a>
+          {% else %}
+            <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
+            </div>
+          {% endif %}
+
           </div>
         </div>
+
       </form>
+
     </div>
   </div>
 </div>

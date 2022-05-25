@@ -6,14 +6,14 @@ from typing import Dict, List, Optional, Union
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Q, Avg, Min, Sum
+from django.db.models import Q, Avg, Min, Sum, QuerySet
 from django.db.models.functions import Coalesce
-
-from shop.models import Shop
-from .utils import category_icon_path, product_image_path
 from django.utils.translation import gettext_lazy as _
+
 from discount.models import Discount
 from discount.models import ProductDiscount
+from shop.models import Shop
+from .utils import category_icon_path, product_image_path
 
 
 class Tag(models.Model):
@@ -482,6 +482,9 @@ class Product(models.Model):
 
         return queryset[:limit]
 
+    def get_shops(self):
+        return Shop.objects.filter(stock__product__id=self.pk).only('name', 'id')
+
     @classmethod
     def get_limited_edition(
             cls,
@@ -636,6 +639,10 @@ class Stock(models.Model):
         return f'Stock: product: {getattr(self.product, "title")} ' \
                f'shop: {getattr(self.shop, "name", None)}'
 
+    @property
+    def pk(self) -> int:
+        return getattr(self, 'id')
+
     @classmethod
     def get_products_in_stock(cls, product: Product) -> QuerySet[Stock]:
         product_in_stock = Stock.objects.filter(product=product)
@@ -663,7 +670,7 @@ class ProductReview(models.Model):
 
     text = models.TextField(
         verbose_name=_('review content'),
-        help_text=_(''),
+        help_text=_('Review content'),
         max_length=1500,
         default=''
     )
