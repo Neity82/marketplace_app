@@ -1,6 +1,7 @@
 from django.views import View
 
 from order.models import Cart
+from order.utils import SUCCESS_RESPONSE_TYPE, WARNING_RESPONSE_TYPE
 from product.models import Stock
 from user.models import CustomUser
 
@@ -28,3 +29,19 @@ class CartMixin(View):
     def get_stock(self, pk: int) -> Stock:
         """ Получение объекта 'Складской единицы' по id"""
         return self.stock_model.objects.filter(id=pk).first()
+
+    @staticmethod
+    def success_type_mapping(success: bool) -> str:
+        """ Отдаем нужный тип ответа, исходя из переменной success """
+        return SUCCESS_RESPONSE_TYPE if success else WARNING_RESPONSE_TYPE
+
+    def prepare_response_data(self, success: bool, message: str, **kwargs) -> dict:
+        """Подготавливаем данные респонса для фронта"""
+        response_type = self.success_type_mapping(success=success)
+        response_data = {
+            'type': response_type,
+            'message': message,
+        }
+        for k, v in kwargs.items():
+            response_data.update({k: v})
+        return response_data

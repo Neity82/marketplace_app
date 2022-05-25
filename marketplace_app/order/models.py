@@ -4,9 +4,9 @@ from typing import List
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
 from django.db.models import Sum, F, Q
-from django.http import Http404
 from django.utils.translation import gettext as _
 
+from order import utils
 from product.models import Stock
 from user.models import CustomUser
 
@@ -68,6 +68,8 @@ class Cart(models.Model):
         verbose_name_plural = _('carts')
         ordering = ['-id']
 
+    objects = models.Manager()
+
     def __str__(self) -> str:
         user = getattr(self, 'user_id') if getattr(self, 'user_id') else 'Unknown'
         return f'Cart: user: {user}, device: {self.device}'
@@ -86,13 +88,16 @@ class Cart(models.Model):
     def __len__(self) -> int:
         return self.count
 
-    def add_to_cart(self, stock_id: int) -> None:
+    def add_to_cart(self, stock_id: int) -> (bool, str):
         """
         Добавляем товар в корзину:
         создаем новый CartEntity или обновляем quantity у старого
         :param stock_id: id товара (складского остатка)
-        :return:
+        :return: bool - успех добавления, сообщение
         """
+        result = True
+        message = utils.ADD_TO_CART_SUCCESS
+
         cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
         if cart_entity:
             if cart_entity.stock.count > cart_entity.quantity:
@@ -101,23 +106,34 @@ class Cart(models.Model):
         else:
             CartEntity.objects.create(cart_id=self.pk, stock_id=stock_id)
 
-    def remove_from_cart(self, stock_id: int) -> None:
+        return result, message
+
+    def remove_from_cart(self, stock_id: int) -> (bool, str):
         """
         Удаляем элемент корзины из корзины
         :param stock_id: id товара (складского остатка)
-        :return: None
+        :return: - успех удаления, сообщение
         """
+        result = False
+        message = utils.REMOVE_FROM_CART_FAIL
+
         cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
         if cart_entity:
             cart_entity.delete()
+            result = True
+            message = utils.REMOVE_FROM_CART_SUCCESS
+        return result, message
 
-    def update_quantity(self, stock_id: int, quantity: int) -> None:
+    def update_quantity(self, stock_id: int, quantity: int) -> (bool, str):
         """
         Обновляем количество у элемента корзины, если количество равно 0 - удаляем
         :param stock_id: id товара (складского остатка)
         :param quantity: новое количество
-        :return:
+        :return: успех обновления, сообщение
         """
+        result = False
+        message = utils.UPDATE_CART_QUANTITY_FAIL
+
         stock = Stock.objects.filter(id=stock_id).first()
         cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock.pk).first()
         if cart_entity:
@@ -125,20 +141,24 @@ class Cart(models.Model):
                 if stock.count >= quantity:
                     cart_entity.quantity = quantity
                     cart_entity.save(update_fields=['quantity'])
+                    result = True
+                    message = utils.UPDATE_CART_QUANTITY_SUCCESS % quantity
             else:
-                self.remove_from_cart(stock_id=stock_id)
-        else:
-            raise Http404
+                result, message = self.remove_from_cart(stock_id=stock_id)
+        return result, message
 
-    def change_shop_by_id(self, stock_id: int, shop_id: int):
+    def change_shop_by_id(self, stock_id: int, shop_id: int) -> (bool, str):
         """
         Меняем продавца у товара, если такой товар уже есть в корзине складываем их количество
+        Если после сложения количество товара превышает складской остаток, отдаем "максимум" со склада
         :param stock_id: id товара (складского остатка)
         :param shop_id: id продавца (магазина)
-        :return:
+        :return: успех операции, сообщение
         """
-        with transaction.atomic():
+        result = True
+        message = utils.CHANGE_SHOP_CART_FAIL
 
+        with transaction.atomic():
             stock = Stock.objects.filter(id=stock_id).first()
             cart_entity = CartEntity.objects.filter(
                 cart_id=self.pk, stock=stock
@@ -150,8 +170,11 @@ class Cart(models.Model):
                 if new_stock not in Stock.objects.filter(cart_entity__cart=self):
                     if cart_entity.quantity >= new_stock.count:
                         new_quantity = new_stock.count
+                        message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
                     else:
                         new_quantity = cart_entity.quantity
+                        message = utils.CHANGE_SHOP_CART_SUCCESS
+                        result = True
 
                     cart_entity.stock = new_stock
                     cart_entity.quantity = new_quantity
@@ -165,14 +188,19 @@ class Cart(models.Model):
                             new_cart_entity.quantity + cart_entity.quantity
                     ):
                         new_cart_entity.quantity = F('quantity') + cart_entity.quantity
+                        message = utils.CHANGE_SHOP_CART_SUCCESS
+                        result = True
                     else:
                         new_cart_entity.quantity = (
                                 F('quantity')
                                 - new_cart_entity.quantity
                                 + cart_entity.quantity
                         )
+                        message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % cart_entity.quantity
+
                     new_cart_entity.save()
                     cart_entity.delete()
+        return result, message
 
     def _get_sums(self) -> (Decimal, Decimal):
         """
@@ -259,7 +287,6 @@ class Cart(models.Model):
             instance = cls._get_user_cart(user=user, device=device)
         return instance
 
-    objects = models.Manager()
 
 
 class Delivery(models.Model):

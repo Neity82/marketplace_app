@@ -680,7 +680,7 @@
                         e.preventDefault();
                         var $inputThis = $(this).siblings($input).filter($input);
                         var value = parseFloat($inputThis.val());
-                        value < $inputThis.attr('max') ? $inputThis.val(value + 1) : $inputThis.val(value)
+                        $inputThis.val(value + 1)
                     });
                     $remove.on('click', function(e) {
                         e.preventDefault();
@@ -897,6 +897,19 @@
         Categories().init();
     });
 
+    // call pop with text
+    function popUp(message, type){
+        return alertify.notify(message, type)
+    }
+
+    // set value for input
+    function setInputValue(item, value){
+        let idValue = 'inputValueToChange'
+        item.setAttribute('id', idValue)
+        document.getElementById(idValue).value = value
+        item.removeAttribute('id')
+    }
+
     // get click-events on all objects with add-to-cart id
     // add product to cart
     $(document).on('click', '#add-to-cart', function(event) {
@@ -917,18 +930,34 @@
                             'method': 'post'
                         },
                         success: function(response) {
-                            console.log(`product ${item.value} successfully added to card`);
                             document.getElementById("CartBlock-amount").innerHTML = response.cart_count
                             document.getElementById("CartBlock-price").innerHTML = response.price
+                            popUp(response.message, response.type);
                         },
                         error: function(xhr, errmsg, err) {
-                            console.log(`error while adding product ${item.value} to card ${err}`);
+                            popUp(err, 'error');
+
                         }
                     });
                 }
             });
         }
     });
+    // get quantity block text
+    function getQuantityFromParentNode(element){
+        let quantityClass = '.Cart-quantity'
+        let parentClass = '.Cart-product'
+        let quantityText = null
+        let parentNodes = document.querySelectorAll(parentClass)
+        parentNodes.forEach((item) =>{
+            if (item.contains(element)) {
+                quantityText = item.querySelector(quantityClass).textContent
+                return quantityText
+            }
+        })
+        return quantityText
+    }
+
 
     // get click-events on all objects with Amount-add class
     // increment product's count in cart
@@ -939,9 +968,11 @@
         if (target) {
             addButtons.forEach((item) => {
                 if (target === item) {
-                    let quantity = target.parentNode.getElementsByTagName('input').amount.value;
-
-                    $.ajax({
+                    let InputElement = target.parentNode.getElementsByTagName('input').amount;
+                    let quantity = InputElement.value;
+                    let maxQuantity = InputElement.max;
+                    if (parseInt(quantity) <= parseInt(maxQuantity)) {
+                        $.ajax({
                         type: 'POST',
                         url: target.href,
                         data: {
@@ -951,13 +982,18 @@
                             'method': 'post'
                         },
                         success: function(response) {
-                            console.log(`product ${item.value} successfully added to card`);
-                            window.location.reload();
+                            popUp(response.message, response.type);
+                            setTimeout(() => window.location.reload(), 1000);
                         },
                         error: function(xhr, errmsg, err) {
-                            console.log(`error while adding product ${item.value} to card ${err}`);
+                            popUp(err, 'error');
                         }
                     });
+                    } else {
+                        setInputValue(InputElement, maxQuantity);
+                        let quantityText = getQuantityFromParentNode(InputElement);
+                        alertify.warning(`${quantityText}!`);
+                    }
                 }
             });
         }
@@ -984,11 +1020,12 @@
                             'method': 'post'
                         },
                         success: function(response) {
-                            console.log(`product ${item.value} successfully added to card`);
-                            window.location.reload();
+                            popUp(response.message, response.type);
+                            setTimeout(() => window.location.reload(), 1000);
+
                         },
                         error: function(xhr, errmsg, err) {
-                            console.log(`error while adding product ${item.value} to card ${err}`);
+                            popUp(err, 'error');
                         }
                     });
                 }
@@ -1016,10 +1053,11 @@
                             'method': 'delete'
                         },
                         success: function(response) {
-                             window.location.reload();
+                            popUp(response.message, response.type);
+                            setTimeout(() => window.location.reload(), 1000);
                         },
                         error: function(xhr, errmsg, err) {
-                            console.log(`error while adding product ${item.value} to card ${err}`);
+                            popUp(err, 'error');
                         }
                     });
                 }
@@ -1048,11 +1086,11 @@
                             'method': 'post'
                         },
                         success: function(response) {
-                            console.log(`product ${item.value} successfully added to card`);
-                            window.location.reload();
+                            popUp(response.message, response.type);
+                            setTimeout(() => window.location.reload(), 2000);
                         },
                         error: function(xhr, errmsg, err) {
-                            console.log(`error while adding product ${item.value} to card ${err}`);
+                            popUp(err, 'error');
                         }
                     });
                 }
