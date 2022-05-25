@@ -155,7 +155,7 @@ class Cart(models.Model):
         :param shop_id: id продавца (магазина)
         :return: успех операции, сообщение
         """
-        result = True
+        result = False
         message = utils.CHANGE_SHOP_CART_FAIL
 
         with transaction.atomic():
@@ -167,7 +167,7 @@ class Cart(models.Model):
             if cart_entity:
                 new_stock = Stock.objects.filter(product_id=stock.product.id, shop_id=shop_id).first()
 
-                if new_stock not in Stock.objects.filter(cart_entity__cart=self):
+                if new_stock not in Stock.objects.filter(cart_entity__cart_id=self.pk):
                     if cart_entity.quantity >= new_stock.count:
                         new_quantity = new_stock.count
                         message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
@@ -184,9 +184,7 @@ class Cart(models.Model):
                         stock_id=new_stock.id, cart_id=self.pk
                     ).first()
 
-                    if new_cart_entity.stock.count >= (
-                            new_cart_entity.quantity + cart_entity.quantity
-                    ):
+                    if new_cart_entity.stock.count >= (new_cart_entity.quantity + cart_entity.quantity):
                         new_cart_entity.quantity = F('quantity') + cart_entity.quantity
                         message = utils.CHANGE_SHOP_CART_SUCCESS
                         result = True
@@ -194,7 +192,7 @@ class Cart(models.Model):
                         new_cart_entity.quantity = (
                                 F('quantity')
                                 - new_cart_entity.quantity
-                                + cart_entity.quantity
+                                + new_cart_entity.stock.count
                         )
                         message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % cart_entity.quantity
 
@@ -279,6 +277,7 @@ class Cart(models.Model):
         device = request.COOKIES.get('device', None)
 
         assert user, 'can\'t get user from request!'
+
         # assert device, 'no "device", check static!'
 
         if user.is_anonymous:
@@ -286,7 +285,6 @@ class Cart(models.Model):
         else:
             instance = cls._get_user_cart(user=user, device=device)
         return instance
-
 
 
 class Delivery(models.Model):
