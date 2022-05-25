@@ -279,7 +279,7 @@ class Cart(models.Model):
         device = request.COOKIES.get('device', None)
 
         assert user, 'can\'t get user from request!'
-        assert device, 'no "device", check static!'
+        # assert device, 'no "device", check static!'
 
         if user.is_anonymous:
             instance = cls._get_anonymous_cart(device=device)
