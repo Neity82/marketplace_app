@@ -1,3 +1,5 @@
+import datetime
+
 from django.db.models import QuerySet, Sum
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest, QueryDict
@@ -30,6 +32,13 @@ class IndexView(generic.TemplateView):
     template_name = 'product/index.html'
 
     def get_context_data(self, **kwargs):
+        # Временное решение для добавления товара дня
+        daily_offer_list = DailyOffer.objects.filter(select_date=datetime.datetime.today())
+        if daily_offer_list.exists() is False:
+            product_day = Product.objects.filter(is_limited=True).first()
+            daily_offer = DailyOffer(product=product_day)
+            daily_offer.save()
+
         context = super().get_context_data(**kwargs)
         context['banner_list'] = Banner.get_banners()
         context['popular_category'] = Category.get_popular()

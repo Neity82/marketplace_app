@@ -460,7 +460,7 @@ class Order(models.Model):
         return Decimal(round(discounted_sum_order, 2))
 
     @classmethod
-    def get_last_order(cls, user: CustomUser):
+    def get_last_order(cls, user: CustomUser) -> 'Order':
         """
         Метод для получения последнего оформленного заказа
 
