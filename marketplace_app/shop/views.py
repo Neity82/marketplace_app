@@ -1,6 +1,7 @@
+from typing import Any, Dict
 from django.apps import apps
 from django.urls import reverse
-from django.views import generic
+from django.views import View, generic
 from .models import Shop
 from .forms import FeedBackForm
 
@@ -9,12 +10,16 @@ Product = apps.get_model(app_label='product', model_name='Product')
 
 
 class ShopListView(generic.ListView):
+    """Класс рендеринта страницы списка магазинов
+    """
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = 'shops'
 
 
 class ShopDetailView(generic.DetailView):
+    """Класс рендеринта страницы детальной информации о магазине
+    """
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = 'shop'
@@ -31,7 +36,7 @@ class ShopDetailView(generic.DetailView):
 class ContactsDetailView(generic.DetailView):
     """Класс рендеринта страницы контактов по запросу методом GET
     """
-    template_name: str = "shop/contacts_detail.html"
+    template_name = "shop/contacts_detail.html"
     context_object_name = 'shop'
 
     def get_object(self, queryset=None):
@@ -42,7 +47,7 @@ class ContactsDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         """Метод формирования контекста страницы (дабавление формы)
         """
-        context = super().get_context_data(**kwargs)
+        context: Dict[str, Any] = super().get_context_data(**kwargs)
         context['form'] = FeedBackForm()
         return context
 
@@ -50,7 +55,7 @@ class ContactsDetailView(generic.DetailView):
 class ContactsFormView(generic.detail.SingleObjectMixin, generic.FormView):
     """Класс рендеринга страницы контактов магазина по запросу методом POST
     """
-    template_name: str = "shop/contacts_detail.html"
+    template_name = "shop/contacts_detail.html"
     context_object_name = 'shop'
     form_class = FeedBackForm
 
@@ -86,11 +91,11 @@ class ContactsView(generic.View):
     def get(self, request, *args, **kwargs):
         """Метод перенаправления на класс при запросе типа GET
         """
-        view = ContactsDetailView.as_view()
+        view: View = ContactsDetailView.as_view()
         return view(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         """Метод перенаправления на класс при запросе типа POST
         """
-        view = ContactsFormView.as_view()
+        view: View = ContactsFormView.as_view()
         return view(request, *args, **kwargs)
