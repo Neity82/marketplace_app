@@ -1,1 +1,142 @@
-[{"model": "info.seoitem", "pk": 1, "fields": {"path_name": "product:home", "meta_title": "Main page", "meta_description": "Main page of e-shop Megano", "title": ""}}, {"model": "info.seoitem", "pk": 2, "fields": {"path_name": "product:list", "meta_title": "Catalog", "meta_description": "Catalog of products e-shop Megano", "title": ""}}, {"model": "info.seoitem", "pk": 3, "fields": {"path_name": "user:user_account", "meta_title": "User account", "meta_description": "User account detail page", "title": ""}}, {"model": "info.seoitem", "pk": 4, "fields": {"path_name": "user:compare_list", "meta_title": "Compare", "meta_description": "Page of campare products", "title": ""}}, {"model": "info.seoitem", "pk": 5, "fields": {"path_name": "user:login", "meta_title": "Login", "meta_description": "Login page", "title": ""}}, {"model": "info.seoitem", "pk": 6, "fields": {"path_name": "user:logout", "meta_title": "Logout", "meta_description": "Logout endpoint", "title": ""}}, {"model": "info.seoitem", "pk": 7, "fields": {"path_name": "user:signup", "meta_title": "Sign up", "meta_description": "Sign up page", "title": ""}}, {"model": "info.seoitem", "pk": 8, "fields": {"path_name": "shop:list", "meta_title": "List of shops", "meta_description": "List of shops in e-shop Megano", "title": ""}}, {"model": "info.seoitem", "pk": 9, "fields": {"path_name": "shop:detail", "meta_title": "Page of shop:", "meta_description": "", "title": ""}}, {"model": "info.seoitem", "pk": 10, "fields": {"path_name": "order:cart", "meta_title": "Cart", "meta_description": "Cart with products page", "title": ""}}, {"model": "info.seoitem", "pk": 11, "fields": {"path_name": "order:order_detail", "meta_title": "Order detail", "meta_description": "Order detail page", "title": ""}}, {"model": "info.seoitem", "pk": 12, "fields": {"path_name": "order:order", "meta_title": "Order", "meta_description": "Order page", "title": ""}}, {"model": "info.seoitem", "pk": 13, "fields": {"path_name": "product:detail", "meta_title": "Page of product:", "meta_description": "", "title": ""}}, {"model": "info.seoitem", "pk": 14, "fields": {"path_name": "discount:list", "meta_title": "Sales list", "meta_description": "This page for list of sales", "title": ""}}]
+[
+    {
+        "model": "info.seoitem",
+        "pk": 1,
+        "fields": {
+            "path_name": "product:home",
+            "meta_title": "Main page",
+            "meta_description": "Main page of e-shop Megano",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 2,
+        "fields": {
+            "path_name": "product:list",
+            "meta_title": "Catalog",
+            "meta_description": "Catalog of products e-shop Megano",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 3,
+        "fields": {
+            "path_name": "user:user_account",
+            "meta_title": "User account",
+            "meta_description": "User account detail page",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 4,
+        "fields": {
+            "path_name": "user:compare_list",
+            "meta_title": "Compare",
+            "meta_description": "Page of campare products",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 5,
+        "fields": {
+            "path_name": "user:login",
+            "meta_title": "Login",
+            "meta_description": "Login page",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 6,
+        "fields": {
+            "path_name": "user:logout",
+            "meta_title": "Logout",
+            "meta_description": "Logout endpoint",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 7,
+        "fields": {
+            "path_name": "user:signup",
+            "meta_title": "Sign up",
+            "meta_description": "Sign up page",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 8,
+        "fields": {
+            "path_name": "shop:list",
+            "meta_title": "List of shops",
+            "meta_description": "List of shops in e-shop Megano",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 9,
+        "fields": {
+            "path_name": "shop:detail",
+            "meta_title": "Page of shop:",
+            "meta_description": "",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 10,
+        "fields": {
+            "path_name": "order:cart",
+            "meta_title": "Cart",
+            "meta_description": "Cart with products page",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 11,
+        "fields": {
+            "path_name": "order:order_detail",
+            "meta_title": "Order detail",
+            "meta_description": "Order detail page",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 12,
+        "fields": {
+            "path_name": "order:order",
+            "meta_title": "Order",
+            "meta_description": "Order page",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 13,
+        "fields": {
+            "path_name": "product:detail",
+            "meta_title": "Page of product:",
+            "meta_description": "",
+            "title": ""
+        }
+    },
+    {
+        "model": "info.seoitem",
+        "pk": 14,
+        "fields": {
+            "path_name": "discount:list",
+            "meta_title": "Sales list",
+            "meta_description": "This page for list of sales",
+            "title": ""
+        }
+    }
+]
