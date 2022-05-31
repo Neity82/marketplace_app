@@ -11,15 +11,4 @@ class ShopAdmin(admin.ModelAdmin):
 
     @staticmethod
     def display_image(obj):
-        return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
-
-
-# class StockEntityInline(admin.TabularInline):
-#     model = StockEntity
-#
-#
-# @admin.register(Stock)
-# class StockAdmin(admin.ModelAdmin):
-#     inlines = (StockEntityInline,)
-#     ordering = ('shop',)
-#     list_display = ('shop',)
+        return mark_safe(f'<img src="{obj.image.url}"  height="50" />')
