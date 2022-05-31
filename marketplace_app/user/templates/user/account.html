@@ -35,7 +35,7 @@
           <div class="Account-group">
             <div class="Account-column">
               <div class="Account-avatar">
-                {% if user.avatar %}
+                {% if request.user.avatar %}
                 <img src="{{ user.avatar.url }}" alt="card.jpg"/>
                 {% else %}
                 <img src="{% static 'assets/img/content/home/card.jpg' %}" alt="card.jpg"/>

@@ -1,11 +1,14 @@
-from typing import List
+import datetime
+from typing import List, Dict
 
 from django.contrib.auth.models import AbstractUser
+from django.core.handlers.wsgi import WSGIRequest
 from django.core.validators import RegexValidator
 from django.db import models
+from django.db.models import Q, QuerySet
 from django.utils.translation import gettext as _
 
-from product.models import Product
+from product.models import Product, Category
 from user.manager import CustomUserManager
 from user.utils import avatar_directory_path
 
@@ -26,6 +29,7 @@ class CustomUser(AbstractUser):
     )
 
     username = None
+
     email = models.EmailField(
         verbose_name=_('email'),
         unique=True,
@@ -106,7 +110,7 @@ class UserProductView(models.Model):
         help_text=_('Viewed product')
     )
     datetime = models.DateTimeField(
-        auto_now_add=True,
+        auto_created=True,
         verbose_name=_('datetime of addition'),
         help_text=_('Viewing datetime')
     )
@@ -142,18 +146,44 @@ class UserProductView(models.Model):
         )
         return queryset[:limit]
 
+    @classmethod
+    def add_object(cls, user: CustomUser, product: Product) -> (bool, str):
+        """
+        Добавляем товар в просмотренные если его там нет или
+        обновляем дату просмотра
 
-class Compare(models.Model):
-    """Модель товаров для сравнения"""
+        :param user: Пользователь
+        :type user: CustomUser
+        :param product: Товар
+        :type product: Product
+        :return: результат добавления и сообщение
+        :rtype: (bool, str)
+        """
 
-    user_id = models.ForeignKey(
-        CustomUser,
-        on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        related_name='user_compare',
-        help_text=_('A user who compares products')
-    )
-    product_id = models.ForeignKey(
+        result: bool = True
+        message: str = _('successfully added')
+
+        if UserProductView.objects.filter(user_id=user, product_id=product).exists():
+            UserProductView.objects.filter(
+                user_id=user,
+                product_id=product
+            ).update(
+                datetime=datetime.datetime.now()
+            )
+
+        else:
+            UserProductView.objects.create(
+                user_id=user,
+                product_id=product,
+                datetime=datetime.datetime.now()
+            )
+        return result, message
+
+
+class CompareEntity(models.Model):
+    """Модель товара в сравнении"""
+
+    product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         verbose_name=_('product'),
@@ -161,41 +191,231 @@ class Compare(models.Model):
         help_text=_('Product for comparison')
     )
 
-    class Meta:
-        verbose_name = _('Compare')
-        verbose_name_plural = _('Compares')
+    compare = models.ForeignKey(
+        'Compare',
+        on_delete=models.CASCADE,
+        related_name='compare_entity',
+        verbose_name=_('compare\'s')
+    )
 
-    def __str__(self):
-        return f'{self.product_id}'
+    class Meta:
+        verbose_name = _('compare entity')
+        verbose_name_plural = _('compare entities')
+
+    objects = models.Manager()
+
+    def __str__(self) -> str:
+        user = getattr(self.compare, 'user_id') if getattr(self.compare, 'user_id') else 'Unknown'
+        return f'Compare entity: user {user}, product: {self.product}'
+
+
+class Compare(models.Model):
+    """Модель сравнения"""
+
+    user_id = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name=_('user'),
+        related_name='compare_user',
+        help_text=_('Compare user'),
+        blank=True,
+        null=True
+    )
+
+    device = models.CharField(
+        max_length=255,
+        help_text=_('cookie device value'),
+        blank=True,
+        null=True
+    )
+
+    class Meta:
+        verbose_name = _('compare')
+        verbose_name_plural = _('compares')
+
+    def __str__(self) -> str:
+        user = getattr(self, 'user_id') if getattr(self, 'user_id') else 'Unknown'
+        return f'Compare: user: {user}, device: {self.device}'
 
     objects = models.Manager()
 
     @classmethod
-    def get_compare_list(cls, user: CustomUser) -> List['Compare']:
+    def get_compare_list(cls, compare_id: 'Compare') -> QuerySet['CompareEntity']:
         """
         Список товаров для сравнения
 
-        :param user: Пользователь
-        :type user: CustomUser
+        :param compare_id: Объект сравнения
+        :type compare_id: Compare
         :return: Список товаров
-        :rtype: List['Compare']
+        :rtype: List['CompareEntity']
         """
 
-        result: List[Compare] = cls.objects.filter(
-            user_id=user
+        result: QuerySet[CompareEntity] = CompareEntity.objects.filter(
+            compare=compare_id
         )
         return result
 
     @classmethod
-    def get_count(cls, user: CustomUser) -> int:
+    def get_compare(cls, request: WSGIRequest) -> 'Compare':
         """
-        Количество товаров для сравнения
+        Получаем объект сравнения из реквеста пользователя, проверяя cookie
+        :param request: django wsgi реквест
+        :type request: WSGIRequest
+        :return: объект Сравнения
+        :rtype: Compare
+        """
+        user = getattr(request, 'user', None)
+        device = request.COOKIES.get('device', None)
+
+        assert user, 'can\'t get user from request!'
+        # assert device, 'no "device", check static!'
+
+        if user.is_anonymous:
+            instance = cls._get_anonymous_compare(device=device)
+        else:
+            instance = cls._get_user_compare(user=user, device=device)
+        return instance
+
+    @classmethod
+    def _get_anonymous_compare(cls, device: str) -> 'Compare':
+        """
+        Получаем или создаем сравнение для анонимного пользователя
+
+        :param device: Девайс пользователя
+        :type device: str
+        :return: объект Сравнения
+        :rtype: Compare
+        """
+
+        instance = Compare.objects.filter(device=device).first()
+        if instance is None:
+            instance = Compare.objects.create(device=device)
+        return instance
+
+    @classmethod
+    def _get_user_compare(cls, user: CustomUser, device: str) -> 'Compare':
+        """
+        Получаем или создаем сравнение для авторизованного пользователя
 
         :param user: Пользователь
         :type user: CustomUser
-        :return: Количество товаров для сравнения
+        :param device: Девайс пользователя
+        :type device: str
+        :return: объект Сравнения
+        :rtype: Compare
+        """
+        instance = Compare.objects.filter(Q(user_id=user) | Q(device=device)).first()
+        if instance is None:
+            instance = Compare.objects.create(device=device, user_id=user)
+        else:
+            cls.update_instance(instance, device=device, user_id=user)
+        return instance
+
+    @staticmethod
+    def update_instance(instance: 'Compare', **kwargs) -> None:
+        """
+        Обновляем объект сравнения из kwargs
+
+        :param instance: объект Сравнения
+        :type instance: Compare
+        """
+
+        updated: bool = False
+        for attr, value in kwargs.items():
+            if getattr(instance, attr) != value:
+                setattr(instance, attr, value)
+                updated = True
+        if updated:
+            instance.save()
+
+    def add_to_compare(self, product_id: int) -> (bool, str):
+        """
+        Добавляем товар в сравнение если его там нет
+
+        :param product_id: id Товара
+        :type product_id: int
+        :return: результат добавления и сообщение
+        :rtype: (bool, str)
+        """
+        result: bool = True
+        message: str = _('successfully added')
+
+        count: int = CompareEntity.objects.filter(
+                    compare_id=self.pk
+                ).count()
+
+        if count < 4:
+            compare_entity = CompareEntity.objects.filter(
+                compare=self.pk,
+                product=product_id
+            ).exists()
+
+            if compare_entity is False:
+                CompareEntity.objects.create(
+                    compare_id=self.pk,
+                    product_id=product_id
+                )
+        else:
+            result = False
+            message = _('maximum of products for comparison')
+
+        return result, message
+
+    def remove_from_compare(self, product_id: int) -> (bool, str):
+        """
+        Удаляем элемент сравнения
+
+        :param product_id: id товара
+        :return: - успех удаления, сообщение
+        """
+
+        result: bool = False
+        message: str = _('failed to remove')
+
+        compare_entity = CompareEntity.objects.filter(
+            compare=self.pk,
+            product=product_id
+        )
+
+        if compare_entity.exists():
+            compare_entity.delete()
+            result = True
+            message = _('successfully removed')
+
+        return result, message
+
+    @classmethod
+    def count(cls, compare_id: 'Compare') -> int:
+        """
+        Считаем количество товаров для сравнения
+
+        :param compare_id: Сравнение
+        :type compare_id: Compare
+        :return: Количество товаров
         :rtype: int
         """
 
-        result: int = len(cls.get_compare_list(user=user))
+        result: int = CompareEntity.objects.filter(compare=compare_id).count()
         return result
+
+    @classmethod
+    def get_categories(cls, compare_id: 'Compare') -> Dict[Category, int]:
+        """
+        Получаем словарь, где ключ - объект Категория,
+        значение - количество товаров в этой категории
+
+        :param compare_id: Объект сhавнение
+        :type compare_id: Compare
+        :return: Словарь из объекта Категории и количества товаров в категории
+        :rtype: Dict[Category, int]
+        """
+        compare_list: QuerySet[CompareEntity] = cls.get_compare_list(compare_id=compare_id)
+
+        category_list = [Category.objects.get(pk=item.product.category_id)
+                         for item in compare_list]
+        categories = {}
+        for item in set(category_list):
+            categories[item] = compare_list.filter(product__category=item).count()
+        return categories
+
+

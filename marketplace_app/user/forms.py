@@ -83,7 +83,7 @@ class UserProfileForm(forms.ModelForm):
         if not phone_clean:
             return phone_clean
 
-        phone = int(''.join([i for i in phone_clean if i.isdigit()])[1:])
+        phone = ''.join([i for i in phone_clean if i.isdigit()])[1:]
         user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
         if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
             raise forms.ValidationError(MESSAGES['clean_phone'])

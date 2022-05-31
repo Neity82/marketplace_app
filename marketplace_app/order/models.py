@@ -288,7 +288,6 @@ class Cart(models.Model):
         return instance
 
 
-
 class Delivery(models.Model):
     """Модель вид доставки"""
 
