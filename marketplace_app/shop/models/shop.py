@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 class Shop(models.Model):
     name = models.CharField(_("name"), max_length=150)
     description = models.TextField(_("description"), blank=True)
-    image = models.ImageField(_("image"), null=True, upload_to='shop_images/')
+    image = models.ImageField(_("image"), blank=True, null=True, upload_to='shop_images/')
     address = models.CharField(_("address"), max_length=150, blank=True)
     phone = models.CharField(_("phone"), max_length=15, blank=True)
     mobile = models.CharField(_("mobile"), max_length=15, blank=True)
