@@ -29,7 +29,7 @@ class CartView(CartMixin):
         message = WRONG_REQUEST
         success = False
 
-        if stock_id:  # TODO else: Http404 ?
+        if stock_id:
             if quantity:
                 success, message = self.cart.update_quantity(stock_id=stock_id, quantity=int(quantity))
             elif shop_id:
@@ -93,8 +93,8 @@ class AddToCartView(CartMixin):
         cart = self.get_cart()
         is_product = request.POST.get('is_product', None)
         if is_product:
-            stock_ids = self.stock_model.objects.filter(product__id=pk).values_list('id')
-            stock_id = self.random_choice(stock_ids)[0]
+            stock_ids = self.stock_model.objects.filter(product__id=pk).values_list('id', flat=True)
+            stock_id = self.random_choice(stock_ids)
         else:
             stock_id = pk
 

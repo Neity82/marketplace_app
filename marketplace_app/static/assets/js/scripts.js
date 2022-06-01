@@ -910,6 +910,11 @@
         item.removeAttribute('id')
     }
 
+    function setCSRFHeader(xhr) {
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+    }
+
     // get click-events on all objects with add-to-cart id
     // add product to cart
     $(document).on('click', '#add-to-cart', function(event) {
@@ -923,10 +928,10 @@
                 if (target === item) {
                     $.ajax({
                         type: 'POST',
+                        beforeSend: setCSRFHeader,
                         url: target.href,
                         data: {
                             'is_product': is_product,
-                            'csrfmiddlewaretoken': getCookie('csrftoken'),
                             'method': 'post'
                         },
                         success: function(response) {
@@ -943,13 +948,14 @@
             });
         }
     });
+
     // get quantity block text
     function getQuantityFromParentNode(element){
         let quantityClass = '.Cart-quantity'
         let parentClass = '.Cart-product'
         let quantityText = null
         let parentNodes = document.querySelectorAll(parentClass)
-        parentNodes.forEach((item) =>{
+        parentNodes.forEach((item) => {
             if (item.contains(element)) {
                 quantityText = item.querySelector(quantityClass).textContent
                 return quantityText
@@ -965,29 +971,29 @@
         event.preventDefault();
         const target = event.currentTarget;
         if (target) {
-            addButtons.forEach((item) => {
+            amountButtons.forEach((item) => {
                 if (target === item) {
                     let InputElement = target.parentNode.getElementsByTagName('input').amount;
                     let quantity = InputElement.value;
                     let maxQuantity = InputElement.max;
                     if (parseInt(quantity) <= parseInt(maxQuantity)) {
                         $.ajax({
-                        type: 'POST',
-                        url: target.href,
-                        data: {
-                            'stock_id': target.value,
-                            'quantity': quantity,
-                            'csrfmiddlewaretoken': getCookie('csrftoken'),
-                            'method': 'post'
-                        },
-                        success: function(response) {
-                            popUp(response.message, response.type);
-                            setTimeout(() => window.location.reload(), 1000);
-                        },
-                        error: function(xhr, errmsg, err) {
-                            popUp(err, 'error');
-                        }
-                    });
+                            type: 'POST',
+                            beforeSend: setCSRFHeader,
+                            url: target.href,
+                            data: {
+                                'stock_id': target.value,
+                                'quantity': quantity,
+                                'method': 'post'
+                            },
+                            success: function (response) {
+                                popUp(response.message, response.type);
+                                setTimeout(() => window.location.reload(), 1000);
+                            },
+                            error: function (xhr, errmsg, err) {
+                                popUp(err, 'error');
+                            }
+                        });
                     } else {
                         setInputValue(InputElement, maxQuantity);
                         let quantityText = getQuantityFromParentNode(InputElement);
@@ -997,39 +1003,6 @@
             });
         }
 
-    });
-
-     // get click-events on all objects with Amount-remove class
-    // decrement product's count in cart
-    $(document).on('click', '.Amount-remove', function(event){
-        let removeButtons = document.querySelectorAll('.Amount-remove');
-        event.preventDefault();
-        const target = event.currentTarget;
-        if (target) {
-            removeButtons.forEach((item) => {
-                if (target === item) {
-                    let quantity = target.parentNode.getElementsByTagName('input').amount.value;
-                    $.ajax({
-                        type: 'POST',
-                        url: target.href,
-                        data: {
-                            'stock_id': target.value,
-                            'quantity': quantity,
-                            'csrfmiddlewaretoken': getCookie('csrftoken'),
-                            'method': 'post'
-                        },
-                        success: function(response) {
-                            popUp(response.message, response.type);
-                            setTimeout(() => window.location.reload(), 1000);
-
-                        },
-                        error: function(xhr, errmsg, err) {
-                            popUp(err, 'error');
-                        }
-                    });
-                }
-            });
-        }
     });
 
     // get click-events on all objects with Cart-delete class
@@ -1043,10 +1016,7 @@
                 if (target === item) {
                     $.ajax({
                         type: 'DELETE',
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-                        },
+                        beforeSend: setCSRFHeader,
                         url: target.href,
                         data: {
                             'method': 'delete'
@@ -1075,13 +1045,13 @@
                 if (target === item) {
                     let shopId = $(target).find('option:selected').attr('value');
                     let stockId = target.parentNode.querySelector('.Amount-remove').value;
-                     $.ajax({
+                    $.ajax({
                         type: 'POST',
+                        beforeSend: setCSRFHeader,
                         url: target.href,
                         data: {
                             'stock_id': stockId,
                             'shop_id': shopId,
-                            'csrfmiddlewaretoken': getCookie('csrftoken'),
                             'method': 'post'
                         },
                         success: function(response) {

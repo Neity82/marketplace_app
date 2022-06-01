@@ -155,19 +155,25 @@ class Cart(models.Model):
         :param shop_id: id продавца (магазина)
         :return: успех операции, сообщение
         """
-        result = True
+        result = False
         message = utils.CHANGE_SHOP_CART_FAIL
 
         with transaction.atomic():
             stock = Stock.objects.filter(id=stock_id).first()
-            cart_entity = CartEntity.objects.filter(
-                cart_id=self.pk, stock=stock
-            ).first()
+            cart_entity = (
+                CartEntity.objects.filter(
+                    cart_id=self.pk, stock=stock
+                    ).select_related("stock", "stock__shop").first()
+            )
 
             if cart_entity:
-                new_stock = Stock.objects.filter(product_id=stock.product.id, shop_id=shop_id).first()
+                new_stock = Stock.objects.filter(
+                    product_id=stock.product.id, shop_id=shop_id
+                ).select_related('shop').first()
 
-                if new_stock not in Stock.objects.filter(cart_entity__cart=self):
+                if new_stock.id not in Stock.objects.filter(
+                        cart_entity__cart_id=self.pk
+                ).values_list('id', flat=True):
                     if cart_entity.quantity >= new_stock.count:
                         new_quantity = new_stock.count
                         message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
@@ -183,23 +189,23 @@ class Cart(models.Model):
                     new_cart_entity = CartEntity.objects.filter(
                         stock_id=new_stock.id, cart_id=self.pk
                     ).first()
-
-                    if new_cart_entity.stock.count >= (
-                            new_cart_entity.quantity + cart_entity.quantity
-                    ):
-                        new_cart_entity.quantity = F('quantity') + cart_entity.quantity
-                        message = utils.CHANGE_SHOP_CART_SUCCESS
-                        result = True
+                    if stock.shop.pk != new_stock.shop.pk:
+                        if new_cart_entity.stock.count >= (new_cart_entity.quantity + cart_entity.quantity):
+                            new_cart_entity.quantity = F('quantity') + cart_entity.quantity
+                            message = utils.CHANGE_SHOP_CART_SUCCESS
+                            result = True
+                        else:
+                            new_cart_entity.quantity = (
+                                    F('quantity')
+                                    - new_cart_entity.quantity
+                                    + new_cart_entity.stock.count
+                            )
+                            message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % cart_entity.quantity
+                        new_cart_entity.save()
+                        cart_entity.delete()
                     else:
-                        new_cart_entity.quantity = (
-                                F('quantity')
-                                - new_cart_entity.quantity
-                                + cart_entity.quantity
-                        )
-                        message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % cart_entity.quantity
-
-                    new_cart_entity.save()
-                    cart_entity.delete()
+                        result = True
+                        message = utils.CHANGE_SHOP_CART_SAME_SHOP
         return result, message
 
     def _get_sums(self) -> (Decimal, Decimal):
@@ -279,6 +285,7 @@ class Cart(models.Model):
         device = request.COOKIES.get('device', None)
 
         assert user, 'can\'t get user from request!'
+
         # assert device, 'no "device", check static!'
 
         if user.is_anonymous:
