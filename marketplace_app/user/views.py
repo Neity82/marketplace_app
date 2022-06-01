@@ -1,14 +1,16 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Sum
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.core.handlers.wsgi import WSGIRequest
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
-from django.views import generic
+from django.views import generic, View
 
 from order.models import Order
+from product.models import AttributeValue
 from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
 from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis
@@ -33,7 +35,8 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['page_active'] = 'account_active'
         context['last_order'] = Order.get_last_order(user=self.request.user)
-        context['product_view'] = UserProductView.get_product_view(user=self.request.user, limit=3)
+        context['product_view'] = UserProductView.get_product_view(user=self.request.user,
+                                                                   limit=3)
         return context
 
 
@@ -68,8 +71,11 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         if self.request.FILES:
             avatar = self.request.FILES['avatar']
             if avatar.size > 2 * 1024 * 1024:
-                messages.error(self.request, _('Image file too large ( > 2mb )'), extra_tags='error')
-                return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
+                messages.error(self.request,
+                               _('Image file too large ( > 2mb )'),
+                               extra_tags='error')
+                return HttpResponseRedirect(reverse('user:user_profile',
+                                                    kwargs={'pk': user.pk}))
             user.avatar = avatar
         else:
             avatar = self.request.user.avatar
@@ -88,8 +94,8 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
         user.save()
         login(self.request, user)
-
-        messages.success(self.request, f'Профиль успешно сохранен', extra_tags='success')
+        messages_text = _('Profile saved successfully')
+        messages.success(self.request, messages_text, extra_tags='success')
 
         return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
 
@@ -148,6 +154,97 @@ class CompareProduct(generic.ListView):
     model = Compare
     template_name = 'user/compare.html'
     context_object_name = 'compare_list'
+
+    def get_context_data(self, **kwargs):
+        compare = Compare.get_compare(self.request)
+
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Compare.get_categories(compare_id=compare)
+        if self.kwargs['pk'] == 0:
+            context['cat_selected'] = 0
+        else:
+            if self.object_list.count() == 0:
+                category_id = 0
+            else:
+                category_id = self.object_list[0].product.category_id
+            context['cat_selected'] = category_id
+        context['total_count'] = Compare.count(compare_id=compare)
+
+        if self.object_list.count() > 0:
+            context['attributes'] = AttributeValue.get_all_attributes_of_product(
+                self.object_list[0].product_id)
+
+        else:
+            messages_text = _('Not enough data to compare')
+            messages.success(self.request, messages_text)
+
+        return context
+
+    def get_queryset(self, **kwargs):
+        compare = Compare.get_compare(self.request)
+        result = Compare.get_compare_list(compare_id=compare.id)
+        if self.kwargs['pk'] != 0:
+            result = result.filter(product__category=self.kwargs['pk'])
+
+        return result
+
+    @staticmethod
+    def success_type_mapping(success: bool) -> str:
+        """ Отдаем нужный тип ответа, исходя из переменной success """
+        return 'success' if success else 'warning'
+
+    def prepare_response_data(self, success: bool, message: str, **kwargs) -> dict:
+        """Подготавливаем данные респонса для фронта"""
+        response_type = self.success_type_mapping(success=success)
+        response_data = {
+            'type': response_type,
+            'message': message,
+        }
+        for k, v in kwargs.items():
+            response_data.update({k: v})
+        return response_data
+
+    def post(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Обработка POST запроса:
+        от клиента получаем идентификаторы и флаги
+        для последующей обработки запроса
+        """
+
+        product_id = kwargs['pk']
+        compare = Compare.get_compare(self.request)
+        success, message = compare.add_to_compare(product_id=product_id)
+        count = Compare.count(compare_id=compare.id)
+
+        response_data = self.prepare_response_data(
+            success=success,
+            message=message,
+            head_count=count
+        )
+
+        return HttpResponse(
+            json.dumps(response_data, default=str),
+            content_type="application/json"
+        )
+
+    def delete(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
+        """Удаляем товар по id из kwargs"""
+
+        product_id = kwargs['pk']
+        compare = Compare.get_compare(self.request)
+        success, message = compare.remove_from_compare(product_id=product_id)
+        count = Compare.count(compare_id=compare.id)
+
+        response_data = self.prepare_response_data(
+            success=success,
+            message=message,
+            head_count=count
+        )
+
+        return HttpResponse(
+            json.dumps(response_data, default=str),
+            content_type="application/json"
+        )
 
 
 class CustomLoginView(BSModalLoginView):

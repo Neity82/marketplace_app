@@ -1,3 +1,5 @@
+import datetime
+
 from django.db.models import QuerySet, Sum
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest, QueryDict
@@ -13,6 +15,7 @@ from info.models import Banner
 from product.forms import ProductReviewForm
 from product.models import DailyOffer, Product, Category, AttributeValue, ProductImage, \
     ProductReview, Stock
+from user.models import UserProductView
 
 
 class IndexView(generic.TemplateView):
@@ -30,6 +33,17 @@ class IndexView(generic.TemplateView):
     template_name = 'product/index.html'
 
     def get_context_data(self, **kwargs):
+        # Временное решение для добавления товара дня
+        daily_offer_list = DailyOffer.objects.filter(
+            select_date=datetime.datetime.today()
+        )
+        if daily_offer_list.exists() is False:
+            product_day = Product.objects.filter(
+                is_limited=True
+            ).order_by('?').first()
+            daily_offer = DailyOffer(product=product_day)
+            daily_offer.save()
+
         context = super().get_context_data(**kwargs)
         context['banner_list'] = Banner.get_banners()
         context['popular_category'] = Category.get_popular()
@@ -46,10 +60,6 @@ class IndexView(generic.TemplateView):
         )
 
         return context
-
-
-def product(request, *args, **kwargs):
-    return render(request, 'product/product.html', {})
 
 
 class ProductListView(generic.ListView):
@@ -78,9 +88,13 @@ class ProductListView(generic.ListView):
             categories_list += [
                 item[0]
                 for item
-                in Category.objects.only("id")
-                    .filter(parent_id=category)
-                    .values_list("id")
+                in Category.objects.only(
+                    "id"
+                ).filter(
+                    parent_id=category
+                ).values_list(
+                    "id"
+                )
             ]
             result = result.filter(category__id__in=categories_list)
         result = result.order_by("sort_index", "title", "id")
@@ -103,8 +117,10 @@ class ProductDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data()
         product_on_page = self.get_object()
+        UserProductView.add_object(user=self.request.user, product=product_on_page)
         context['images'] = ProductImage.get_product_pics(product_on_page)
-        context['attributes'] = AttributeValue.get_all_attributes_of_product(product_on_page)
+        context['attributes'] = AttributeValue.get_all_attributes_of_product(
+            product_on_page)
         context['comments'] = ProductReview.get_comments(product_on_page)
         context['stocks'] = Stock.get_products_in_stock(product_on_page)
         context['price'] = Product.get_price_with_discount(product_on_page)

@@ -6,13 +6,14 @@ from typing import Dict, List, Optional, Union
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models import Q, Avg, Min, Sum
+from django.db.models import Q, Avg, Min, Sum, QuerySet
 from django.db.models.functions import Coalesce
-
-from .utils import category_icon_path, product_image_path
 from django.utils.translation import gettext_lazy as _
+
 from discount.models import Discount
 from discount.models import ProductDiscount
+from shop.models import Shop
+from .utils import category_icon_path, product_image_path
 
 
 class Tag(models.Model):
@@ -95,10 +96,17 @@ class Category(models.Model):
                 if parent else title)
 
     @classmethod
-    def get_popular(cls, limit: int = 3):
-        """Метод для получения n избранных категорий товаров"""
+    def get_popular(cls, limit: int = 3) -> QuerySet[Product]:
+        """
+        Метод для получения n избранных категорий товаров
 
-        queryset = Category.objects.prefetch_related(
+        :param limit: Необходимое количество категорий
+        :type limit: int
+        :return: Список объектов категорий
+        :rtype: QuerySet[Category]
+        """
+
+        queryset: QuerySet[Product] = Category.objects.prefetch_related(
             'product'
         ).filter(
             product__stock__count__gt=0,
@@ -332,7 +340,7 @@ class Product(models.Model):
         return Decimal(round(avg_price, 2))
 
     def _get_discounted_price(
-        self, base_price: 'Decimal', discount: 'Discount'
+            self, base_price: 'Decimal', discount: 'Discount'
     ) -> Decimal:
         """Метод получения скидочной цены
 
@@ -347,8 +355,8 @@ class Product(models.Model):
             return Decimal(
                 round(
                     (
-                        base_price *
-                        (100 - discount.discount_value) / 100
+                            base_price *
+                            (100 - discount.discount_value) / 100
                     ),
                     2
                 )
@@ -386,28 +394,28 @@ class Product(models.Model):
         categories_list: list = [self.category_id]
         if self.category.parent_id is not None:
             categories_list += [self.category.parent_id]
-        discounts: List[ProductDiscount] = ProductDiscount.objects\
+        discounts: List[ProductDiscount] = ProductDiscount.objects \
             .select_related("discount_id").filter(
-                (
-                    Q(
-                        product_id=self,
-                        discount_id__discount_type='PD',
-                        discount_id__is_active=True
-                    ) | Q(
-                        category_id__in=categories_list,
-                        discount_id__discount_type='PD',
-                        discount_id__is_active=True
-                    )
-                ) & (
-                    Q(
-                        discount_id__start_at__lte=today,
-                        discount_id__finish_at=None
-                    ) | Q(
-                        discount_id__start_at__lte=today,
-                        discount_id__finish_at__gt=today
-                    )
+            (
+                Q(
+                    product_id=self,
+                    discount_id__discount_type='PD',
+                    discount_id__is_active=True
+                ) | Q(
+                    category_id__in=categories_list,
+                    discount_id__discount_type='PD',
+                    discount_id__is_active=True
+                )
+            ) & (
+                Q(
+                    discount_id__start_at__lte=today,
+                    discount_id__finish_at=None
+                ) | Q(
+                    discount_id__start_at__lte=today,
+                    discount_id__finish_at__gt=today
                 )
             )
+        )
         if not discounts:
             return result
         discount_percent: ProductDiscount = discounts.filter(
@@ -443,14 +451,21 @@ class Product(models.Model):
         return result
 
     @classmethod
-    def get_popular(cls, shop=None, limit: int = 8):
+    def get_popular(cls, shop: Union[Shop, None] = None, limit: int = 8) -> List[Product]:
         """
         Метод для получения списка популярных товаров в количестве limit.
         Популярность определяется сначала по "индексу сортировки",
         если "индекс сортировки" одинаковый, тогда по количеству продаж
+
+        :param shop: Объект shop
+        :type shop: Union[Shop, None]
+        :param limit: Необходимое количество товаров
+        :type limit: int
+        :return: Список товаров
+        :rtype: List[Product]
         """
 
-        queryset = Product.objects.prefetch_related(
+        queryset: List[Product] = Product.objects.prefetch_related(
             'stock'
         ).filter(
             stock__count__gt=0
@@ -463,15 +478,31 @@ class Product(models.Model):
         )
 
         if shop:
-            queryset = queryset.filter(stock__shop=shop)
+            queryset: List[Product] = queryset.filter(stock__shop=shop)
 
         return queryset[:limit]
 
-    @classmethod
-    def get_limited_edition(cls, daily_offer=None, limit: int = 16):
-        """Метод для получения списка товаров ограниченного тиража"""
+    def get_shops(self):
+        return Shop.objects.filter(stock__product__id=self.pk).only('name', 'id')
 
-        queryset = Product.objects.prefetch_related(
+    @classmethod
+    def get_limited_edition(
+            cls,
+            daily_offer: Union[DailyOffer, None] = None,
+            limit: int = 16
+    ) -> List[Product]:
+        """
+        Метод для получения списка товаров ограниченного тиража
+
+        :param daily_offer: Товар дня
+        :type daily_offer: DailyOffer
+        :param limit: Необходимое количество товаров
+        :type limit: int
+        :return: Список товаров
+        :rtype: List[Product]
+        """
+
+        queryset: List[Product] = Product.objects.prefetch_related(
             'stock'
         ).filter(
             is_limited=True, stock__count__gt=0
@@ -480,19 +511,24 @@ class Product(models.Model):
         ).order_by('?').select_related('category__parent')
 
         if daily_offer:
-            queryset = queryset.exclude(
+            queryset: List[Product] = queryset.exclude(
                 id=daily_offer.product_id)
 
         return queryset[:limit]
 
     @classmethod
-    def get_product_with_discount(cls, limit: int = 9):
+    def get_product_with_discount(cls, limit: int = 9) -> List[Product]:
         """
         Метод для получения списка случайных товаров,
         на которые действует какая-нибудь акция в количестве limit
+
+        :param limit: Необходимое количество товаров
+        :type limit: int
+        :return: Список товаров
+        :rtype: List[Product]
         """
 
-        queryset = Product.objects.prefetch_related(
+        queryset: List[Product] = Product.objects.prefetch_related(
             'stock',
             'product_discount'
         ).filter(
@@ -547,26 +583,29 @@ class DailyOffer(models.Model):
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
 
-    # def __str__(self) -> str:
-    #     return (
-    #         f'Daily offer: product: {getattr(self.product, "title")}',
-    #         f'on: {self.select_date}'
-    #     )
+    def __str__(self) -> str:
+        return (
+            f'Daily offer: product: {getattr(self.product, "title")} '
+            f'on: {self.select_date}'
+        )
 
     @classmethod
-    def get_daily_offer(cls):
-        """Метод для получения предложения дня"""
+    def get_daily_offer(cls) -> DailyOffer:
+        """
+        Метод для получения предложения дня
 
-        queryset = DailyOffer.objects.filter(
+        :return: Товар дня
+        :rtype: DailyOffer
+        """
+
+        queryset: List[DailyOffer] = DailyOffer.objects.filter(
             select_date=date.today()
-        ).annotate(
-            avg_price=Avg('product__stock__price')
         ).select_related(
             'product__category'
         )
 
         if queryset.exists():
-            daily_offer = queryset.latest('select_date')
+            daily_offer: DailyOffer = queryset.latest('select_date')
             return daily_offer
 
 
@@ -600,6 +639,10 @@ class Stock(models.Model):
         return f'Stock: product: {getattr(self.product, "title")} ' \
                f'shop: {getattr(self.shop, "name", None)}'
 
+    @property
+    def pk(self) -> int:
+        return getattr(self, 'id')
+
     @classmethod
     def get_products_in_stock(cls, product: Product) -> QuerySet[Stock]:
         product_in_stock = Stock.objects.filter(product=product)
@@ -627,7 +670,7 @@ class ProductReview(models.Model):
 
     text = models.TextField(
         verbose_name=_('review content'),
-        help_text=_(''),
+        help_text=_('Review content'),
         max_length=1500,
         default=''
     )

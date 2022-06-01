@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load static %}
 {% load category_list %}
+{% load user_tags %}
 
 {% get_categories as categories %}
 
@@ -107,20 +108,26 @@
     </nav>
     <div class="row-block">
       <div class="CartBlock">
-        <a class="CartBlock-block" href="{% url 'user:compare_list' %}">
+        
+        <a class="CartBlock-block" href="{% url 'user:compare_list' pk=0 %}">
           <img class="CartBlock-img" src="{% static 'assets/img/icons/exchange.svg' %}" alt="exchange.svg"/>
-          <span class="CartBlock-amount">4
-          </span>
+          <span id="Compare-amount" class="CartBlock-amount">{% head_count request=request %}</span>
         </a>
-        <a class="CartBlock-block" href="{% url 'order:cart' %}">
-          <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}" alt="cart.svg"/>
-          <span class="CartBlock-amount">0
-          </span>
-        </a>
-        <div class="CartBlock-block">
-          <span class="CartBlock-price">0.00$
-          </span>
-        </div>
+        
+
+        {% with qty=cart|length %}
+          <a class="CartBlock-block" href="{% url 'order:cart' %}">
+            <img class="CartBlock-img" src="{% static 'assets/img/icons/cart.svg' %}" alt="cart.svg"/>
+            <span id="CartBlock-amount" class="CartBlock-amount">{{ qty }}</span>
+          </a>
+        {% endwith %}
+
+        {% with price=cart.get_min_sum %}
+          <div class="CartBlock-block">
+            <span id="CartBlock-price" class="CartBlock-price">{{ price }}$</span>
+          </div>
+        {% endwith %}
+
       </div>
     </div>
     <div class="row-block Header-trigger">
@@ -189,7 +196,7 @@
       <div class="search">
         <form class="form form_search" action="/catalog/" method="post">
           {% csrf_token %}
-          <input class="search-input" id="query" name="query" type="text" placeholder="{% translate "What are you looking for ..." %}"/>
+          <input class="search-input" id="query" name="query" type="text" placeholder="{% translate 'What are you looking for ...' %}"/>
           <button class="search-button" type="submit" name="search" id="search">
             <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>{% translate "Search" %}
           </button>

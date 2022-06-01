@@ -28,6 +28,11 @@ class OrderEntityAdmin(admin.ModelAdmin):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ['user_id', 'stock_id', 'count']
-    list_display_links = ['user_id']
+    # TODO stocks
+    list_display = ['user_id', 'device', 'cart_entity_display', ]
+    list_display_links = ['user_id', ]
+    readonly_fields = ['device', ]
 
+    @staticmethod
+    def cart_entity_display(obj) -> str:
+        return ", ".join([tag.title for tag in obj.cart_entity.all()])

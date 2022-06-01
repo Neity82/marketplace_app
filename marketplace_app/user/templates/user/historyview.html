@@ -1,9 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block title %}
-  {{seo.title}}
-{% endblock %}
+{% load i18n %}
 
 {% block head %}
   {% include "head.html" %}
@@ -20,13 +17,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Viewing history</h1>
+        <h1 class="Middle-title">{% trans "Viewing history" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">home</a>
+            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>Viewing history</span>
+            <span>{% trans "Viewing history" %}</span>
           </li>
         </ul>
       </div>

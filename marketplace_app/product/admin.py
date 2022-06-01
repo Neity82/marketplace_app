@@ -116,6 +116,7 @@ class ProductAdmin(admin.ModelAdmin):
         'is_limited',
         'tags',
         'category',
+        'rating',
         'created_at',
     )
 
