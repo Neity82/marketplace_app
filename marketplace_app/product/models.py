@@ -96,14 +96,14 @@ class Category(models.Model):
                 if parent else title)
 
     @classmethod
-    def get_popular(cls, limit: int = 3) -> List[Category]:
+    def get_popular(cls, limit: int = 3) -> QuerySet[Product]:
         """
         Метод для получения n избранных категорий товаров
 
         :param limit: Необходимое количество категорий
         :type limit: int
         :return: Список объектов категорий
-        :rtype: List[Category]
+        :rtype: QuerySet[Category]
         """
 
         queryset: QuerySet[Product] = Category.objects.prefetch_related(
@@ -583,11 +583,11 @@ class DailyOffer(models.Model):
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
 
-    # def __str__(self) -> str:
-    #     return (
-    #         f'Daily offer: product: {getattr(self.product, "title")}',
-    #         f'on: {self.select_date}'
-    #     )
+    def __str__(self) -> str:
+        return (
+            f'Daily offer: product: {getattr(self.product, "title")} '
+            f'on: {self.select_date}'
+        )
 
     @classmethod
     def get_daily_offer(cls) -> DailyOffer:

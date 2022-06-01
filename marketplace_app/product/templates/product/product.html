@@ -65,7 +65,7 @@
                   </div>
                 </div>
                 <div class="ProductCard-compare">
-                  <a class="btn btn_default" href="{% url 'user:compare_list' %}">
+                  <a id="add-to-compare" class="btn btn_default product" href="{% url 'user:compare_list' product.id %}">
                     <img class="btn-icon" src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
                   </a>
                 </div>

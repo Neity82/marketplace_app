@@ -1,5 +1,5 @@
 [
-{
+  {
   "model": "user.customuser",
   "pk": 1,
   "fields": {

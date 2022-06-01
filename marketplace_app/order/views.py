@@ -41,7 +41,10 @@ class CartView(CartMixin):
             cart_count=self.cart.count,
             price=self.cart.get_min_sum()
         )
-        return HttpResponse(json.dumps(response_data, default=str), content_type="application/json")
+        return HttpResponse(
+            json.dumps(response_data, default=str),
+            content_type="application/json"
+        )
 
     def get(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
         """Возвращаем список элементов корзины и их стоимость"""
@@ -57,8 +60,13 @@ class CartView(CartMixin):
         """ Получение объекта корзины по id """
         # TODO добавить only
         cart_pk = self.get_cart_pk()
-        return self.model.objects.prefetch_related('cart_entity').prefetch_related(
-            'cart_entity__stock__product').prefetch_related('cart_entity__stock__shop').filter(id=cart_pk).first()
+        return self.model.objects.prefetch_related(
+            'cart_entity'
+        ).prefetch_related(
+            'cart_entity__stock__product'
+        ).prefetch_related(
+            'cart_entity__stock__shop'
+        ).filter(id=cart_pk).first()
 
     def get_sum(self) -> dict:
         """ Получение цены продукта """
@@ -97,7 +105,11 @@ class AddToCartView(CartMixin):
             cart_count=cart.count,
             price=cart.get_min_sum()
         )
-        return HttpResponse(json.dumps(response_data, default=str), content_type="application/json", status=200)
+        return HttpResponse(
+            json.dumps(response_data, default=str),
+            content_type="application/json",
+            status=200
+        )
 
 
 class RemoveFromCartView(CartMixin):

@@ -20,18 +20,18 @@
       {% if discount.base %}
       <span class="Card-price">${{ discount.price }}</span>
       {% else %}
-      <span class="Card-price">The product is over</span>
+      <span class="Card-price">{% trans 'The product is over' %}</span>
       {% endif %}
     </div>
     <div class="Card-category">{{ product.category }}</div>
     <div class="Card-hover">
-      <a class="Card-btn" href="add_bookmark">
+      <a id="add-to-view" class="Card-btn product" href="{% url 'user:add_to_view' product.id %}">
         <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
       </a>
       <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add_to_cart' product.id %}">
         <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
       </a>
-      <a class="Card-btn" href="#">
+      <a id="add-to-compare" class="Card-btn product" href="{% url 'user:compare_list' product.id %}">
         <img src="{% static 'assets/img/icons/card/change.svg' %}" alt="change.svg"/>
       </a>
     </div>
