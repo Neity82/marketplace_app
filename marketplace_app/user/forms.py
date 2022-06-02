@@ -49,6 +49,10 @@ class UserProfileForm(forms.ModelForm):
     а так же для смены пароля
     """
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs['instance']
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+
     avatar = forms.CharField(label=_('avatar').capitalize(),
                              widget=forms.FileInput(attrs={'class': 'form-input'}),
                              required=False)
@@ -84,8 +88,7 @@ class UserProfileForm(forms.ModelForm):
             return phone_clean
 
         phone = ''.join([i for i in phone_clean if i.isdigit()])[1:]
-        user = CustomUser.objects.get(email=self.cleaned_data.get('email'))
-        if phone and CustomUser.objects.filter(phone=phone) and user.phone != phone:
+        if phone and CustomUser.objects.filter(phone=phone) and self.user.phone != phone:
             raise forms.ValidationError(MESSAGES['clean_phone'])
         return phone
 
