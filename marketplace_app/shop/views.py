@@ -1,6 +1,5 @@
 from django.apps import apps
 from django.views import generic
-from django.shortcuts import get_object_or_404
 
 
 from .models import Shop
@@ -10,12 +9,15 @@ Product = apps.get_model(app_label='product', model_name='Product')
 
 
 class ShopListView(generic.ListView):
+    """Представление списка магазинов"""
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = 'shops'
+    paginate_by = 24
 
 
 class ShopDetailView(generic.DetailView):
+    """Представление объекта магазина"""
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = 'shop'
@@ -30,6 +32,7 @@ class ShopDetailView(generic.DetailView):
 
 
 class ContactsView(generic.detail.SingleObjectMixin, generic.TemplateView):
+    """Представление страницы контактов"""
     template_name = "shop/contacts_detail.html"
     context_object_name = 'shop'
 
