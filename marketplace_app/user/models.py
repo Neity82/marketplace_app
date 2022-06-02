@@ -6,6 +6,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Q, QuerySet
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from product.models import Product, Category
@@ -168,14 +169,14 @@ class UserProductView(models.Model):
                 user_id=user,
                 product_id=product
             ).update(
-                datetime=datetime.datetime.now()
+                datetime=timezone.now()
             )
 
         else:
             UserProductView.objects.create(
                 user_id=user,
                 product_id=product,
-                datetime=datetime.datetime.now()
+                datetime=timezone.now()
             )
         return result, message
 
@@ -224,6 +225,7 @@ class Compare(models.Model):
 
     device = models.CharField(
         max_length=255,
+        verbose_name=_('device'),
         help_text=_('cookie device value'),
         blank=True,
         null=True
@@ -355,6 +357,9 @@ class Compare(models.Model):
                     compare_id=self.pk,
                     product_id=product_id
                 )
+            else:
+                result: bool = False
+                message: str = _('has already been added before')
         else:
             result = False
             message = _('maximum of products for comparison')
