@@ -540,23 +540,6 @@ class Product(models.Model):
 
         return queryset[:limit]
 
-    @classmethod
-    def get_price_with_discount(cls, product: Product) -> QuerySet:
-        """
-        Метод для получения цены со скидкой
-        """
-
-        queryset = Product.objects.prefetch_related(
-            'stock',
-            'product_discount'
-        ).filter(
-            pk=product.pk,
-        ).distinct().annotate(
-            avg_price=Avg('stock__price')
-        ).first()
-
-        return queryset
-
 
 class DailyOffer(models.Model):
     """Модель: предложение дня"""
@@ -674,6 +657,13 @@ class ProductReview(models.Model):
         max_length=1500,
         default=''
     )
+
+    rating = models.PositiveSmallIntegerField(
+        verbose_name=_('rating'),
+        help_text=_('Product rating'),
+        blank=True,
+        null=True
+        )
 
     objects = models.Manager()
 

@@ -12,6 +12,7 @@ from django.views import generic, View
 from order.models import Order
 from product.models import AttributeValue
 from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
+from user.mixin import ResponseDataMixin
 from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis
 
@@ -121,7 +122,7 @@ class HistoryOrders(LoginRequiredMixin, generic.ListView):
         return orders_list
 
 
-class HistoryViews(LoginRequiredMixin, generic.ListView):
+class HistoryViews(LoginRequiredMixin, ResponseDataMixin, generic.ListView):
     """
     Представление страницы historyview.html
 
@@ -142,8 +143,31 @@ class HistoryViews(LoginRequiredMixin, generic.ListView):
         views_list = UserProductView.get_product_view(user=self.request.user, limit=20)
         return views_list
 
+    def post(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
+        """
+        Обработка POST запроса:
+        от клиента получаем идентификаторы и флаги
+        для последующей обработки запроса
+        """
 
-class CompareProduct(generic.ListView):
+        product_id = kwargs['pk']
+        success, message = UserProductView.add_object(
+            user=self.request.user,
+            product=product_id
+        )
+
+        response_data = self.prepare_response_data(
+            success=success,
+            message=message
+        )
+
+        return HttpResponse(
+            json.dumps(response_data, default=str),
+            content_type="application/json"
+        )
+
+
+class CompareProduct(ResponseDataMixin, generic.ListView):
     """
         Представление страницы compare.html
 
@@ -187,22 +211,6 @@ class CompareProduct(generic.ListView):
             result = result.filter(product__category=self.kwargs['pk'])
 
         return result
-
-    @staticmethod
-    def success_type_mapping(success: bool) -> str:
-        """ Отдаем нужный тип ответа, исходя из переменной success """
-        return 'success' if success else 'warning'
-
-    def prepare_response_data(self, success: bool, message: str, **kwargs) -> dict:
-        """Подготавливаем данные респонса для фронта"""
-        response_type = self.success_type_mapping(success=success)
-        response_data = {
-            'type': response_type,
-            'message': message,
-        }
-        for k, v in kwargs.items():
-            response_data.update({k: v})
-        return response_data
 
     def post(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
         """

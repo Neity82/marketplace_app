@@ -148,15 +148,15 @@ class UserProductView(models.Model):
         return queryset[:limit]
 
     @classmethod
-    def add_object(cls, user: CustomUser, product: Product) -> (bool, str):
+    def add_object(cls, user: CustomUser, product: int) -> (bool, str):
         """
         Добавляем товар в просмотренные если его там нет или
         обновляем дату просмотра
 
         :param user: Пользователь
         :type user: CustomUser
-        :param product: Товар
-        :type product: Product
+        :param product: id Товара
+        :type product: int
         :return: результат добавления и сообщение
         :rtype: (bool, str)
         """
@@ -175,7 +175,7 @@ class UserProductView(models.Model):
         else:
             UserProductView.objects.create(
                 user_id=user,
-                product_id=product,
+                product_id=Product.objects.get(id=product),
                 datetime=timezone.now()
             )
         return result, message

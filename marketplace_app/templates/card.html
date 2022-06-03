@@ -25,7 +25,7 @@
     </div>
     <div class="Card-category">{{ product.category }}</div>
     <div class="Card-hover">
-      <a id="add-to-view" class="Card-btn product" href="">
+      <a id="add-to-view" class="Card-btn product" href="{% url 'user:user_views' product.id %}">
         <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
       </a>
       <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add_to_cart' product.id %}">
