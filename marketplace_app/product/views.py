@@ -1,6 +1,6 @@
 import datetime
 
-from django.db.models import QuerySet, Sum
+from django.db.models import QuerySet, Sum, Avg, F
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest, QueryDict
 from django.urls import reverse
@@ -117,23 +117,32 @@ class ProductDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data()
         product_on_page = self.get_object()
-        UserProductView.add_object(user=self.request.user, product=product_on_page)
+        UserProductView.add_object(user=self.request.user, product=product_on_page.id)
         context['images'] = ProductImage.get_product_pics(product_on_page)
         context['attributes'] = AttributeValue.get_all_attributes_of_product(
             product_on_page)
         context['comments'] = ProductReview.get_comments(product_on_page)
         context['stocks'] = Stock.get_products_in_stock(product_on_page)
-        context['price'] = Product.get_price_with_discount(product_on_page)
         return context
 
     def post(self, request, *args, **kwargs):
         product_item = self.get_object()
         post_data = request.POST.copy()
+
         post_data['product'] = product_item
         post_data['user'] = self.request.user
         form = ProductReviewForm(post_data)
         if form.is_valid():
             form.save()
+        if 'rating' in post_data:
+            avg_rating = ProductReview.objects.filter(
+                product=product_item
+            ).aggregate(
+                avg=Avg('rating', filter=F('rating'))
+            )
+            product_item.rating = round(avg_rating['avg'])
+            product_item.save()
+
         return HttpResponseRedirect(
             reverse(
                 'product:detail',

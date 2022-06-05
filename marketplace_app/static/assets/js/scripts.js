@@ -918,7 +918,7 @@
     // get click-events on all objects with add-to-cart id
     // add product to cart
     $(document).on('click', '#add-to-cart', function(event) {
-        let addToCardButtons = document.querySelectorAll('.Card-btn, .Compare-btn');
+        let addToCardButtons = document.querySelectorAll('.Card-btn, .Compare-btn, .Product-btn');
         event.preventDefault();
         const target = event.currentTarget;
         let is_product = false

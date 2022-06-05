@@ -200,3 +200,14 @@ class StockAdmin(admin.ModelAdmin):
         'shop',
         'product',
     )
+
+
+@admin.register(models.ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = (
+        'date',
+        'user',
+        'product',
+        'text',
+        'rating'
+    )

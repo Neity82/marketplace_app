@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}
-  {{seo.title}}
-{% endblock %}
+{% load i18n %}
 
 {% block head %}
   {% include "head.html" %}
@@ -20,16 +18,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Megano Product
-        </h1>
+        <h1 class="Middle-title">{% trans 'Megano Product' %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">home
-            </a>
+            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>Product
-            </span>
+            <span>{% trans 'Product' %}</span>
           </li>
         </ul>
       </div>
@@ -37,12 +32,20 @@
   </div>
   <div class="Section">
     <div class="wrap">
+      {% with product.discount as discount %}
       <div class="Product">
         <div class="ProductCard">
           <div class="ProductCard-look">
             <div class="ProductCard-photo">
-              <div class="ProductCard-sale">-15%
-              </div>
+              {% if discount.type %}
+              {% if discount.type == "P" %}
+              <div class="ProductCard-sale">-{{ discount.value }}%</div>
+              {% elif discount.type == "S" %}
+              <div class="ProductCard-sale">-{{ discount.value }}$</div>
+              {% elif discount.type == "F"  %}
+              <div class="ProductCard-sale">FIX</div>
+              {% endif %}
+              {% endif %}
               <img src="{{ images.0.image.url }}" alt="bigGoods.png"/>
             </div>
             <div class="ProductCard-picts">
@@ -59,10 +62,14 @@
               </h2>
               <div class="ProductCard-info">
                 <div class="ProductCard-cost">
-                  <div class="ProductCard-price">${{ price.discount.price }}
-                  </div>
-                  <div class="ProductCard-priceOld">${{ price.avg_price }}
-                  </div>
+                  {% if discount.base %}
+                  <div class="ProductCard-price">${{ discount.price }}</div>
+                  {% else %}
+                  <div class="ProductCard-price">{% trans 'The product is over' %}</div>
+                  {% endif %}
+                  {% if discount.type %}
+                  <div class="ProductCard-priceOld">${{ discount.base }}</div>
+                  {% endif %}
                 </div>
                 <div class="ProductCard-compare">
                   <a id="add-to-compare" class="btn btn_default product" href="{% url 'user:compare_list' product.id %}">
@@ -77,24 +84,21 @@
             <div class="ProductCard-cart">
               <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                 <div class="Amount Amount_product">
-                  <button class="Amount-remove" type="button">
-                  </button>
+                  <button class="Amount-remove" type="button"></button>
                   <input class="Amount-input form-input" name="amount" type="text" value="1"/>
-                  <button class="Amount-add" type="button">
-                  </button>
+                  <button class="Amount-add" type="button"></button>
                 </div>
               </div>
               <div class="ProductCard-cartElement">
                 <a class="btn btn_primary" href="to_cart_page">
                   <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                  <span class="btn-content">Add To Cart
-                  </span>
+                  <span class="btn-content">{% trans 'Add To Cart' %}</span>
                 </a>
               </div>
             </div>
             <div class="ProductCard-footer">
               <div class="ProductCard-tags">
-                <strong class="ProductCard-tagsTitle">Tags:
+                <strong class="ProductCard-tagsTitle">{% trans 'Tags' %}:
                 </strong>
                   {% for tag in product.tags.all %}
                     <a href="to_tag_{{tag}}">{{ tag }}
@@ -108,20 +112,16 @@
         <div class="Tabs Tabs_default">
           <div class="Tabs-links">
             <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-              <span>Описание
-              </span>
+              <span>{% trans 'Description' %}</span>
             </a>
             <a class="Tabs-link" href="#sellers">
-              <span>Продавцы
-              </span>
+              <span>{% trans 'Shops' %}</span>
             </a>
             <a class="Tabs-link" href="#addit">
-              <span>AdditionaL Info
-              </span>
+              <span>{% trans 'AdditionaL Info' %}</span>
             </a>
             <a class="Tabs-link" href="#reviews">
-              <span>Reviews ({{ comments|length }})
-              </span>
+              <span>{% trans 'Reviews' %} ({{ comments|length }})</span>
             </a>
           </div>
           <div class="Tabs-wrap">
@@ -145,43 +145,52 @@
                             ">
                       </div>
                       {% else %}
-                      <div class="Comment-avatar">
-                      </div>
+                      <div class="Comment-avatar"></div>
                       {% endif %}
                     </div>
                     <div class="Comment-column">
                       <header class="Comment-header">
                         <div>
-                          <strong class="Comment-title">{{ comment.user.first_name }} {{ comment.user.last_name }}
-                          </strong>
-                          <span class="Comment-date">{{ comment.date }}
-                          </span>
+                          <strong class="Comment-title">{{ comment.user.first_name }} {{ comment.user.last_name }}</strong>
+                          <span class="Comment-date">{{ comment.date }}</span>
                         </div>
                       </header>
-                      <div class="Comment-content"> {{ comment.text }}
-                      </div>
+                      <div class="Comment-content"> {{ comment.text }}</div>
                     </div>
                   </div>
                 {% endfor %}
               </div>
               <header class="Section-header Section-header_product">
-                <h3 class="Section-title">Add Review
-                </h3>
+                <h3 class="Section-title">{% trans 'Add Review' %}</h3>
               </header>
               <div class="Tabs-addComment">
 
                 {% if user.is_anonymous %}
-                <button id="login_btn_middle" class="ControlPanel-title link" id='login'>Login for review
-                </button>
+                <button id="login_btn_middle" class="ControlPanel-title link" id='login'>{% trans 'Login for review' %}</button>
                 {% else %}
                 <form class="form" action="/products/{{product.id}}/" method="post">
                   {% csrf_token %}
                   <div class="form-group">
+                    <label class="rating-form-label" for="">{% trans 'Rate the product' %}</label>
+                    <div class="rating-area">
+                      <input type="radio" id="star-5" name="rating" value="5">
+                      <label for="star-5" title="Оценка «5»"></label>	
+                      <input type="radio" id="star-4" name="rating" value="4">
+                      <label for="star-4" title="Оценка «4»"></label>    
+                      <input type="radio" id="star-3" name="rating" value="3">
+                      <label for="star-3" title="Оценка «3»"></label>  
+                      <input type="radio" id="star-2" name="rating" value="2">
+                      <label for="star-2" title="Оценка «2»"></label>    
+                      <input type="radio" id="star-1" name="rating" value="1">
+                      <label for="star-1" title="Оценка «1»"></label>
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
                     {{ form.text }}
                   </div>
                   <div class="form-group">
-                    <button class="btn btn_muted" type="submit">Submit Review
-                    </button>
+                    <button class="btn btn_muted" type="submit">{% trans 'Submit Review' %}</button>
                   </div>
                 </form>
                 {% endif %}
@@ -240,8 +249,7 @@
                   <div class="Categories-block Categories-button">
                     <a class="btn btn_primary" href="to_cart_page">
                       <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                      <span class="btn-content">Купить
-                      </span>
+                      <span class="btn-content">{% trans 'Buy' %}</span>
                     </a>
                   </div>
                 </div>
@@ -268,6 +276,7 @@
           </div>
         </div>
       </div>
+      {% endwith %}
     </div>
   </div>
 </div>
