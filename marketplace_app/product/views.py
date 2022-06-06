@@ -1,20 +1,24 @@
 import datetime
-
-from django.db.models import QuerySet, Sum
+from urllib.parse import urlencode
+from decimal import Decimal
+from typing import Any, Dict, List, Optional, Set, TypedDict
+from django.db.models import QuerySet, Sum, Count, Q
+from django.db.models.functions import Coalesce
 from django.http import HttpResponseRedirect
-from django.http.request import HttpRequest, QueryDict
+from django.http.request import HttpRequest
 from django.urls import reverse
 from django.views import generic
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from datetime import date, timedelta
 
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 
 from info.models import Banner
+from shop.models import Shop
 from product.forms import ProductReviewForm
-from product.models import DailyOffer, Product, Category, AttributeValue, ProductImage, \
-    ProductReview, Stock
+from product.models import (DailyOffer, Product, Category, AttributeValue,
+                            ProductImage, ProductReview, Stock)
 
 
 class IndexView(generic.TemplateView):
@@ -33,7 +37,8 @@ class IndexView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         # Временное решение для добавления товара дня
-        daily_offer_list = DailyOffer.objects.filter(select_date=datetime.datetime.today())
+        daily_offer_list = \
+            DailyOffer.objects.filter(select_date=datetime.datetime.today())
         if daily_offer_list.exists() is False:
             product_day = Product.objects.filter(is_limited=True).first()
             daily_offer = DailyOffer(product=product_day)
@@ -57,50 +62,338 @@ class IndexView(generic.TemplateView):
         return context
 
 
-def product(request, *args, **kwargs):
-    return render(request, 'product/product.html', {})
-
-
 class ProductListView(generic.ListView):
     template_name = "product/catalog.html"
     paginate_by = 8
     context_object_name = "products"
 
-    def get_queryset(self):
-        result: QuerySet = (Product.objects.annotate(
-            total_count=Sum("stock")
-        ).filter(total_count__gt=0))
-        query: str = (
-            QueryDict(self.request.GET.urlencode()).dict().get("query", "")
+    def __init__(self, **kwargs: Any) -> None:
+        self.query_params: Dict[str, Any] = {}
+        super().__init__(**kwargs)
+
+    def _get_sorted_list(self, queryset: QuerySet[Product],
+                         sort_by: str) -> QuerySet[Product]:
+        """Функция фортировки продуктов по одному из признаков
+
+        :param queryset: Список продуктов
+        :type queryset: QuerySet[Product]
+        :param sort_by: Признак сортировки
+        :type sort_by: str
+        :return: Сортированный список продуктов
+        :rtype: QuerySet[Product]
+        """
+        self.context['sort_by'] = sort_by
+        if sort_by == 'price':
+            return sorted(
+                queryset,
+                key=lambda item: item.discount['price']
+            )
+        elif sort_by == '-price':
+            return sorted(
+                queryset,
+                key=lambda item: item.discount['price'],
+                reverse=True
+            )
+        elif sort_by == 'popularity':
+            return sorted(
+                queryset.annotate(
+                    popularity=Coalesce(
+                        Sum('stock__order_entity_stock__count'),
+                        0
+                    )
+                ),
+                key=lambda item: item.popularity
+            )
+        elif sort_by == '-popularity':
+            return sorted(
+                queryset.annotate(
+                    popularity=Coalesce(
+                        Sum('stock__order_entity_stock__count'),
+                        0
+                    )
+                ),
+                key=lambda item: item.popularity,
+                reverse=True
+            )
+        elif sort_by == 'review':
+            return sorted(
+                queryset.annotate(
+                    reviews=Coalesce(
+                        Count('user_product_view'),
+                        0
+                    )
+                ),
+                key=lambda item: item.reviews
+            )
+        elif sort_by == '-review':
+            return sorted(
+                queryset.annotate(
+                    reviews=Coalesce(
+                        Count('user_product_view'),
+                        0
+                    )
+                ),
+                key=lambda item: item.reviews,
+                reverse=True
+            )
+        elif sort_by == 'novelty':
+            return queryset.order_by('created_at')
+        elif sort_by == '-novelty':
+            return queryset.order_by('-created_at')
+        return queryset
+
+    class AttributeDict(TypedDict):
+        id: int
+        title: str
+        type: str
+        values: Set[str]
+
+    def _get_attributes(self) -> List[AttributeDict]:
+        """Получение списка атрибутов с значениями, соответствующих данной категории
+
+        :return: Список атрибутов
+        :rtype: List[AttributeDict]
+        """
+        attr_values: list = list(AttributeValue.objects.only(
+            'attribute__id', 'attribute__title', 'attribute__type', 'value'
+        ).filter(attribute__category__id=self.query_params['category'])
+         .values(
+             'attribute__id', 'attribute__title', 'attribute__type', 'value'
+         ))
+        attr_values = sorted(
+            attr_values, key=lambda item: item['attribute__id']
         )
-        if query:
-            return result.filter(title__icontains=query)
-        category: int = (
-            int(self.request.GET.dict().get("category", ""))
-            if self.request.GET.dict().get("category", "").isdigit()
+        result: list = []
+        current_id: int = 0
+        for item in attr_values:
+            idx: int = item['attribute__id']
+            title: str = item['attribute__title']
+            type: str = item['attribute__type']
+            value: str = item['value']
+            if value == 'None':
+                continue
+            if idx == current_id:
+                result[-1]['values'].add(value)
+            else:
+                result.append(
+                    {
+                        'id': idx,
+                        'title': title,
+                        'type': type,
+                        'values': set((value,))
+                    }
+                )
+                current_id = idx
+        return sorted(result, key=lambda item: item['title'])
+
+    def _get_categories(self) -> List[Optional[int]]:
+        """Метод возвращает список категорий: родительской и его дочерних
+
+        :return: Список категорий
+        :rtype: List[Optional[int]]
+        """
+        result: List[Optional[int]] = []
+        if 'category' not in self.query_params:
+            return result
+        category_id: int = (
+            int(self.query_params['category'])
+            if self.query_params.get("category", "").isdigit()
             else 0
         )
-        if not Category.objects.filter(id=category):
-            category = 0
-        if category:
-            categories_list: list = [category]
-            categories_list += [
-                item[0]
-                for item
-                in Category.objects.only("id")
-                    .filter(parent_id=category)
-                    .values_list("id")
-            ]
-            result = result.filter(category__id__in=categories_list)
-        result = result.order_by("sort_index", "title", "id")
+        try:
+            category: Category = Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            return result
+        self.context['category_title'] = category.title
+        result.append(category_id)
+        result += [
+            item[0]
+            for item
+            in Category.objects.only("id")
+                               .filter(parent_id=category_id)
+                               .values_list("id")
+        ]
+        if category.parent_id is not None:
+            self.context['parent_category_id'] = \
+                Category.objects.only('id').get(id=category.parent_id).id
+            self.context['parent_category_title'] = \
+                Category.objects.only('title').get(id=category.parent_id).title
         return result
 
+    def _get_prices_shops(self,
+                          products: QuerySet[Product]) -> Dict[int, Decimal]:
+        """Метод устанавливает значения минимальной и максимальной цены,
+        списка применимых магазинов для выбранного набора продуктов
+
+        :param products: Список продуктов
+        :type products: QuerySet[Product]
+        :return: Словарь индексов продуктов со стоимостями
+        :rtype: Dict[int, Decimal]
+        """
+        self.context['shops'] = \
+            Shop.objects.only('id', 'name')\
+                        .filter(
+                            Q(stock__count__gt=0) &
+                            Q(stock__product__in=products)
+                        ).distinct().order_by('name')
+        prices: Dict[int, Decimal] = {
+            item.id: item.discount['price']
+            for item
+            in products
+        }
+        self.context['min_price'] = min(prices.values())
+        self.context['max_price'] = max(prices.values())
+        return prices
+
+    def _get_base_filters(self, prices: Dict[int, Decimal]) -> Q:
+        """Функция полуения не зависящих от категории фильтров
+
+        :param prices: Список всех цен на товары
+        :type prices: Dict[int, Decimal]
+        :return: Фильтр для QuerySet
+        :rtype: Q
+        """
+        result: Q = Q()
+        # Фильтр по цене
+        if 'price' in self.query_params:
+            try:
+                min_price, max_price = \
+                    tuple(
+                        map(Decimal, self.query_params['price'].split(sep=';'))
+                    )
+            except ValueError:
+                min_price = self.context['min_price']
+                max_price = self.context['max_price']
+            if (min_price != self.context['min_price'] or
+                    max_price != self.context['max_price']):
+                filtered_by_price: List[Optional[int]] = [
+                    idx for idx, price in prices.items()
+                    if (price >= min_price and price <= max_price)
+                ]
+                self.context['filter_min_price'] = min_price
+                self.context['filter_max_price'] = max_price
+                if filtered_by_price:
+                    result &= Q(id__in=filtered_by_price)
+        # Фильтр по названию
+        if 'title' in self.query_params:
+            result &= Q(title__icontains=self.query_params['title'])
+            self.context['title'] = self.query_params['title']
+        # Фильтр по магазину
+        if 'shop' in self.query_params:
+            self.query_params['shop'] = list(
+                map(int, self.query_params['shop'])
+            )
+            result &= Q(stock__shop__id__in=self.query_params['shop'])
+            self.context['selected_shops'] = self.query_params['shop']
+        return result
+
+    def _get_attr_filters(self) -> List[Q]:
+        """Функия получения фильтра по аттрибутам, связанным с категорией
+
+        :return: Список фильтров по аттрибутам
+        :rtype: List[Q]
+        """
+        result: List[Q] = []
+        self.context['attr_filter'] = {}
+        for attr in self.query_params.keys():
+            if attr.startswith('attr_'):
+                _, type_, id_ = tuple(attr.split(sep='_'))
+                self.context['attr_filter'][int(id_)] = self.query_params[attr]
+                if type_ == 't':
+                    result.append(
+                        Q(
+                            attribute__id=int(id_),
+                            value__icontains=self.query_params[attr]
+                        )
+                    )
+                elif type_ == 's':
+                    result.append(
+                        Q(
+                            attribute__id=int(id_),
+                            value=self.query_params[attr]
+                        )
+                    )
+                elif type_ == 'c':
+                    result.append(
+                        Q(
+                            attribute__id=int(id_),
+                            value='Yes'
+                        )
+                    )
+        return result
+
+    def get_queryset(self):
+        collected_filter: Q = Q(total_count__gt=0)
+        if 'query' in self.query_params:
+            collected_filter &= Q(title__icontains=self.query_params['query'])
+            self.context['query'] = self.query_params['query']
+        categories: List[int] = self._get_categories()
+        if categories:
+            collected_filter &= Q(category__id__in=categories)
+        result: QuerySet = (Product.objects.annotate(
+            total_count=Sum("stock__count")
+        ).filter(collected_filter))
+        # Здесь мы получили набор продуктов соответствующий
+        # выбранной категории или строке поиска
+        prices: Dict[int, Decimal] = self._get_prices_shops(result)
+        result = result.filter(self._get_base_filters(prices))
+        # Здесь мы получили объекты отфильтрованные по базовому набору
+        # фильтров
+        if 'category' in self.query_params:
+            for filter in self._get_attr_filters():
+                result = result.filter(
+                    product_item__in=AttributeValue.objects.filter(
+                        filter
+                    )
+                )
+        result = self._get_sorted_list(result, self.sort_by)
+        return result
+
+    def get(self, request, *args, **kwargs):
+        self.query_params.update({**request.GET.dict()})
+        if 'shop' in self.query_params:
+            self.query_params['shop'] = request.GET.getlist('shop')
+        self.context: Dict[str, Any] = {}
+        self.sort_by: str = self.query_params.pop('sort_by', 'price')
+        return super().get(request, *args, **kwargs)
+
     def post(self, request: HttpRequest, *args, **kwargs):
-        search_query = QueryDict(request.POST.urlencode()).dict()["query"]
-        return redirect(f"/catalog/?query={search_query}")
+        url: str = reverse('product:list')
+        # Если пришел post запрос, то это из строки поиска или
+        # из фильтра по параметрам
+        self.query_params.update({**request.POST.dict()})
+        # Если из строки поика, то сразу переходим к поиску
+        if 'query' in self.query_params:
+            return redirect(
+                url + '?query=%s' % self.query_params['query']
+            )
+        # Если из фильтров по аттрибуатм, то удаляем лишние и
+        # получаем необходимые
+        if 'shop' in self.query_params:
+            self.query_params['shop'] = request.POST.getlist('shop')
+        for name in tuple(self.query_params.keys()):
+            if (
+                name == 'csrfmiddlewaretoken' or
+                self.query_params[name] == '' or
+                name == 'page'
+            ):
+                del self.query_params[name]
+        # Восстанавливаем значение поиска или категории, если есть
+        if 'category' in request.GET:
+            self.query_params['category'] = request.GET['category']
+        if 'query' in request.GET:
+            self.query_params['query'] = request.GET['query']
+        return redirect(
+            url + '?%s' % urlencode(self.query_params, True)
+        )
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
+        context: Dict[str, Any] = super().get_context_data(**kwargs)
+        context.update({**self.context})
+        if 'category' in self.query_params:
+            context['attributes'] = self._get_attributes()
+        context['base_url'] = urlencode(self.query_params)
+        return context
 
 
 class ProductDetailView(FormMixin, DetailView):
@@ -113,7 +406,8 @@ class ProductDetailView(FormMixin, DetailView):
         context = super(ProductDetailView, self).get_context_data()
         product_on_page = self.get_object()
         context['images'] = ProductImage.get_product_pics(product_on_page)
-        context['attributes'] = AttributeValue.get_all_attributes_of_product(product_on_page)
+        context['attributes'] = \
+            AttributeValue.get_all_attributes_of_product(product_on_page)
         context['comments'] = ProductReview.get_comments(product_on_page)
         context['stocks'] = Stock.get_products_in_stock(product_on_page)
         context['price'] = Product.get_price_with_discount(product_on_page)

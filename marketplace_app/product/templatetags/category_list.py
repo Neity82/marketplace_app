@@ -1,4 +1,4 @@
-from typing import Dict, List, Union, OrderedDict
+from typing import Any, Dict, List, Union, OrderedDict
 import collections
 from django import template
 from product.models import Category
@@ -39,6 +39,11 @@ def update_page(get_dict: dict, page: int):
 
 
 @register.filter(name='get_items')
-def get(list_: list, index: str):
+def get_items(list_: list, index: str):
     start_idx_str, stop_idx_str = index.split(sep=":")
     return list_[int(start_idx_str):int(stop_idx_str)]
+
+
+@register.filter(name='dict_key')
+def dict_key(dict_: dict, key: Any):
+    return dict_[key]

@@ -102,6 +102,10 @@
             <a class="menu-link" href="{% url 'shop:contacts_detail' %}">{% translate "Contacts" %}
             </a>
           </li>
+          <li class="menu-item">
+            <a class="menu-link" href="{% url 'info:about' %}">{% translate "About" %}
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -196,8 +200,8 @@
       <div class="search">
         <form class="form form_search" action="/catalog/" method="post">
           {% csrf_token %}
-          <input class="search-input" id="query" name="query" type="text" placeholder="{% translate 'What are you looking for ...' %}"/>
-          <button class="search-button" type="submit" name="search" id="search">
+          <input class="search-input" id="query" name="query" type="text" value="{% if query %}{{ query }}{% endif %}" placeholder="{% translate 'What are you looking for ...' %}"/>
+          <button class="search-button" type="submit" name="submit" id="search">
             <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>{% translate "Search" %}
           </button>
         </form>

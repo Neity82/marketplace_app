@@ -39,7 +39,11 @@ class CartEntity(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        user = getattr(self.cart, 'user_id') if getattr(self.cart, 'user_id') else 'Unknown'
+        user = (
+            getattr(self.cart, 'user_id')
+            if getattr(self.cart, 'user_id')
+            else 'Unknown'
+        )
         return f'Cart entity: user {user}, stock: {self.stock}'
 
 
@@ -71,14 +75,20 @@ class Cart(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        user = getattr(self, 'user_id') if getattr(self, 'user_id') else 'Unknown'
+        user = (
+            getattr(self, 'user_id')
+            if getattr(self, 'user_id')
+            else 'Unknown'
+        )
         return f'Cart: user: {user}, device: {self.device}'
 
     @property
     def count(self) -> int:
         field = 'quantity'
         aggregation_field = 'quantity__sum'
-        count = CartEntity.objects.filter(cart=self).aggregate(Sum(field)).get(aggregation_field)
+        count = CartEntity.objects.filter(cart=self)\
+                                  .aggregate(Sum(field))\
+                                  .get(aggregation_field)
         return count
 
     @property

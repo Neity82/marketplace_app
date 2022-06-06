@@ -1,3 +1,4 @@
+from typing import List
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -40,14 +41,22 @@ class Banner(models.Model):
 
     objects = models.Manager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "{title}".format(
             title=self.title
         )
 
     @classmethod
-    def get_banners(cls, limit: int = 3):
-        queryset = Banner.objects.filter(
+    def get_banners(cls, limit: int = 3) -> List['Banner']:
+        """
+        Получаем список случайных активных баннеров в размере limit
+
+        :param limit: Необходимое колличество
+        :type limit: int
+        :return: Список баннеров
+        :rtype: List[Banner]
+        """
+        queryset: List[Banner] = Banner.objects.filter(
             is_active=True
         ).order_by('?')
         return queryset[:limit]

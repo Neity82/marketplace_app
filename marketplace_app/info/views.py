@@ -3,6 +3,7 @@ from django.urls import ResolverMatch
 from info.models import SEOItem
 from product.models import Product
 from shop.models import Shop
+from django.views import generic
 
 
 def addition_info_for_shop_pages(pk: int) -> Dict[str, str]:
@@ -69,3 +70,12 @@ def seo_data(request) -> Dict[str, SEOItem]:
         }
     except Exception:
         return {}
+
+
+class AboutView(generic.TemplateView):
+    template_name: str = 'info/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["shop"] = Shop.objects.get(name='megano')
+        return context
