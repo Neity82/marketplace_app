@@ -1,7 +1,10 @@
+import datetime
+
 from django.test import TestCase
+from django.utils import timezone
 
 from product.models import Product, Category
-from user.models import CustomUser, UserProductView, Compare
+from user.models import CustomUser, UserProductView, Compare, CompareEntity
 
 from user.utils import avatar_directory_path
 
@@ -142,7 +145,9 @@ class BaseModelTests(TestCase):
     def setUpTestData(cls):
         cls.user = CustomUser.objects.create_user(
             email='test1@test.com',
-            password='1234pass'
+            password='1234pass',
+            first_name='First_name',
+            last_name='Last_name'
         )
         category = Category.objects.create(title='category_1')
         cls.count_item = 5
@@ -161,14 +166,16 @@ class UserProductViewModelTests(BaseModelTests):
 
         UserProductView.objects.create(
             user_id=self.user,
-            product_id=Product.objects.first()
+            product_id=Product.objects.first(),
+            datetime=timezone.now()
         )
         self.assertEqual(UserProductView.objects.count(), 1)
 
     def test_verbose_name(self):
         product_view = UserProductView.objects.create(
             user_id=self.user,
-            product_id=Product.objects.first()
+            product_id=Product.objects.first(),
+            datetime=timezone.now()
         )
         self.assertEqual(
             product_view._meta.get_field('user_id').verbose_name,
@@ -188,7 +195,8 @@ class UserProductViewModelTests(BaseModelTests):
 
         product_view = UserProductView.objects.create(
             user_id=self.user,
-            product_id=Product.objects.first()
+            product_id=Product.objects.first(),
+            datetime=timezone.now()
         )
         self.assertEqual(str(product_view), str(product_view.product_id))
 
@@ -201,7 +209,8 @@ class UserProductViewModelTests(BaseModelTests):
         for item in Product.objects.all():
             UserProductView.objects.create(
                 user_id=self.user,
-                product_id=item
+                product_id=item,
+                datetime=timezone.now()
             )
         count = UserProductView.objects.count()
         self.assertEqual(count, self.count_item)
@@ -223,6 +232,79 @@ class UserProductViewModelTests(BaseModelTests):
             self.count_item
         )
 
+    def test_add_object(self):
+        """
+         Тест функции add_object,
+         добавление товара в просмотренные
+        """
+
+        product_view_old = UserProductView.objects.create(
+            user_id=self.user,
+            product_id=Product.objects.first(),
+            datetime=timezone.now() - datetime.timedelta(days=1)
+        )
+        count = UserProductView.objects.count()
+        self.assertEqual(count, count)
+        # Если нет товара среди просмотренных - добавляем
+        UserProductView.add_object(
+            user=self.user,
+            product=Product.objects.all()[1]
+        )
+        count = UserProductView.objects.count()
+        self.assertEqual(count, count)
+
+        datetime_1 = UserProductView.objects.get(
+            user_id=self.user,
+            product_id=Product.objects.first()).datetime
+        # Товар есть в списке просмотренных - обновляем дату просмотра
+        UserProductView.add_object(
+            user=self.user,
+            product=product_view_old.product_id
+        )
+        product_view_new = UserProductView.objects.get(
+            user_id=self.user,
+            product_id=Product.objects.first())
+        datetime_2 = product_view_new.datetime
+
+        self.assertNotEqual(datetime_1, datetime_2)
+
+
+class CompareEntityModelTest(BaseModelTests):
+    def test_create_compare_entity(self):
+        """Тест на добавление нового объекта модели"""
+        compare = Compare.objects.create(
+            user_id=self.user
+        )
+        compare_entity = CompareEntity.objects.create(
+            product=Product.objects.first(),
+            compare=compare
+        )
+        self.assertEqual(CompareEntity.objects.count(), 1)
+
+        self.assertEqual(
+            compare_entity._meta.get_field('product').verbose_name,
+            'product'
+        )
+        self.assertEqual(
+            compare_entity._meta.get_field('compare').verbose_name,
+            'compare\'s'
+        )
+
+    def test_str(self):
+        """Тест строкового представления объекта"""
+
+        compare = Compare.objects.create(
+            user_id=self.user
+        )
+        compare_entity = CompareEntity.objects.create(
+            product=Product.objects.first(),
+            compare=compare
+        )
+        self.assertEqual(
+            str(compare_entity),
+            f'Compare entity: user {self.user}, product: {Product.objects.first()}'
+        )
+
 
 class CompareModelTests(BaseModelTests):
     """Тесты модели Compare"""
@@ -231,33 +313,34 @@ class CompareModelTests(BaseModelTests):
         """Тест на добавление нового объекта модели"""
 
         Compare.objects.create(
-            user_id=self.user,
-            product_id=Product.objects.first()
+            user_id=self.user
         )
         self.assertEqual(Compare.objects.count(), 1)
 
     def test_verbose_name(self):
         compare = Compare.objects.create(
-            user_id=self.user,
-            product_id=Product.objects.first()
+            user_id=self.user
         )
         self.assertEqual(
             compare._meta.get_field('user_id').verbose_name,
             'user'
         )
         self.assertEqual(
-            compare._meta.get_field('product_id').verbose_name,
-            'product'
+            compare._meta.get_field('device').verbose_name,
+            'device'
         )
 
     def test_str(self):
         """Тест строкового представления объекта"""
-
+        device = 'aaa111sss222'
         compare = Compare.objects.create(
             user_id=self.user,
-            product_id=Product.objects.first()
+            device=device
         )
-        self.assertEqual(str(compare), str(compare.product_id))
+        self.assertEqual(
+            str(compare),
+            f'Compare: user: {self.user}, device: {device}'
+        )
 
     def test_get_compare_lis(self):
         """
@@ -265,24 +348,88 @@ class CompareModelTests(BaseModelTests):
         получение списка товаров для сравнения
         """
 
+        compare = Compare.objects.create(
+            user_id=self.user
+        )
         for item in Product.objects.all():
-            Compare.objects.create(
-                user_id=self.user,
-                product_id=item
+            CompareEntity.objects.create(
+                compare=compare,
+                product=item
             )
-        compare_list = Compare.get_compare_list(user=self.user)
+        compare_list = Compare.get_compare_list(compare_id=compare.id)
         self.assertEqual(len(compare_list), self.count_item)
 
-    def test_get_count(self):
+    def test_add_to_compare(self):
         """
-        Тест функции get_count,
-        получение количества товаров для сравнения
+        Тест функции add_to_compare,
+        Добавляем товар в сравнение если его там нет
         """
 
-        for item in Product.objects.all():
-            Compare.objects.create(
-                user_id=self.user,
-                product_id=item
-            )
-        count = Compare.get_count(user=self.user)
-        self.assertEqual(count, self.count_item)
+        compare = Compare.objects.create(
+            user_id=self.user
+        )
+        CompareEntity.objects.create(
+            compare=compare,
+            product=Product.objects.first()
+        )
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 1)
+
+        # Пробуем добавить товар, который уже есть в сравнении
+        res, mess = compare.add_to_compare(product_id=Product.objects.first().id)
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 1)
+        self.assertEqual(res, False)
+        self.assertEqual(mess, 'has already been added before')
+
+        # Пробуем добавить новый товар
+        res, mess = compare.add_to_compare(product_id=Product.objects.all()[1].id)
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 2)
+        self.assertEqual(res, True)
+        self.assertEqual(mess, 'successfully added')
+
+        # Пробуем добавить товар сверх лимита
+        CompareEntity.objects.create(compare=compare, product=Product.objects.all()[2])
+        CompareEntity.objects.create(compare=compare, product=Product.objects.all()[3])
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 4)
+
+        res, mess = compare.add_to_compare(product_id=Product.objects.all()[4].id)
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 4)
+        self.assertEqual(res, False)
+        self.assertEqual(mess, 'maximum of products for comparison')
+
+    def test_remove_from_compare(self):
+        """
+        Тест функции remove_from_compare
+        Удаляем элемент сравнения
+        """
+
+        compare = Compare.objects.create(
+            user_id=self.user
+        )
+        CompareEntity.objects.create(
+            compare=compare,
+            product=Product.objects.first()
+        )
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 1)
+
+        res, mess = compare.remove_from_compare(product_id=Product.objects.first().id)
+        self.assertEqual(CompareEntity.objects.filter(compare=compare).count(), 0)
+        self.assertEqual(res, True)
+        self.assertEqual(mess, 'successfully removed')
+
+    def test_count(self):
+        """
+        Тест функции count
+        количество товаров для сравнения
+        """
+
+        compare = Compare.objects.create(
+            user_id=self.user
+        )
+        CompareEntity.objects.create(
+            compare=compare,
+            product=Product.objects.first()
+        )
+
+        count = Compare.count(compare_id=compare.id)
+        self.assertEqual(count, 1)
+

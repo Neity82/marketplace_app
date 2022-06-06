@@ -9,6 +9,7 @@ ADD_TO_CART_SUCCESS = _('successfully added')
 
 CHANGE_SHOP_CART_FAIL = _('failed to change shop')
 CHANGE_SHOP_CART_SUCCESS = _('shop successfully changed')
+CHANGE_SHOP_CART_SAME_SHOP = _('same shop')
 
 REMOVE_FROM_CART_FAIL = _('failed to remove')
 REMOVE_FROM_CART_SUCCESS = _('successfully removed')

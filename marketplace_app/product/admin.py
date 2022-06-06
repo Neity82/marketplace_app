@@ -116,6 +116,7 @@ class ProductAdmin(admin.ModelAdmin):
         'is_limited',
         'tags',
         'category',
+        'rating',
         'created_at',
     )
 
@@ -198,4 +199,15 @@ class StockAdmin(admin.ModelAdmin):
     list_filter = (
         'shop',
         'product',
+    )
+
+
+@admin.register(models.ProductReview)
+class ProductReviewAdmin(admin.ModelAdmin):
+    list_display = (
+        'date',
+        'user',
+        'product',
+        'text',
+        'rating'
     )

@@ -2,8 +2,9 @@ import datetime
 from urllib.parse import urlencode
 from decimal import Decimal
 from typing import Any, Dict, List, Optional, Set, TypedDict
-from django.db.models import QuerySet, Sum, Count, Q
+from django.db.models import QuerySet, Sum, Count, Q, Avg, F
 from django.db.models.functions import Coalesce
+
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse
@@ -17,8 +18,9 @@ from django.views.generic.edit import FormMixin
 from info.models import Banner
 from shop.models import Shop
 from product.forms import ProductReviewForm
-from product.models import (DailyOffer, Product, Category, AttributeValue,
-                            ProductImage, ProductReview, Stock)
+from product.models import DailyOffer, Product, Category, AttributeValue, \
+    ProductImage, ProductReview, Stock
+from user.models import UserProductView
 
 
 class IndexView(generic.TemplateView):
@@ -37,10 +39,13 @@ class IndexView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         # Временное решение для добавления товара дня
-        daily_offer_list = \
-            DailyOffer.objects.filter(select_date=datetime.datetime.today())
+        daily_offer_list = DailyOffer.objects.filter(
+            select_date=datetime.datetime.today()
+        )
         if daily_offer_list.exists() is False:
-            product_day = Product.objects.filter(is_limited=True).first()
+            product_day = Product.objects.filter(
+                is_limited=True
+            ).order_by('?').first()
             daily_offer = DailyOffer(product=product_day)
             daily_offer.save()
 
@@ -405,22 +410,35 @@ class ProductDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data()
         product_on_page = self.get_object()
+        UserProductView.add_object(
+            user=self.request.user,
+            product=product_on_page.id
+        )
         context['images'] = ProductImage.get_product_pics(product_on_page)
-        context['attributes'] = \
-            AttributeValue.get_all_attributes_of_product(product_on_page)
+        context['attributes'] = AttributeValue.get_all_attributes_of_product(
+            product_on_page)
         context['comments'] = ProductReview.get_comments(product_on_page)
         context['stocks'] = Stock.get_products_in_stock(product_on_page)
-        context['price'] = Product.get_price_with_discount(product_on_page)
         return context
 
     def post(self, request, *args, **kwargs):
         product_item = self.get_object()
         post_data = request.POST.copy()
+
         post_data['product'] = product_item
         post_data['user'] = self.request.user
         form = ProductReviewForm(post_data)
         if form.is_valid():
             form.save()
+        if 'rating' in post_data:
+            avg_rating = ProductReview.objects.filter(
+                product=product_item
+            ).aggregate(
+                avg=Avg('rating', filter=F('rating'))
+            )
+            product_item.rating = round(avg_rating['avg'])
+            product_item.save()
+
         return HttpResponseRedirect(
             reverse(
                 'product:detail',

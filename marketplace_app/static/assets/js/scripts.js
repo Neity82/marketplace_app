@@ -918,7 +918,7 @@
     // get click-events on all objects with add-to-cart id
     // add product to cart
     $(document).on('click', '#add-to-cart', function(event) {
-        let addToCardButtons = document.querySelectorAll('.Card-btn');
+        let addToCardButtons = document.querySelectorAll('.Card-btn, .Compare-btn, .Product-btn');
         event.preventDefault();
         const target = event.currentTarget;
         let is_product = false
@@ -964,54 +964,10 @@
         return quantityText
     }
 
-    // enter pressing on input
-    $('.Amount-input').keydown(function (event) {
-        if (event.keyCode === 13) {
-            let amountInputs = document.querySelectorAll('.Amount-input')
-            event.preventDefault();
-            const target = event.currentTarget;
-            if (target) {
-                amountInputs.forEach((item) => {
-                    if (target === item) {
-                        let quantity = target.value;
-                        let maxQuantity = target.max;
-                        let stockId = target.parentNode.querySelector('.Amount-add').value;
-                        if (parseInt(quantity) <= parseInt(maxQuantity)) {
-                            $.ajax({
-                                type: 'POST',
-                                beforeSend: setCSRFHeader,
-                                url: target.href,
-                                data: {
-                                    'stock_id': stockId,
-                                    'quantity': quantity,
-                                    'method': 'post'
-                                },
-                                success: function (response) {
-                                    popUp(response.message, response.type);
-                                    setTimeout(() => window.location.reload(), 1000);
-                                },
-                                error: function (xhr, errmsg, err) {
-                                    popUp(err, 'error');
-                                }
-                            });
-                        } else {
-                            setInputValue(target, maxQuantity);
-                            let quantityText = getQuantityFromParentNode(target);
-                            alertify.warning(`${quantityText}!`);
-                    }
-                    }
-                })
-            }
-
-        }
-    });
-
-    // get click-events on all objects with Amount-add/Amount-remove classes
-    // increment/decrement product's count in cart
-
-
-    $(document).on('click', '.Amount-add, .Amount-remove', function (event) {
-        let amountButtons = document.querySelectorAll('.Amount-add, .Amount-remove');
+    // get click-events on all objects with Amount-add class
+    // increment product's count in cart
+    $(document).on('click', '.Amount-add', function(event){
+        let addButtons = document.querySelectorAll('.Amount-add');
         event.preventDefault();
         const target = event.currentTarget;
         if (target) {
@@ -1108,6 +1064,103 @@
                     });
                 }
             })
+        }
+    });
+
+    // get click-events on all objects with add-to-compare id
+    // add product to compare
+    $(document).on('click', '#add-to-compare', function(event) {
+        let addToCardButtons = document.querySelectorAll('.Card-btn, .btn_default');
+        event.preventDefault();
+        const target = event.currentTarget;
+        let is_product = false
+        if (target && target.classList.contains('product')) {
+            is_product = true
+            addToCardButtons.forEach((item) => {
+                if (target === item) {
+                    $.ajax({
+                        type: 'POST',
+                        url: target.href,
+                        data: {
+                            'is_product': is_product,
+                            'csrfmiddlewaretoken': getCookie('csrftoken'),
+                            'method': 'post'
+                        },
+                        success: function(response) {
+                            document.getElementById("Compare-amount").innerHTML = response.head_count,
+                            popUp(response.message, response.type);
+                        },
+                        error: function(xhr, errmsg, err) {
+                            popUp(err, 'error');
+
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    // get click-events on all objects with Compare-delete class
+    // delete product from compare
+    $(document).on('click', '#delete-from-compare', function(event){
+        let deleteButtons = document.querySelectorAll('.Compare-delete');
+        event.preventDefault();
+        const target = event.currentTarget;
+        if (target) {
+            deleteButtons.forEach((item) => {
+                if (target === item) {
+                    $.ajax({
+                        type: 'DELETE',
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+                        },
+                        url: target.href,
+                        data: {
+                            'method': 'delete'
+                        },
+                        success: function(response) {
+                            popUp(response.message, response.type);
+                            setTimeout(() => window.location.reload(), 1000);
+                        },
+                        error: function(xhr, errmsg, err) {
+                            popUp(err, 'error');
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    // get click-events on all objects with add-to-view id
+    // add product to view
+    $(document).on('click', '#add-to-view', function(event) {
+        let addToCardButtons = document.querySelectorAll('.Card-btn');
+        event.preventDefault();
+        const target = event.currentTarget;
+        let is_product = false
+        if (target && target.classList.contains('product')) {
+            is_product = true
+            addToCardButtons.forEach((item) => {
+                if (target === item) {
+                    $.ajax({
+                        type: 'POST',
+                        url: target.href,
+                        data: {
+                            'is_product': is_product,
+                            'csrfmiddlewaretoken': getCookie('csrftoken'),
+                            'method': 'post'
+                        },
+                        success: function(response) {
+                            popUp(response.message, response.type);
+                        },
+                        error: function(xhr, errmsg, err) {
+                            popUp(err, 'error');
+
+                        }
+                    });
+                }
+            });
         }
     });
 })(jQuery);

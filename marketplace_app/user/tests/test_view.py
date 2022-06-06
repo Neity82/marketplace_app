@@ -1,11 +1,11 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from order.models import Order, Delivery
 from product.models import Category, Product
-from user.models import CustomUser, UserProductView
-
+from user.models import CustomUser, UserProductView, Compare, CompareEntity
 
 TEST_EMAIL = 'normal@user.com'
 TEST_PASS = 'test1793'
@@ -51,6 +51,7 @@ class BaseViewTests(TestCase):
             UserProductView.objects.create(
                 user_id=cls.user,
                 product_id=Product.objects.get(pk=i),
+                datetime=timezone.now()
             )
         delivery = Delivery.objects.create(name='delivery')
         for i in range(1, 4):
@@ -62,14 +63,22 @@ class BaseViewTests(TestCase):
                 address=f'Address_{i}'
             )
 
+        compare = Compare.objects.create(user_id=cls.user)
+        for i in range(4):
+            CompareEntity.objects.create(
+                compare=compare,
+                product=Product.objects.get(id=i+1)
+            )
+
 
 class UserAccountViewTests(BaseViewTests):
     """Тесты представления UserAccount"""
 
     def test_url_exists_at_desired_location(self):
+        # Не авторизован
         response = self.client.get(f'/user/{self.user.id}/account/')
-        self.assertEqual(response.status_code, 404)
-
+        self.assertEqual(response.status_code, 302)
+        # Авторизован
         self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/account/')
         self.assertEqual(response.status_code, 200)
@@ -89,9 +98,10 @@ class UserProfileViewTests(BaseViewTests):
     """Тесты представления UserProfile"""
 
     def test_url_exists_at_desired_location(self):
+        # Не авторизован
         response = self.client.get(f'/user/{self.user.id}/profile/')
-        self.assertEqual(response.status_code, 404)
-
+        self.assertEqual(response.status_code, 302)
+        # Авторизован
         self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/profile/')
         self.assertEqual(response.status_code, 200)
@@ -108,14 +118,33 @@ class UserProfileViewTests(BaseViewTests):
             'Last First Middle'
         )
 
+    def test_correct_profile(self):
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
+        url = f'/user/{self.user.id}/profile/'
+        data_correct = {
+            'email': 'new_email@test.ru',
+            'phone': '+7(999) 111-22-44',
+            'full_name': 'Old_last Old_first Old_middle',
+        }
+        response = self.client.post(url, data_correct)
+        self.assertEqual(CustomUser.objects.get(id=1).email, 'new_email@test.ru')
+        self.assertEqual(CustomUser.objects.get(id=1).phone, '9991112244')
+        self.assertEqual(CustomUser.objects.get(id=1).last_name, 'Old_last')
+        self.assertEqual(CustomUser.objects.get(id=1).first_name, 'Old_first')
+        self.assertEqual(CustomUser.objects.get(id=1).middle_name, 'Old_middle')
+
+        self.assertRedirects(response, f'/user/{self.user.id}/profile/', status_code=302,
+                             target_status_code=200)
+
 
 class HistoryOrderTests(BaseViewTests):
     """Тесты представления HistoryOrder"""
 
     def test_url_exists_at_desired_location(self):
+        # Не авторизован
         response = self.client.get(f'/user/{self.user.id}/orders/')
-        self.assertEqual(response.status_code, 404)
-
+        self.assertEqual(response.status_code, 302)
+        # Авторизован
         self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/orders/')
         self.assertEqual(response.status_code, 200)
@@ -140,9 +169,10 @@ class HistoryViewTests(BaseViewTests):
     """Тесты представления HistoryView"""
 
     def test_url_exists_at_desired_location(self):
+        # Не авторизован
         response = self.client.get(f'/user/{self.user.id}/views/')
-        self.assertEqual(response.status_code, 404)
-
+        self.assertEqual(response.status_code, 302)
+        # Авторизован
         self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
         response = self.client.get(f'/user/{self.user.id}/views/')
         self.assertEqual(response.status_code, 200)
@@ -158,18 +188,24 @@ class HistoryViewTests(BaseViewTests):
         self.assertEqual(len(response.context['views_list']), 5)
 
 
-# class CompareProductTests(BaseViewTests):
-#     def test_url_exists_at_desired_location(self):
-#         self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
-#
-#         response = self.client.get(f'/user/{self.user.id}/compare/')
-#         self.assertEqual(response.status_code, 200)
-#
-#     def test_correct_template(self):
-#         self.assertTrue(self.client.login(email='normal@user.com', password='test1793'))
-#
-#         response = self.client.get(f'/user/{self.user.id}/compare/')
-#         self.assertTemplateUsed(response, 'user/compare.html')
+class CompareProductTests(BaseViewTests):
+    """Тесты представления CompareProduct"""
+
+    def test_url_exists_at_desired_location(self):
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
+
+        response = self.client.get(f'/compare/category/0/')
+        self.assertEqual(response.status_code, 200)
+
+    def test_correct_template(self):
+        self.assertTrue(self.client.login(email=TEST_EMAIL, password=TEST_PASS))
+
+        response = self.client.get(f'/compare/category/0/')
+        self.assertTemplateUsed(response, 'user/compare.html')
+        self.assertTrue('categories' in response.context)
+        self.assertTrue('cat_selected' in response.context)
+        self.assertTrue('total_count' in response.context)
+        self.assertTrue('attributes' in response.context)
 
 
 class LoginTests(BaseViewTests):

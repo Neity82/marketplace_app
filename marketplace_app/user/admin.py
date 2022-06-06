@@ -3,7 +3,12 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext as _
 
 from user.forms import CustomUserChangeForm, CustomUserAddForm
-from user.models import CustomUser, UserProductView, Compare
+from user.models import CustomUser, UserProductView, Compare, CompareEntity
+
+
+class CompareEntityInline(admin.StackedInline):
+    model = CompareEntity
+    extra = 1
 
 
 @admin.register(CustomUser)
@@ -44,7 +49,7 @@ class CustomUserAdmin(UserAdmin):
 class UserProductViewAdmin(admin.ModelAdmin):
     """Представление модели просмотренных товаров в интерфейсе администратора"""
 
-    list_display = ['id', 'user_id', 'product_id']
+    list_display = ['id', 'user_id', 'product_id', 'datetime']
     list_display_links = ['id']
 
 
@@ -52,7 +57,8 @@ class UserProductViewAdmin(admin.ModelAdmin):
 class CompareAdmin(admin.ModelAdmin):
     """Представление модели товаров для сравнения в интерфейсе администратора"""
 
-    list_display = ['id', 'user_id', 'product_id']
+    list_display = ['id', 'user_id']
     list_display_links = ['id']
+    inlines = [CompareEntityInline,]
 
 

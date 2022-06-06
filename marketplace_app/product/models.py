@@ -96,14 +96,14 @@ class Category(models.Model):
                 if parent else title)
 
     @classmethod
-    def get_popular(cls, limit: int = 3) -> List[Category]:
+    def get_popular(cls, limit: int = 3) -> QuerySet[Product]:
         """
         Метод для получения n избранных категорий товаров
 
         :param limit: Необходимое количество категорий
         :type limit: int
         :return: Список объектов категорий
-        :rtype: List[Category]
+        :rtype: QuerySet[Category]
         """
 
         queryset: QuerySet[Product] = Category.objects.prefetch_related(
@@ -568,23 +568,6 @@ class Product(models.Model):
 
         return queryset[:limit]
 
-    @classmethod
-    def get_price_with_discount(cls, product: Product) -> QuerySet:
-        """
-        Метод для получения цены со скидкой
-        """
-
-        queryset = Product.objects.prefetch_related(
-            'stock',
-            'product_discount'
-        ).filter(
-            pk=product.pk,
-        ).distinct().annotate(
-            avg_price=Avg('stock__price')
-        ).first()
-
-        return queryset
-
 
 class DailyOffer(models.Model):
     """Модель: предложение дня"""
@@ -611,11 +594,11 @@ class DailyOffer(models.Model):
         verbose_name = _('daily offer')
         verbose_name_plural = _('daily offers')
 
-    # def __str__(self) -> str:
-    #     return (
-    #         f'Daily offer: product: {getattr(self.product, "title")}',
-    #         f'on: {self.select_date}'
-    #     )
+    def __str__(self) -> str:
+        return (
+            f'Daily offer: product: {getattr(self.product, "title")} '
+            f'on: {self.select_date}'
+        )
 
     @classmethod
     def get_daily_offer(cls) -> Optional[DailyOffer]:
@@ -703,6 +686,13 @@ class ProductReview(models.Model):
         max_length=1500,
         default=''
     )
+
+    rating = models.PositiveSmallIntegerField(
+        verbose_name=_('rating'),
+        help_text=_('Product rating'),
+        blank=True,
+        null=True
+        )
 
     objects = models.Manager()
 
