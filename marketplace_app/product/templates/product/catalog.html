@@ -23,13 +23,25 @@
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="/">{% translate "home" %}
-            </a>
+            <a href="/">{% translate "home" %}</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>{% translate "Catalog" %}
-            </span>
-          </li>
+          {% if category_title %}
+            <li class="breadcrumbs-item">
+              <a href="{% url 'product:list' %}">{% translate "Catalog" %}</a>
+            </li>
+            {% if parent_category_id %}
+            <li class="breadcrumbs-item">
+              <a href="{% url 'product:list' %}?category={{ parent_category_id }}">{{ parent_category_title }}</a>
+            </li>
+            {% endif %}
+            <li class="breadcrumbs-item breadcrumbs-item_current">
+              <span>{{ category_title }}</span>
+            </li>
+          {% else %}
+            <li class="breadcrumbs-item breadcrumbs-item_current">
+              <span>{% translate "Catalog" %}</span>
+            </li>
+          {% endif %}
         </ul>
       </div>
     </div>
@@ -39,35 +51,60 @@
       <div class="Section-column">
         <div class="Section-columnSection">
           <header class="Section-header">
-            <strong class="Section-title">Filter
-            </strong>
+            <strong class="Section-title">{% translate "Filter"|capfirst %}</strong>
           </header>
           <div class="Section-columnContent">
-            <form class="form" action="#" method="post">
+            <form class="form" name="filter" action="{{ request.get_full_path }}" method="post">
+              {% csrf_token %}
+              {% if min_price and max_price %}
               <div class="form-group">
                 <div class="range Section-columnRange">
-                  <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="7" data-max="50" data-from="7" data-to="27"/>
-                  <div class="range-price">Price:&#32;
-                    <div class="rangePrice">
-                    </div>
+                  <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="{{ min_price }}" data-max="{{ max_price }}" data-from="{% if filter_min_price %}{{ filter_min_price }}{% else %}{{ min_price }}{% endif %}" data-to="{% if filter_max_price %}{{ filter_max_price }}{% else %}{{ max_price }}{% endif %}"/>
+                  <div class="range-price">{% translate "Price" %}:&#32;
+                    <div class="rangePrice"></div>
                   </div>
                 </div>
               </div>
+              {% endif %}
               <div class="form-group">
-                <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="Название"/>
+                <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="{% translate "Title"|capfirst %}" {% if title %}value="{{ title }}"{% endif %}/>
               </div>
+              {% if shops %}
               <div class="form-group">
-                <!-- - var options = setOptions(items, ['value', 'selected', 'disabled']);-->
-                <select class="form-select">
-                  <option value="seller" selected="selected" disabled="disabled">Продавец
-                  </option>
-                  <option value="kkk">Kkkk
-                  </option>
-                  <option value="sdfsdf">sdfsdf
-                  </option>
+                <select name='shop' size="4" multiple style="width: 100%;">
+                  {% for shop in shops %}
+                  <option value="{{ shop.id }}"{% if shop.id in selected_shops %} selected{% endif %}>{{ shop.name }}</option>
+                  {% endfor %}
                 </select>
               </div>
+              {% endif %}
+              {% for attribute in attributes %}
+              {% with attribute.id as id %}
               <div class="form-group">
+                {% if attribute.type == "T" %}
+                  <input class="form-input form-input_full" name="attr_t_{{ attribute.id }}" type="text" placeholder="{{ attribute.title|lower }}"{% if id in attr_filter %} value="{{ attr_filter|dict_key:id }}"{% endif %}/>
+                {% elif attribute.type == "C" %}
+                  <label class="toggle">
+                    <input type="checkbox" name="attr_c_{{ attribute.id }}"{% if id in attr_filter %} checked="checked"{% endif %}>
+                    <span class="toggle-box"></span>
+                    <span class="toggle-text">{{ attribute.title|lower }}</span>
+                  </label>
+                {% elif attribute.type == "S" %}
+                {% if id in attr_filter %}
+                {% with attr_filter|dict_key:id as values %}
+                <select class="form-select" name="attr_s_{{ attribute.id }}" size="1">
+                  <option value="">{{ attribute.title|lower }}</option>
+                  {% for value in attribute.values %}
+                  <option value="{{ value }}"{% if value in values %} selected="selected"{% endif %}>{{ value }}</option>
+                  {% endfor %}
+                </select>
+                {% endwith %}
+                {% endif %}
+                {% endif %}
+              </div>
+              {% endwith %}
+              {% endfor %}
+              {% comment %} <div class="form-group">
                 <label class="toggle">
                   <input type="checkbox"/>
                   <span class="toggle-box">
@@ -84,51 +121,51 @@
                   <span class="toggle-text">С бесплатной доставкой
                   </span>
                 </label>
-              </div>
+              </div> {% endcomment %}
               <div class="form-group">
-                <div class="buttons">
-                  <a class="btn btn_square btn_dark btn_narrow" href="#">Filter
-                  </a>
+                <div class="buttons" onClick="javascript:document.filter.submit();">
+                  <span class="btn btn_square btn_dark btn_narrow">{% translate "Filter" %}</span>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        <div class="Section-columnSection">
+        {% comment %} <div class="Section-columnSection">
           <header class="Section-header">
             <strong class="Section-title">Popular tags
             </strong>
           </header>
           <div class="Section-columnContent">
             <div class="buttons">
-              <a class="btn btn_default btn_sm" href="#">Video
-              </a>
-              <a class="btn btn_default btn_sm" href="#">Development
-              </a>
-              <a class="btn btn_default btn_sm" href="#">Gaming
-              </a>
-              <a class="btn btn_default btn_sm" href="#">Asus
-              </a>
-              <a class="btn btn_default btn_sm" href="#">Development
-              </a>
-              <a class="btn btn_default btn_sm" href="#">Video
-              </a>
+              <a class="btn btn_default btn_sm" href="#">Video</a>
+              <a class="btn btn_default btn_sm" href="#">Development</a>
+              <a class="btn btn_default btn_sm" href="#">Gaming</a>
+              <a class="btn btn_default btn_sm" href="#">Asus</a>
+              <a class="btn btn_default btn_sm" href="#">Development</a>
+              <a class="btn btn_default btn_sm" href="#">Video</a>
             </div>
           </div>
-        </div>
+        </div> {% endcomment %}
       </div>
       <div class="Section-content">
         <div class="Sort">
-          <div class="Sort-title">Сортировать по:
-          </div>
+          <div class="Sort-title">{% translate "Sort by:" %}</div>
           <div class="Sort-variants">
-            <a class="Sort-sortBy Sort-sortBy_dec" href="#">Популярности
+            <a class="Sort-sortBy{% if sort_by == 'popularity' %} Sort-sortBy_inc{% elif sort_by == '-popularity'%} Sort-sortBy_dec{% endif %}"
+              href="/catalog/?sort_by={% if sort_by == 'popularity' %}-popularity{% else %}popularity{% endif %}&{{ base_url }}">
+              {% translate "popularity"|capfirst %}
             </a>
-            <a class="Sort-sortBy" href="#">Цене
+            <a class="Sort-sortBy{% if sort_by == 'price' %} Sort-sortBy_inc{% elif sort_by == '-price'%} Sort-sortBy_dec{% endif %}"
+              href="/catalog/?sort_by={% if sort_by == 'price' %}-price{% else %}price{% endif %}&{{ base_url }}">
+              {% translate "price"|capfirst %}
             </a>
-            <a class="Sort-sortBy" href="#">Отзывам
+            <a class="Sort-sortBy{% if sort_by == 'review' %} Sort-sortBy_inc{% elif sort_by == '-review'%} Sort-sortBy_dec{% endif %}"
+              href="/catalog/?sort_by={% if sort_by == 'review' %}-review{% else %}review{% endif %}&{{ base_url }}">
+              {% translate "review"|capfirst %}
             </a>
-            <a class="Sort-sortBy Sort-sortBy_inc" href="#">Новизне
+            <a class="Sort-sortBy{% if sort_by == 'novelty' %} Sort-sortBy_inc{% elif sort_by == '-novelty'%} Sort-sortBy_dec{% endif %}"
+              href="/catalog/?sort_by={% if sort_by == 'novelty' %}-novelty{% else %}novelty{% endif %}&{{ base_url }}">
+              {% translate "novelty"|capfirst %}
             </a>
           </div>
         </div>

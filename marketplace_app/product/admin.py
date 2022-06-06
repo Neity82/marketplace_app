@@ -28,10 +28,10 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(models.Attribute)
 class AttributeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'category', 'help_text', 'rank',)
+    list_display = ('id', 'title', 'category', 'type', 'help_text', 'rank',)
     list_display_links = ('id', 'title',)
     search_fields = ('id', 'title', 'category', 'help_text',)
-    fields = ('title', 'category', 'help_text', 'rank',)
+    fields = ('title', 'type', 'category', 'help_text', 'rank',)
     list_filter = ('category', 'title', 'rank')
 
 

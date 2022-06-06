@@ -2,7 +2,7 @@ from __future__ import annotations
 from datetime import date, datetime
 import pytz
 from decimal import Decimal
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, TypedDict, Union
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -153,6 +153,19 @@ class Attribute(models.Model):
         max_length=50,
     )
 
+    class AttributeType(models.TextChoices):
+        TEXT = 'T', _('Text')
+        CHECK = 'C', _('Check')
+        SELECT = 'S', _('Select')
+
+    type = models.CharField(
+        verbose_name=_('Field type'),
+        max_length=1,
+        help_text=_('Field type'),
+        choices=AttributeType.choices,
+        default=AttributeType.TEXT
+    )
+
     category = models.ForeignKey(
         'Category',
         verbose_name=_('attribute\'s category'),
@@ -189,8 +202,8 @@ class AttributeValue(models.Model):
     value = models.CharField(
         max_length=255,
         verbose_name=_('value'),
-        blank=True,
         null=True,
+        default=None
     )
 
     unit = models.ForeignKey(
@@ -230,8 +243,21 @@ class AttributeValue(models.Model):
     objects = models.Manager()
 
     @classmethod
-    def get_all_attributes_of_product(cls, product: Product) -> QuerySet[AttributeValue]:
-        return AttributeValue.objects.filter(product=product).order_by('-attribute__rank')
+    def get_all_attributes_of_product(cls, product: Product) \
+            -> QuerySet[AttributeValue]:
+        return AttributeValue.objects.filter(product=product)\
+                                     .order_by('-attribute__rank')
+
+
+DiscountDict = TypedDict(
+        'DiscountDict',
+        {
+            'type': Optional[str],
+            'value': Optional[int],
+            'price': Optional[Decimal],
+            'base': Optional[Decimal],
+        }
+    )
 
 
 class Product(models.Model):
@@ -375,14 +401,14 @@ class Product(models.Model):
         return Decimal('NaN')
 
     @property
-    def discount(self) -> Dict[str, Union[str, Decimal]]:
+    def discount(self) -> DiscountDict:
         """Свойство для хранения механизма скидки и скидочной стоимости
 
         :return: Словарь с механизмом скидки и скидочной стоимостью
         :rtype: Dict[str, Union[str, Decimal]]
         """
-        base_price = self._price
-        result: Dict[str, Union[str, int, Decimal, None]] = {
+        base_price: Optional['Decimal'] = self._price
+        result: DiscountDict = {
             "type": None,
             "value": None,
             "price": base_price,
@@ -394,7 +420,7 @@ class Product(models.Model):
         categories_list: list = [self.category_id]
         if self.category.parent_id is not None:
             categories_list += [self.category.parent_id]
-        discounts: List[ProductDiscount] = ProductDiscount.objects \
+        discounts: QuerySet[ProductDiscount] = ProductDiscount.objects \
             .select_related("discount_id").filter(
             (
                 Q(
@@ -418,17 +444,17 @@ class Product(models.Model):
         )
         if not discounts:
             return result
-        discount_percent: ProductDiscount = discounts.filter(
+        discount_percent: QuerySet[ProductDiscount] = discounts.filter(
             discount_id__discount_mechanism='P'
         ).order_by(
             '-discount_id__discount_value'
         ).first()
-        discount_sum: ProductDiscount = discounts.filter(
+        discount_sum: QuerySet[ProductDiscount] = discounts.filter(
             discount_id__discount_mechanism='S'
         ).order_by(
             '-discount_id__discount_value'
         ).first()
-        discount_fix: ProductDiscount = discounts.filter(
+        discount_fix: QuerySet[ProductDiscount] = discounts.filter(
             discount_id__discount_mechanism='F'
         ).order_by(
             'discount_id__discount_value'
@@ -441,7 +467,7 @@ class Product(models.Model):
         for obj in max_discount_list:
             if obj is None:
                 continue
-            discounted_price = self._get_discounted_price(
+            discounted_price: Decimal = self._get_discounted_price(
                 base_price, obj.discount_id
             )
             if discounted_price < result["price"]:
@@ -451,7 +477,8 @@ class Product(models.Model):
         return result
 
     @classmethod
-    def get_popular(cls, shop: Union[Shop, None] = None, limit: int = 8) -> List[Product]:
+    def get_popular(cls, shop: Union[Shop, None] = None, limit: int = 8) -> \
+            List[Product]:
         """
         Метод для получения списка популярных товаров в количестве limit.
         Популярность определяется сначала по "индексу сортировки",
@@ -465,7 +492,7 @@ class Product(models.Model):
         :rtype: List[Product]
         """
 
-        queryset: List[Product] = Product.objects.prefetch_related(
+        queryset: QuerySet[Product] = Product.objects.prefetch_related(
             'stock'
         ).filter(
             stock__count__gt=0
@@ -478,12 +505,13 @@ class Product(models.Model):
         )
 
         if shop:
-            queryset: List[Product] = queryset.filter(stock__shop=shop)
+            queryset = queryset.filter(stock__shop=shop)
 
         return queryset[:limit]
 
     def get_shops(self):
-        return Shop.objects.filter(stock__product__id=self.pk).only('name', 'id')
+        return Shop.objects.filter(stock__product__id=self.pk)\
+                           .only('name', 'id')
 
     @classmethod
     def get_limited_edition(
@@ -502,7 +530,7 @@ class Product(models.Model):
         :rtype: List[Product]
         """
 
-        queryset: List[Product] = Product.objects.prefetch_related(
+        queryset: QuerySet[Product] = Product.objects.prefetch_related(
             'stock'
         ).filter(
             is_limited=True, stock__count__gt=0
@@ -511,7 +539,7 @@ class Product(models.Model):
         ).order_by('?').select_related('category__parent')
 
         if daily_offer:
-            queryset: List[Product] = queryset.exclude(
+            queryset = queryset.exclude(
                 id=daily_offer.product_id)
 
         return queryset[:limit]
@@ -573,7 +601,7 @@ class DailyOffer(models.Model):
         )
 
     @classmethod
-    def get_daily_offer(cls) -> DailyOffer:
+    def get_daily_offer(cls) -> Optional[DailyOffer]:
         """
         Метод для получения предложения дня
 
@@ -581,7 +609,7 @@ class DailyOffer(models.Model):
         :rtype: DailyOffer
         """
 
-        queryset: List[DailyOffer] = DailyOffer.objects.filter(
+        queryset: QuerySet[DailyOffer] = DailyOffer.objects.filter(
             select_date=date.today()
         ).select_related(
             'product__category'
@@ -590,6 +618,7 @@ class DailyOffer(models.Model):
         if queryset.exists():
             daily_offer: DailyOffer = queryset.latest('select_date')
             return daily_offer
+        return None
 
 
 class Stock(models.Model):

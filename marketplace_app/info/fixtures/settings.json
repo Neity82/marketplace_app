@@ -1,0 +1,65 @@
+[
+    {
+        "model": "info.settings",
+        "pk": 1,
+        "fields": {
+            "name": "feedback_mailing_host",
+            "description": "Адрес SMTP-сервера для отправки e-mail из формы обратной связи",
+            "value": "smtp.example.com"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 2,
+        "fields": {
+            "name": "feedback_mailing_port",
+            "description": "Порт SMTP-сервера для отправки e-mail из формы обратной связи",
+            "value": "465"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 3,
+        "fields": {
+            "name": "feedback_mailing_login",
+            "description": "Логин SMTP-сервера для отправки e-mail из формы обратной связи",
+            "value": "login@example.com"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 4,
+        "fields": {
+            "name": "feedback_mailing_password",
+            "description": "Пароль SMTP-сервера для отправки e-mail из формы обратной связи",
+            "value": "password"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 5,
+        "fields": {
+            "name": "feedback_mailing_email",
+            "description": "Адрес получателя сообщений из формы обратной связи",
+            "value": "reciever@example.com"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 6,
+        "fields": {
+            "name": "feedback_mailing_tls_usage",
+            "description": "Применение TLS при аутентификации на SMTP-сервере для отправки e-mail из формы обратной связи",
+            "value": "n"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 7,
+        "fields": {
+            "name": "feedback_mailing_ssl_usage",
+            "description": "Применение SSL при аутентификации на SMTP-сервере для отправки e-mail из формы обратной связи",
+            "value": "y"
+        }
+    }
+]

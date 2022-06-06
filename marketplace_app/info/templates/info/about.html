@@ -13,26 +13,24 @@
   </header>
 {% endblock %}
 
-{% block middle %}
 
+{% block middle %}
   <div class="Middle Middle_top">
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">{% translate "Contact Megano" %}
+          <h1 class="Middle-title">{% translate "About Megano" %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item">
-              <a href="{% url 'product:home' %}">{% translate "home" %}</a>
+            <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% translate "home" %}</a>
             </li>
-            <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>{% translate "Contact" %}</span>
+            <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate "About Us" %}</span>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="Section Section_column Section_columnRight Section_columnWide">
+    <div class="Section Section_column Section_columnLeft Section_columnWide">
       <div class="wrap">
         <div class="Section-column">
           <div class="Section-columnSection Section-columnSection_mark">
@@ -103,76 +101,61 @@
           </div>
         </div>
         <div class="Section-content">
-          <div class="Map">
-            <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Aab0c930ee3de165a0eaa7eab3c5e810a0019bf38d9c3e3b44ca793b8ba10aad9&amp;amp;width=100%25&amp;amp;height=486&amp;amp;lang=ru_RU&amp;amp;scroll=true"></script>
-          </div>
-          <div class="Contacts Contacts_main">
-            <div class="Contacts-block">
-              <div class="media">
-                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/phone.svg' %}" alt="{% translate "phone" %}"/>
-                </div>
-                <div class="media-content">
-                  {% translate "Phone" %}: {{shop.phone|slice:"0:2"}} ({{shop.phone|slice:"2:5"}}) {{shop.phone|slice:"5:8"}}-{{shop.phone|slice:"8:12"}}-{{shop.phone|slice:"12:15"}}
-                  <br>
-                  {% translate "Mobile" %}: {{shop.mobile|slice:"0:2"}} ({{shop.mobile|slice:"2:5"}}) {{shop.mobile|slice:"5:8"}}-{{shop.mobile|slice:"8:12"}}-{{shop.mobile|slice:"12:15"}}
-                </div>
-              </div>
-            </div>
-            <div class="Contacts-block">
-              <div class="media">
-                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/address.svg' %}" alt="{% translate "address" %}"/>
-                </div>
-                <div class="media-content">{{ shop.address }}</div>
-              </div>
-            </div>
-            <div class="Contacts-block">
-              <div class="media">
-                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/mail.svg' %}" alt="{% translate "mail" %}"/>
-                </div>
-                <div class="media-content">
-                  {% translate "General" %}: {{ shop.email_general }}
-                  <br>
-                  {% translate "Editor" %}:  {{ shop.email_editor }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <header class="Section-header Section-header_sm">
-            <h2 class="Section-title">{% translate "Contact Form" %}
-            </h2>
-          </header>
-          <form class="form form_contacts" action="/contacts/" method="post" name="feedback">
-            <div class="form-group">
-              <div class="row">
+          <article class="Article">
+            <div class="Article-section">
+              <div class="row row_verticalCenter row_maxHalf">
                 <div class="row-block">
-                  {% csrf_token %}
-                  {{ form.name.errors}}
-                  {{ form.name }}
+                  <h2>{% translate "Why Choose Megano?" %}
+                  </h2>
+                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem.
+                  </p>
+                  <p>Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justotuio, rhoncus ut loret, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus element semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae  ligula eget dolor. Aenean massa. Cumtipsu sociis natoque pena tibusetm t semper ni.
+                  </p>
+                  <div><a class="btn btn_primary" href="{% url 'product:list' %}">{% translate "Get Started" %}</a>
+                  </div>
                 </div>
                 <div class="row-block">
-                  {{ form.email.errors}}
-                  {{ form.email }}
-                </div>
-                <div class="row-block">
-                  {{ form.site.errors}}
-                  {{ form.site }}
+                  <div class="pict">
+                    <img src="{% static 'assets/img/content/home/slider.png' %}" alt="slider.png"/>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="form-group">
-              {{ form.message.errors}}
-              {{ form.message }}
+            <div class="Article-section">
+              <div class="row row_verticalCenter row_maxHalf">
+                <div class="row-block">
+                  <div class="pict"><img src="{% static 'assets/img/content/home/bigGoods.png' %}" alt="bigGoods.png"/>
+                  </div>
+                </div>
+                <div class="row-block">
+                  <h2>{% translate "Megano Store History" %}
+                  </h2>
+                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula eget dolor. Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eutu, pretiumem.
+                  </p>
+                  <ul>
+                    <li>Lorem ipsum dolor sit amet, consectetuer
+                    </li>
+                    <li>adipiscing elit doli. Aenean commodo ligula
+                    </li>
+                    <li>eget dolor. Aenean massa. Cumtipsu sociis
+                    </li>
+                    <li>natoque penatibus et magnis dis parturient
+                    </li>
+                    <li>montesti, nascetur ridiculus mus. Donec
+                    </li>
+                    <li>quam felis, ultricies nec, pellentesque eutu
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="form-group" onClick="javascript:document.feedback.submit();">
-              <a class="btn btn_muted form-btn">{% translate "Send Message" %}</a>
-            </div>
-          </form>
+          </article>
         </div>
       </div>
     </div>
   </div>
-
 {% endblock middle %}
 {% block footer %}
   {% include "footer.html" %}
 {% endblock %}
+  
