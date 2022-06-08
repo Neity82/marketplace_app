@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,7 +47,6 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
-    # 'modeltranslation',
 ]
 
 MIDDLEWARE = [

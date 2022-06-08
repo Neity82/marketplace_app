@@ -28,6 +28,10 @@ urlpatterns = [
     path('', include('info.urls', namespace='info')),
 ]
 
+urlpatterns += [
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
 if settings.DEBUG:
 
     urlpatterns = [

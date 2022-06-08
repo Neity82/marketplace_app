@@ -1,0 +1,1092 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#: .\product\models.py:630
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-07 18:15+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n"
+"%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n"
+"%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: .\discount\apps.py:8 .\discount\models.py:7
+msgid "discount"
+msgstr "скидка"
+
+#: .\discount\models.py:8 .\discount\templates\discount\sale.html:29
+msgid "discounts"
+msgstr "скидки"
+
+#: .\discount\models.py:11
+msgid "Product discount"
+msgstr "Скидка товара"
+
+#: .\discount\models.py:12
+msgid "Set discount"
+msgstr "Скидка на набор"
+
+#: .\discount\models.py:13
+msgid "Basket discount"
+msgstr "Скидка на корзину"
+
+#: .\discount\models.py:16
+msgid "discount type"
+msgstr "Тип скидки"
+
+#: .\discount\models.py:17
+msgid "Discount type"
+msgstr "Тип скидки"
+
+#: .\discount\models.py:24
+msgid "Percent discount"
+msgstr "Процент скидки"
+
+#: .\discount\models.py:25
+msgid "Discount sum"
+msgstr "Сумма скидки"
+
+#: .\discount\models.py:26
+msgid "Fix price"
+msgstr "Фиксированная цена"
+
+#: .\discount\models.py:29
+msgid "discount mechanism"
+msgstr "Механизм скидки"
+
+#: .\discount\models.py:30
+msgid "Discount mechanism"
+msgstr "Механизм скидки"
+
+#: .\discount\models.py:37
+msgid "discount value"
+msgstr "Размер скидки"
+
+#: .\discount\models.py:38
+msgid "Discount value"
+msgstr "Размер скидки"
+
+#: .\discount\models.py:43
+msgid "is active"
+msgstr "флаг активности"
+
+#: .\discount\models.py:44
+msgid "There is active discount"
+msgstr "Активная скидка"
+
+#: .\discount\models.py:49 .\shop\models\shop.py:7
+msgid "description"
+msgstr "описание"
+
+#: .\discount\models.py:50
+msgid "Discount description"
+msgstr "Описание скидки"
+
+#: .\discount\models.py:55
+msgid "start at"
+msgstr "начало в"
+
+#: .\discount\models.py:56
+msgid "Discount start date"
+msgstr "Дата начала скидки"
+
+#: .\discount\models.py:60
+msgid "finish at"
+msgstr "окончание в "
+
+#: .\discount\models.py:61
+msgid "Discount finish date"
+msgstr "Дата окончания скидки"
+
+#: .\discount\models.py:75
+msgid "product discount"
+msgstr "скидка на товар"
+
+#: .\discount\models.py:76
+msgid "product discounts"
+msgstr "скидки на товар"
+
+#: .\discount\models.py:82 .\discount\models.py:116 .\discount\models.py:166
+msgid "discount id"
+msgstr "идентификатор скидки"
+
+#: .\discount\models.py:83 .\discount\models.py:117 .\discount\models.py:167
+msgid "Discount id"
+msgstr "Идентификатор скидки"
+
+#: .\discount\models.py:88
+msgid "product(s) id"
+msgstr "идентификатор товара"
+
+#: .\discount\models.py:89
+msgid "Product(s) id"
+msgstr "Идентификатор товара"
+
+#: .\discount\models.py:97
+msgid "category(ies) id"
+msgstr "идентификатор категории"
+
+#: .\discount\models.py:98
+msgid "Category(ies) id"
+msgstr "Идентификатор категории"
+
+#: .\discount\models.py:109
+msgid "set discount"
+msgstr "скидка на набор"
+
+#: .\discount\models.py:110
+msgid "set discounts"
+msgstr "скидки на набор"
+
+#: .\discount\models.py:122
+msgid "product(s) 1 id"
+msgstr ""
+
+#: .\discount\models.py:123
+msgid "Product(s) 1 id"
+msgstr ""
+
+#: .\discount\models.py:131
+msgid "category(ies) 1 id"
+msgstr ""
+
+#: .\discount\models.py:132
+msgid "Category(ies) 1 id"
+msgstr ""
+
+#: .\discount\models.py:140
+msgid "product(s) 2 id"
+msgstr ""
+
+#: .\discount\models.py:141
+msgid "Product(s) 2 id"
+msgstr ""
+
+#: .\discount\models.py:149
+msgid "category(ies) 2 id"
+msgstr ""
+
+#: .\discount\models.py:150
+msgid "Category(ies) 2 id"
+msgstr ""
+
+#: .\discount\models.py:159
+msgid "basket discount"
+msgstr "скидка на корзину"
+
+#: .\discount\models.py:160
+msgid "basket discounts"
+msgstr "скидки на корзину"
+
+#: .\discount\models.py:171
+msgid "minimum products count"
+msgstr "минимальное количество товаров"
+
+#: .\discount\models.py:172
+msgid "Minimum products count"
+msgstr "Минимальное количество товаров"
+
+#: .\discount\models.py:177
+msgid "maximum products count"
+msgstr "максимальное количество товаров"
+
+#: .\discount\models.py:178
+msgid "Maximum products count"
+msgstr "Максимальное количество товаров"
+
+#: .\discount\models.py:183
+msgid "minimum basket cost"
+msgstr "минимальная стоимость корзины"
+
+#: .\discount\models.py:184
+msgid "Minimum basket cost"
+msgstr "Минимальная стоимость корзины"
+
+#: .\discount\models.py:189
+msgid "maximum basket cost"
+msgstr "максимальная стоимость корзины"
+
+#: .\discount\models.py:190
+msgid "Maximum basket cost"
+msgstr "Максимальная стоимость корзины"
+
+#: .\discount\templates\discount\sale.html:22
+msgid "DISCOUNTS"
+msgstr "СКИДКИ"
+
+#: .\discount\templates\discount\sale.html:25
+#: .\product\templates\product\catalog.html:26
+#: .\user\templates\user\account.html:28
+msgid "home"
+msgstr "домой"
+
+#: .\discount\templates\discount\sale.html:44
+msgid "percent sale"
+msgstr "скидка на товар"
+
+#: .\discount\templates\discount\sale.html:46
+msgid "basket sale"
+msgstr "скидка на корзину"
+
+#: .\discount\templates\discount\sale.html:48
+msgid "set sale"
+msgstr "скидка на набор"
+
+#: .\discount\templates\discount\sale.html:50
+msgid "unknown sale type"
+msgstr "неизвестный тип скидки"
+
+#: .\info\apps.py:7 .\info\apps.py:8
+msgid "Info"
+msgstr "Информация"
+
+#: .\info\models\banner.py:11 .\product\models.py:22 .\product\models.py:54
+#: .\product\models.py:143 .\product\models.py:233
+msgid "title"
+msgstr "название"
+
+#: .\info\models\banner.py:13
+msgid "Banner title"
+msgstr "Название баннера"
+
+#: .\info\models\banner.py:16
+msgid "text"
+msgstr "текст"
+
+#: .\info\models\banner.py:17
+msgid "Banner text"
+msgstr "Текст баннера"
+
+#: .\info\models\banner.py:20 .\product\models.py:239 .\product\models.py:663
+#: .\shop\models\shop.py:8
+msgid "image"
+msgstr "изображение"
+
+#: .\info\models\banner.py:22
+msgid "Banner image"
+msgstr "Изображение баннера"
+
+#: .\info\models\banner.py:25
+msgid "URL"
+msgstr "Ссылка"
+
+#: .\info\models\banner.py:26
+msgid "Banner url"
+msgstr "Ссылка баннера"
+
+#: .\info\models\banner.py:29
+msgid "active"
+msgstr "активность баннера"
+
+#: .\info\models\banner.py:30
+msgid "Banner is active"
+msgstr "Баннер активен"
+
+#: .\info\models\banner.py:35
+msgid "banner"
+msgstr "баннер"
+
+#: .\info\models\banner.py:36
+msgid "banners"
+msgstr "баннеры"
+
+#: .\info\models\seoitem.py:6
+msgid "path name"
+msgstr "имя эндпоинта"
+
+#: .\info\models\seoitem.py:8
+msgid "meta title"
+msgstr "имя страницы"
+
+#: .\info\models\seoitem.py:14 .\info\models\seoitem.py:21
+msgid "meta description"
+msgstr "описание страницы"
+
+#: .\info\models\seoitem.py:30
+msgid "SEO item"
+msgstr "SEO элемент"
+
+#: .\info\models\seoitem.py:31
+msgid "SEO items"
+msgstr "SEO элементы"
+
+#: .\info\models\settings.py:6 .\order\models.py:48 .\shop\models\shop.py:6
+msgid "name"
+msgstr "имя"
+
+#: .\info\models\settings.py:7 .\product\models.py:183
+msgid "value"
+msgstr "значение"
+
+#: .\info\models\settings.py:11 .\info\models\settings.py:12
+msgid "settings"
+msgstr "настройки"
+
+#: .\order\models.py:18 .\order\models.py:73 .\user\models.py:70
+#: .\user\models.py:95 .\user\models.py:141
+msgid "user"
+msgstr "пользователь"
+
+#: .\order\models.py:20
+msgid "Cart user"
+msgstr "Корзина пользователя"
+
+#: .\order\models.py:25 .\order\models.py:235 .\product\models.py:596
+msgid "stock"
+msgstr "склад"
+
+#: .\order\models.py:27
+msgid "Cart stock"
+msgstr "Склад в корзине"
+
+#: .\order\models.py:31 .\order\models.py:259
+msgid "count"
+msgstr "количество"
+
+#: .\order\models.py:32
+msgid "Cart count"
+msgstr "Количесто в корзине"
+
+#: .\order\models.py:36
+msgid "cart"
+msgstr "корзина"
+
+#: .\order\models.py:37
+msgid "carts"
+msgstr "корзины"
+
+#: .\order\models.py:49
+msgid "Delivery name"
+msgstr "Имя доставки"
+
+#: .\order\models.py:53 .\order\models.py:248
+msgid "price"
+msgstr "цена"
+
+#: .\order\models.py:54
+msgid "Delivery price"
+msgstr "Стоимость доставки"
+
+#: .\order\models.py:58 .\order\models.py:86
+msgid "delivery"
+msgstr "доставка"
+
+#: .\order\models.py:59
+msgid "deliveries"
+msgstr "доставки"
+
+#: .\order\models.py:75
+msgid "Order user"
+msgstr "Заказ юзера"
+
+#: .\order\models.py:79
+msgid "order date"
+msgstr "дата заказа"
+
+#: .\order\models.py:80
+msgid "Order date"
+msgstr "Дата заказа"
+
+#: .\order\models.py:88
+msgid "Order delivery"
+msgstr "Доставка заказа"
+
+#: .\order\models.py:92
+msgid "Card"
+msgstr ""
+
+#: .\order\models.py:93
+msgid "Some accounts"
+msgstr ""
+
+#: .\order\models.py:98
+msgid "payment"
+msgstr "оплата"
+
+#: .\order\models.py:99
+msgid "Order payment"
+msgstr "Оплата заказа"
+
+#: .\order\models.py:103
+msgid "city"
+msgstr "город"
+
+#: .\order\models.py:104
+msgid "Order city"
+msgstr "Город заказа"
+
+#: .\order\models.py:108 .\shop\models\shop.py:9
+msgid "address"
+msgstr "адрес"
+
+#: .\order\models.py:109
+msgid "Order address"
+msgstr "Адрес заказа"
+
+#: .\order\models.py:113
+msgid "comment"
+msgstr "комментарий"
+
+#: .\order\models.py:114
+msgid "Order comment"
+msgstr "Комментарий заказа"
+
+#: .\order\models.py:118
+msgid "Paid"
+msgstr "Оплачен"
+
+#: .\order\models.py:119
+msgid "Not paid"
+msgstr "Не оплачен"
+
+#: .\order\models.py:120
+msgid "Delivered"
+msgstr "Доставлен"
+
+#: .\order\models.py:121
+msgid "Received"
+msgstr "Получен"
+
+#: .\order\models.py:127
+msgid "state"
+msgstr "статус"
+
+#: .\order\models.py:128
+msgid "Order state"
+msgstr "Статус заказа"
+
+#: .\order\models.py:132
+msgid ""
+"Payment has not been completed, because you are suspected of intolerance"
+msgstr "Оплата не была завершена, потому что вы подозреваетесь в нетерпимости"
+
+#: .\order\models.py:133
+msgid "There are not enough funds in your account"
+msgstr "На вашем счете недостаточно средств"
+
+#: .\order\models.py:134
+msgid "Oops... Something went wrong"
+msgstr "Упс... что-то пошло не так"
+
+#: .\order\models.py:140
+msgid "error"
+msgstr "ошибка"
+
+#: .\order\models.py:141
+msgid "Order error"
+msgstr "Ошибка в заказе"
+
+#: .\order\models.py:145 .\order\models.py:242
+msgid "order"
+msgstr "заказ"
+
+#: .\order\models.py:146
+msgid "orders"
+msgstr "заказы"
+
+#: .\order\models.py:237
+msgid "OrderEntity stock"
+msgstr ""
+
+#: .\order\models.py:244
+msgid "OrderEntity order"
+msgstr ""
+
+#: .\order\models.py:249
+msgid "OrderEntity price"
+msgstr ""
+
+#: .\order\models.py:254
+msgid "discounted price"
+msgstr ""
+
+#: .\order\models.py:255
+msgid "OrderEntity discounted price"
+msgstr ""
+
+#: .\order\models.py:260
+msgid "OrderEntity count"
+msgstr ""
+
+#: .\order\models.py:264
+msgid "order entity"
+msgstr ""
+
+#: .\order\models.py:265
+msgid "orders entity"
+msgstr ""
+
+#: .\product\admin.py:162
+msgid "Tags"
+msgstr "Тег"
+
+#: .\product\models.py:23
+msgid "Tag title"
+msgstr "Название тега"
+
+#: .\product\models.py:30
+msgid "tag"
+msgstr "тег"
+
+#: .\product\models.py:31
+msgid "tags"
+msgstr "теги"
+
+#: .\product\models.py:45
+msgid "parent id"
+msgstr "id родителельской категории"
+
+#: .\product\models.py:47
+msgid "Parent category"
+msgstr "Родительская категория"
+
+#: .\product\models.py:55 .\product\models.py:144
+msgid "Category title"
+msgstr "Название категории"
+
+#: .\product\models.py:60
+msgid "icon"
+msgstr "иконка"
+
+#: .\product\models.py:61
+msgid "Category icon"
+msgstr "Иконка категории"
+
+#: .\product\models.py:68 .\product\models.py:300
+msgid "sort index"
+msgstr "сортировочный индекс"
+
+#: .\product\models.py:69 .\product\models.py:301
+msgid "Sort index"
+msgstr "Сортировочный индекс"
+
+#: .\product\models.py:84 .\product\models.py:274
+msgid "category"
+msgstr "категория"
+
+#: .\product\models.py:85
+msgid "categories"
+msgstr "категории"
+
+#: .\product\models.py:123 .\product\models.py:190
+msgid "unit"
+msgstr "единица измерения"
+
+#: .\product\models.py:129
+msgid "unit description"
+msgstr "описание единицы измерения"
+
+#: .\product\models.py:150
+msgid "attribute's category"
+msgstr "категория атрибута"
+
+#: .\product\models.py:163
+msgid "Rank of importance. 100 - most important"
+msgstr "Индекс важности атрибута, 100 - самый важный"
+
+#: .\product\models.py:170 .\product\models.py:171
+msgid "attribute"
+msgstr "атрибут"
+
+#: .\product\models.py:200
+msgid "product's attribute"
+msgstr "товар атрибута"
+
+#: .\product\models.py:207
+msgid "product item"
+msgstr "товар"
+
+#: .\product\models.py:216
+msgid "attribute value"
+msgstr "значение атрибута"
+
+#: .\product\models.py:217
+msgid "attribute values"
+msgstr "значения атрибута"
+
+#: .\product\models.py:234
+msgid "Product title"
+msgstr "Имя продукта"
+
+#: .\product\models.py:240 .\product\models.py:659 .\product\models.py:664
+msgid "Product image"
+msgstr "Изображение продукта"
+
+#: .\product\models.py:246
+msgid "short description"
+msgstr "короткое описание"
+
+#: .\product\models.py:247
+msgid "Product short description"
+msgstr "Короткое описание товара"
+
+#: .\product\models.py:252
+msgid "long description"
+msgstr "полное описание"
+
+#: .\product\models.py:253
+msgid "Product long description"
+msgstr "полное описание товара"
+
+#: .\product\models.py:258
+msgid "is limited"
+msgstr "ограниченная серия"
+
+#: .\product\models.py:259
+msgid "There is limited edition"
+msgstr "Это ограниченная серия"
+
+#: .\product\models.py:275
+msgid "Product category"
+msgstr "Категория товара"
+
+#: .\product\models.py:279
+msgid "created at"
+msgstr "создано в"
+
+#: .\product\models.py:280
+msgid "Date the product was added"
+msgstr "Дата добавления товара"
+
+#: .\product\models.py:293
+msgid "rating"
+msgstr "рейтинг"
+
+#: .\product\models.py:294
+msgid "Product rating"
+msgstr "Рейтинг товара"
+
+#: .\product\models.py:308 .\product\models.py:309 .\product\models.py:532
+#: .\user\models.py:102 .\user\models.py:148
+msgid "product"
+msgstr "товар"
+
+#: .\product\models.py:533
+msgid "Daily's offer product"
+msgstr "Ежедневное предложение"
+
+#: .\product\models.py:538
+msgid "promo text"
+msgstr "промо текст"
+
+#: .\product\models.py:539
+msgid "Daily offer promo content"
+msgstr "Ежедневное предложение наполнение"
+
+#: .\product\models.py:547
+msgid "daily offer"
+msgstr "ежедневное предложение"
+
+#: .\product\models.py:548
+msgid "daily offers"
+msgstr "ежедневные предложение"
+
+#: .\product\models.py:579
+msgid "shop id"
+msgstr "идентификатор магазина"
+
+#: .\product\models.py:581
+msgid "Stock's shop"
+msgstr "Магазин склада"
+
+#: .\product\models.py:586
+msgid "product id"
+msgstr "идентификатор товара"
+
+#: .\product\models.py:588
+msgid "Stock's product"
+msgstr "Товар склада"
+
+#: .\product\models.py:597
+msgid "stocks"
+msgstr "склады"
+
+#: .\product\models.py:615
+msgid "User product view product"
+msgstr ""
+
+#: .\product\models.py:617
+msgid "Preview's product"
+msgstr ""
+
+#: .\product\models.py:622
+msgid "User product view user"
+msgstr ""
+
+#: .\product\models.py:624
+msgid "Preview's user"
+msgstr ""
+
+#: .\product\models.py:629
+msgid "review content"
+msgstr ""
+
+#: .\product\models.py:638
+msgid "user product view"
+msgstr ""
+
+#: .\product\models.py:639
+msgid "user product views"
+msgstr ""
+
+#: .\product\models.py:658
+msgid "product of image"
+msgstr "товар изображения"
+
+#: .\product\models.py:671
+msgid "product image"
+msgstr "изображение товара"
+
+#: .\product\models.py:672
+msgid "product images"
+msgstr "изображения товара"
+
+#: .\product\templates\product\catalog.html:22
+#: .\product\templates\product\catalog.html:30 .\templates\header.html:113
+msgid "Catalog"
+msgstr "Каталог"
+
+#: .\shop\apps.py:7
+msgid "Shop"
+msgstr "Магазин"
+
+#: .\shop\apps.py:8 .\shop\templates\shop\shop_detail.html:29
+#: .\shop\templates\shop\shop_list.html:21
+#: .\shop\templates\shop\shop_list.html:29 .\templates\header.html:117
+msgid "Shops"
+msgstr "Магазины"
+
+#: .\shop\models\shop.py:10 .\user\forms.py:53 .\user\models.py:51
+msgid "phone"
+msgstr "телефон"
+
+#: .\shop\models\shop.py:11
+msgid "mobile"
+msgstr "мобильный телефон"
+
+#: .\shop\models\shop.py:12
+msgid "general email"
+msgstr "общая эл. почта"
+
+#: .\shop\models\shop.py:13
+msgid "editor email"
+msgstr "редактор эл. почты"
+
+#: .\shop\models\shop.py:14
+msgid "shipping and returns policy"
+msgstr "политика по доставке и возврату товара"
+
+#: .\shop\models\shop.py:15
+msgid "refund policy"
+msgstr "политика возврата денежных средств"
+
+#: .\shop\models\shop.py:16
+msgid "support policy"
+msgstr "Политика поддержки"
+
+#: .\shop\models\shop.py:17
+msgid "quality policy"
+msgstr "политика по гарантии"
+
+#: .\shop\models\shop.py:23
+msgid "shop"
+msgstr "магазин"
+
+#: .\shop\models\shop.py:24
+msgid "shops"
+msgstr "магазины"
+
+#: .\shop\templates\shop\shop_detail.html:25
+#: .\shop\templates\shop\shop_list.html:25 .\templates\header.html:107
+msgid "Home"
+msgstr "Домой"
+
+#: .\shop\templates\shop\shop_detail.html:50
+msgid "Shipping & Returns"
+msgstr "Доставка и возврат"
+
+#: .\shop\templates\shop\shop_detail.html:65
+msgid "Money Back"
+msgstr "Возврат средств"
+
+#: .\shop\templates\shop\shop_detail.html:80
+msgid "Support Policy"
+msgstr "Политика поддержки"
+
+#: .\shop\templates\shop\shop_detail.html:95
+msgid "Quality Guarantee"
+msgstr "Гарантия качества"
+
+#: .\shop\templates\shop\shop_detail.html:109
+msgid "Phone:"
+msgstr "Телефон:"
+
+#: .\shop\templates\shop\shop_detail.html:112
+msgid "Mobile:"
+msgstr "Мобильный телефон:"
+
+#: .\shop\templates\shop\shop_detail.html:137
+msgid "General:"
+msgstr "Общие:"
+
+#: .\shop\templates\shop\shop_detail.html:138
+msgid "Editor:"
+msgstr "Редактор:"
+
+#: .\shop\templates\shop\shop_detail.html:145 .\templates\header.html:29
+msgid "Follow Us"
+msgstr "Подписаться"
+
+#: .\shop\templates\shop\shop_detail.html:201
+msgid "Popular Products"
+msgstr "Популярные товары"
+
+#: .\shop\templates\shop\shop_list.html:49
+msgid "There is no shops yet"
+msgstr "Магазины пока отсутствуют"
+
+#: .\shop\templates\shop\shop_list.html:51
+msgid "But soon there will be"
+msgstr "Но скоро там будет"
+
+#: .\templates\header.html:25
+msgid "Free Delivery"
+msgstr "Бесплатная доставка"
+
+#: .\templates\header.html:78 .\user\templates\user\account.html:26
+#: .\user\templates\user\account.html:29
+msgid "Account"
+msgstr "Аккаунт"
+
+#: .\templates\header.html:81
+msgid "Log Out"
+msgstr "Выход"
+
+#: .\templates\header.html:84
+msgid "Login"
+msgstr "Авторизация"
+
+#: .\templates\header.html:87
+msgid "Register"
+msgstr "Регистрация"
+
+#: .\templates\header.html:123
+msgid "Discounts"
+msgstr "Скидки"
+
+#: .\templates\header.html:127
+msgid "Contacts"
+msgstr "Контакты"
+
+#: .\templates\header.html:169
+msgid "All Departments"
+msgstr "Все категории"
+
+#: .\templates\header.html:221
+msgid "What are you looking for ..."
+msgstr "То что вы хотите найти  ..."
+
+#: .\templates\header.html:223
+msgid "Search"
+msgstr "Поиск"
+
+#: .\user\admin.py:22
+msgid "Personal information"
+msgstr "Личная информаиця"
+
+#: .\user\admin.py:25
+msgid "Permission"
+msgstr "Разрешение"
+
+#: .\user\admin.py:28
+msgid "Important dates"
+msgstr "Важные даты"
+
+#: .\user\apps.py:8 .\user\models.py:71
+msgid "users"
+msgstr "пользователи"
+
+#: .\user\forms.py:34 .\user\forms.py:84 .\user\forms.py:123
+msgid "A user with such a phone is already registered"
+msgstr "Пользователь с таким номером телефона уже зарегистрирован"
+
+#: .\user\forms.py:47 .\user\models.py:58
+msgid "avatar"
+msgstr "аватар"
+
+#: .\user\forms.py:50
+msgid "full name"
+msgstr "полное имя"
+
+#: .\user\forms.py:56
+msgid "e-mail"
+msgstr "эл. почта"
+
+#: .\user\forms.py:58
+msgid "password"
+msgstr "пароль"
+
+#: .\user\forms.py:61
+msgid "Here you can change the password"
+msgstr "Место для изменения пароля"
+
+#: .\user\forms.py:64
+msgid "confirm password"
+msgstr "подтвердите пароль"
+
+#: .\user\forms.py:67
+msgid "Enter the password again"
+msgstr "Введите пароль повторно"
+
+#: .\user\forms.py:91
+msgid "Required to fill in"
+msgstr "Обязательное для ввода"
+
+#: .\user\forms.py:93
+msgid "Passwords don't match"
+msgstr "Не верный пароль"
+
+#: .\user\models.py:23
+msgid "Invalid format"
+msgstr "Не верный формат"
+
+#: .\user\models.py:28
+msgid "email"
+msgstr "эл. почта"
+
+#: .\user\models.py:30
+msgid "User email"
+msgstr "Почта пользователя"
+
+#: .\user\models.py:33
+msgid "first name"
+msgstr "имя"
+
+#: .\user\models.py:36
+msgid "User first name"
+msgstr "Имя пользователя"
+
+#: .\user\models.py:39
+msgid "middle name"
+msgstr "отчество"
+
+#: .\user\models.py:42
+msgid "User middle name"
+msgstr "Отчество пользователя"
+
+#: .\user\models.py:45
+msgid "last name"
+msgstr "фамилия"
+
+#: .\user\models.py:48
+msgid "User last name"
+msgstr "Фамилия пользователя"
+
+#: .\user\models.py:53
+msgid "User phone"
+msgstr "Телефон пользователя"
+
+#: .\user\models.py:59
+msgid "User avatar"
+msgstr "Аватар пользователя"
+
+#: .\user\models.py:97
+msgid "The user who viewed the product"
+msgstr "Пользователь смотрящий товары"
+
+#: .\user\models.py:104
+msgid "Viewed product"
+msgstr "Просмотренный товар"
+
+#: .\user\models.py:108
+msgid "datetime of addition"
+msgstr "дата и время добавления"
+
+#: .\user\models.py:109
+msgid "Viewing datetime"
+msgstr "дата и время просмотра"
+
+#: .\user\models.py:113
+msgid "viewed product"
+msgstr "просмотренный товар"
+
+#: .\user\models.py:114
+msgid "viewed products"
+msgstr "просмотренные товар"
+
+#: .\user\models.py:143
+msgid "A user who compares products"
+msgstr "Пользователь сравнивающий товары"
+
+#: .\user\models.py:150
+msgid "Product for comparison"
+msgstr "Товар на сравнение"
+
+#: .\user\models.py:154
+msgid "Compare"
+msgstr "Сравнения"
+
+#: .\user\models.py:155
+msgid "Compares"
+msgstr "Сравнения"
+
+#: .\user\templates\user\account.html:51
+msgid "Edit Profile"
+msgstr "Изменить профиль"
+
+#: .\user\templates\user\account.html:68
+#, fuzzy
+#| msgid "Order city"
+msgid "Order history"
+msgstr "История заказа"
+
+#: .\user\templates\user\account.html:73
+#, fuzzy
+#| msgid "Order delivery"
+msgid "Type of delivery:"
+msgstr "Доставка заказа"
+
+#: .\user\templates\user\account.html:77
+#, fuzzy
+#| msgid "payment"
+msgid "Payment:"
+msgstr "Оплата:"
+
+#: .\user\templates\user\account.html:81
+msgid "Total cost:"
+msgstr "Общая стоимость:"
+
+#: .\user\templates\user\account.html:85
+msgid "Status:"
+msgstr "Статус:"
+
+#: .\user\templates\user\account.html:90
+msgid "Payment failed:"
+msgstr "Ошибка оплаты:"
+
+#: .\user\templates\user\account.html:97
+msgid "You don't have any orders"
+msgstr "У вас еще нет заказов"
+
+#: .\user\templates\user\account.html:106
+msgid "Viewing history"
+msgstr "История просмотра товаров"
+
+#: .\user\templates\user\account.html:137
+msgid "Go to the full list"
+msgstr "Полный лист"
+
+#: .\user\views.py:71
+msgid "Image file too large ( > 2mb )"
+msgstr "Размер файла слишком большой (больше 2 мб)"
