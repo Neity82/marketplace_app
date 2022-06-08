@@ -3,44 +3,59 @@ from django.forms import BaseInlineFormSet
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-# from modeltranslation.admin import TranslationAdmin
+from modeltranslation.admin import TranslationAdmin
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
 from product import models
 
 
+class TranslationAdminMedia:
+    class Media:
+        js = (
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
+            'modeltranslation/js/tabbed_translation_fields.js',
+        )
+        css = {
+            'screen': ('modeltranslation/css/tabbed_translation_fields.css',),
+        }
+
+
 @admin.register(models.Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
     )
     list_display_links = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
     )
     search_fields = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
     )
     fields = ('title',)
 
 
 @admin.register(models.Attribute)
-class AttributeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'category', 'type', 'help_text', 'rank',)
-    list_display_links = ('id', 'title',)
-    search_fields = ('id', 'title', 'category', 'help_text',)
+class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
+    list_display = ('id', 'title_en', 'title_ru', 'category', 'type', 'help_text', 'rank',)
+    list_display_links = ('id', 'title_en', 'title_ru', )
+    search_fields = ('id', 'title_en', 'title_ru', 'category', 'help_text',)
     fields = ('title', 'type', 'category', 'help_text', 'rank',)
-    list_filter = ('category', 'title', 'rank')
+    list_filter = ('category', 'title_en', 'title_ru', 'rank')
 
 
 @admin.register(models.Unit)
-class UnitAdmin(admin.ModelAdmin):
-    list_display = ('unit', 'unit_description',)
-    list_display_links = ('unit', 'unit_description',)
-    search_fields = ('unit', 'unit_description',)
-    fields = ('unit', 'unit_description',)
+class UnitAdmin(TranslationAdmin, TranslationAdminMedia):
+    list_display = ('title_en', 'title_ru', 'unit_description',)
+    list_display_links = ('title_en', 'title_ru', 'unit_description',)
+    search_fields = ('title_en', 'title_ru', 'unit_description',)
+    fields = ('title', 'unit_description',)
 
 
 class ChildInlineFormSet(BaseInlineFormSet):
@@ -67,15 +82,24 @@ class AttributeValueAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Category)
-class CategoryAdmin(SuperModelAdmin):
-    list_display = ('id', 'display_icon', 'title', 'parent', 'sort_index')
+class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
+    list_display = (
+        'id',
+        'display_icon',
+        'title_en',
+        'title_ru',
+        'parent',
+        'sort_index',
+    )
     list_display_links = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
     )
     search_fields = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
         'parent',
     )
     fields = ('title', 'parent', 'icon', 'sort_index')
@@ -88,12 +112,13 @@ class CategoryAdmin(SuperModelAdmin):
 
 
 @admin.register(models.Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
         'image_display',
-        'short_description',
+        'short_description_en',
         'is_limited',
         'tags_display',
         'category',
@@ -102,11 +127,13 @@ class ProductAdmin(admin.ModelAdmin):
     )
     list_display_links = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
     )
     search_fields = (
         'id',
-        'title',
+        'title_en',
+        'title_ru',
     )
     fields = (
         'title',
