@@ -7,6 +7,7 @@ ALLOWED_HOSTS = ["*"]
 DEBUG = env.get_value('DEBUG')
 SECRET_KEY = env.get_value('SECRET_KEY')
 
+
 DATABASES = {
     'default': {
         'ENGINE': env.get_value('DB_ENGINE'),

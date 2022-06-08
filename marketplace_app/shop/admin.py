@@ -24,7 +24,7 @@ class ShopAdmin(TranslationAdmin, TranslationAdminMedia):
 
     @staticmethod
     def display_image(obj):
-        return mark_safe(f'<img src="{obj.image.url}"  height="50" />')
+        return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
 
 # class StockEntityInline(admin.TabularInline):
