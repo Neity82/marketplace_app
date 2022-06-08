@@ -139,6 +139,10 @@ class Unit(models.Model):
         null=False,
     )
 
+    class Meta:
+        verbose_name = _('unit')
+        verbose_name_plural = _('units')
+
     def __str__(self) -> str:
         return getattr(self, "title")
 

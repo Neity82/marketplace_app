@@ -1,7 +1,8 @@
+{% load i18n %}
 <div class="Section-column">
   <div class="Section-columnSection">
     <header class="Section-header">
-      <strong class="Section-title">Navigation
+      <strong class="Section-title">{% trans "Navigation" %}
       </strong>
     </header>
     <div class="Section-columnContent">
@@ -9,19 +10,19 @@
         <ul class="menu menu_vt">
           
           <li class="menu-item {% if page_active == 'account_active' %} menu-item_ACTIVE {% endif %}">
-            <a class="menu-link" href="{% url 'user:user_account' request.user.id %}">Account</a>
+            <a class="menu-link" href="{% url 'user:user_account' request.user.id %}">{% trans "Account" %}</a>
           </li>
           
           <li class="menu-item {% if page_active == 'profile_active' %} menu-item_ACTIVE {% endif %}">
-            <a class="menu-link" href="{% url 'user:user_profile' request.user.id %}">Profile</a>
+            <a class="menu-link" href="{% url 'user:user_profile' request.user.id %}">{% trans "Profile" %}</a>
           </li>
           
           <li class="menu-item {% if page_active == 'historyorder_active' %} menu-item_ACTIVE {% endif %}">
-            <a class="menu-link" href="{% url 'user:user_orders_list' request.user.id %}">Order history</a>
+            <a class="menu-link" href="{% url 'user:user_orders_list' request.user.id %}">{% trans "Order history" %}</a>
           </li>
 
           <li class="menu-item {% if page_active == 'historyview_active' %} menu-item_ACTIVE {% endif %}">
-            <a class="menu-link" href="{% url 'user:user_views' request.user.id %}">Viewing history</a>
+            <a class="menu-link" href="{% url 'user:user_views' request.user.id %}">{% trans "Viewing history" %}</a>
           </li>
 
         </ul>

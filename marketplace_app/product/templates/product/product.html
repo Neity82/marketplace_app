@@ -129,7 +129,7 @@
               <header class="Section-header">
                 <h3 class="Section-title">
                   {% if not comments %}
-                    No reviews
+                    {% trans "No reviews" %}
                   {% endif %}
                 </h3>
               </header>
@@ -209,9 +209,9 @@
               <div class="table">
                 <table>
                   <tr>
-                    <th>Attribute
+                    <th>{% trans "Attribute" %}
                     </th>
-                    <th>Value
+                    <th>{% trans "Value" %}
                     </th>
                   </tr>
                   {% for attribute in attributes %}
