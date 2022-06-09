@@ -1,9 +1,6 @@
-from django import forms
 from django.contrib import admin
-from super_inlines.admin import SuperModelAdmin
-
+from .forms import SEOItemForm
 from .models import Banner, SEOItem, Settings
-from .utils import get_urls
 
 from modeltranslation.admin import TranslationAdmin
 
@@ -31,23 +28,6 @@ class SettingsAdmin(admin.ModelAdmin):
     """Класс решистрации в админке модели Settings
     """
     list_display = ('__str__', 'value')
-
-
-def get_choices():
-    return [(item, item) for item in get_urls()]
-
-
-class SEOItemForm(forms.ModelForm):
-    """Форма редактирования модели SEO
-    """
-
-    def __init__(self, *args, **kwargs):
-        super(SEOItemForm, self).__init__(*args, **kwargs)
-        self.fields['path_name'].widget = forms.Select(choices=get_choices())
-
-    class Meta:
-        model = SEOItem
-        fields = '__all__'
 
 
 @admin.register(SEOItem)
