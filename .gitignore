@@ -137,3 +137,5 @@ dmypy.json
 
 .vscode/
 .media/
+
+marketplace_app/marketplace_app/dev_settings
