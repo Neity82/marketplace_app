@@ -979,7 +979,7 @@ msgstr "Каталог"
 #: .\product\templates\product\catalog.html:54
 #: .\product\templates\product\catalog.html:128
 msgid "Filter"
-msgstr "Фильтер"
+msgstr "Фильтр"
 
 #: .\product\templates\product\catalog.html:63
 #: .\user\templates\user\compare.html:228
