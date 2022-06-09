@@ -5,6 +5,7 @@ from .models import Shop
 @register(Shop)
 class ShopTranslationOptions(TranslationOptions):
     fields = (
+        'name',
         'description',
         'address',
         'shipping_policy',

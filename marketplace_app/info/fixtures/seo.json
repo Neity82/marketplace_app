@@ -1,142 +1,198 @@
 [
-    {
-        "model": "info.seoitem",
-        "pk": 1,
-        "fields": {
-            "path_name": "product:home",
-            "meta_title": "Main page",
-            "meta_description": "Main page of e-shop Megano",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 2,
-        "fields": {
-            "path_name": "product:list",
-            "meta_title": "Catalog",
-            "meta_description": "Catalog of products e-shop Megano",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 3,
-        "fields": {
-            "path_name": "user:user_account",
-            "meta_title": "User account",
-            "meta_description": "User account detail page",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 4,
-        "fields": {
-            "path_name": "user:compare_list",
-            "meta_title": "Compare",
-            "meta_description": "Page of campare products",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 5,
-        "fields": {
-            "path_name": "user:login",
-            "meta_title": "Login",
-            "meta_description": "Login page",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 6,
-        "fields": {
-            "path_name": "user:logout",
-            "meta_title": "Logout",
-            "meta_description": "Logout endpoint",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 7,
-        "fields": {
-            "path_name": "user:signup",
-            "meta_title": "Sign up",
-            "meta_description": "Sign up page",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 8,
-        "fields": {
-            "path_name": "shop:list",
-            "meta_title": "List of shops",
-            "meta_description": "List of shops in e-shop Megano",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 9,
-        "fields": {
-            "path_name": "shop:detail",
-            "meta_title": "Page of shop:",
-            "meta_description": "",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 10,
-        "fields": {
-            "path_name": "order:cart",
-            "meta_title": "Cart",
-            "meta_description": "Cart with products page",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 11,
-        "fields": {
-            "path_name": "order:order_detail",
-            "meta_title": "Order detail",
-            "meta_description": "Order detail page",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 12,
-        "fields": {
-            "path_name": "order:order",
-            "meta_title": "Order",
-            "meta_description": "Order page",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 13,
-        "fields": {
-            "path_name": "product:detail",
-            "meta_title": "Page of product:",
-            "meta_description": "",
-            "title": ""
-        }
-    },
-    {
-        "model": "info.seoitem",
-        "pk": 14,
-        "fields": {
-            "path_name": "discount:list",
-            "meta_title": "Sales list",
-            "meta_description": "This page for list of sales",
-            "title": ""
-        }
+  {
+    "model": "info.seoitem",
+    "pk": 1,
+    "fields": {
+      "path_name": "product:home",
+      "meta_title": "Main page",
+      "meta_title_en": "Main page",
+      "meta_title_ru": "Главная страница",
+      "meta_description": "Main page of e-shop Megano",
+      "meta_description_en": "Main page of e-shop Megano",
+      "meta_description_ru": "Главная страница E-Shop Megano",
+      "title": ""
     }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 2,
+    "fields": {
+      "path_name": "product:list",
+      "meta_title": "Catalog",
+      "meta_title_en": "Catalog",
+      "meta_title_ru": "Каталог",
+      "meta_description": "Catalog of products e-shop Megano",
+      "meta_description_en": "Catalog of products e-shop Megano",
+      "meta_description_ru": "Каталог продуктов E-Shop Megano",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 3,
+    "fields": {
+      "path_name": "user:user_account",
+      "meta_title": "User account",
+      "meta_title_en": "User account",
+      "meta_title_ru": "Учетная запись пользователя",
+      "meta_description": "User account detail page",
+      "meta_description_en": "User account detail page",
+      "meta_description_ru": "Страница сведения об учетной записи пользователя",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 4,
+    "fields": {
+      "path_name": "user:compare_list",
+      "meta_title": "Compare",
+      "meta_title_en": "Compare",
+      "meta_title_ru": "Сравнивать",
+      "meta_description": "Page of compare products",
+      "meta_description_en": "Page of compare products",
+      "meta_description_ru": "Страница сравнения продуктов",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 5,
+    "fields": {
+      "path_name": "user:login",
+      "meta_title": "Login",
+      "meta_title_en": "Login",
+      "meta_title_ru": "Авторизоваться",
+      "meta_description": "Login page",
+      "meta_description_en": "Login page",
+      "meta_description_ru": "Страница авторизации",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 6,
+    "fields": {
+      "path_name": "user:logout",
+      "meta_title": "Logout",
+      "meta_title_en": "Logout",
+      "meta_title_ru": "Выйти",
+      "meta_description": "Logout endpoint",
+      "meta_description_en": "Logout endpoint",
+      "meta_description_ru": "Выходная конечная точка",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 7,
+    "fields": {
+      "path_name": "user:signup",
+      "meta_title": "Sign up",
+      "meta_title_en": "Sign up",
+      "meta_title_ru": "Подписаться",
+      "meta_description": "Sign up page",
+      "meta_description_en": "Sign up page",
+      "meta_description_ru": "Зарегистрируйтесь",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 8,
+    "fields": {
+      "path_name": "shop:list",
+      "meta_title": "List of shops",
+      "meta_title_en": "List of shops",
+      "meta_title_ru": "Список магазинов",
+      "meta_description": "List of shops in e-shop Megano",
+      "meta_description_en": "List of shops in e-shop Megano",
+      "meta_description_ru": "Список магазинов в E-Shop Megano",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 9,
+    "fields": {
+      "path_name": "shop:detail",
+      "meta_title": "Page of shop:",
+      "meta_title_en": "Page of shop:",
+      "meta_title_ru": "Страница магазина:",
+      "meta_description": "",
+      "meta_description_en": "",
+      "meta_description_ru": "Подробная страница магазина ",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 10,
+    "fields": {
+      "path_name": "order:cart",
+      "meta_title": "Cart",
+      "meta_title_en": "Cart",
+      "meta_title_ru": "Корзина",
+      "meta_description": "Cart with products page",
+      "meta_description_en": "Cart with products page",
+      "meta_description_ru": "Телега с продуктами страница",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 11,
+    "fields": {
+      "path_name": "order:order_detail",
+      "meta_title": "Order detail",
+      "meta_title_en": "Order detail",
+      "meta_title_ru": "Заказать детали",
+      "meta_description": "Order detail page",
+      "meta_description_en": "Order detail page",
+      "meta_description_ru": "Закажите подробную страницу",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 12,
+    "fields": {
+      "path_name": "order:order",
+      "meta_title": "Order",
+      "meta_title_en": "Order",
+      "meta_title_ru": "Заказ",
+      "meta_description": "Order page",
+      "meta_description_en": "Order page",
+      "meta_description_ru": "Страница заказа",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 13,
+    "fields": {
+      "path_name": "product:detail",
+      "meta_title": "Page of product:",
+      "meta_title_en": "Page of product:",
+      "meta_title_ru": "Страница продукта:",
+      "meta_description": "",
+      "meta_description_en": "",
+      "meta_description_ru": "Подробная страница товара ",
+      "title": ""
+    }
+  },
+  {
+    "model": "info.seoitem",
+    "pk": 14,
+    "fields": {
+      "path_name": "discount:list",
+      "meta_title": "Sales list",
+      "meta_title_en": "Sales list",
+      "meta_title_ru": "Список продаж",
+      "meta_description": "This page for list of sales",
+      "meta_description_en": "This page for list of sales",
+      "meta_description_ru": "Эта страница для списка продаж",
+      "title": ""
+    }
+  }
 ]
