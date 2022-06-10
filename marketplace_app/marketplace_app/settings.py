@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
     # 'modeltranslation',
+    'payments.apps.PaymentsConfig',
 ]
 
 MIDDLEWARE = [
