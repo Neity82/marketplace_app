@@ -27,6 +27,10 @@ class Payment(models.Model):
         related_name="payment",
         verbose_name=_("order"),
     )
+    card = models.CharField(
+        _("card number"),
+        max_length=8,
+    )
     status = models.CharField(
         _("status"),
         max_length=150,
