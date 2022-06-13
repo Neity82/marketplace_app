@@ -145,6 +145,15 @@ class OrderDetail(generic.DetailView):
     template_name = 'order/oneorder.html'
     context_object_name = 'order'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+
+        if (not obj.user_id == self.request.user and not
+                self.request.user.is_superuser):
+            raise Http404
+
+        return obj
+
 
 def order(request, *args, **kwargs):
     return render(request, 'order/order.html', {})
