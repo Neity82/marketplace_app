@@ -10,10 +10,10 @@ class Payment(models.Model):
     """Модель платежа"""
 
     class Status(models.TextChoices):
-        CANCELED = "canceled", _("Canceled")
-        ERROR = "error", _("Error")
-        SUCCESS = "success", _("Success")
         PROCESSING = "processing", _("Processing")
+        CANCELED = "canceled", _("Canceled")
+        SUCCESS = "success", _("Success")
+        ERROR = "error", _("Error")
 
     uuid = models.UUIDField(
         _("id"),
@@ -26,15 +26,17 @@ class Payment(models.Model):
         on_delete=models.PROTECT,
         related_name="payment",
         verbose_name=_("order"),
+        unique=True,
     )
     card = models.CharField(
         _("card number"),
-        max_length=8,
+        max_length=9,
     )
     status = models.CharField(
         _("status"),
         max_length=150,
         choices=Status.choices,
+        default=Status.PROCESSING.value,
     )
     message = models.CharField(
         _("message"),
