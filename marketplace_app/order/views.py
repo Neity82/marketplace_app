@@ -2,14 +2,18 @@ import json
 import random
 import typing
 
+from django import views
 from django.core.handlers.wsgi import WSGIRequest
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 from django.views import generic
+from django.views.generic import CreateView
 
 from order.mixins import CartMixin
 from order.models import Order, Cart
 from order.utils import WRONG_REQUEST
+from payments.models import Payment
+from payments.forms import PaymentForm
 
 
 class CartView(CartMixin):
@@ -146,9 +150,28 @@ def order(request, *args, **kwargs):
     return render(request, 'order/order.html', {})
 
 
-def payment(request, *args, **kwargs):
-    return render(request, 'order/payment.html', {})
+class PaymentView(views.View):
+    """Представление платежа"""
+    CREATE_TEMPLATE = "payments/payment_form.html"
+    PROCESS_TEMPLATE = "payments/progress.html"
+    FORM = PaymentForm()
+    REVERSE_URL = "order:payment_create"
 
+    def get(self, request, pk):
+        if Payment.objects.select_related(
+                "order"
+        ).filter(
+            order__pk=pk
+        ).exists():
+            return render(request, self.PROCESS_TEMPLATE)
+        order = Order.objects.only("payment_type").filter(pk=pk).first()
+        payment_type = True if order.payment_type == "account" else False
+        return render(request, self.CREATE_TEMPLATE, context={"form": self.FORM,
+                                                              "payment_type": payment_type})
 
-def paymentsomeone(request, *args, **kwargs):
-    return render(request, 'order/paymentsomeone.html', {})
+    def post(self, request, pk):
+        Payment.objects.create(
+            order=Order.objects.filter(pk=pk).first(),
+            card=request.POST["card"],
+        )
+        return self.get(request, pk)
