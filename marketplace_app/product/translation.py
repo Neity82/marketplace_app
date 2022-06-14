@@ -1,9 +1,27 @@
-# from modeltranslation.translator import translator, TranslationOptions
-# from .models import Category
+from modeltranslation.translator import register, TranslationOptions
+from .models import Category, Tag, Unit, Attribute, Product
 
 
-# class CategoryTranslationOptions(TranslationOptions):
-    # fields = ('title',)
+@register(Category)
+class CategoryTranslationOptions(TranslationOptions):
+    fields = ('title',)
 
 
-# translator.register(Category, CategoryTranslationOptions)
+@register(Tag)
+class TagTranslationOptions(TranslationOptions):
+    fields = ('title',)
+
+
+@register(Unit)
+class UnitTranslationOptions(TranslationOptions):
+    fields = ('title',)
+
+
+@register(Attribute)
+class AttributeTranslationOptions(TranslationOptions):
+    fields = ('title',)
+
+
+@register(Product)
+class ProductTranslationOptions(TranslationOptions):
+    fields = ('title', 'short_description', 'long_description', )

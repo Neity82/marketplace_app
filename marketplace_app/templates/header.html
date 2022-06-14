@@ -5,6 +5,19 @@
 
 {% get_categories as categories %}
 
+<div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog mt-5">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog mt-5" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+
 <div class="ControlPanel">
   <div class="wrap">
     <div class="row ControlPanel-row">
@@ -49,7 +62,19 @@
       </div>
       <nav class="row-block">
         <div class="row ControlPanel-rowSplit">
-          <div class="row-block">
+          <div class="row-block">{% get_current_language as LANGUAGE_CODE %}
+            <form class="ControlPanel-title" action="{% url 'set_language' %}" method="post">
+              {% if LANGUAGE_CODE == 'ru' %}
+                  {% csrf_token %}
+                  <input name="language" type="hidden" value="en-us" />
+                  <button class="ControlPanel-title link padding-0" type="submit" value="en-us">en</button>
+              {% else %}
+                  {% csrf_token %}
+                  <input name="language" type="hidden" value="ru" />
+                  <button class="ControlPanel-title link padding-0" type="submit" value="ru">ру</button>
+              {% endif %}
+            </form>
+            <span class="ControlPanel-title"> / </span>
             {% if user.is_authenticated %}
             <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">{% translate "Account" %}
             </a>
@@ -84,7 +109,7 @@
             </a>
           </li>
           <li class="menu-item">
-            <span class="menu-label menu-label_danger">New
+            <span class="menu-label menu-label_danger">{% translate "New" %}
             </span>
             <a class="menu-link" href="{% url 'product:list' %}">{% translate "Catalog" %}
             </a>
@@ -94,7 +119,7 @@
             </a>
           </li>
           <li class="menu-item">
-            <span class="menu-label menu-label_success">Hot
+            <span class="menu-label menu-label_success">{% translate "Hot" %}
             </span>
             <a class="menu-link" href="{% url 'discount:list' %}">{% translate "Discounts" %}
             </a>

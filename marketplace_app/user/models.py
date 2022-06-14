@@ -7,7 +7,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.utils import timezone
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from product.models import Product, Category
 from user.manager import CustomUserManager

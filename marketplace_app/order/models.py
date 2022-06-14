@@ -4,7 +4,7 @@ from typing import List
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
 from django.db.models import Sum, F, Q
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from order import utils
 from product.models import Stock

@@ -1,16 +1,26 @@
-from django import forms
 from django.contrib import admin
-
+from .forms import SEOItemForm
 from .models import Banner, SEOItem, Settings
-from .utils import get_urls
+
+from modeltranslation.admin import TranslationAdmin
 
 
 @admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
-    """Класс решистрации в админке модели Banner
+class BannerAdmin(TranslationAdmin):
+    """Класс регистрации в админке модели Banner
     """
-    list_display = ['id', 'title', 'is_active']
-    list_editable = ['is_active']
+    list_display = ('id', 'title', 'is_active')
+    list_editable = ('is_active',)
+
+    class Media:
+        js = (
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
+            'modeltranslation/js/tabbed_translation_fields.js',
+        )
+        css = {
+            'screen': ('modeltranslation/css/tabbed_translation_fields.css',),
+        }
 
 
 @admin.register(Settings)
@@ -20,26 +30,8 @@ class SettingsAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'value')
 
 
-def get_choices() -> list:
-    return [(item, item) for item in get_urls()]
-
-
-class SEOItemForm(forms.ModelForm):
-    """Форма редактирования моледи SEO
-    """
-    def __init__(self, *args, **kwargs):
-        super(SEOItemForm, self).__init__(*args, **kwargs)
-        self.fields['path_name'].widget = forms.Select(choices=get_choices())
-
-    class Meta:
-        model = SEOItem
-        fields = '__all__'
-
-
 @admin.register(SEOItem)
-class SeoItemAdmin(admin.ModelAdmin):
-    """Класс решистрации в админке модели SEO
-    """
+class SeoItemAdmin(TranslationAdmin):
     form = SEOItemForm
     list_display = (
         'id',
@@ -51,3 +43,13 @@ class SeoItemAdmin(admin.ModelAdmin):
         'meta_title',
         'meta_description',
     )
+
+    class Media:
+        js = (
+            'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
+            'modeltranslation/js/tabbed_translation_fields.js',
+        )
+        css = {
+            'screen': ('modeltranslation/css/tabbed_translation_fields.css',),
+        }
