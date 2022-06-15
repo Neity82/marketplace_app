@@ -353,14 +353,14 @@ class Order(models.Model):
         help_text=_('Order delivery')
     )
 
-    class Payment(models.TextChoices):
+    class PaymentType(models.TextChoices):
         CARD = 'card', _('Card')
         SOME_ACCOUNTS = 'account', _('Some accounts')
 
-    payment = models.CharField(
+    payment_type = models.CharField(
         max_length=50,
-        choices=Payment.choices,
-        verbose_name=_('payment'),
+        choices=PaymentType.choices,
+        verbose_name=_('payment type'),
         help_text=_('Order payment')
     )
     city = models.CharField(
