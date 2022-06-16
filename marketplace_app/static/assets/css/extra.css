@@ -3062,6 +3062,11 @@ a.Cart-title {
   position: absolute;
   background: 0 0 no-repeat;
 }
+
+.empty-cart {
+  text-align: center !important;
+}
+
 .Middle-footer {
   margin-top: 19px;
 }
@@ -3135,6 +3140,11 @@ a.Cart-title {
 .Order-navigate .menu-item_ACTIVE ~ .menu-item .menu-link {
   color: #424650;
 }
+
+.Order-navigate .menu-item_COMPLETE {
+  color: #3cb878;
+}
+
 .Order-navigate .menu-item_ACTIVE ~ .menu-item .menu-link:hover {
   cursor: default;
 }

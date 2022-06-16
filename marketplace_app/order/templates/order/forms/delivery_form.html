@@ -1,0 +1,84 @@
+{% extends "order/order.html" %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+{% block head %}
+  {% include "head.html" %}
+{% endblock %}
+
+{% block header %}
+  <header class="Header">
+    {% include "_modal.html" %}
+    {% include "header.html" %}
+  </header>
+{% endblock %}
+
+
+{% block order_form %}
+  <p>Step {{ wizard.steps.step1 }} of 4</p>
+  <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
+
+  <form action="" method="post">{% csrf_token %}
+    <div class="row">
+      <div class="row-block">
+        <div class="form-group">
+          {% for delivery in form.base_fields.delivery_type.choices %}
+            {% if delivery.0 == form.data.delivery_type %}
+              <div>
+                <label class="toggle">
+                  <input type="radio" name="delivery_form-delivery_type" value="{{ delivery.0 }}" checked="checked"/>
+                  <span class="toggle-box">
+                  </span>
+                  <span class="toggle-text">{{ delivery.1 }}
+                  </span>
+                </label>
+              </div>
+            {% else %}
+              <div>
+                <label class="toggle">
+                  <input type="radio" name="delivery_form-delivery_type" value="{{ delivery.0 }}"/>
+                  <span class="toggle-box">
+                  </span>
+                  <span class="toggle-text">{{ delivery.1 }}
+                  </span>
+                </label>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="form-group">
+           {{ form.errors.city }}
+          <label class="form-label" for="city">{% trans 'City' %}
+          </label>
+          <input class="form-input" id="city" name="delivery_form-city" type="text" value="{{ form.data.city }}" required="required"/>
+        </div>
+        <div class="form-group">
+           {{ form.errors.address }}
+          <label class="form-label" for="address">{% trans 'Address' %}
+          </label>
+          <input class="form-textarea" name="delivery_form-address" id="address" type="text" value="{{ form.data.address }}" required="required">
+        </div>
+      </div>
+    </div>
+    <div class="Order-footer">
+
+      {% if wizard.steps.prev %}
+        <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+      {% endif %}
+
+     {% if wizard.steps.next %}
+        <button class="btn btn_success" name="wizard_goto_step" type="submit" value="{{ wizard.steps.next }}">{% trans "next step" %}</button>
+      {% endif %}
+    </div>
+
+  </form>
+  {% endblock %}
+
+{% block footer %}
+  {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+  {% include "scripts.html" %}
+{% endblock %}

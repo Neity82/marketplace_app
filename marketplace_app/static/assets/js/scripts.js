@@ -25,8 +25,13 @@
         });
     }
 
+    function eraseCookie(name) {
+        document.cookie = `${name}=` + '' + '=; Max-Age=0'
+    }
+
     // set device var
-    let device = getCookie('device')
+    let deviceCookie = 'device'
+    let device = getCookie(deviceCookie)
     if (device === null || device === undefined) {
         device = uuidv4()
     }
@@ -192,45 +197,48 @@
                             validate = $this.data('validate'),
                             message = '',
                             error = false;
-                        validate = validate.split(' ');
-                        validate.forEach(function(v) {
-                            switch (v) {
-                                case 'require':
-                                    if (!$this.val()) {
-                                        message = 'Это поле обязательно для заполнения. ';
-                                        error = true;
-                                    }
-                                    break;
-                                case 'pay':
-                                    var val = $this.val().replace(' ', '');
-                                    val = val + '';
-                                    if (parseFloat(val) % 2 !== 0) {
-                                        message += 'Номер должен быть четным. ';
-                                        error = true;
-                                    }
-                                    break;
+                        if (validate) {
+                            validate = validate.split(' ');
+                            validate.forEach(function(v) {
+                                switch (v) {
+                                    case 'require':
+                                        if (!$this.val()) {
+                                            message = 'Это поле обязательно для заполнения. ';
+                                            error = true;
+                                        }
+                                        break;
+                                    case 'pay':
+                                        var val = $this.val().replace(' ', '');
+                                        val = val + '';
+                                        if (parseFloat(val) % 2 !== 0) {
+                                            message += 'Номер должен быть четным. ';
+                                            error = true;
+                                        }
+                                        break;
 
-                            }
-                            if (error) {
-                                if ($this.hasClass('form-input')) {
-                                    $this.addClass('form-input_error');
                                 }
-                                if ($this.hasClass('form-textarea')) {
-                                    $this.addClass('form-textarea_error');
+                                if (error) {
+                                    if ($this.hasClass('form-input')) {
+                                        $this.addClass('form-input_error');
+                                    }
+                                    if ($this.hasClass('form-textarea')) {
+                                        $this.addClass('form-textarea_error');
+                                    }
+                                    if (!$this.next('.form-error').length) {
+                                        $this.after('<div class="form-error">' + message + '</div>');
+                                    }
+                                    $this.data('errorinput', true);
+                                } else {
+                                    $this.next('.form-error').remove();
+                                    $this.removeClass('form-input_error');
+                                    $this.removeClass('form-textarea_error');
+                                    $this.data('errorinput', false);
                                 }
-                                if (!$this.next('.form-error').length) {
-                                    $this.after('<div class="form-error">' + message + '</div>');
-                                }
-                                $this.data('errorinput', true);
-                            } else {
-                                $this.next('.form-error').remove();
-                                $this.removeClass('form-input_error');
-                                $this.removeClass('form-textarea_error');
-                                $this.data('errorinput', false);
-                            }
-                            message = '';
+                                message = '';
 
-                        });
+                            });
+                        }
+
                     });
                     $form.on('submit', function(e) {
                         var $this = $(this),
@@ -692,42 +700,78 @@
             };
         };
         Amount().init();
-        var Order = function() {
-            var $next = $('.Order-next'),
-                $blocks = $('.Order-block'),
-                $navigate = $('.Order-navigate');
-            return {
-                init: function() {
-                    $next.add($navigate.find('.menu-link')).on('click', function(e) {
-                        e.preventDefault();
-                        var $this = $(this),
-                            href = $this.attr('href'),
-                            error = false,
-                            $validate = $this.closest($blocks).find('[data-validate]')
-                        if ($(e.target).is('.Order-next')) {
-                            $validate.each(function() {
-                                var $this = $(this);
-                                $this.trigger('blur');
-                                if ($this.data('errorinput')) {
-                                    error = true
-                                }
-                            });
-                        }
-                        if (error === false && ($(e.target).is('.Order-next') ||
-                                $blocks.index($(href)) < $blocks.index($blocks.filter('.Order-block_OPEN')))) {
-                            $blocks.removeClass('Order-block_OPEN');
-                            $(href).addClass('Order-block_OPEN');
-                            $navigate.find('.menu-item').removeClass('menu-item_ACTIVE');
-                            $navigate.find('.menu-link[href="' + href + '"]')
-                                .closest('.menu-item')
-                                .addClass('menu-item_ACTIVE');
-                        }
 
-                    });
+        $(document).on('click', '.order-navigate-link', function(event) {
+            event.preventDefault();
+            const target = event.currentTarget
+            let data = {}
+            let stepName = target.href.substring(target.href.lastIndexOf('/') + 1)
+            if (stepName !== "#") {
+                data['wizard_goto_step'] = stepName
+                $.ajax({
+                    type: 'POST',
+                    beforeSend: setCSRFHeader,
+                    url: target.baseURI,
+                    data: data,
+                    success: function(response) {
+                        document.body.innerHTML = response
+                    },
+                    error: function(xhr, errmsg, err) {}
+                });
+            }
+
+        })
+
+        $(document).ready(function() {
+            let orderStep = document.getElementById('order-step')
+            let navigateMenu = document.querySelector('.Order-navigate')
+            let navigateItem = document.querySelectorAll('.menu-item')
+            navigateItem.forEach((item) => {
+                if (navigateMenu) {
+                    if (navigateMenu.contains(item)) {
+                        if (parseInt(item.value) === parseInt(orderStep.value)) {
+                            item.classList.add('menu-item_ACTIVE')
+                            item.classList.remove('menu-item_COMPLETE')
+                        } else if (parseInt(item.value) < parseInt(orderStep.value)) {
+                            item.classList.remove('menu-item_ACTIVE')
+                            item.classList.add('menu-item_COMPLETE')
+                        } else {
+                            item.classList.remove('menu-item_ACTIVE')
+                            item.classList.remove('menu-item_COMPLETE')
+                            let anchor = item.getElementsByTagName('a')[0]
+                            anchor.setAttribute('href', '#')
+                        }
+                    }
                 }
-            };
-        };
-        Order().init();
+            })
+        })
+
+
+        $(document).on('click', '.order-prev-step', function(event) {
+            event.preventDefault();
+            const target = event.currentTarget;
+            let prevStepButtons = document.querySelectorAll('.order-prev-step')
+            if (target) {
+                prevStepButtons.forEach((item) => {
+                    if (item === target) {
+                        let data = {}
+                        data[item.name] = item.value
+                        $.ajax({
+                            type: 'POST',
+                            beforeSend: setCSRFHeader,
+                            url: target.href,
+                            data: data,
+                            success: function(response) {
+                                document.body.innerHTML = response
+                            },
+                            error: function(xhr, errmsg, err) {}
+                        });
+                    }
+                })
+            }
+
+        })
+
         var Account = function() {
             return {
                 init: function() {}
@@ -898,12 +942,12 @@
     });
 
     // call pop with text
-    function popUp(message, type){
+    function popUp(message, type) {
         return alertify.notify(message, type)
     }
 
     // set value for input
-    function setInputValue(item, value){
+    function setInputValue(item, value) {
         let idValue = 'inputValueToChange'
         item.setAttribute('id', idValue)
         document.getElementById(idValue).value = value
@@ -950,7 +994,7 @@
     });
 
     // get quantity block text
-    function getQuantityFromParentNode(element){
+    function getQuantityFromParentNode(element) {
         let quantityClass = '.Cart-quantity'
         let parentClass = '.Cart-product'
         let quantityText = null
@@ -966,7 +1010,7 @@
 
     // get click-events on all objects with Amount-add class
     // increment product's count in cart
-    $(document).on('click', '.Amount-add', function(event){
+    $(document).on('click', '.Amount-add', function(event) {
         let addButtons = document.querySelectorAll('.Amount-add');
         event.preventDefault();
         const target = event.currentTarget;
@@ -986,11 +1030,11 @@
                                 'quantity': quantity,
                                 'method': 'post'
                             },
-                            success: function (response) {
+                            success: function(response) {
                                 popUp(response.message, response.type);
                                 setTimeout(() => window.location.reload(), 1000);
                             },
-                            error: function (xhr, errmsg, err) {
+                            error: function(xhr, errmsg, err) {
                                 popUp(err, 'error');
                             }
                         });
@@ -1007,7 +1051,7 @@
 
     // get click-events on all objects with Cart-delete class
     // delete product from cart
-    $(document).on('click', '.Cart-delete', function(event){
+    $(document).on('click', '.Cart-delete', function(event) {
         let deleteButtons = document.querySelectorAll('.Cart-delete');
         event.preventDefault();
         const target = event.currentTarget;
@@ -1036,7 +1080,7 @@
 
     // get click-events on all objects with Cart-block_seller class
     // change product's shop
-    $(document).on('click', '.Cart-block_seller', function(event){
+    $(document).on('click', '.Cart-block_seller', function(event) {
         let shopOptions = document.querySelectorAll('.Cart-block_seller');
         event.preventDefault();
         const target = event.currentTarget;
@@ -1088,7 +1132,7 @@
                         },
                         success: function(response) {
                             document.getElementById("Compare-amount").innerHTML = response.head_count,
-                            popUp(response.message, response.type);
+                                popUp(response.message, response.type);
                         },
                         error: function(xhr, errmsg, err) {
                             popUp(err, 'error');
@@ -1102,7 +1146,7 @@
 
     // get click-events on all objects with Compare-delete class
     // delete product from compare
-    $(document).on('click', '#delete-from-compare', function(event){
+    $(document).on('click', '#delete-from-compare', function(event) {
         let deleteButtons = document.querySelectorAll('.Compare-delete');
         event.preventDefault();
         const target = event.currentTarget;
@@ -1111,7 +1155,7 @@
                 if (target === item) {
                     $.ajax({
                         type: 'DELETE',
-                        beforeSend: function (xhr) {
+                        beforeSend: function(xhr) {
                             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
                             xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
                         },
@@ -1163,4 +1207,30 @@
             });
         }
     });
+
+
+    // clean cookie after logout
+    $(document).on('click', '#logout-btn', function(event) {
+        const target = event.currentTarget;
+        eraseCookie(deviceCookie)
+        $.ajax({
+            type: 'POST',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+            },
+            url: target.href,
+            data: {
+                'method': 'post'
+            },
+            success: function(response) {
+                document.body.innerHTML = response
+            },
+            error: function(xhr, errmsg, err) {
+                popUp(err, 'error');
+            }
+        });
+
+    })
+
 })(jQuery);

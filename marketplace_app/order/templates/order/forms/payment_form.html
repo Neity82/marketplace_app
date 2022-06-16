@@ -1,0 +1,57 @@
+{% extends "order/order.html" %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+
+{% block head %}
+  {% include "head.html" %}
+{% endblock %}
+
+{% block header %}
+  <header class="Header">
+    {% include "_modal.html" %}
+    {% include "header.html" %}
+  </header>
+{% endblock %}
+
+
+{% block order_form %}
+ <p>Step {{ wizard.steps.step1 }} of 4</p>
+ <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
+
+  <form action="" method="post">{% csrf_token %}
+    <div class="row">
+        <div class="row-block">
+            <select name="payment_form-payment_type" id="id_payment_form-payment_type">
+                {% for option in form.base_fields.payment_type.choices %}
+                    {% if form.data.payment_type == option.0 %}
+                        <option selected="selected" value="{{ option.0 }}">{{ option.0 }}</option>
+                    {% else %}
+                        <option value="{{ option.0 }}">{{ option.0 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+
+        </div>
+    </div>
+
+
+
+    <div class="Order-footer">
+        {% if wizard.steps.prev %}
+            <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+        {% endif %}
+
+        <button class="btn btn_success" name="wizard_goto_step" type="submit" value="confirm">{% trans "next step" %}</button>
+    </div>
+  </form>
+{% endblock %}
+
+{% block footer %}
+  {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+  {% include "scripts.html" %}
+{% endblock %}
