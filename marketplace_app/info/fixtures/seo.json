@@ -143,7 +143,7 @@
     "model": "info.seoitem",
     "pk": 11,
     "fields": {
-      "path_name": "order:order_detail",
+      "path_name": "order:order-detail",
       "meta_title": "Order detail",
       "meta_title_en": "Order detail",
       "meta_title_ru": "Заказать детали",

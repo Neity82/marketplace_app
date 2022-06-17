@@ -28,7 +28,7 @@
       <a id="add-to-view" class="Card-btn product" href="{% url 'user:user_views' product.id %}">
         <img src="{% static 'assets/img/icons/card/bookmark.svg' %}" alt="bookmark.svg"/>
       </a>
-      <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add_to_cart' product.id %}">
+      <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add-to-cart' product.id %}">
         <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
       </a>
       <a id="add-to-compare" class="Card-btn product" href="{% url 'user:compare_list' product.id %}">
