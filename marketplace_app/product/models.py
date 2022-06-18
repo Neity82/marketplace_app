@@ -126,9 +126,9 @@ class Category(models.Model):
 
 class Unit(models.Model):
     """Модель: Единица измерения для атрибута"""
-    unit = models.CharField(
+    title = models.CharField(
         max_length=16,
-        verbose_name=_('unit'),
+        verbose_name=_('unit title'),
         blank=False,
         null=False,
     )
@@ -139,8 +139,12 @@ class Unit(models.Model):
         null=False,
     )
 
+    class Meta:
+        verbose_name = _('unit')
+        verbose_name_plural = _('units')
+
     def __str__(self) -> str:
-        return getattr(self, "unit")
+        return getattr(self, "title")
 
 
 class Attribute(models.Model):

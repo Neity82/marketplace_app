@@ -22,13 +22,20 @@
         $("#login_btn").modalForm({
                 formURL: "{% url 'user:login' %}"
               });
-
     });
+
+
+    $(document).ready(function() {
+        $("#order-login-btn").modalForm({
+                formURL: `{% url 'user:login' %}?next=${window.location.pathname}`
+              });
+    });
+
+
     $(document).ready(function() {
         $("#sign_up_btn").modalForm({
                 formURL: "{% url 'user:signup' %}"
               });
-
     });
 </script>
 

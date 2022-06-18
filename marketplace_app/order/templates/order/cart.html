@@ -35,7 +35,9 @@
   </div>
   <div class="Section">
     <div class="wrap">
-      <form class="form Cart" action="#" method="post">
+      {% if cart|length %}
+        <form class="form Cart" action="#" method="post">
+
         {% for cart_entity in cart.cart_entity.all %}
           <div class="Cart-product">
 
@@ -89,34 +91,38 @@
               </div>
             </div>
             <div class="Cart-block Cart-block_delete">
-              <a class="Cart-delete" href="{% url 'order:remove_from_cart' cart_entity.stock.id %}">
+              <a class="Cart-delete" href="{% url 'order:remove-from-cart' cart_entity.stock.id %}">
                 <img src="{% static 'assets/img/icons/card/delete.svg' %}" alt="delete.svg"/>
               </a>
             </div>
           </div>
         </div>
         {% endfor %}
+
         <div class="Cart-total">
           <div class="Cart-block Cart-block_total">
-            <strong class="Cart-title">Итого:
+            <strong class="Cart-title">Итого:</strong>
             {% if total.discount_sum %}
-              </strong><span class="Cart-price">{{ total.discount_sum }}$</span><span class="Cart-price_old">{{ total.old_sum }}$</span>
+
+            <span class="Cart-price">{{ total.discount_sum }}$</span><span class="Cart-price_old">{{ total.old_sum }}$</span>
             {% else %}
-              </strong><span class="Cart-price">{{ total.old_sum }}$</span>
+
+            <span class="Cart-price">{{ total.old_sum }}$</span>
             {% endif %}
           </div>
-          {% if request.user.is_anonymous %}
-            <div class="Cart-block"><a class="btn btn_success btn_lg disabled" href="order.html">Оформить заказ</a>
-          {% else %}
-            <div class="Cart-block"><a class="btn btn_success btn_lg" href="order.html">Оформить заказ</a>
-            </div>
-          {% endif %}
 
-          </div>
+        <div class="Cart-block"><a class="btn btn_success btn_lg" href="{%  url 'order:order' %}">{% trans 'Checkout' %}</a>
+        </div>
+
         </div>
 
       </form>
+      {% else %}
+      <div class="empty-cart">
+        {% trans 'Cart is empty :(' %}
+      </div>
 
+      {% endif %}
     </div>
   </div>
 </div>

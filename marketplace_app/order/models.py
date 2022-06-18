@@ -4,7 +4,7 @@ from typing import List
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
 from django.db.models import Sum, F, Q
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from order import utils
 from product.models import Stock
@@ -13,38 +13,39 @@ from user.models import CustomUser
 
 class CartEntity(models.Model):
     """Модель элемента корзины"""
+
     stock = models.ForeignKey(
         Stock,
         on_delete=models.CASCADE,
-        related_name='cart_entity',
-        help_text=_('Cart stock'),
-        blank=True
+        related_name="cart_entity",
+        help_text=_("Cart stock"),
+        blank=True,
     )
 
     cart = models.ForeignKey(
-        'Cart',
+        "Cart",
         on_delete=models.CASCADE,
-        related_name='cart_entity',
-        verbose_name=_('cart\'s ')
+        related_name="cart_entity",
+        verbose_name=_("cart's "),
     )
     quantity = models.PositiveSmallIntegerField(
         default=1,
     )
 
     class Meta:
-        verbose_name = _('cart entity')
-        verbose_name_plural = _('cart entities')
-        ordering = ['-id']
+        verbose_name = _("cart entity")
+        verbose_name_plural = _("cart entities")
+        ordering = ["-id"]
 
     objects = models.Manager()
 
     def __str__(self) -> str:
         user = (
-            getattr(self.cart, 'user_id')
-            if getattr(self.cart, 'user_id')
-            else 'Unknown'
+            getattr(self.cart, "user_id")
+            if getattr(self.cart, "user_id")
+            else "Unknown"
         )
-        return f'Cart entity: user {user}, stock: {self.stock}'
+        return f"Cart entity: user {user}, stock: {self.stock}"
 
 
 class Cart(models.Model):
@@ -53,47 +54,42 @@ class Cart(models.Model):
     user_id = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        related_name='cart_user',
-        help_text=_('Cart user'),
+        verbose_name=_("user"),
+        related_name="cart_user",
+        help_text=_("Cart user"),
         blank=True,
-        null=True
+        null=True,
     )
 
     device = models.CharField(
-        max_length=255,
-        help_text=_('cookie device value'),
-        blank=True,
-        null=True
+        max_length=255, help_text=_("cookie device value"), blank=True, null=True
     )
 
     class Meta:
-        verbose_name = _('cart')
-        verbose_name_plural = _('carts')
-        ordering = ['-id']
+        verbose_name = _("cart")
+        verbose_name_plural = _("carts")
+        ordering = ["-id"]
 
     objects = models.Manager()
 
     def __str__(self) -> str:
-        user = (
-            getattr(self, 'user_id')
-            if getattr(self, 'user_id')
-            else 'Unknown'
-        )
-        return f'Cart: user: {user}, device: {self.device}'
+        user = getattr(self, "user_id") if getattr(self, "user_id") else "Unknown"
+        return f"Cart: user: {user}, device: {self.device}"
 
     @property
     def count(self) -> int:
-        field = 'quantity'
-        aggregation_field = 'quantity__sum'
-        count = CartEntity.objects.filter(cart=self)\
-                                  .aggregate(Sum(field))\
-                                  .get(aggregation_field)
-        return count
+        field = "quantity"
+        aggregation_field = "quantity__sum"
+        count = (
+            CartEntity.objects.filter(cart=self)
+            .aggregate(Sum(field))
+            .get(aggregation_field)
+        )
+        return count if count else 0
 
     @property
     def pk(self) -> int:
-        return getattr(self, 'id')
+        return getattr(self, "id")
 
     def __len__(self) -> int:
         return self.count
@@ -108,10 +104,12 @@ class Cart(models.Model):
         result = True
         message = utils.ADD_TO_CART_SUCCESS
 
-        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
+        cart_entity = CartEntity.objects.filter(
+            cart_id=self.pk, stock_id=stock_id
+        ).first()
         if cart_entity:
             if cart_entity.stock.count > cart_entity.quantity:
-                cart_entity.quantity = F('quantity') + 1
+                cart_entity.quantity = F("quantity") + 1
                 cart_entity.save()
         else:
             CartEntity.objects.create(cart_id=self.pk, stock_id=stock_id)
@@ -127,7 +125,9 @@ class Cart(models.Model):
         result = False
         message = utils.REMOVE_FROM_CART_FAIL
 
-        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
+        cart_entity = CartEntity.objects.filter(
+            cart_id=self.pk, stock_id=stock_id
+        ).first()
         if cart_entity:
             cart_entity.delete()
             result = True
@@ -145,12 +145,14 @@ class Cart(models.Model):
         message = utils.UPDATE_CART_QUANTITY_FAIL
 
         stock = Stock.objects.filter(id=stock_id).first()
-        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock.pk).first()
+        cart_entity = CartEntity.objects.filter(
+            cart_id=self.pk, stock_id=stock.pk
+        ).first()
         if cart_entity:
             if quantity:
                 if stock.count >= quantity:
                     cart_entity.quantity = quantity
-                    cart_entity.save(update_fields=['quantity'])
+                    cart_entity.save(update_fields=["quantity"])
                     result = True
                     message = utils.UPDATE_CART_QUANTITY_SUCCESS % quantity
             else:
@@ -165,57 +167,77 @@ class Cart(models.Model):
         :param shop_id: id продавца (магазина)
         :return: успех операции, сообщение
         """
+
         result = False
         message = utils.CHANGE_SHOP_CART_FAIL
 
         with transaction.atomic():
             stock = Stock.objects.filter(id=stock_id).first()
             cart_entity = (
-                CartEntity.objects.filter(
-                    cart_id=self.pk, stock=stock
-                    ).select_related("stock", "stock__shop").first()
+                CartEntity.objects.filter(cart_id=self.pk, stock=stock)
+                .select_related("stock", "stock__shop")
+                .first()
             )
 
             if cart_entity:
-                new_stock = Stock.objects.filter(
-                    product_id=stock.product.id, shop_id=shop_id
-                ).select_related('shop').first()
+                new_stock = (
+                    Stock.objects.filter(product_id=stock.product.id, shop_id=shop_id)
+                    .select_related("shop")
+                    .first()
+                )
 
-                if new_stock.id not in Stock.objects.filter(
+                if stock.shop.pk != new_stock.shop.pk:
+
+                    if new_stock.id not in Stock.objects.filter(
                         cart_entity__cart_id=self.pk
-                ).values_list('id', flat=True):
-                    if cart_entity.quantity >= new_stock.count:
-                        new_quantity = new_stock.count
-                        message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
-                    else:
-                        new_quantity = cart_entity.quantity
-                        message = utils.CHANGE_SHOP_CART_SUCCESS
-                        result = True
+                    ).values_list("id", flat=True):
 
-                    cart_entity.stock = new_stock
-                    cart_entity.quantity = new_quantity
-                    cart_entity.save(update_fields=['stock', 'quantity', ])
-                else:
-                    new_cart_entity = CartEntity.objects.filter(
-                        stock_id=new_stock.id, cart_id=self.pk
-                    ).first()
-                    if stock.shop.pk != new_stock.shop.pk:
-                        if new_cart_entity.stock.count >= (new_cart_entity.quantity + cart_entity.quantity):
-                            new_cart_entity.quantity = F('quantity') + cart_entity.quantity
+                        if cart_entity.quantity >= new_stock.count:
+                            new_quantity = new_stock.count
+                            message = (
+                                utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
+                            )
+                        else:
+                            new_quantity = cart_entity.quantity
+                            message = utils.CHANGE_SHOP_CART_SUCCESS
+                            result = True
+
+                        cart_entity.stock = new_stock
+                        cart_entity.quantity = new_quantity
+                        cart_entity.save(
+                            update_fields=[
+                                "stock",
+                                "quantity",
+                            ]
+                        )
+                    else:
+                        new_cart_entity = CartEntity.objects.filter(
+                            stock_id=new_stock.id, cart_id=self.pk
+                        ).first()
+
+                        if new_cart_entity.stock.count >= (
+                            new_cart_entity.quantity + cart_entity.quantity
+                        ):
+                            new_cart_entity.quantity = (
+                                F("quantity") + cart_entity.quantity
+                            )
                             message = utils.CHANGE_SHOP_CART_SUCCESS
                             result = True
                         else:
                             new_cart_entity.quantity = (
-                                    F('quantity')
-                                    - new_cart_entity.quantity
-                                    + new_cart_entity.stock.count
+                                F("quantity")
+                                - new_cart_entity.quantity
+                                + new_cart_entity.stock.count
                             )
-                            message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % cart_entity.quantity
+                            message = (
+                                utils.UPDATE_CART_QUANTITY_LIMIT_MERGED
+                                % cart_entity.quantity
+                            )
                         new_cart_entity.save()
                         cart_entity.delete()
-                    else:
-                        result = True
-                        message = utils.CHANGE_SHOP_CART_SAME_SHOP
+                else:
+                    result = True
+                    message = utils.CHANGE_SHOP_CART_SAME_SHOP
         return result, message
 
     def _get_sums(self) -> (Decimal, Decimal):
@@ -230,8 +252,8 @@ class Cart(models.Model):
             old_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
             if cart_entity.stock.product.discount:
                 discount_sum += (
-                        Decimal(cart_entity.stock.product.discount.get("price"))
-                        * cart_entity.quantity
+                    Decimal(cart_entity.stock.product.discount.get("price"))
+                    * cart_entity.quantity
                 )
             else:
                 discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
@@ -244,14 +266,16 @@ class Cart(models.Model):
     def total_sums(self) -> dict:
         """Возвращаем суммы без скидок и со скидкой в виде словаря"""
         old_sum, discount_sum = self._get_sums()
-        total = {'old_sum': old_sum, }
+        total = {
+            "old_sum": old_sum,
+        }
         if old_sum != discount_sum:
             total.update(discount_sum=discount_sum)
         return total
 
     @staticmethod
-    def update_instance(instance: 'Cart', **kwargs) -> None:
-        """Обновляем объект корзины из kwargs """
+    def update_instance(instance: "Cart", **kwargs) -> None:
+        """Обновляем объект корзины из kwargs"""
         updated = False
         for attr, value in kwargs.items():
             if getattr(instance, attr) != value:
@@ -261,23 +285,29 @@ class Cart(models.Model):
             instance.save()
 
     @classmethod
-    def _get_anonymous_cart(cls, device: str) -> 'Cart':
+    def _get_anonymous_cart(cls, device: str) -> "Cart":
         """
         Получаем или создаем корзину для анонимного пользователя
         :return: объект Корзины
         """
-        instance = Cart.objects.filter(device=device).first()
-        if instance is None:
-            instance = Cart.objects.create(device=device)
+        instance = {}
+        if device:
+            instance = Cart.objects.filter(device=device).first()
+            if instance is None:
+                instance = Cart.objects.create(device=device)
         return instance
 
     @classmethod
-    def _get_user_cart(cls, user: CustomUser, device: str) -> 'Cart':
+    def _get_user_cart(cls, user: CustomUser, device: str) -> "Cart":
         """
         Получаем или создаем корзину для авторизованного пользователя
         :return: объект Корзины
         """
-        instance = Cart.objects.filter(Q(user_id=user) | Q(device=device)).first()
+        instance = (
+            Cart.objects.filter(Q(user_id=user) | Q(device=device))
+            .order_by("user_id")
+            .first()
+        )
         if instance is None:
             instance = Cart.objects.create(device=device, user_id=user)
         else:
@@ -285,16 +315,16 @@ class Cart(models.Model):
         return instance
 
     @classmethod
-    def get_cart(cls, request: WSGIRequest) -> 'Cart':
+    def get_cart(cls, request: WSGIRequest) -> "Cart":
         """
         Получаем объект корзины из реквеста пользователя, проверяя cookie
         :param request: django wsgi реквест
         :return: объект Корзины
         """
-        user = getattr(request, 'user', None)
-        device = request.COOKIES.get('device', None)
+        user = getattr(request, "user", None)
+        device = request.COOKIES.get("device", None)
 
-        assert user, 'can\'t get user from request!'
+        assert user, "can't get user from request!"
 
         # assert device, 'no "device", check static!'
 
@@ -304,29 +334,106 @@ class Cart(models.Model):
             instance = cls._get_user_cart(user=user, device=device)
         return instance
 
+    def get_shops(self) -> set:
+        """Получение множества магазинов (продавцов) у корзины"""
+        shops = set()
+        cart_entity_qs = CartEntity.objects.filter(cart_id=self.pk).select_related(
+            "stock", "stock__shop"
+        )
+        for cart_entity in cart_entity_qs:
+            shops.add(cart_entity.stock.shop)
+        return shops
 
-class Delivery(models.Model):
-    """Модель вид доставки"""
+
+class DeliveryType(models.Model):
+    """
+    name - название типа доставки
+    special_price - специальная цена, если сумма корзины больше cart_sum
+    price - обычная цена
+    cart_sum - фиксированная "стоимость" корзины для управления ценой доставки
+    """
 
     name = models.CharField(
-        max_length=50,
-        verbose_name=_('name'),
-        help_text=_('Delivery name')
+        max_length=50, verbose_name=_("name"), help_text=_("Delivery name")
     )
-    price = models.PositiveIntegerField(
+    special_price = models.PositiveIntegerField(
         default=0,
-        verbose_name=_('price'),
-        help_text=_('Delivery price')
+        verbose_name=_("special price"),
+        help_text=_("Delivery special price"),
+    )
+
+    price = models.PositiveIntegerField(
+        default=200, verbose_name=_("price"), help_text=_("Delivery price")
+    )
+
+    cart_sum = models.PositiveIntegerField(
+        default=2000,
+        verbose_name=_("cart price"),
+        help_text=_("Cart sum for special price"),
     )
 
     class Meta:
-        verbose_name = _('delivery')
-        verbose_name_plural = _('deliveries')
+        verbose_name = _("delivery type")
+        verbose_name_plural = _("delivery types")
 
     def __str__(self) -> str:
-        return f'{self.name}'
+        return f"{self.name}"
 
     objects = models.Manager()
+
+
+class Delivery(models.Model):
+    """Модель доставки"""
+
+    base_delivery_id = 1
+    express_delivery_id = 2
+
+    delivery_type = models.ForeignKey(
+        DeliveryType,
+        on_delete=models.CASCADE,
+        verbose_name=_("delivery_type"),
+        related_name="delivery_delivery_type",
+        help_text=_("Delivery type"),
+        null=True,
+    )
+    city = models.CharField(max_length=50, default="")
+    address = models.TextField(default="")
+    price = models.DecimalField(decimal_places=2, max_digits=9, default=200)
+
+    class Meta:
+        verbose_name = _("Delivery item")
+        verbose_name_plural = _("Delivery items")
+
+    objects = models.Manager()
+
+    def __str__(self):
+        return f"{self.city}, {self.address}: {self.delivery_type}"
+
+    @classmethod
+    def get_delivery_data(cls, cart: Cart, delivery_type_pk: int) -> dict:
+        """
+        Получение данных о доставке для корзины:
+            - стоимость доставки
+            - название типа доставки
+        """
+        delivery_type_obj = DeliveryType.objects.filter(id=delivery_type_pk).first()
+        return {
+            "delivery_sum": cls.get_delivery_sum(cart, delivery_type_obj),
+            "delivery_name": delivery_type_obj.name,
+        }
+
+    @classmethod
+    def get_delivery_sum(cls, cart: Cart, delivery_type_obj: DeliveryType) -> Decimal:
+        """Получение стоимости доставки для корзины"""
+        cart_sum = cart.get_min_sum()
+        base_delivery = DeliveryType.objects.filter(id=cls.base_delivery_id).first()
+        delivery_sum = base_delivery.price
+
+        if len(cart.get_shops()) == 1 and cart_sum > base_delivery.cart_sum:
+            delivery_sum = base_delivery.special_price
+        delivery_sum += delivery_type_obj.special_price
+
+        return Decimal(delivery_sum)
 
 
 class Order(models.Model):
@@ -335,89 +442,78 @@ class Order(models.Model):
     user_id = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        related_name='order_info',
-        help_text=_('Order user')
+        verbose_name=_("user"),
+        related_name="order_info",
+        help_text=_("Order user"),
     )
     datetime = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_('order date'),
-        help_text=_('Order date')
+        auto_now_add=True, verbose_name=_("order date"), help_text=_("Order date")
     )
     delivery_id = models.ForeignKey(
         Delivery,
         on_delete=models.SET_NULL,
         null=True,
-        verbose_name=_('delivery'),
-        related_name='order_delivery',
-        help_text=_('Order delivery')
+        verbose_name=_("delivery"),
+        related_name="order_delivery",
+        help_text=_("Order delivery"),
     )
 
-    class Payment(models.TextChoices):
-        CARD = 'card', _('Card')
-        SOME_ACCOUNTS = 'account', _('Some accounts')
+    class PaymentType(models.TextChoices):
+        CARD = "card", _("Card")
+        SOME_ACCOUNTS = "account", _("Some accounts")
 
-    payment = models.CharField(
+    payment_type = models.CharField(
         max_length=50,
-        choices=Payment.choices,
-        verbose_name=_('payment'),
-        help_text=_('Order payment')
-    )
-    city = models.CharField(
-        max_length=50,
-        verbose_name=_('city'),
-        help_text=_('Order city')
-    )
-    address = models.CharField(
-        max_length=250,
-        verbose_name=_('address'),
-        help_text=_('Order address')
+        choices=PaymentType.choices,
+        verbose_name=_("payment type"),
+        help_text=_("Order payment"),
+        default=PaymentType.CARD,
     )
     comment = models.TextField(
-        blank=True,
-        verbose_name=_('comment'),
-        help_text=_('Order comment')
+        blank=True, verbose_name=_("comment"), help_text=_("Order comment")
     )
 
     class State(models.TextChoices):
-        PAID = 'paid', _('Paid')
-        NOT_PAID = 'not paid', _('Not paid')
-        DELIVERY = 'delivered', _('Delivered')
-        RECEIVED = 'received', _('Received')
+        PAID = "paid", _("Paid")
+        NOT_PAID = "not paid", _("Not paid")
+        DELIVERY = "delivered", _("Delivered")
+        RECEIVED = "received", _("Received")
 
     state = models.CharField(
         max_length=50,
         choices=State.choices,
         default=State.NOT_PAID,
-        verbose_name=_('state'),
-        help_text=_('Order state')
+        verbose_name=_("state"),
+        help_text=_("Order state"),
     )
 
     class Error(models.TextChoices):
-        ERROR_1 = 'error1', _('Payment has not been completed, because you are suspected of intolerance')
-        ERROR_2 = 'error2', _('There are not enough funds in your account')
-        ERROR_3 = 'error3', _('Oops... Something went wrong')
+        ERROR_1 = "error1", _(
+            "Payment has not been completed, because you are suspected of intolerance"
+        )
+        ERROR_2 = "error2", _("There are not enough funds in your account")
+        ERROR_3 = "error3", _("Oops... Something went wrong")
 
     error = models.CharField(
         max_length=250,
         choices=Error.choices,
         blank=True,
-        verbose_name=_('error'),
-        help_text=_('Order error')
+        verbose_name=_("error"),
+        help_text=_("Order error"),
     )
 
     class Meta:
-        verbose_name = _('order')
-        verbose_name_plural = _('orders')
-        ordering = ['-id']
+        verbose_name = _("order")
+        verbose_name_plural = _("orders")
+        ordering = ["-id"]
 
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f'Order №{self.pk}'
+        return f"Order №{self.pk}"
 
     @property
-    def get_order_entity(self) -> List['OrderEntity']:
+    def get_order_entity(self) -> List["OrderEntity"]:
         """Метод получения товаров в заказе
 
         :return: Товары в заказе
@@ -426,10 +522,7 @@ class Order(models.Model):
 
         result: List[OrderEntity] = OrderEntity.objects.filter(
             order_id=self
-        ).select_related(
-            'stock_id',
-            'stock_id__product'
-        )
+        ).select_related("stock_id", "stock_id__product")
         return result
 
     @property
@@ -444,12 +537,10 @@ class Order(models.Model):
         sum_order: Decimal = Decimal(0)
         order_entity: List[OrderEntity] = OrderEntity.objects.filter(
             order_id=self.pk
-        ).annotate(
-            sum=F('price') * F('count')
-        )
+        ).annotate(sum=F("price") * F("count"))
         for sum_entity in order_entity:
-            sum_order += sum_entity.sum
-
+            sum_order += getattr(sum_entity, "sum", Decimal(0.0))
+        sum_order += getattr(self.delivery_id, "price", Decimal(0.0))
         return Decimal(round(sum_order, 2))
 
     @property
@@ -465,18 +556,19 @@ class Order(models.Model):
         order_entity: List[OrderEntity] = OrderEntity.objects.filter(
             order_id=self.pk
         ).annotate(
-            discounted_sum=F('discounted_price') * F('count'),
-            sum=F('price') * F('count')
+            discounted_sum=F("discounted_price") * F("count"),
+            sum=F("price") * F("count"),
         )
         for sum_entity in order_entity:
             if sum_entity.discounted_sum is None:
                 discounted_sum_order += sum_entity.sum
             else:
                 discounted_sum_order += sum_entity.discounted_sum
+        discounted_sum_order += getattr(self.delivery_id, "price", Decimal(0.0))
         return Decimal(round(discounted_sum_order, 2))
 
     @classmethod
-    def get_last_order(cls, user: CustomUser) -> 'Order':
+    def get_last_order(cls, user: CustomUser) -> "Order":
         """
         Метод для получения последнего оформленного заказа
 
@@ -487,8 +579,47 @@ class Order(models.Model):
         """
 
         if cls.objects.filter(user_id=user).exists():
-            last_order: Order = Order.objects.filter(user_id=user).latest('datetime')
+            last_order: Order = Order.objects.filter(user_id=user).latest("datetime")
             return last_order
+
+    @classmethod
+    def create_order(
+        cls, cart: Cart, delivery_data: dict, payment_data: dict, user: CustomUser
+    ) -> "Order":
+        """Создание заказа"""
+        with transaction.atomic():
+            delivery_type_pk = delivery_data.pop("delivery_type")
+            delivery_type_obj = DeliveryType.objects.filter(id=delivery_type_pk).first()
+            delivery_price = Delivery.get_delivery_sum(
+                cart=cart, delivery_type_obj=delivery_type_obj
+            )
+            delivery_obj = Delivery.objects.create(
+                delivery_type=delivery_type_obj, price=delivery_price, **delivery_data
+            )
+
+            order = Order.objects.create(
+                user_id=user,
+                delivery_id=delivery_obj,
+                payment_type=payment_data.get("payment_type"),
+            )
+
+            for cart_entity in CartEntity.objects.filter(
+                cart_id=cart.pk
+            ).select_related("stock", "stock__product"):
+                price = Decimal(cart_entity.stock.price)
+                discounted_price = Decimal(
+                    cart_entity.stock.product.discount.get("price")
+                )
+                OrderEntity.objects.create(
+                    stock_id=cart_entity.stock,
+                    order_id=order,
+                    price=price,
+                    discounted_price=discounted_price,
+                    count=cart_entity.quantity,
+                )
+                cart_entity.delete()
+
+        return order
 
 
 class OrderEntity(models.Model):
@@ -497,36 +628,32 @@ class OrderEntity(models.Model):
     stock_id = models.ForeignKey(
         Stock,
         on_delete=models.CASCADE,
-        verbose_name=_('stock'),
-        related_name='order_entity_stock',
-        help_text=_('OrderEntity stock')
+        verbose_name=_("stock"),
+        related_name="order_entity_stock",
+        help_text=_("OrderEntity stock"),
     )
     order_id = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
-        verbose_name=_('order'),
-        related_name='order_entity_order',
-        help_text=_('OrderEntity order')
+        verbose_name=_("order"),
+        related_name="order_entity_order",
+        help_text=_("OrderEntity order"),
     )
     price = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_('price'),
-        help_text=_('OrderEntity price')
+        default=0, verbose_name=_("price"), help_text=_("OrderEntity price")
     )
     discounted_price = models.PositiveIntegerField(
         blank=True,
         null=True,
-        verbose_name=_('discounted price'),
-        help_text=_('OrderEntity discounted price')
+        verbose_name=_("discounted price"),
+        help_text=_("OrderEntity discounted price"),
     )
     count = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_('count'),
-        help_text=_('OrderEntity count')
+        default=0, verbose_name=_("count"), help_text=_("OrderEntity count")
     )
 
     class Meta:
-        verbose_name = _('order entity')
-        verbose_name_plural = _('orders entity')
+        verbose_name = _("order entity")
+        verbose_name_plural = _("orders entity")
 
     objects = models.Manager()

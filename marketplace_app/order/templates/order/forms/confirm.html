@@ -1,0 +1,151 @@
+{% extends "order/order.html" %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+
+{% block head %}
+  {% include "head.html" %}
+{% endblock %}
+
+{% block header %}
+  <header class="Header">
+    {% include "_modal.html" %}
+    {% include "header.html" %}
+  </header>
+{% endblock %}
+
+
+{% block order_form %}
+  <p>Step 4 of 4</p>
+  <input id="order-step" type="hidden"  value="4">
+
+  <form action="" method="post">{% csrf_token %}
+    <div class="Order-infoBlock">
+      <div class="Order-personal">
+        <div class="row">
+          <div class="row-block">
+            <div class="Order-info">
+              <div class="Order-infoType">{% trans 'Full name' %}:
+              </div>
+              <div class="Order-infoContent">{{ user_info_form.full_name }}
+              </div>
+            </div>
+            <div class="Order-info">
+              <div class="Order-infoType">{% trans 'Phone' %}:
+              </div>
+              <div class="Order-infoContent">{{ user_info_form.phone}}
+              </div>
+            </div>
+            <div class="Order-info">
+              <div class="Order-infoType">Email:
+              </div>
+              <div class="Order-infoContent">{{ user_info_form.email }}
+              </div>
+            </div>
+          </div>
+          <div class="row-block">
+            <div class="Order-info Order-info_delivery">
+              <div class="Order-infoType">{% trans 'Delivery type' %}:
+              </div>
+              <div class="Order-infoContent">{{ delivery_name }}
+              </div>
+            </div>
+            <div class="Order-info">
+              <div class="Order-infoType">{% trans 'City' %}:
+              </div>
+              <div class="Order-infoContent">{{ delivery_form.city }}
+              </div>
+            </div>
+            <div class="Order-info">
+              <div class="Order-infoType">{% trans 'Address' %}:
+              </div>
+              <div class="Order-infoContent">{{ delivery_form.address }}
+              </div>
+            </div>
+            <div class="Order-info Order-info_pay">
+              <div class="Order-infoType">{% trans 'Payment' %}:
+              </div>
+              <div class="Order-infoContent">{{ payment_form.payment_type }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Cart Cart_order">
+        {% for cart_entity in cart.cart_entity.all %}
+          <div class="Cart-product">
+          <div class="Cart-block Cart-block_row">
+            <div class="Cart-block Cart-block_pict">
+              <a class="Cart-pict" href="#">
+                <img class="Cart-img" src="{{ cart_entity.stock.product.image.url }}" alt="card.jpg"/>
+              </a>
+            </div>
+            <div class="Cart-block Cart-block_info">
+              <a class="Cart-title" href="#">{{ cart_entity.stock.product.title }}
+              </a>
+              <div class="Cart-desc">{{ cart_entity.stock.product.short_description }}
+              </div>
+            </div>
+
+            <div class="Cart-block Cart-block_price">
+              {% if cart_entity.stock.product.discount.type %}
+                <div class="Cart-price Cart-price_old">{{ cart_entity.stock.price }}$
+                </div>
+
+                <div class="Cart-price">{{ cart_entity.stock.product.discount.price }}$
+                </div>
+              {% else %}
+                <div class="Cart-price">{{ cart_entity.stock.price }}$
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          </div>
+          <div>
+
+          <div>
+              <span class="Cart-block Cart-block_seller">{% trans 'sold by' %}: {{ cart_entity.stock.shop.name }}</span>
+            </div>
+
+            <div>
+              <span class="Cart-block Cart-block_amount">{% trans 'quantity' %}: {{ cart_entity.quantity }} {% trans 'pc.' %}</span>
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+
+      <div class="Cart-total">
+        <div class="Cart-block Cart-block_total">
+          <div>
+            <span class="Cart-block Cart-block_amount">{% trans 'price' %}: {{ cart_sum }}$</span>
+          </div>
+
+          <div>
+            <span class="Cart-block Cart-block_amount">{% trans 'delivery' %}: {{ delivery_sum }}$</span>
+          </div>
+
+          <strong class="Cart-title">{% trans 'Total' %}:
+          </strong>
+          <span class="Cart-price">{{ total_sum }}$</span>
+        </div>
+        <div class="Cart-block">
+
+          <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="payment_form">{% trans "prev step" %}</button>
+          <button class="btn btn_success" name="wizard_goto_step" type="submit" value="done">{% trans "Checkout" %}</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  {% endblock %}
+
+{% block footer %}
+  {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+  {% include "scripts.html" %}
+{% endblock %}

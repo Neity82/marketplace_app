@@ -19,7 +19,7 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">Account</h1>
+        <h1 class="Middle-title">{% trans "Account" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% trans "home" %}</a></li>
           <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans "Account" %}</span></li>
@@ -54,7 +54,7 @@
                   {% if last_order %}
                   <div class="row">
                     <div class="row-block">
-                      <a class="Order-title" href="{% url 'order:order_detail' pk=last_order.pk %}">
+                      <a class="Order-title" href="{% url 'order:order-detail' pk=last_order.pk %}">
                         Заказ&#32;
                         <span class="Order-numberOrder">№{{ last_order.id }}</span>
                         &#32;от&#32;
