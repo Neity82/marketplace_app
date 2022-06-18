@@ -40,7 +40,7 @@
             <div class="Order-personal">
               <div class="row">
                 <div class="row-block">
-                  <a class="Order-title" href="{% url 'order:order_detail' pk=order.pk %}">
+                  <a class="Order-title" href="{% url 'order:order-detail' pk=order.pk %}">
                     {% trans "Orde" %}r&#32;
                     <span class="Order-numberOrder">№{{ order.id }}</span>
                     &#32;{% trans "from" %}&#32;

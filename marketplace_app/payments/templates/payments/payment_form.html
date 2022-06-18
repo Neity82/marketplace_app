@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load i18n %}
+
+{% block head %}
+  {% include "head.html" %}
+{% endblock %}
+
+{% block header %}
+  <header class="Header">
+    {% include "_modal.html" %}
+    {% include "header.html" %}
+  </header>
+{% endblock %}
+
+{% block middle %}
+<div class="Middle Middle_top">
+  <div class="Middle-top">
+    <div class="wrap">
+      <div class="Middle-header">
+        <h1 class="Middle-title">{% translate "Payment" %}
+        </h1>
+        <ul class="breadcrumbs Middle-breadcrumbs">
+          <li class="breadcrumbs-item">
+            <a href="{% url 'product:home' %}">{% translate "Home" %}
+            </a>
+          </li>
+          <li class="breadcrumbs-item breadcrumbs-item_current">
+            <span>{% translate "Payment" %}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="Section">
+    <div class="wrap">
+      <form class="form Payment" method="post">
+        {% csrf_token %}
+        <div class="Payment-card">
+          <div class="form-group">
+            <label class="form-label">{% translate "Card number" %}
+            </label>
+            {{ form.card }}
+            {# <input class="form-input Payment-bill" id="numero1" name="{{ form.card.name }}" type="text" placeholder="9999 9999" data-mask="9999 9999" data-validate="require pay"/>#}
+          </div>
+          {% if payment_type %}
+            <div class="form-group">
+              <a class="btn btn_success Payment-generate" href="#">{% translate "Generate random number" %}
+              </a>
+            </div>
+          {% endif %}
+        </div>
+        <div class="Payment-pay">
+          <input type="submit" class="btn btn_primary" value="{% translate "Pay" %}">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+  {% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+  {% include "scripts.html" %}
+{% endblock %}

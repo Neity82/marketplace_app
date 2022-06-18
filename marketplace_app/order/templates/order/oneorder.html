@@ -66,15 +66,15 @@
                 <div class="row-block">
                   <div class="Order-info Order-info_delivery">
                     <div class="Order-infoType">{% trans "Type of delivery" %}:</div>
-                    <div class="Order-infoContent">{{ order.delivery_id }}</div>
+                    <div class="Order-infoContent">{{ order.delivery_id.delivery_type }}</div>
                   </div>
                   <div class="Order-info">
                     <div class="Order-infoType">{% trans "City" %}:</div>
-                    <div class="Order-infoContent">{{ order.city }}</div>
+                    <div class="Order-infoContent">{{ order.delivery_id.city }}</div>
                   </div>
                   <div class="Order-info">
                     <div class="Order-infoType">{% trans "Address" %}:</div>
-                    <div class="Order-infoContent">{{ order.address }}</div>
+                    <div class="Order-infoContent">{{ order.delivery_id.address }}</div>
                   </div>
                   <div class="Order-info Order-info_pay">
                     <div class="Order-infoType">{% trans "Payment" %}:</div>
@@ -137,6 +137,9 @@
               
               <div class="Cart-total">
                 <div class="Cart-block Cart-block_total">
+                  <div>
+                    <span class="Cart-block Cart-block_amount">{% trans 'delivery' %}: {{ order.delivery_id.price }}$</span>
+                  </div>
                   <strong class="Cart-title">
                     Total:
                     {% with order.discounted_sum_order as discounted_sum_order and order.sum_order as sum_order %}

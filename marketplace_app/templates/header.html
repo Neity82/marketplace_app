@@ -79,13 +79,13 @@
             <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">{% translate "Account" %}
             </a>
             <span class="ControlPanel-title"> / </span>
-            <a class="ControlPanel-title" href="{% url 'user:logout' %}">{% translate "Log Out" %}
+            <a id="logout-btn" class="ControlPanel-title" href="{% url 'user:logout' %}">{% translate "Log Out" %}
             </a>
             {% else %}
-            <button id="login_btn" class="ControlPanel-title link" id='login'>{% translate "Login" %}
+            <button id="login_btn" class="ControlPanel-title link">{% translate "Login" %}
             </button>
             <span class="ControlPanel-title"> / </span>
-            <button id="sign_up_btn" class="ControlPanel-title link" id='sign_up'>{% translate "Register" %}
+            <button id="sign_up_btn" class="ControlPanel-title link">{% translate "Register" %}
             </button>
             {% endif %}
           </div>

@@ -1,0 +1,72 @@
+{% extends "order/order.html" %}
+{% load static %}
+{% load i18n %}
+{% load l10n %}
+
+{% block order_form %}
+  <p>Step {{ wizard.steps.step1 }} of 4</p>
+  <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
+  <form class="form order-form" action="" method="post">{% csrf_token %}
+
+    <div class="row">
+      <div class="row-block">
+
+        <div class="form-group">
+          {{ form.errors.full_name }}
+          <label class="form-label" for="full_name">{% trans 'Full name' %}
+          </label>
+          <input class="form-input" id="full_name" name="user_info_form-full_name" type="text" value="{{ form.data.full_name }}" required="required"/>
+        </div>
+
+        <div class="form-group">
+            {{ form.errors.phone }}
+          <label class="form-label" for="phone">{% trans 'Phone' %}
+          </label>
+          <input class="form-input" id="phone" name="user_info_form-phone" type="text" value="{{ form.data.phone }}" required="required"/>
+        </div>
+
+        <div class="form-group">
+          {{ form.errors.email }}
+          <label class="form-label" for="email">Email
+          </label>
+          <input class="form-input" id="email" name="user_info_form-email" type="text" value="{{ form.data.email }}" data-validate="require" required="required"/>
+        </div>
+      </div>
+      {% if request.user.is_anonymous %}
+        <div class="row-block">
+        <div class="form-group">
+          {{ form.errors.password1 }}
+          <label class="form-label" for="password">{% trans 'Password' %}
+          </label>
+          <input class="form-input" id="password" name="user_info_form-password1" type="password" placeholder="{% trans 'Type your password' %}"/>
+        </div>
+
+        <div class="form-group">
+          {{ form.errors.password2 }}
+          <label class="form-label" for="passwordReply">{% trans 'Confirm password' %}
+          </label>
+          <input class="form-input" id="passwordReply" name="user_info_form-password2" type="password" placeholder="{% trans 'Retype password' %}"/>
+        </div>
+
+        <div class="form-group">
+          <a id="order-login-btn" class="btn btn_muted Order-btnReg">{% trans 'I already have account' %}
+          </a>
+        </div>
+      </div>
+      {% else %}
+        <div class="row-block"></div>
+      {% endif %}
+    </div>
+    <div class="Order-footer">
+
+        {% if wizard.steps.prev %}
+          <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+        {% endif %}
+
+        {% if wizard.steps.next %}
+          <button class="btn btn_success" name="wizard_goto_step" type="submit" value="{{ wizard.steps.next }}">{% trans "next step" %}</button>
+        {% endif %}
+      </div>
+  </form>
+{% endblock %}
+

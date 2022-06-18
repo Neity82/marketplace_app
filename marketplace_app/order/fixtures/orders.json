@@ -1,325 +1,315 @@
 [
-{
-  "model": "order.delivery",
-  "pk": 1,
-  "fields": {
-    "name": "Доставка",
-    "price": 200
+  {
+    "model": "order.deliverytype",
+    "pk": 1,
+    "fields": {
+      "name": "Доставка",
+      "special_price": 0,
+      "price": 200,
+      "cart_sum": 2000
+    }
+  },
+  {
+    "model": "order.deliverytype",
+    "pk": 2,
+    "fields": {
+      "name": "Экспресс-доставка",
+      "special_price": 500,
+      "price": 500,
+      "cart_sum": 2000
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 3,
+    "fields": {
+      "price":  200,
+      "delivery_type": 1,
+      "city": "Москва",
+      "address": "ул.Верещагина, д.52, стр.1"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 4,
+    "fields": {
+      "price":  500,
+      "delivery_type": 2,
+      "city": "Москва",
+      "address": "ул.Верещагина, д.52, стр.1"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 5,
+    "fields": {
+      "price":  200,
+      "delivery_type": 1,
+      "city": "Санкт-Петербург",
+      "address": "пр.Мира, д.41, кор.1,  оф.4"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 6,
+    "fields": {
+      "price":  200,
+      "delivery_type": 1,
+      "city": "Санкт-Петербург",
+      "address": "пр.Мира, д.41, кор.1,  оф.4"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 7,
+    "fields": {
+      "price":  500,
+      "delivery_type": 2,
+      "city": "Санкт-Петербург",
+      "address": "пр.Мира, д.41, кор.1,  оф.4"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 8,
+    "fields": {
+      "delivery_type": 2,
+      "city": "Vologda",
+      "address": "ул.Приморская, д.111, кор.5, оф.15"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 9,
+    "fields": {
+      "price":  0,
+      "delivery_type": 1,
+      "city": "Москва",
+      "address": "ул.Приморская, д.111, кор.5, оф.15"
+    }
+  },
+  {
+    "model": "order.delivery",
+    "pk": 10,
+    "fields": {
+      "price":  500,
+      "delivery_type": 2,
+      "city": "Москва",
+      "address": "ул.Приморская, д.111, кор.5, оф.15"
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 13,
+    "fields": {
+      "user_id": 16,
+      "datetime": "2022-06-13T19:24:49.525Z",
+      "delivery_id": 3,
+      "payment_type": "card",
+      "comment": "no comment",
+      "state": "not paid",
+      "error": ""
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 14,
+    "fields": {
+      "user_id": 17,
+      "datetime": "2022-06-13T19:26:46.476Z",
+      "delivery_id": 4,
+      "payment_type": "account",
+      "comment": "",
+      "state": "paid",
+      "error": "error3"
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 15,
+    "fields": {
+      "user_id": 16,
+      "datetime": "2022-06-13T19:27:18.159Z",
+      "delivery_id": 6,
+      "payment_type": "card",
+      "comment": "",
+      "state": "not paid",
+      "error": "error2"
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 16,
+    "fields": {
+      "user_id": 18,
+      "datetime": "2022-06-13T19:28:02.386Z",
+      "delivery_id": 6,
+      "payment_type": "card",
+      "comment": "",
+      "state": "delivered",
+      "error": ""
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 17,
+    "fields": {
+      "user_id": 20,
+      "datetime": "2022-06-13T19:28:40.213Z",
+      "delivery_id": 7,
+      "payment_type": "account",
+      "comment": "",
+      "state": "received",
+      "error": "error2"
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 18,
+    "fields": {
+      "user_id": 21,
+      "datetime": "2022-06-13T19:29:40.363Z",
+      "delivery_id": 9,
+      "payment_type": "card",
+      "comment": "",
+      "state": "paid",
+      "error": ""
+    }
+  },
+  {
+    "model": "order.order",
+    "pk": 19,
+    "fields": {
+      "user_id": 20,
+      "datetime": "2022-06-13T19:30:13.891Z",
+      "delivery_id": 10,
+      "payment_type": "card",
+      "comment": "",
+      "state": "not paid",
+      "error": "error1"
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 23,
+    "fields": {
+      "stock_id": 1,
+      "order_id": 13,
+      "price": 2000,
+      "discounted_price": null,
+      "count": 1
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 24,
+    "fields": {
+      "stock_id": 6,
+      "order_id": 13,
+      "price": 150,
+      "discounted_price": 100,
+      "count": 2
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 25,
+    "fields": {
+      "stock_id": 3,
+      "order_id": 13,
+      "price": 135,
+      "discounted_price": null,
+      "count": 3
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 26,
+    "fields": {
+      "stock_id": 8,
+      "order_id": 14,
+      "price": 1500,
+      "discounted_price": 1300,
+      "count": 2
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 27,
+    "fields": {
+      "stock_id": 17,
+      "order_id": 15,
+      "price": 3000,
+      "discounted_price": 2000,
+      "count": 1
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 28,
+    "fields": {
+      "stock_id": 33,
+      "order_id": 16,
+      "price": 1500,
+      "discounted_price": null,
+      "count": 2
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 29,
+    "fields": {
+      "stock_id": 6,
+      "order_id": 16,
+      "price": 2000,
+      "discounted_price": 1500,
+      "count": 1
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 30,
+    "fields": {
+      "stock_id": 16,
+      "order_id": 17,
+      "price": 100,
+      "discounted_price": 99,
+      "count": 2
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 31,
+    "fields": {
+      "stock_id": 39,
+      "order_id": 18,
+      "price": 1500,
+      "discounted_price": 1000,
+      "count": 1
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 32,
+    "fields": {
+      "stock_id": 40,
+      "order_id": 18,
+      "price": 250,
+      "discounted_price": null,
+      "count": 1
+    }
+  },
+  {
+    "model": "order.orderentity",
+    "pk": 33,
+    "fields": {
+      "stock_id": 33,
+      "order_id": 19,
+      "price": 1500,
+      "discounted_price": 1300,
+      "count": 2
+    }
   }
-},
-{
-  "model": "order.delivery",
-  "pk": 2,
-  "fields": {
-    "name": "Экспресс-доставка",
-    "price": 500
-  }
-},
-{
-  "model": "order.order",
-  "pk": 3,
-  "fields": {
-    "user_id": 16,
-    "datetime": "2022-05-19T11:28:17.664Z",
-    "delivery_id": 1,
-    "payment": "card",
-    "city": "Москва",
-    "address": "ул.Верещагина, д.52, стр.1",
-    "comment": "No comment",
-    "state": "not paid",
-    "error": "error3"
-  }
-},
-{
-  "model": "order.order",
-  "pk": 4,
-  "fields": {
-    "user_id": 16,
-    "datetime": "2022-05-19T11:35:51.509Z",
-    "delivery_id": 2,
-    "payment": "account",
-    "city": "Москва",
-    "address": "ул.Верещагина, д.52, стр.1",
-    "comment": "Comment",
-    "state": "delivered",
-    "error": ""
-  }
-},
-{
-  "model": "order.order",
-  "pk": 5,
-  "fields": {
-    "user_id": 17,
-    "datetime": "2022-05-19T11:39:37.138Z",
-    "delivery_id": 1,
-    "payment": "card",
-    "city": "Санкт-Петербург",
-    "address": "пр.Мира, д.41, кор.1,  оф.4",
-    "comment": "Comment",
-    "state": "paid",
-    "error": ""
-  }
-},
-{
-  "model": "order.order",
-  "pk": 6,
-  "fields": {
-    "user_id": 17,
-    "datetime": "2022-05-19T11:40:28.099Z",
-    "delivery_id": 1,
-    "payment": "account",
-    "city": "Санкт-Петербург",
-    "address": "пр.Мира, д.41, кор.1,  оф.4",
-    "comment": "Comment",
-    "state": "not paid",
-    "error": "error2"
-  }
-},
-{
-  "model": "order.order",
-  "pk": 7,
-  "fields": {
-    "user_id": 17,
-    "datetime": "2022-05-19T11:41:16.787Z",
-    "delivery_id": 2,
-    "payment": "card",
-    "city": "Санкт-Петербург",
-    "address": "пр.Мира, д.41, кор.1,  оф.4",
-    "comment": "Comment",
-    "state": "received",
-    "error": ""
-  }
-},
-{
-  "model": "order.order",
-  "pk": 8,
-  "fields": {
-    "user_id": 18,
-    "datetime": "2022-05-19T12:06:13.405Z",
-    "delivery_id": 2,
-    "payment": "account",
-    "city": "Vologda",
-    "address": "ул.Приморская, д.111, кор.5, оф.15",
-    "comment": "Comment Comment Comment",
-    "state": "paid",
-    "error": ""
-  }
-},
-{
-  "model": "order.order",
-  "pk": 9,
-  "fields": {
-    "user_id": 20,
-    "datetime": "2022-05-19T12:07:18.017Z",
-    "delivery_id": 1,
-    "payment": "card",
-    "city": "Москва",
-    "address": "ул.Приморская, д.111, кор.5, оф.15",
-    "comment": "Comment CommentCommentComment CommentComment",
-    "state": "not paid",
-    "error": "error1"
-  }
-},
-{
-  "model": "order.order",
-  "pk": 10,
-  "fields": {
-    "user_id": 20,
-    "datetime": "2022-05-19T12:08:20.482Z",
-    "delivery_id": 2,
-    "payment": "account",
-    "city": "Москва",
-    "address": "ул.Приморская, д.111, кор.5, оф.15",
-    "comment": "Comment",
-    "state": "received",
-    "error": ""
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 5,
-  "fields": {
-    "stock_id": 3,
-    "order_id": 3,
-    "price": 2000,
-    "discounted_price": null,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 6,
-  "fields": {
-    "stock_id": 18,
-    "order_id": 3,
-    "price": 150,
-    "discounted_price": 100,
-    "count": 2
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 7,
-  "fields": {
-    "stock_id": 18,
-    "order_id": 3,
-    "price": 135,
-    "discounted_price": null,
-    "count": 3
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 8,
-  "fields": {
-    "stock_id": 18,
-    "order_id": 4,
-    "price": 250,
-    "discounted_price": 220,
-    "count": 2
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 9,
-  "fields": {
-    "stock_id": 2,
-    "order_id": 4,
-    "price": 120,
-    "discounted_price": null,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 10,
-  "fields": {
-    "stock_id": 65,
-    "order_id": 5,
-    "price": 1500,
-    "discounted_price": 1300,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 11,
-  "fields": {
-    "stock_id": 43,
-    "order_id": 6,
-    "price": 1320,
-    "discounted_price": 1100,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 12,
-  "fields": {
-    "stock_id": 17,
-    "order_id": 6,
-    "price": 350,
-    "discounted_price": null,
-    "count": 2
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 13,
-  "fields": {
-    "stock_id": 18,
-    "order_id": 7,
-    "price": 3000,
-    "discounted_price": 2200,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 14,
-  "fields": {
-    "stock_id": 14,
-    "order_id": 7,
-    "price": 1500,
-    "discounted_price": null,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 15,
-  "fields": {
-    "stock_id": 16,
-    "order_id": 8,
-    "price": 500,
-    "discounted_price": 450,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 16,
-  "fields": {
-    "stock_id": 2,
-    "order_id": 8,
-    "price": 20,
-    "discounted_price": 15,
-    "count": 5
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 17,
-  "fields": {
-    "stock_id": 13,
-    "order_id": 9,
-    "price": 450,
-    "discounted_price": null,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 18,
-  "fields": {
-    "stock_id": 7,
-    "order_id": 9,
-    "price": 1000,
-    "discounted_price": 850,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 19,
-  "fields": {
-    "stock_id": 66,
-    "order_id": 10,
-    "price": 55,
-    "discounted_price": null,
-    "count": 3
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 20,
-  "fields": {
-    "stock_id": 62,
-    "order_id": 10,
-    "price": 350,
-    "discounted_price": 320,
-    "count": 1
-  }
-},
-{
-  "model": "order.orderentity",
-  "pk": 21,
-  "fields": {
-    "stock_id": 12,
-    "order_id": 10,
-    "price": 540,
-    "discounted_price": 500,
-    "count": 2
-  }
-}
+
+
 ]

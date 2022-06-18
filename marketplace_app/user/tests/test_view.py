@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from order.models import Order, Delivery
+from order.models import Order, DeliveryType
 from product.models import Category, Product
 from user.models import CustomUser, UserProductView, Compare, CompareEntity
 
@@ -53,7 +53,7 @@ class BaseViewTests(TestCase):
                 product_id=Product.objects.get(pk=i),
                 datetime=timezone.now()
             )
-        delivery = Delivery.objects.create(name='delivery')
+        delivery = DeliveryType.objects.create(name='delivery')
         for i in range(1, 4):
             Order.objects.create(
                 user_id=cls.user,
