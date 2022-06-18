@@ -31,13 +31,13 @@
         {% if "shops" in request.path %}
           {% for stock in stocks %}
             {% if stock.product == product %}
-              <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add_to_cart_shop' product.id stock.id %}">
+              <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add-to-cart-shop' product.id stock.id %}">
                 <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
               </a>
             {% endif %}
           {% endfor %}
         {% else %}
-          <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add_to_cart' product.id %}">
+          <a id="add-to-cart"  class="Card-btn product" href="{% url 'order:add-to-cart' product.id %}">
             <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
           </a>
         {% endif %}

@@ -94,22 +94,22 @@ class Cart(models.Model):
     def __len__(self) -> int:
         return self.count
 
-    def add_to_cart(self, stock_id: int) -> (bool, str):
+    def add_to_cart(self, stock_id: int, cnt: int = 1) -> (bool, str):
         """
         Добавляем товар в корзину:
         создаем новый CartEntity или обновляем quantity у старого
-        :param stock_id: id товара (складского остатка)
+        :param
+        stock_id: id товара (складского остатка)
+        cnt: количество добавляемого товара
         :return: bool - успех добавления, сообщение
         """
         result = True
         message = utils.ADD_TO_CART_SUCCESS
 
-        cart_entity = CartEntity.objects.filter(
-            cart_id=self.pk, stock_id=stock_id
-        ).first()
+        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
         if cart_entity:
             if cart_entity.stock.count > cart_entity.quantity:
-                cart_entity.quantity = F("quantity") + 1
+                cart_entity.quantity = F("quantity") + cnt
                 cart_entity.save()
         else:
             CartEntity.objects.create(cart_id=self.pk, stock_id=stock_id)
@@ -326,7 +326,7 @@ class Cart(models.Model):
 
         assert user, "can't get user from request!"
 
-        # assert device, 'no "device", check static!'
+        # assert device, "no "device", check static!"
 
         if user.is_anonymous:
             instance = cls._get_anonymous_cart(device=device)
@@ -517,7 +517,7 @@ class Order(models.Model):
         """Метод получения товаров в заказе
 
         :return: Товары в заказе
-        :rtype: List['OrderEntity']
+        :rtype: List["OrderEntity"]
         """
 
         result: List[OrderEntity] = OrderEntity.objects.filter(
