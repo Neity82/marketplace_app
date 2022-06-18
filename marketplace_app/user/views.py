@@ -29,14 +29,14 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
     """
 
     model = CustomUser
-    template_name = 'user/account.html'
-    context_object_name = 'user'
+    template_name = "user/account.html"
+    context_object_name = "user"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_active'] = 'account_active'
-        context['last_order'] = Order.get_last_order(user=self.request.user)
-        context['product_view'] = UserProductView.get_product_view(user=self.request.user,
+        context["page_active"] = "account_active"
+        context["last_order"] = Order.get_last_order(user=self.request.user)
+        context["product_view"] = UserProductView.get_product_view(user=self.request.user,
                                                                    limit=3)
         return context
 
@@ -50,18 +50,18 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
     model = CustomUser
     form_class = UserProfileForm
-    template_name = 'user/profile.html'
+    template_name = "user/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_active'] = 'profile_active'
+        context["page_active"] = "profile_active"
         return context
 
     def get_form_kwargs(self):
         kwargs = super(UserProfile, self).get_form_kwargs()
         kwargs.update({
-            'initial': {
-                'full_name': self.request.user.get_full_name,
+            "initial": {
+                "full_name": self.request.user.get_full_name,
             }
         })
         return kwargs
@@ -70,20 +70,20 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         user = form.save(commit=False)
 
         if self.request.FILES:
-            avatar = self.request.FILES['avatar']
+            avatar = self.request.FILES["avatar"]
             if avatar.size > 2 * 1024 * 1024:
                 messages.error(self.request,
-                               _('Image file too large ( > 2mb )'),
-                               extra_tags='error')
-                return HttpResponseRedirect(reverse('user:user_profile',
-                                                    kwargs={'pk': user.pk}))
+                               _("Image file too large ( > 2mb )"),
+                               extra_tags="error")
+                return HttpResponseRedirect(reverse("user:user_profile",
+                                                    kwargs={"pk": user.pk}))
             user.avatar = avatar
         else:
             avatar = self.request.user.avatar
             user.avatar = avatar
 
-        full_name = form.cleaned_data.get('full_name').split()
-        password = form.cleaned_data.get('password1')
+        full_name = form.cleaned_data.get("full_name").split()
+        password = form.cleaned_data.get("password1")
         if full_name:
             last_name, first_name, middle_name = full_name_analysis(name=full_name)
             user.last_name = last_name
@@ -95,10 +95,10 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
         user.save()
         login(self.request, user)
-        messages_text = _('Profile saved successfully')
-        messages.success(self.request, messages_text, extra_tags='success')
+        messages_text = _("Profile saved successfully")
+        messages.success(self.request, messages_text, extra_tags="success")
 
-        return HttpResponseRedirect(reverse('user:user_profile', kwargs={'pk': user.pk}))
+        return HttpResponseRedirect(reverse('user:user_profile', kwargs={"pk": user.pk}))
 
 
 class HistoryOrders(LoginRequiredMixin, generic.ListView):
@@ -109,12 +109,12 @@ class HistoryOrders(LoginRequiredMixin, generic.ListView):
     """
 
     model = Order
-    template_name = 'user/historyorder.html'
-    context_object_name = 'orders_list'
+    template_name = "user/historyorder.html"
+    context_object_name = "orders_list"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_active'] = 'historyorder_active'
+        context["page_active"] = "historyorder_active"
         return context
 
     def get_queryset(self):
@@ -131,12 +131,12 @@ class HistoryViews(LoginRequiredMixin, ResponseDataMixin, generic.ListView):
     """
 
     model = UserProductView
-    template_name = 'user/historyview.html'
-    context_object_name = 'views_list'
+    template_name = "user/historyview.html"
+    context_object_name = "views_list"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['page_active'] = 'historyview_active'
+        context["page_active"] = "historyview_active"
         return context
 
     def get_queryset(self):
@@ -150,7 +150,7 @@ class HistoryViews(LoginRequiredMixin, ResponseDataMixin, generic.ListView):
         для последующей обработки запроса
         """
 
-        product_id = kwargs['pk']
+        product_id = kwargs["pk"]
         success, message = UserProductView.add_object(
             user=self.request.user,
             product=product_id
@@ -176,30 +176,30 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
     """
 
     model = Compare
-    template_name = 'user/compare.html'
-    context_object_name = 'compare_list'
+    template_name = "user/compare.html"
+    context_object_name = "compare_list"
 
     def get_context_data(self, **kwargs):
         compare = Compare.get_compare(self.request)
 
         context = super().get_context_data(**kwargs)
-        context['categories'] = Compare.get_categories(compare_id=compare)
-        if self.kwargs['pk'] == 0:
-            context['cat_selected'] = 0
+        context["categories"] = Compare.get_categories(compare_id=compare)
+        if self.kwargs["pk"] == 0:
+            context["cat_selected"] = 0
         else:
             if self.object_list.count() == 0:
                 category_id = 0
             else:
                 category_id = self.object_list[0].product.category_id
-            context['cat_selected'] = category_id
-        context['total_count'] = Compare.count(compare_id=compare)
+            context["cat_selected"] = category_id
+        context["total_count"] = Compare.count(compare_id=compare)
 
         if self.object_list.count() > 0:
-            context['attributes'] = AttributeValue.get_all_attributes_of_product(
+            context["attributes"] = AttributeValue.get_all_attributes_of_product(
                 self.object_list[0].product_id)
 
         else:
-            messages_text = _('Not enough data to compare')
+            messages_text = _("Not enough data to compare")
             messages.success(self.request, messages_text)
 
         return context
@@ -207,8 +207,8 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
     def get_queryset(self, **kwargs):
         compare = Compare.get_compare(self.request)
         result = Compare.get_compare_list(compare_id=compare.id)
-        if self.kwargs['pk'] != 0:
-            result = result.filter(product__category=self.kwargs['pk'])
+        if self.kwargs["pk"] != 0:
+            result = result.filter(product__category=self.kwargs["pk"])
 
         return result
 
@@ -219,7 +219,7 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
         для последующей обработки запроса
         """
 
-        product_id = kwargs['pk']
+        product_id = kwargs["pk"]
         compare = Compare.get_compare(self.request)
         success, message = compare.add_to_compare(product_id=product_id)
         count = Compare.count(compare_id=compare.id)
@@ -238,7 +238,7 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
     def delete(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
         """Удаляем товар по id из kwargs"""
 
-        product_id = kwargs['pk']
+        product_id = kwargs["pk"]
         compare = Compare.get_compare(self.request)
         success, message = compare.remove_from_compare(product_id=product_id)
         count = Compare.count(compare_id=compare.id)
@@ -264,9 +264,9 @@ class CustomLoginView(BSModalLoginView):
     """
 
     authentication_form = CustomAuthenticationForm
-    template_name = 'user/login.html'
-    success_message = 'Success: You were successfully logged in.'
-    success_url = reverse_lazy('product:home')
+    template_name = "user/login.html"
+    success_message = "Success: You were successfully logged in."
+    success_url = reverse_lazy("product:home")
 
 
 class SignUpView(BSModalCreateView):
@@ -278,6 +278,6 @@ class SignUpView(BSModalCreateView):
     """
 
     form_class = CustomUserCreationForm
-    template_name = 'user/signup.html'
-    success_message = 'Success: Sign up succeeded. You can now Log in.'
-    success_url = reverse_lazy('product:home')
+    template_name = "user/signup.html"
+    success_message = "Success: Sign up succeeded. You can now Log in."
+    success_url = reverse_lazy("product:home")

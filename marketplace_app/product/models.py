@@ -478,7 +478,7 @@ class Product(models.Model):
 
     @classmethod
     def get_popular(cls, shop: Union[Shop, None] = None, limit: int = 8) -> \
-            List[Product]:
+            QuerySet[Product]:
         """
         Метод для получения списка популярных товаров в количестве limit.
         Популярность определяется сначала по "индексу сортировки",
@@ -489,7 +489,7 @@ class Product(models.Model):
         :param limit: Необходимое количество товаров
         :type limit: int
         :return: Список товаров
-        :rtype: List[Product]
+        :rtype: QuerySet[Product]
         """
 
         queryset: QuerySet[Product] = Product.objects.prefetch_related(
@@ -518,7 +518,7 @@ class Product(models.Model):
             cls,
             daily_offer: Union[DailyOffer, None] = None,
             limit: int = 16
-    ) -> List[Product]:
+    ) -> QuerySet[Product]:
         """
         Метод для получения списка товаров ограниченного тиража
 
@@ -527,7 +527,7 @@ class Product(models.Model):
         :param limit: Необходимое количество товаров
         :type limit: int
         :return: Список товаров
-        :rtype: List[Product]
+        :rtype: QuerySet[Product]
         """
 
         queryset: QuerySet[Product] = Product.objects.prefetch_related(

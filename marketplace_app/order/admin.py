@@ -35,4 +35,4 @@ class CartAdmin(admin.ModelAdmin):
 
     @staticmethod
     def cart_entity_display(obj) -> str:
-        return ", ".join([tag.title for tag in obj.cart_entity.all()])
+        return "; ".join([tag.__str__() for tag in obj.cart_entity.all()])

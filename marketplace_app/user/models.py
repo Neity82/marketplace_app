@@ -164,20 +164,23 @@ class UserProductView(models.Model):
         result: bool = True
         message: str = _('successfully added')
 
-        if UserProductView.objects.filter(user_id=user, product_id=product).exists():
-            UserProductView.objects.filter(
-                user_id=user,
-                product_id=product
-            ).update(
-                datetime=timezone.now()
-            )
+        if user.is_authenticated:
+            if UserProductView.objects.filter(
+                    user_id=user, product_id=product
+            ).exists():
+                UserProductView.objects.filter(
+                    user_id=user,
+                    product_id=product
+                ).update(
+                    datetime=timezone.now()
+                )
 
-        else:
-            UserProductView.objects.create(
-                user_id=user,
-                product_id=Product.objects.get(id=product),
-                datetime=timezone.now()
-            )
+            else:
+                UserProductView.objects.create(
+                    user_id=user,
+                    product_id=Product.objects.get(id=product),
+                    datetime=timezone.now()
+                )
         return result, message
 
 

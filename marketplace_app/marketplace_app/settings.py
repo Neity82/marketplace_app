@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,6 +46,9 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
     # 'modeltranslation',
+    'django_celery_beat',
+    'import_export_celery',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
 ROOT_URLCONF = 'marketplace_app.urls'
@@ -178,4 +181,21 @@ AUTH_USER_MODEL = 'user.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 # LOGOUT_REDIRECT_URL = '/login/'
 
+# REDIS related settings
+REDIS_HOST = "localhost"
+REDIS_PORT = "6379"
+CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
+CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+IMPORT_EXPORT_CELERY_INIT_MODULE = "marketplace_app.celery"
+
+IMPORT_EXPORT_CELERY_MODELS = {
+    "Stock": {
+        'app_label': 'stock',
+        'model_name': 'Stock',
+    }
+}
 
