@@ -26,7 +26,6 @@ class Payment(models.Model):
         on_delete=models.PROTECT,
         related_name="payment",
         verbose_name=_("order"),
-        unique=True,
     )
     card = models.CharField(
         _("card number"),
