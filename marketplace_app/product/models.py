@@ -660,6 +660,11 @@ class Stock(models.Model):
         return getattr(self, 'id')
 
     @classmethod
+    def get_products_in_stock_by_shop(cls, shop: Shop) -> QuerySet[Stock]:
+        product_in_stock = Stock.objects.filter(shop=shop)
+        return product_in_stock
+
+    @classmethod
     def get_products_in_stock(cls, product: Product) -> QuerySet[Stock]:
         product_in_stock = Stock.objects.filter(product=product)
         return product_in_stock
