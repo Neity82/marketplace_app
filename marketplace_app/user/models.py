@@ -1,6 +1,7 @@
 import datetime
 from typing import List, Dict
 
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import AbstractUser
 from django.core.handlers.wsgi import WSGIRequest
 from django.core.validators import RegexValidator
@@ -84,6 +85,10 @@ class CustomUser(AbstractUser):
         full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
         return full_name.strip()
 
+    @property
+    def full_name(self) -> str:
+        return self.get_full_name
+
     def __str__(self) -> str:
         first_name = getattr(self, "first_name")
         first_name = first_name[0] + '.' if first_name else ''
@@ -91,6 +96,53 @@ class CustomUser(AbstractUser):
         middle_name = middle_name[0] + '.' if middle_name else ''
         short_name = f'{getattr(self, "last_name")} {first_name}{middle_name}'
         return short_name
+
+    @classmethod
+    def login_new_user(cls, request: WSGIRequest, email: str, password: str) -> None:
+        """
+        аутентификация и авторизация пользователя
+        :param request: реквест из вью
+        :param email: электронная почта пользователя
+        :param password: пароль пользователя
+        :return: None
+        """
+        new_user = authenticate(
+            email=email,
+            password=password,
+        )
+        login(request, new_user)
+
+    @staticmethod
+    def parse_user_name(full_name: str) -> dict:
+        """
+        разделяем ФИО на части:
+        ФИО -> last_name, first_name, middle_name
+        ФИ -> last_name, first_name
+        И -> first_name
+        """
+        user_name_data = {}
+        if full_name:
+            user_name_data_raw = full_name.split()
+            user_name_data_raw_len = len(user_name_data_raw)
+            if user_name_data_raw_len == 3:
+                user_name_data.update(first_name=user_name_data_raw[1])
+                user_name_data.update(last_name=user_name_data_raw[0])
+                user_name_data.update(middle_name=user_name_data_raw[2])
+
+            elif user_name_data_raw_len == 2:
+                user_name_data.update(first_name=user_name_data_raw[1])
+                user_name_data.update(last_name=user_name_data_raw[0])
+
+            elif user_name_data_raw_len == 1:
+                user_name_data.update(first_name=user_name_data_raw[0])
+
+            elif user_name_data_raw_len > 3:
+                user_name_data.update(last_name=user_name_data_raw[0])
+                user_name_data.update(middle_name=user_name_data_raw[-1])
+                user_name_data.update(first_name=" ".join(user_name_data_raw[1:-1]))
+        else:
+            user_name_data = full_name
+        return user_name_data
 
 
 class UserProductView(models.Model):

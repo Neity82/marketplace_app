@@ -128,7 +128,7 @@
             <div class="Compare-product">
               <div class="Compare-nameProduct">{{ product.title }}</div>
               <div class="Compare-feature">
-                <a id="add-to-cart" class="Compare-btn product" href="{% url 'order:add_to_cart' product.id %}">
+                <a id="add-to-cart" class="Compare-btn product" href="{% url 'order:add-to-cart' product.id %}">
                   <img src="{% static 'assets/img/icons/card/cart.svg' %}" alt="cart.svg"/>
                 </a>
                 <a id="delete-from-compare" class="Compare-btn Compare-delete" href="{% url 'user:compare_list' product.id %}">
