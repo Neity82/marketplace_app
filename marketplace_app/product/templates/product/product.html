@@ -63,12 +63,12 @@
               <div class="ProductCard-info">
                 <div class="ProductCard-cost">
                   {% if discount.base %}
-                  <div class="ProductCard-price">${{ discount.price }}</div>
+                    <div class="ProductCard-price">${{ discount.price }}</div>
                   {% else %}
-                  <div class="ProductCard-price">{% trans 'The product is over' %}</div>
+                    <div class="ProductCard-price">{% trans 'The product is over' %}</div>
                   {% endif %}
                   {% if discount.type %}
-                  <div class="ProductCard-priceOld">${{ discount.base }}</div>
+                    <div class="ProductCard-priceOld">${{ discount.base }}</div>
                   {% endif %}
                 </div>
                 <div class="ProductCard-compare">
@@ -85,12 +85,12 @@
               <div class="ProductCard-cartElement ProductCard-cartElement_amount">
                 <div class="Amount Amount_product">
                   <button class="Amount-remove" type="button"></button>
-                  <input class="Amount-input form-input" name="amount" type="text" value="1"/>
+                    <input class="Amount-input form-input" name="amount" type="text" value="1">
                   <button class="Amount-add" type="button"></button>
                 </div>
               </div>
               <div class="ProductCard-cartElement">
-                <a class="btn btn_primary" href="to_cart_page">
+                <a class="btn btn_primary product add_to_cart" id="add-to-cart" href="{% url 'order:add-to-cart' product.id %}">
                   <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                   <span class="btn-content">{% trans 'Add To Cart' %}</span>
                 </a>
@@ -247,7 +247,7 @@
                     </strong>
                   </div>
                   <div class="Categories-block Categories-button">
-                    <a class="btn btn_primary" href="to_cart_page">
+                    <a id="add-to-cart-shop" class="btn btn_primary add_to_cart_shop product" href="{% url 'order:add-to-cart-shop' product.id stock.id %}">
                       <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
                       <span class="btn-content">{% trans 'Buy' %}</span>
                     </a>

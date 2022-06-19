@@ -3,7 +3,7 @@ from django.apps import apps
 from django.urls import reverse
 from django.views import generic
 
-
+from product.models import Stock
 from .models import Shop
 from .forms import FeedBackForm
 
@@ -31,6 +31,10 @@ class ShopDetailView(generic.DetailView):
         kwargs.update(
             {'products': Product.get_popular(shop=self.get_object())}
         )
+        kwargs.update(
+            {'stocks': Stock.get_products_in_stock_by_shop(self.get_object())},
+        )
+
         return kwargs
 
 

@@ -103,17 +103,21 @@ class AddToCartView(CartMixin):
         :return - json с количеством товаров в корзине и минимальной стоимостью
         """
         pk = kwargs.get("pk")
+        shop = kwargs.get("shop_id")
+        cnt = kwargs.get("cnt")
         cart = self.get_cart()
         is_product = request.POST.get("is_product", None)
-        if is_product:
-            stock_ids = self.stock_model.objects.filter(product__id=pk).values_list(
-                "id", flat=True
-            )
+        if shop is not None:
+            stock_id = shop
+        elif is_product:
+            stocks = self.stock_model.objects.filter(product__id=pk)
+            stock_ids = stocks.values_list("id", flat=True)
             stock_id = self.random_choice(stock_ids)
         else:
             stock_id = pk
 
-        success, message = cart.add_to_cart(stock_id=stock_id)
+        cnt = cnt if cnt is not None else 1
+        success, message = cart.add_to_cart(stock_id=stock_id, cnt=int(cnt))
         response_data = self.prepare_response_data(
             success=success,
             message=message,
@@ -155,8 +159,8 @@ class OrderDetail(generic.DetailView):
     """
 
     model = order_models.Order
-    template_name = 'order/oneorder.html'
-    context_object_name = 'order'
+    template_name = "order/oneorder.html"
+    context_object_name = "order"
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -347,7 +351,7 @@ class OrderView(SessionWizardView):
             return self.render(form)
 
     def render_confirm(self, **kwargs):
-        """Подготовка к рендеру шага 'Подтверждения'"""
+        """Подготовка к рендеру шага "Подтверждения"""
         final_forms = OrderedDict()
         for form_key in self.get_form_list():
             form_obj = self.get_form(

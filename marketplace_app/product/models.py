@@ -659,6 +659,11 @@ class Stock(models.Model):
     def pk(self) -> int:
         return getattr(self, 'id')
 
+    @staticmethod
+    def get_products_in_stock_by_shop(shop: Shop) -> QuerySet[Stock]:
+        product_in_stock = Stock.objects.filter(shop=shop)
+        return product_in_stock
+
     @classmethod
     def get_products_in_stock(cls, product: Product) -> QuerySet[Stock]:
         product_in_stock = Stock.objects.filter(product=product)

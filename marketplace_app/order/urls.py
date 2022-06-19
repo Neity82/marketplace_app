@@ -12,6 +12,9 @@ order_forms = getattr(views.OrderView, "order_forms", list())
 urlpatterns = [
     path("cart/", views.CartView.as_view(), name="cart"),
     path("cart/add/<int:pk>", views.AddToCartView.as_view(), name="add-to-cart"),
+    path("cart/add/<int:pk>/<int:cnt>", views.AddToCartView.as_view(), name="add-to-cart-cnt"),
+    path("cart/add/<int:pk>/shop/<int:shop_id>",
+         views.AddToCartView.as_view(), name="add-to-cart-shop"),
     path(
         "cart/remove/<int:pk>",
         views.RemoveFromCartView.as_view(),
