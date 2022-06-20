@@ -9,7 +9,7 @@ class Discount(models.Model):
 
     class DiscountType(models.TextChoices):
         PRODUCT_DISCOUNT = "PD", _("Product discount")
-        SET_DISCOUNT = "SD", _("Set discount")
+        # SET_DISCOUNT = "SD", _("Set discount")
         BASKET_DISCOUNT = "BD", _("Basket discount")
 
     discount_type = models.CharField(

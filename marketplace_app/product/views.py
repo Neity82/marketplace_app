@@ -246,8 +246,8 @@ class ProductListView(generic.ListView):
             for item
             in products
         }
-        self.context['min_price'] = min(prices.values())
-        self.context['max_price'] = max(prices.values())
+        self.context['min_price'] = int(min(prices.values()))
+        self.context['max_price'] = int(max(prices.values()))
         return prices
 
     def _get_base_filters(self, prices: Dict[int, Decimal]) -> Q:
@@ -275,8 +275,8 @@ class ProductListView(generic.ListView):
                     idx for idx, price in prices.items()
                     if (price >= min_price and price <= max_price)
                 ]
-                self.context['filter_min_price'] = min_price
-                self.context['filter_max_price'] = max_price
+                self.context['filter_min_price'] = int(min_price)
+                self.context['filter_max_price'] = int(max_price)
                 if filtered_by_price:
                     result &= Q(id__in=filtered_by_price)
         # Фильтр по названию
@@ -397,7 +397,7 @@ class ProductListView(generic.ListView):
         context.update({**self.context})
         if 'category' in self.query_params:
             context['attributes'] = self._get_attributes()
-        context['base_url'] = urlencode(self.query_params)
+        context['base_url'] = urlencode(self.query_params, True)
         return context
 
 

@@ -3,12 +3,13 @@ from typing import List
 
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 
 from order import utils
 from product.models import Stock
 from user.models import CustomUser
+from discount.controllers import get_basket_discount
 
 
 class CartEntity(models.Model):
@@ -246,18 +247,26 @@ class Cart(models.Model):
         :return: tuple(сумма без скидок, сумма со скидкой)
         """
         old_sum = Decimal(0.0)
-        discount_sum = Decimal(0.0)
+        product_discount_sum = Decimal(0.0)
 
-        for cart_entity in CartEntity.objects.filter(cart=self).select_related("stock"):
+        cart_objects: QuerySet[CartEntity] = \
+            CartEntity.objects.filter(cart=self).select_related("stock")
+        for cart_entity in cart_objects:
             old_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
             if cart_entity.stock.product.discount:
-                discount_sum += (
+                product_discount_sum += (
                     Decimal(cart_entity.stock.product.discount.get("price"))
                     * cart_entity.quantity
                 )
             else:
-                discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
-        return old_sum, discount_sum
+                product_discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
+
+        basket_discount_sum = get_basket_discount(
+            len(cart_objects), old_sum
+        )
+        if basket_discount_sum != 0:
+            return old_sum, min(product_discount_sum, basket_discount_sum)
+        return old_sum, product_discount_sum
 
     def get_min_sum(self) -> Decimal:
         """Возвращаем минимальную сумму стоимости товаров"""
