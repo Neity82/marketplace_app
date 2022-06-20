@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from order import utils
 from product.models import Stock
 from user.models import CustomUser
-from discount.controllers import DiscountController
+from discount.controllers import get_basket_discount
 
 
 class CartEntity(models.Model):
@@ -261,7 +261,7 @@ class Cart(models.Model):
             else:
                 product_discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
 
-        basket_discount_sum = DiscountController.get_basket_discount(
+        basket_discount_sum = get_basket_discount(
             len(cart_objects), old_sum
         )
         if basket_discount_sum != 0:
