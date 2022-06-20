@@ -7,7 +7,7 @@ from modeltranslation.admin import TranslationAdmin
 
 from product import models
 from product.models import Product, Category
-from product.utils import undelete_admin
+from product.utils import undelete_admin, DeletedFilter
 
 
 class TranslationAdminMedia:
@@ -104,6 +104,7 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
         'title_ru',
         'parent',
     )
+    list_filter = (DeletedFilter, )
     fields = ('title', 'parent', 'icon', 'sort_index')
 
     @staticmethod
@@ -129,6 +130,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         'title_en',
         'title_ru',
         'image_display',
+        'is_deleted',
         'short_description_en',
         'is_limited',
         'tags_display',
@@ -156,16 +158,19 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         'category',
         'rating',
         'created_at',
+        'is_deleted',
     )
 
     list_filter = (
         'category',
         'is_limited',
+        DeletedFilter,
     )
 
     readonly_fields = (
         'rating',
         'created_at',
+        'is_deleted',
     )
 
     inlines = [AttributeValueInLine]
@@ -173,6 +178,10 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     @staticmethod
     def admin_manager():
         return Product.admin_objects
+
+    @staticmethod
+    def is_deleted(obj) -> bool:
+        return obj.deleted_at is not None
 
     def tags_display(self, obj) -> str:
         return ", ".join([tag.title for tag in obj.tags.all()])

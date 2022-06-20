@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext as _
 
-from product.utils import undelete_admin
+from product.utils import undelete_admin, DeletedFilter
 from user.forms import CustomUserChangeForm, CustomUserAddForm
 from user.models import CustomUser, UserProductView, Compare, CompareEntity
 
@@ -23,6 +23,7 @@ class CustomUserAdmin(UserAdmin):
 
     list_display = ['id', 'email', 'last_name', 'first_name', 'middle_name', 'phone']
     list_display_links = ['id', 'email']
+    list_filter = (DeletedFilter, )
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
