@@ -11,12 +11,13 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 
 app.autodiscover_tasks()
 
-# app.conf.beat_schedule = {
-#     "add-daily-offer": {
-#         "task": "product.tasks.add_daily_offer",
-#         "schedule": crontab(minute=0, hour=0),
-#     },
-# }
+app.conf.beat_schedule = {
+    "add-daily-offer": {
+        "task": "product.tasks.add_daily_offer",
+        # "schedule": crontab(minute=0, hour=0),
+        "schedule": crontab(minute='*/2'),
+    },
+}
 
 
 

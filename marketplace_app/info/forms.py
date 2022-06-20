@@ -14,8 +14,8 @@ class SEOItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SEOItemForm, self).__init__(*args, **kwargs)
-        self.fields['path_name'].widget = forms.Select(choices=get_choices())
+        self.fields["path_name"].widget = forms.Select(choices=get_choices())
 
     class Meta:
         model = SEOItem
-        fields = '__all__'
+        fields = "__all__"

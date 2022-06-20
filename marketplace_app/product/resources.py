@@ -12,9 +12,6 @@ class ProductResource(resources.ModelResource):
         model = Product
         skip_unchanged = True
 
-    def after_import(self, dataset, result, using_transactions, dry_run, **kwargs):
-        print('!!!!!!!!!!!! OK!!!!!!!!!!')
-
 
 class StockResource(resources.ModelResource):
     """
@@ -26,9 +23,9 @@ class StockResource(resources.ModelResource):
         model = Stock
         skip_unchanged = True
 
-    def after_import(self, dataset, result, using_transactions, dry_run, **kwargs):
-        if dry_run is False:
-            print('!!!!!!!!!!!!!!!')
+    # def after_import(self, dataset, result, using_transactions, dry_run, **kwargs):
+    #     if dry_run is False:
+    #         print('!!!!!!!!!!!!!!!')
 
 
 

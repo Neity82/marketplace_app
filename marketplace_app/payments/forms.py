@@ -19,6 +19,6 @@ class PaymentForm(forms.ModelForm):
         )}
 
     def clean(self):
-        card = self.cleaned_data['card']
+        card = self.cleaned_data["card"]
         print(card)
         super().clean()

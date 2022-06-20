@@ -20,32 +20,32 @@ class Tag(models.Model):
     """Модель: тэг"""
 
     title = models.CharField(
-        verbose_name=_('title'),
-        help_text=_('Tag title'),
+        verbose_name=_("title"),
+        help_text=_("Tag title"),
         max_length=50,
     )
 
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _('tag')
-        verbose_name_plural = _('tags')
+        verbose_name = _("tag")
+        verbose_name_plural = _("tags")
 
     def __str__(self) -> str:
-        return getattr(self, 'title')
+        return getattr(self, "title")
 
 
 class Category(models.Model):
     """Модель: категория"""
 
-    SEP = ' / '
+    SEP = " / "
 
     parent = models.ForeignKey(
-        'Category',
+        "Category",
         on_delete=models.CASCADE,
-        verbose_name=_('parent id'),
-        related_name='child',
-        help_text=_('Parent category'),
+        verbose_name=_("parent id"),
+        related_name="child",
+        help_text=_("Parent category"),
         null=True,
         blank=True,
         default=None,

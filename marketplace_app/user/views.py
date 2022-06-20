@@ -7,7 +7,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext as _
-from django.views import generic, View
+from django.views import generic
 
 from order.models import Order
 from product.models import AttributeValue
@@ -82,13 +82,17 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
             avatar = self.request.user.avatar
             user.avatar = avatar
 
-        full_name = form.cleaned_data.get("full_name").split()
+        full_name = form.cleaned_data.get("full_name")
         password = form.cleaned_data.get("password1")
         if full_name:
-            last_name, first_name, middle_name = full_name_analysis(name=full_name)
-            user.last_name = last_name
-            user.first_name = first_name
-            user.middle_name = middle_name
+            user_name_data = full_name_analysis(full_name=full_name)
+            user.last_name = user_name_data["last_name"]
+            user.first_name = user_name_data["first_name"]
+            user.middle_name = user_name_data["middle_name"]
+        else:
+            user.last_name = ""
+            user.first_name = ""
+            user.middle_name = ""
 
         if password:
             user.set_password(password)

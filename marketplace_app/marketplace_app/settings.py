@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
     # 'modeltranslation',
-    'django_celery_beat',
+    # 'django_celery_beat',
     'import_export_celery',
     'import_export',
     'payments.apps.PaymentsConfig',

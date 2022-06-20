@@ -3,10 +3,12 @@ from django.forms import BaseInlineFormSet
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from import_export.admin import ImportMixin
 from modeltranslation.admin import TranslationAdmin
 from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
 from product import models
+from product.resources import ProductResource, StockResource
 
 
 class TranslationAdminMedia:
@@ -112,7 +114,7 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
 
 
 @admin.register(models.Product)
-class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
+class ProductAdmin(ImportMixin, TranslationAdmin, TranslationAdminMedia):
     list_display = (
         'id',
         'title_en',
@@ -177,6 +179,8 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
 
     tags_display.short_description = _('Tags')
 
+    resource_class = ProductResource
+
 
 @admin.register(models.DailyOffer)
 class DailyOfferAdmin(admin.ModelAdmin):
@@ -201,7 +205,7 @@ class DailyOfferAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Stock)
-class StockAdmin(admin.ModelAdmin):
+class StockAdmin(ImportMixin, admin.ModelAdmin):
     list_display = (
         'id',
         'price',
@@ -227,6 +231,8 @@ class StockAdmin(admin.ModelAdmin):
         'shop',
         'product',
     )
+
+    resource_class = StockResource
 
 
 @admin.register(models.ProductReview)
