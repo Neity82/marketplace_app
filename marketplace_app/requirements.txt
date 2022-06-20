@@ -10,6 +10,7 @@ django-modeltranslation==0.18.2
 django-super-inlines==0.2.1
 django-tinymce==3.4.0
 django-widget-tweaks==1.4.12
+django-timestampable==1.0.3
 future==0.18.2
 gunicorn==20.1.0
 isort==5.10.1
