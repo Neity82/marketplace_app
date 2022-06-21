@@ -5,6 +5,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
 from django.db.models import Sum, F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
+from timestamps.models import SoftDeletes
 
 from order import utils
 from product.models import Stock
@@ -445,7 +446,7 @@ class Delivery(models.Model):
         return Decimal(delivery_sum)
 
 
-class Order(models.Model):
+class Order(SoftDeletes):
     """Модель заказа"""
 
     user_id = models.ForeignKey(

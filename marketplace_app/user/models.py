@@ -9,13 +9,14 @@ from django.db import models
 from django.db.models import Q, QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from timestamps.models import SoftDeletes
 
 from product.models import Product, Category
 from user.manager import CustomUserManager
 from user.utils import avatar_directory_path
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser, SoftDeletes):
     """
     Абстрактный базовый пользователь.
 

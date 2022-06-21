@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models import Q, Avg, Min, Sum, QuerySet
 from django.db.models.functions import Coalesce
 from django.utils.translation import gettext_lazy as _
+from timestamps.models import SoftDeletes
 
 from discount.models import Discount
 from discount.models import ProductDiscount
@@ -35,7 +36,7 @@ class Tag(models.Model):
         return getattr(self, 'title')
 
 
-class Category(models.Model):
+class Category(SoftDeletes):
     """Модель: категория"""
 
     SEP = ' / '
@@ -79,7 +80,7 @@ class Category(models.Model):
     #   - https://github.com/jrief/django-entangled
     #   - https://github.com/abogushov/django-admin-json-editor
 
-    objects = models.Manager()
+    admin_objects = models.Manager()
 
     class Meta:
         verbose_name = _('category')
@@ -264,7 +265,7 @@ DiscountDict = TypedDict(
     )
 
 
-class Product(models.Model):
+class Product(SoftDeletes):
     """Модель: продукт"""
 
     title = models.CharField(
@@ -340,7 +341,7 @@ class Product(models.Model):
         default=0
     )
 
-    objects = models.Manager()
+    admin_objects = models.Manager()
 
     class Meta:
         verbose_name = _('product')
