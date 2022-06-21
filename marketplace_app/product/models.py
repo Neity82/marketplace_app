@@ -589,6 +589,7 @@ class DailyOffer(models.Model):
         verbose_name=_('promo text'),
         help_text=_('Daily offer promo content'),
         max_length=1500,
+        blank=True,
         default=''
     )
 
