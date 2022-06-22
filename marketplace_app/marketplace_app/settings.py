@@ -186,7 +186,8 @@ LOGIN_REDIRECT_URL = '/'
 # LOGOUT_REDIRECT_URL = '/login/'
 
 # REDIS related settings
-REDIS_HOST = "localhost"
+# REDIS_HOST = "127.0.0.1"
+REDIS_HOST = "redis"
 REDIS_PORT = "6379"
 CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
 CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
