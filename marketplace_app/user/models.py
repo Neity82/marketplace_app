@@ -1,4 +1,3 @@
-import datetime
 from typing import List, Dict
 
 from django.contrib.auth import authenticate, login
@@ -27,62 +26,62 @@ class CustomUser(AbstractUser):
 
     phone_regex = RegexValidator(
         regex=r"^\d{10}$",
-        message=_('Invalid format')
+        message=_("Invalid format")
     )
 
     username = None
 
     email = models.EmailField(
-        verbose_name=_('email'),
+        verbose_name=_("email"),
         unique=True,
-        help_text=_('User email')
+        help_text=_("User email")
     )
     first_name = models.CharField(
-        verbose_name=_('first name'),
+        verbose_name=_("first name"),
         max_length=150,
         blank=True,
-        help_text=_('User first name')
+        help_text=_("User first name")
     )
     middle_name = models.CharField(
-        verbose_name=_('middle name'),
+        verbose_name=_("middle name"),
         max_length=150,
         blank=True,
-        help_text=_('User middle name')
+        help_text=_("User middle name")
     )
     last_name = models.CharField(
-        verbose_name=_('last name'),
+        verbose_name=_("last name"),
         max_length=150,
         blank=True,
-        help_text=_('User last name')
+        help_text=_("User last name")
     )
     phone = models.CharField(
-        verbose_name=_('phone'),
+        verbose_name=_("phone"),
         validators=[phone_regex],
-        help_text=_('User phone'),
+        help_text=_("User phone"),
         max_length=16,
         blank=True
     )
     avatar = models.ImageField(
-        verbose_name=_('avatar'),
-        help_text=_('User avatar'),
+        verbose_name=_("avatar"),
+        help_text=_("User avatar"),
         blank=True,
         upload_to=avatar_directory_path
     )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
     class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+        verbose_name = _("user")
+        verbose_name_plural = _("users")
 
     @property
     def get_full_name(self) -> str:
         """Возвращает first_name, middle_name и last_name с пробелом между ними."""
 
-        full_name = f'{self.last_name} {self.first_name} {self.middle_name}'
+        full_name = f"{self.last_name} {self.first_name} {self.middle_name}"
         return full_name.strip()
 
     @property
@@ -91,9 +90,9 @@ class CustomUser(AbstractUser):
 
     def __str__(self) -> str:
         first_name = getattr(self, "first_name")
-        first_name = first_name[0] + '.' if first_name else ''
+        first_name = first_name[0] + "." if first_name else ""
         middle_name = getattr(self, "middle_name")
-        middle_name = middle_name[0] + '.' if middle_name else ''
+        middle_name = middle_name[0] + "." if middle_name else ""
         short_name = f'{getattr(self, "last_name")} {first_name}{middle_name}'
         return short_name
 
@@ -151,27 +150,27 @@ class UserProductView(models.Model):
     user_id = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        related_name='user_view',
-        help_text=_('The user who viewed the product')
+        verbose_name=_("user"),
+        related_name="user_view",
+        help_text=_("The user who viewed the product")
     )
     product_id = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=_('product'),
-        related_name='product_view',
-        help_text=_('Viewed product')
+        verbose_name=_("product"),
+        related_name="product_view",
+        help_text=_("Viewed product")
     )
     datetime = models.DateTimeField(
         auto_created=True,
-        verbose_name=_('datetime of addition'),
-        help_text=_('Viewing datetime')
+        verbose_name=_("datetime of addition"),
+        help_text=_("Viewing datetime")
     )
 
     class Meta:
-        verbose_name = _('viewed product')
-        verbose_name_plural = _('viewed products')
-        ordering = ['-datetime']
+        verbose_name = _("viewed product")
+        verbose_name_plural = _("viewed products")
+        ordering = ["-datetime"]
 
     objects = models.Manager()
 
@@ -179,7 +178,8 @@ class UserProductView(models.Model):
         return f'{self.product_id}'
 
     @classmethod
-    def get_product_view(cls, user: CustomUser, limit: int = None) -> List['UserProductView']:
+    def get_product_view(cls, user: CustomUser, limit: int = None) -> \
+            List['UserProductView']:
         """
         Метод получения списка просмотренных товаров
 
@@ -194,8 +194,8 @@ class UserProductView(models.Model):
         queryset: List[UserProductView] = UserProductView.objects.filter(
             user_id=user
         ).select_related(
-            'product_id',
-            'product_id__category'
+            "product_id",
+            "product_id__category"
         )
         return queryset[:limit]
 
@@ -214,7 +214,7 @@ class UserProductView(models.Model):
         """
 
         result: bool = True
-        message: str = _('successfully added')
+        message: str = _("successfully added")
 
         if user.is_authenticated:
             if UserProductView.objects.filter(
@@ -242,27 +242,27 @@ class CompareEntity(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        verbose_name=_('product'),
-        related_name='product_compare',
-        help_text=_('Product for comparison')
+        verbose_name=_("product"),
+        related_name="product_compare",
+        help_text=_("Product for comparison")
     )
 
     compare = models.ForeignKey(
-        'Compare',
+        "Compare",
         on_delete=models.CASCADE,
-        related_name='compare_entity',
-        verbose_name=_('compare\'s')
+        related_name="compare_entity",
+        verbose_name=_("compare\'s")
     )
 
     class Meta:
-        verbose_name = _('compare entity')
-        verbose_name_plural = _('compare entities')
+        verbose_name = _("compare entity")
+        verbose_name_plural = _("compare entities")
 
     objects = models.Manager()
 
     def __str__(self) -> str:
-        user = getattr(self.compare, 'user_id') if getattr(self.compare, 'user_id') else 'Unknown'
-        return f'Compare entity: user {user}, product: {self.product}'
+        user = getattr(self.compare, "user_id") if getattr(self.compare, "user_id") else "Unknown"
+        return f"Compare entity: user {user}, product: {self.product}"
 
 
 class Compare(models.Model):
@@ -271,33 +271,33 @@ class Compare(models.Model):
     user_id = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        verbose_name=_('user'),
-        related_name='compare_user',
-        help_text=_('Compare user'),
+        verbose_name=_("user"),
+        related_name="compare_user",
+        help_text=_("Compare user"),
         blank=True,
         null=True
     )
 
     device = models.CharField(
         max_length=255,
-        verbose_name=_('device'),
-        help_text=_('cookie device value'),
+        verbose_name=_("device"),
+        help_text=_("cookie device value"),
         blank=True,
         null=True
     )
 
     class Meta:
-        verbose_name = _('compare')
-        verbose_name_plural = _('compares')
+        verbose_name = _("compare")
+        verbose_name_plural = _("compares")
 
     def __str__(self) -> str:
-        user = getattr(self, 'user_id') if getattr(self, 'user_id') else 'Unknown'
-        return f'Compare: user: {user}, device: {self.device}'
+        user = getattr(self, "user_id") if getattr(self, "user_id") else "Unknown"
+        return f"Compare: user: {user}, device: {self.device}"
 
     objects = models.Manager()
 
     @classmethod
-    def get_compare_list(cls, compare_id: 'Compare') -> QuerySet['CompareEntity']:
+    def get_compare_list(cls, compare_id: "Compare") -> QuerySet['CompareEntity']:
         """
         Список товаров для сравнения
 
@@ -313,7 +313,7 @@ class Compare(models.Model):
         return result
 
     @classmethod
-    def get_compare(cls, request: WSGIRequest) -> 'Compare':
+    def get_compare(cls, request: WSGIRequest) -> "Compare":
         """
         Получаем объект сравнения из реквеста пользователя, проверяя cookie
         :param request: django wsgi реквест
@@ -321,10 +321,10 @@ class Compare(models.Model):
         :return: объект Сравнения
         :rtype: Compare
         """
-        user = getattr(request, 'user', None)
-        device = request.COOKIES.get('device', None)
+        user = getattr(request, "user", None)
+        device = request.COOKIES.get("device", None)
 
-        assert user, 'can\'t get user from request!'
+        assert user, "can\'t get user from request!"
         # assert device, 'no "device", check static!'
 
         if user.is_anonymous:
@@ -334,7 +334,7 @@ class Compare(models.Model):
         return instance
 
     @classmethod
-    def _get_anonymous_compare(cls, device: str) -> 'Compare':
+    def _get_anonymous_compare(cls, device: str) -> "Compare":
         """
         Получаем или создаем сравнение для анонимного пользователя
 
@@ -350,7 +350,7 @@ class Compare(models.Model):
         return instance
 
     @classmethod
-    def _get_user_compare(cls, user: CustomUser, device: str) -> 'Compare':
+    def _get_user_compare(cls, user: CustomUser, device: str) -> "Compare":
         """
         Получаем или создаем сравнение для авторизованного пользователя
 
@@ -369,7 +369,7 @@ class Compare(models.Model):
         return instance
 
     @staticmethod
-    def update_instance(instance: 'Compare', **kwargs) -> None:
+    def update_instance(instance: "Compare", **kwargs) -> None:
         """
         Обновляем объект сравнения из kwargs
 
@@ -395,7 +395,7 @@ class Compare(models.Model):
         :rtype: (bool, str)
         """
         result: bool = True
-        message: str = _('successfully added')
+        message: str = _("successfully added")
 
         count: int = CompareEntity.objects.filter(
                     compare_id=self.pk
@@ -414,10 +414,10 @@ class Compare(models.Model):
                 )
             else:
                 result: bool = False
-                message: str = _('has already been added before')
+                message: str = _("has already been added before")
         else:
             result = False
-            message = _('maximum of products for comparison')
+            message = _("maximum of products for comparison")
 
         return result, message
 
@@ -430,7 +430,7 @@ class Compare(models.Model):
         """
 
         result: bool = False
-        message: str = _('failed to remove')
+        message: str = _("failed to remove")
 
         compare_entity = CompareEntity.objects.filter(
             compare=self.pk,
@@ -440,12 +440,12 @@ class Compare(models.Model):
         if compare_entity.exists():
             compare_entity.delete()
             result = True
-            message = _('successfully removed')
+            message = _("successfully removed")
 
         return result, message
 
     @classmethod
-    def count(cls, compare_id: 'Compare') -> int:
+    def count(cls, compare_id: "Compare") -> int:
         """
         Считаем количество товаров для сравнения
 
@@ -459,7 +459,7 @@ class Compare(models.Model):
         return result
 
     @classmethod
-    def get_categories(cls, compare_id: 'Compare') -> Dict[Category, int]:
+    def get_categories(cls, compare_id: "Compare") -> Dict[Category, int]:
         """
         Получаем словарь, где ключ - объект Категория,
         значение - количество товаров в этой категории

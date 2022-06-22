@@ -4,10 +4,11 @@ from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from import_export.admin import ImportMixin
+from import_export.formats.base_formats import XLS, JSON, YAML
 from modeltranslation.admin import TranslationAdmin
-from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
 from product import models
+from product.forms import CustomImportForm
 from product.resources import ProductResource, StockResource
 
 
@@ -45,8 +46,9 @@ class TagAdmin(TranslationAdmin, TranslationAdminMedia):
 
 @admin.register(models.Attribute)
 class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
-    list_display = ('id', 'title_en', 'title_ru', 'category', 'type', 'help_text', 'rank',)
-    list_display_links = ('id', 'title_en', 'title_ru', )
+    list_display = (
+    'id', 'title_en', 'title_ru', 'category', 'type', 'help_text', 'rank',)
+    list_display_links = ('id', 'title_en', 'title_ru',)
     search_fields = ('id', 'title_en', 'title_ru', 'category', 'help_text',)
     fields = ('title', 'type', 'category', 'help_text', 'rank',)
     list_filter = ('category', 'title_en', 'title_ru', 'rank')
@@ -181,6 +183,14 @@ class ProductAdmin(ImportMixin, TranslationAdmin, TranslationAdminMedia):
 
     resource_class = ProductResource
 
+    def get_import_formats(self):
+        formats = (
+          XLS,
+          JSON,
+          YAML,
+          )
+        return [f for f in formats if f().can_import()]
+
 
 @admin.register(models.DailyOffer)
 class DailyOfferAdmin(admin.ModelAdmin):
@@ -205,7 +215,7 @@ class DailyOfferAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Stock)
-class StockAdmin(ImportMixin, admin.ModelAdmin):
+class StockAdmin(admin.ModelAdmin):
     list_display = (
         'id',
         'price',
@@ -233,6 +243,14 @@ class StockAdmin(ImportMixin, admin.ModelAdmin):
     )
 
     resource_class = StockResource
+
+    def get_import_formats(self):
+        formats = (
+          XLS,
+          JSON,
+          YAML,
+          )
+        return [f for f in formats if f().can_import()]
 
 
 @admin.register(models.ProductReview)

@@ -11,10 +11,15 @@ def avatar_directory_path(instance, filename) -> str:
     )
 
 
-def full_name_analysis(full_name: str) -> dict:
+def full_name_analysis(full_name: str) -> dict[str, str]:
     """
     Функция получает на вход полное имя клиента,
     возвращает фамилию, имя и отчество
+
+    :param full_name: ФИО пользователя
+    :type full_name: str
+    :return: Словарь с разобранными данными ФИО
+    ":rtype: dict[str, str]
     """
 
     user_name_data = {}

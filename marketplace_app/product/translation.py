@@ -4,24 +4,24 @@ from .models import Category, Tag, Unit, Attribute, Product
 
 @register(Category)
 class CategoryTranslationOptions(TranslationOptions):
-    fields = ('title',)
+    fields = ("title",)
 
 
 @register(Tag)
 class TagTranslationOptions(TranslationOptions):
-    fields = ('title',)
+    fields = ("title",)
 
 
 @register(Unit)
 class UnitTranslationOptions(TranslationOptions):
-    fields = ('title',)
+    fields = ("title",)
 
 
 @register(Attribute)
 class AttributeTranslationOptions(TranslationOptions):
-    fields = ('title',)
+    fields = ("title",)
 
 
 @register(Product)
 class ProductTranslationOptions(TranslationOptions):
-    fields = ('title', 'short_description', 'long_description', )
+    fields = ("title", "short_description", "long_description", )

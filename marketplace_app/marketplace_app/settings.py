@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
     # 'modeltranslation',
-    # 'django_celery_beat',
+    'django_celery_beat',
     'import_export_celery',
     'import_export',
     'payments.apps.PaymentsConfig',
@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
-ROOT_URLCONF = 'marketplace_app.urls'
+ROOT_URLCONF = "marketplace_app.urls"
 
 TEMPLATES_PRODUCT_DIR = os.path.join(BASE_DIR, "product", "templates")
 TEMPLATES_INFO_DIR = os.path.join(BASE_DIR, "info", "templates")
@@ -151,7 +151,7 @@ LANGUAGES = [
     ('ru', 'Русский'),
 ]
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'),]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -171,6 +171,8 @@ STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+IMPORT_FILE_ROOT = os.path.join(BASE_DIR, "import_files")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -196,8 +198,12 @@ IMPORT_EXPORT_CELERY_INIT_MODULE = "marketplace_app.celery"
 
 IMPORT_EXPORT_CELERY_MODELS = {
     "Stock": {
-        'app_label': 'stock',
-        'model_name': 'Stock',
+        "app_label": "stock",
+        "model_name": "Stock",
+    },
+    "Product": {
+        "app_label": "product",
+        "model_name": "Product",
     }
 }
 
