@@ -7,8 +7,6 @@ from user import models as user_models
 
 
 class CartModelTest(order_mixins.CartTestMixin):
-    def setUp(self) -> None:
-        super().setUp()
 
     def test_get_anonymous_cart(self) -> None:
         user = self.response.wsgi_request.user
