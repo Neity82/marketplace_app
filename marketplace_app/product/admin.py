@@ -8,6 +8,8 @@ from import_export.formats.base_formats import XLS, JSON, YAML
 from modeltranslation.admin import TranslationAdmin
 
 from product import models
+from product.models import Product, Category
+from product.utils import undelete_admin, DeletedFilter
 
 from product.resources import ProductResource, StockResource
 
@@ -150,6 +152,7 @@ class AttributeValueAdmin(admin.ModelAdmin):
 
 @admin.register(models.Category)
 class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
+    change_form_template = "admin/undelete_change_form.html"
     list_display = (
         "id",
         "display_icon",
@@ -175,6 +178,15 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
         "icon",
         "sort_index"
     )
+<<<<<<< HEAD
+=======
+    list_filter = (DeletedFilter, )
+    fields = ('title', 'parent', 'icon', 'sort_index')
+>>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
+
+    @staticmethod
+    def admin_manager():
+        return Category.admin_objects
 
     # inlines = [AttributeInLine]
 
@@ -182,10 +194,16 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
     def display_icon(obj):
         return mark_safe(f'<img src="{obj.icon.url}"  height="15" />')
 
+    def response_change(self, request, obj):
+        undelete_admin(self, request, obj)
+        return super(CategoryAdmin, self).response_change(request, obj)
+
 
 @admin.register(models.Product)
 class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
+    change_form_template = "admin/undelete_change_form.html"
     list_display = (
+<<<<<<< HEAD
         "id",
         "title_en",
         "title_ru",
@@ -196,6 +214,19 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "category",
         "created_at",
         "sort_index"
+=======
+        'id',
+        'title_en',
+        'title_ru',
+        'image_display',
+        'is_deleted',
+        'short_description_en',
+        'is_limited',
+        'tags_display',
+        'category',
+        'created_at',
+        'sort_index'
+>>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
     )
     list_display_links = (
         "id",
@@ -208,6 +239,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "title_ru",
     )
     fields = (
+<<<<<<< HEAD
         "title",
         "image",
         "short_description",
@@ -227,9 +259,41 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     readonly_fields = (
         "rating",
         "created_at",
+=======
+        'title',
+        'image',
+        'short_description',
+        'long_description',
+        'is_limited',
+        'tags',
+        'category',
+        'rating',
+        'created_at',
+        'is_deleted',
+    )
+
+    list_filter = (
+        'category',
+        'is_limited',
+        DeletedFilter,
+    )
+
+    readonly_fields = (
+        'rating',
+        'created_at',
+        'is_deleted',
+>>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
     )
 
     inlines = [AttributeValueInLine]
+
+    @staticmethod
+    def admin_manager():
+        return Product.admin_objects
+
+    @staticmethod
+    def is_deleted(obj) -> bool:
+        return obj.deleted_at is not None
 
     def tags_display(self, obj) -> str:
         return ", ".join([tag.title for tag in obj.tags.all()])
@@ -241,6 +305,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
                 product=obj,
                 attribute=attribute,
             )
+        undelete_admin(self, request, obj)
         return super(ProductAdmin, self).response_change(request, obj)
 
     @staticmethod

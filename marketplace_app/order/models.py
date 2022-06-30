@@ -1,14 +1,15 @@
 from decimal import Decimal
 from typing import List
 
-from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
+from timestamps.models import SoftDeletes
 
 from order import utils
 from product.models import Stock
 from user.models import CustomUser
+from discount.controllers import get_basket_discount
 
 
 class CartEntity(models.Model):
@@ -94,22 +95,22 @@ class Cart(models.Model):
     def __len__(self) -> int:
         return self.count
 
-    def add_to_cart(self, stock_id: int) -> (bool, str):
+    def add_to_cart(self, stock_id: int, cnt: int = 1) -> (bool, str):
         """
         Добавляем товар в корзину:
         создаем новый CartEntity или обновляем quantity у старого
-        :param stock_id: id товара (складского остатка)
+        :param
+        stock_id: id товара (складского остатка)
+        cnt: количество добавляемого товара
         :return: bool - успех добавления, сообщение
         """
         result = True
         message = utils.ADD_TO_CART_SUCCESS
 
-        cart_entity = CartEntity.objects.filter(
-            cart_id=self.pk, stock_id=stock_id
-        ).first()
+        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
         if cart_entity:
             if cart_entity.stock.count > cart_entity.quantity:
-                cart_entity.quantity = F("quantity") + 1
+                cart_entity.quantity = F("quantity") + cnt
                 cart_entity.save()
         else:
             CartEntity.objects.create(cart_id=self.pk, stock_id=stock_id)
@@ -246,18 +247,26 @@ class Cart(models.Model):
         :return: tuple(сумма без скидок, сумма со скидкой)
         """
         old_sum = Decimal(0.0)
-        discount_sum = Decimal(0.0)
+        product_discount_sum = Decimal(0.0)
 
-        for cart_entity in CartEntity.objects.filter(cart=self).select_related("stock"):
+        cart_objects: QuerySet[CartEntity] = \
+            CartEntity.objects.filter(cart=self).select_related("stock")
+        for cart_entity in cart_objects:
             old_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
             if cart_entity.stock.product.discount:
-                discount_sum += (
+                product_discount_sum += (
                     Decimal(cart_entity.stock.product.discount.get("price"))
                     * cart_entity.quantity
                 )
             else:
-                discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
-        return old_sum, discount_sum
+                product_discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
+
+        basket_discount_sum = get_basket_discount(
+            len(cart_objects), old_sum
+        )
+        if basket_discount_sum != 0:
+            return old_sum, min(product_discount_sum, basket_discount_sum)
+        return old_sum, product_discount_sum
 
     def get_min_sum(self) -> Decimal:
         """Возвращаем минимальную сумму стоимости товаров"""
@@ -315,19 +324,13 @@ class Cart(models.Model):
         return instance
 
     @classmethod
-    def get_cart(cls, request: WSGIRequest) -> "Cart":
+    def get_cart(cls, user: CustomUser, device: str) -> "Cart":
         """
-        Получаем объект корзины из реквеста пользователя, проверяя cookie
-        :param request: django wsgi реквест
+        Получаем объект корзины из пользователя и id устройства
+        :param user: пользователь из запроса
+        :param device:
         :return: объект Корзины
         """
-        user = getattr(request, "user", None)
-        device = request.COOKIES.get("device", None)
-
-        assert user, "can't get user from request!"
-
-        # assert device, 'no "device", check static!'
-
         if user.is_anonymous:
             instance = cls._get_anonymous_cart(device=device)
         else:
@@ -436,7 +439,7 @@ class Delivery(models.Model):
         return Decimal(delivery_sum)
 
 
-class Order(models.Model):
+class Order(SoftDeletes):
     """Модель заказа"""
 
     user_id = models.ForeignKey(
@@ -517,7 +520,7 @@ class Order(models.Model):
         """Метод получения товаров в заказе
 
         :return: Товары в заказе
-        :rtype: List['OrderEntity']
+        :rtype: List["OrderEntity"]
         """
 
         result: List[OrderEntity] = OrderEntity.objects.filter(
@@ -584,23 +587,15 @@ class Order(models.Model):
 
     @classmethod
     def create_order(
-        cls, cart: Cart, delivery_data: dict, payment_data: dict, user: CustomUser
+        cls, cart: Cart, delivery: Delivery, payment_type: str, user: CustomUser
     ) -> "Order":
         """Создание заказа"""
         with transaction.atomic():
-            delivery_type_pk = delivery_data.pop("delivery_type")
-            delivery_type_obj = DeliveryType.objects.filter(id=delivery_type_pk).first()
-            delivery_price = Delivery.get_delivery_sum(
-                cart=cart, delivery_type_obj=delivery_type_obj
-            )
-            delivery_obj = Delivery.objects.create(
-                delivery_type=delivery_type_obj, price=delivery_price, **delivery_data
-            )
 
             order = Order.objects.create(
                 user_id=user,
-                delivery_id=delivery_obj,
-                payment_type=payment_data.get("payment_type"),
+                delivery_id=delivery,
+                payment_type=payment_type,
             )
 
             for cart_entity in CartEntity.objects.filter(

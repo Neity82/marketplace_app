@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load i18n %}
+{% load cache %}
 
 {% block head %}
   {% include "head.html" %}
@@ -40,6 +41,7 @@
   <div class="Section Section_column Section_columnLeft Section_columnWide">
     <div class="wrap">
       <div class="Section-column">
+        {% cache 86400 shop_info %}
         {% if shop.shipping_policy %}
             <div class="Section-columnSection Section-columnSection_mark">
               <div class="media media_advantage">
@@ -140,6 +142,7 @@
               </div>
             </div>
         {% endif %}
+        {% endcache %}
         <div class="Section-columnSection">
           <header class="Section-header">
             <strong class="Section-title">{% translate "Follow Us" %}
@@ -203,12 +206,14 @@
         </header>
         <div class="Cards">
           {% if products %}
+            {% cache 3600 shop_popular_products %}
             {% for product in products %}
               {% url 'product:detail' product.id as product_url %}
                 <div class="Card">
                   {% include "card.html" %}
                 </div>
             {% endfor %}
+            {% endcache %}
           {% endif %}
         </div>
       </div>

@@ -46,11 +46,15 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
+<<<<<<< HEAD
     # 'modeltranslation',
     'django_celery_beat',
     'import_export_celery',
     'import_export',
+=======
+>>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
     'payments.apps.PaymentsConfig',
+    'timestamps',
 ]
 
 MIDDLEWARE = [

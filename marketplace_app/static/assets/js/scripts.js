@@ -962,7 +962,7 @@
     // get click-events on all objects with add-to-cart id
     // add product to cart
     $(document).on('click', '#add-to-cart', function(event) {
-        let addToCardButtons = document.querySelectorAll('.Card-btn, .Compare-btn, .Product-btn');
+        let addToCardButtons = document.querySelectorAll('.Card-btn, .Compare-btn, .Product-btn, .add_to_cart_shop');
         event.preventDefault();
         const target = event.currentTarget;
         let is_product = false
@@ -974,6 +974,76 @@
                         type: 'POST',
                         beforeSend: setCSRFHeader,
                         url: target.href,
+                        data: {
+                            'is_product': is_product,
+                            'method': 'post'
+                        },
+                        success: function(response) {
+                            document.getElementById("CartBlock-amount").innerHTML = response.cart_count
+                            document.getElementById("CartBlock-price").innerHTML = response.price
+                            popUp(response.message, response.type);
+                        },
+                        error: function(xhr, errmsg, err) {
+                            popUp(err, 'error');
+
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+
+    // get click-events on all objects with add-to-cart id
+    // add product to cart
+    $(document).on('click', '#add-to-cart-shop', function(event) {
+        let addToCardButtons = document.querySelectorAll('.add_to_cart_shop');
+        event.preventDefault();
+        const target = event.currentTarget;
+        let is_product = false
+        if (target && target.classList.contains('product')) {
+            is_product = true
+            addToCardButtons.forEach((item) => {
+                if (target === item) {
+                    $.ajax({
+                        type: 'POST',
+                        beforeSend: setCSRFHeader,
+                        url: target.href,
+                        data: {
+                            'is_product': is_product,
+                            'method': 'post'
+                        },
+                        success: function(response) {
+                            document.getElementById("CartBlock-amount").innerHTML = response.cart_count
+                            document.getElementById("CartBlock-price").innerHTML = response.price
+                            popUp(response.message, response.type);
+                        },
+                        error: function(xhr, errmsg, err) {
+                            popUp(err, 'error');
+
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+    // get click-events on all objects with add-to-cart id
+    // add product to cart
+    $(document).on('click', '#add-to-cart', function(event) {
+        let addToCardButtons = document.querySelectorAll('.add_to_cart');
+        event.preventDefault();
+        const target = event.currentTarget;
+        let is_product = false
+        if (target && target.classList.contains('product')) {
+            is_product = true
+            let cnt = document.getElementsByName("amount")
+            addToCardButtons.forEach((item) => {
+                if (target === item) {
+                    $.ajax({
+                        type: 'POST',
+                        beforeSend: setCSRFHeader,
+                        url: target.href + '/' + cnt[0].value,
                         data: {
                             'is_product': is_product,
                             'method': 'post'
@@ -1011,7 +1081,7 @@
     // get click-events on all objects with Amount-add class
     // increment product's count in cart
     $(document).on('click', '.Amount-add', function(event) {
-        let addButtons = document.querySelectorAll('.Amount-add');
+        let amountButtons = document.querySelectorAll('.Amount-add');
         event.preventDefault();
         const target = event.currentTarget;
         if (target) {

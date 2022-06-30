@@ -51,16 +51,16 @@
               </div>
             </div>
             <div class="Cart-block Cart-block_price">
-              {% if cart_entity.stock.product.discount.type %}
-                <div class="Cart-price Cart-price_old">{{ cart_entity.stock.price }}$
-                </div>
+              {% comment %} {% if cart_entity.stock.product.discount.type %} {% endcomment %}
+                {% comment %} <div class="Cart-price Cart-price_old">{{ cart_entity.stock.price }}$ {% endcomment %}
+                {% comment %} </div> {% endcomment %}
 
-                <div class="Cart-price">{{ cart_entity.stock.product.discount.price }}$
-                </div>
-              {% else %}
+                {% comment %} <div class="Cart-price">{{ cart_entity.stock.product.discount.price }}$ {% endcomment %}
+                {% comment %} </div> {% endcomment %}
+              {% comment %} {% else %} {% endcomment %}
                 <div class="Cart-price">{{ cart_entity.stock.price }}$
                 </div>
-              {% endif %}
+              {% comment %} {% endif %} {% endcomment %}
             </div>
           </div>
           <div class="Cart-block Cart-block_row">

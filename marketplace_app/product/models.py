@@ -9,6 +9,7 @@ from django.db import models
 from django.db.models import Q, Avg, Min, Sum, QuerySet
 from django.db.models.functions import Coalesce
 from django.utils.translation import gettext_lazy as _
+from timestamps.models import SoftDeletes
 
 from discount.models import Discount
 from discount.models import ProductDiscount
@@ -35,7 +36,7 @@ class Tag(models.Model):
         return getattr(self, "title")
 
 
-class Category(models.Model):
+class Category(SoftDeletes):
     """Модель: категория"""
 
     SEP = " / "
@@ -71,7 +72,19 @@ class Category(models.Model):
         default=0
     )
 
+<<<<<<< HEAD
     objects = models.Manager()
+=======
+    # TODO в качестве привязки аттрибутов к категории
+    #  рассмотреть EAV:
+    #   - https://pypi.org/project/eav-django/
+    #   - https://github.com/mvpdev/django-eav
+    #  рассмотреть JSONFiled:
+    #   - https://github.com/jrief/django-entangled
+    #   - https://github.com/abogushov/django-admin-json-editor
+
+    admin_objects = models.Manager()
+>>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
 
     class Meta:
         verbose_name = _("category")
@@ -256,7 +269,7 @@ DiscountDict = TypedDict(
     )
 
 
-class Product(models.Model):
+class Product(SoftDeletes):
     """Модель: продукт"""
 
     title = models.CharField(
@@ -332,7 +345,7 @@ class Product(models.Model):
         default=0
     )
 
-    objects = models.Manager()
+    admin_objects = models.Manager()
 
     class Meta:
         verbose_name = _("product")
@@ -650,6 +663,11 @@ class Stock(models.Model):
     @property
     def pk(self) -> int:
         return getattr(self, "id")
+
+    @staticmethod
+    def get_products_in_stock_by_shop(shop: Shop) -> QuerySet[Stock]:
+        product_in_stock = Stock.objects.filter(shop=shop)
+        return product_in_stock
 
     @classmethod
     def get_products_in_stock(cls, product: Product) -> QuerySet[Stock]:
