@@ -63,8 +63,7 @@ class Banner(models.Model):
 
 
 class SEOItem(models.Model):
-    """Модель переопределения обозначений url
-    """
+    """Модель переопределения обозначений url"""
     path_name = models.CharField(
         verbose_name=_("path name"),
         max_length=512
@@ -106,8 +105,7 @@ class SEOItem(models.Model):
 
 
 class Settings(models.Model):
-    """Модель хранения настроек проекта
-    """
+    """Модель хранения настроек проекта"""
     name = models.CharField(
         verbose_name=_("name"),
         max_length=50,

@@ -7,8 +7,7 @@ from modeltranslation.admin import TranslationAdmin
 
 @admin.register(Banner)
 class BannerAdmin(TranslationAdmin):
-    """Класс регистрации в админке модели Banner
-    """
+    """Класс регистрации в админке модели Banner"""
     list_display = ("id", "title", "is_active")
     list_editable = ("is_active",)
 
@@ -25,8 +24,7 @@ class BannerAdmin(TranslationAdmin):
 
 @admin.register(Settings)
 class SettingsAdmin(admin.ModelAdmin):
-    """Класс решистрации в админке модели Settings
-    """
+    """Класс регистрации в админке модели Settings"""
     list_display = ("__str__", "value")
 
 

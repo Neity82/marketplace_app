@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class InfoConfig(AppConfig):
-    name = 'info'
+    name = "info"
     verbose_name = _("info")
     verbose_name_plural = _("info")
-    default_auto_field = 'django.db.models.BigAutoField'
+    default_auto_field = "django.db.models.BigAutoField"

@@ -56,52 +56,52 @@ class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
         "rank",
     )
     list_display_links = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     search_fields = (
-        'id',
-        'title_en',
-        'title_ru',
-        'category',
-        'help_text',
+        "id",
+        "title_en",
+        "title_ru",
+        "category",
+        "help_text",
     )
     fields = (
-        'title',
-        'type',
-        'category',
-        'help_text',
-        'rank',
+        "title",
+        "type",
+        "category",
+        "help_text",
+        "rank",
     )
     list_filter = (
-        'category',
-        'title_en',
-        'title_ru',
-        'rank'
+        "category",
+        "title_en",
+        "title_ru",
+        "rank"
     )
 
 
 @admin.register(models.Unit)
 class UnitAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
-        'title_en',
-        'title_ru',
-        'unit_description',
+        "title_en",
+        "title_ru",
+        "unit_description",
     )
     list_display_links = (
-        'title_en',
-        'title_ru',
-        'unit_description',
+        "title_en",
+        "title_ru",
+        "unit_description",
     )
     search_fields = (
-        'title_en',
-        'title_ru',
-        'unit_description',
+        "title_en",
+        "title_ru",
+        "unit_description",
     )
     fields = (
-        'title',
-        'unit_description',
+        "title",
+        "unit_description",
     )
 
 
@@ -109,47 +109,72 @@ class ChildInlineFormSet(BaseInlineFormSet):
 
     def __init__(self, *args, **kwargs):
         super(ChildInlineFormSet, self).__init__(*args, **kwargs)
-        self.queryset = self.queryset.order_by('-attribute__rank')
+        self.queryset = self.queryset.order_by("-attribute__rank")
 
 
 class AttributeValueInLine(admin.StackedInline):
     model = models.AttributeValue
     extra = 0
     formset = ChildInlineFormSet
-    readonly_fields = ('attribute',)
+    readonly_fields = ("attribute",)
 
 
 @admin.register(models.AttributeValue)
 class AttributeValueAdmin(admin.ModelAdmin):
-    list_display = ('product', 'attribute', 'value', 'unit',)
-    list_display_links = ('product', 'attribute', 'value', 'unit',)
-    search_fields = ('product', 'attribute', 'value', 'unit',)
-    fields = ('product', 'attribute', 'value', 'unit',)
+    list_display = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
+    list_display_links = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
+    search_fields = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
+    fields = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
     # inlines = [AttributeInLine]
 
 
 @admin.register(models.Category)
 class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
-        'id',
-        'display_icon',
-        'title_en',
-        'title_ru',
-        'parent',
-        'sort_index',
+        "id",
+        "display_icon",
+        "title_en",
+        "title_ru",
+        "parent",
+        "sort_index",
     )
     list_display_links = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     search_fields = (
-        'id',
-        'title_en',
-        'title_ru',
-        'parent',
+        "id",
+        "title_en",
+        "title_ru",
+        "parent",
     )
-    fields = ('title', 'parent', 'icon', 'sort_index')
+    fields = (
+        "title",
+        "parent",
+        "icon",
+        "sort_index"
+    )
 
     # inlines = [AttributeInLine]
 
@@ -161,47 +186,47 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
 @admin.register(models.Product)
 class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
-        'id',
-        'title_en',
-        'title_ru',
-        'image_display',
-        'short_description_en',
-        'is_limited',
-        'tags_display',
-        'category',
-        'created_at',
-        'sort_index'
+        "id",
+        "title_en",
+        "title_ru",
+        "image_display",
+        "short_description_en",
+        "is_limited",
+        "tags_display",
+        "category",
+        "created_at",
+        "sort_index"
     )
     list_display_links = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     search_fields = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     fields = (
-        'title',
-        'image',
-        'short_description',
-        'long_description',
-        'is_limited',
-        'tags',
-        'category',
-        'rating',
-        'created_at',
+        "title",
+        "image",
+        "short_description",
+        "long_description",
+        "is_limited",
+        "tags",
+        "category",
+        "rating",
+        "created_at",
     )
 
     list_filter = (
-        'category',
-        'is_limited',
+        "category",
+        "is_limited",
     )
 
     readonly_fields = (
-        'rating',
-        'created_at',
+        "rating",
+        "created_at",
     )
 
     inlines = [AttributeValueInLine]
@@ -222,86 +247,66 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     def image_display(obj):
         return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
-    tags_display.short_description = _('Tags')
-    #
-    # resource_class = ProductResource
-    #
-    # def get_import_formats(self):
-    #     formats = (
-    #         XLS,
-    #         JSON,
-    #         YAML,
-    #     )
-    #     return [f for f in formats if f().can_import()]
+    tags_display.short_description = _("Tags")
 
 
 @admin.register(models.DailyOffer)
 class DailyOfferAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'product',
-        'select_date',
+        "id",
+        "product",
+        "select_date",
     )
     list_display_links = (
-        'id',
-        'product',
+        "id",
+        "product",
     )
     search_fields = (
-        'id',
-        'product',
-        'select_date',
+        "id",
+        "product",
+        "select_date",
     )
     fields = (
-        'product',
-        'select_date',
+        "product",
+        "select_date",
     )
 
 
 @admin.register(models.Stock)
 class StockAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'price',
-        'count',
-        'shop',
-        'product',
+        "id",
+        "price",
+        "count",
+        "shop",
+        "product",
     )
     list_display_links = (
-        'id',
-        'price',
+        "id",
+        "price",
     )
     search_fields = (
-        'id',
-        'price',
+        "id",
+        "price",
     )
     fields = (
-        'price',
-        'count',
-        'shop',
-        'product',
+        "price",
+        "count",
+        "shop",
+        "product",
     )
     list_filter = (
-        'shop',
-        'product',
+        "shop",
+        "product",
     )
-
-    # resource_class = StockResource
-    #
-    # def get_import_formats(self):
-    #     formats = (
-    #         XLS,
-    #         JSON,
-    #         YAML,
-    #     )
-    #     return [f for f in formats if f().can_import()]
 
 
 @admin.register(models.ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
     list_display = (
-        'date',
-        'user',
-        'product',
-        'text',
-        'rating'
+        "date",
+        "user",
+        "product",
+        "text",
+        "rating"
     )
