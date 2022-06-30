@@ -1081,7 +1081,7 @@
     // get click-events on all objects with Amount-add class
     // increment product's count in cart
     $(document).on('click', '.Amount-add', function(event) {
-        let addButtons = document.querySelectorAll('.Amount-add');
+        let amountButtons = document.querySelectorAll('.Amount-add');
         event.preventDefault();
         const target = event.currentTarget;
         if (target) {

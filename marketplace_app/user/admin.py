@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext as _
 
+from product.utils import undelete_admin, DeletedFilter
 from user.forms import CustomUserChangeForm, CustomUserAddForm
 from user.models import CustomUser, UserProductView, Compare, CompareEntity
 
@@ -14,6 +15,7 @@ class CompareEntityInline(admin.StackedInline):
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     """Представление модели пользователь в интерфейсе администратора"""
+    change_form_template = "admin/undelete_change_form.html"
 
     form = CustomUserChangeForm
     add_form = CustomUserAddForm
@@ -21,6 +23,7 @@ class CustomUserAdmin(UserAdmin):
 
     list_display = ['id', 'email', 'last_name', 'first_name', 'middle_name', 'phone']
     list_display_links = ['id', 'email']
+    list_filter = (DeletedFilter, )
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -43,6 +46,10 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = ('email',)
     ordering = ('email',)
+
+    def response_change(self, request, obj):
+        undelete_admin(self, request, obj)
+        return super(CustomUserAdmin, self).response_change(request, obj)
 
 
 @admin.register(UserProductView)

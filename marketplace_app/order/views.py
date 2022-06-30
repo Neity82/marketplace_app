@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.views import generic
 from formtools.wizard.views import SessionWizardView
 
-from order.mixins import CartMixin
+from order.mixins import CartMixin, cart_init_data
 from order import forms as order_forms
 from order import models as order_models
 from order.utils import WRONG_REQUEST
@@ -104,7 +104,7 @@ class AddToCartView(CartMixin):
         """
         pk = kwargs.get("pk")
         shop = kwargs.get("shop_id")
-        cnt = kwargs.get("cnt")
+        cnt = kwargs.get("cnt", 1)
         cart = self.get_cart()
         is_product = request.POST.get("is_product", None)
         if shop is not None:
@@ -116,7 +116,6 @@ class AddToCartView(CartMixin):
         else:
             stock_id = pk
 
-        cnt = cnt if cnt is not None else 1
         success, message = cart.add_to_cart(stock_id=stock_id, cnt=int(cnt))
         response_data = self.prepare_response_data(
             success=success,
@@ -366,7 +365,7 @@ class OrderView(SessionWizardView):
 
     def confirm(self, form_dict, **kwargs):
         """Шаг подтверждения заказа"""
-        cart = self.cart_model.get_cart(self.request)
+        cart = self.cart_model.get_cart(**cart_init_data(self.request))
         context = {
             form_name: form.cleaned_data for form_name, form in form_dict.items()
         }
@@ -390,11 +389,21 @@ class OrderView(SessionWizardView):
         delivery_data = context.get(self.delivery_form_key)
         payment_data = context.get(self.payment_form_key)
         cart = context.get(self.cart_key)
+
+        delivery_type_pk = delivery_data.pop("delivery_type")
+        delivery_type_obj = order_models.DeliveryType.objects.filter(id=delivery_type_pk).first()
+        delivery_price = order_models.Delivery.get_delivery_sum(
+            cart=cart, delivery_type_obj=delivery_type_obj
+        )
+        delivery_obj = order_models.Delivery.objects.create(
+            delivery_type=delivery_type_obj, price=delivery_price, **delivery_data
+        )
+
         order = self.order_model.create_order(
             cart=cart,
-            delivery_data=delivery_data,
-            payment_data=payment_data,
-            user=self.request.user,
+            delivery=delivery_obj,
+            payment_type=payment_data.get("payment_type"),
+            user=getattr(self.request, 'user'),
         )
         self.storage.reset()
         kwargs.update(pk=getattr(order, "id"))
@@ -403,7 +412,7 @@ class OrderView(SessionWizardView):
     def done(self, form_list: list, **kwargs) -> HttpResponse:
         """Постобработка данных и оформление заказа"""
         form_dict = kwargs.pop("form_dict")
-        cart = self.cart_model.get_cart(self.request)
+        cart = self.cart_model.get_cart(**cart_init_data(self.request))
         context = {
             form_name: form.cleaned_data for form_name, form in form_dict.items()
         }

@@ -4,9 +4,10 @@ from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
 from modeltranslation.admin import TranslationAdmin
-from super_inlines.admin import SuperInlineModelAdmin, SuperModelAdmin
 
 from product import models
+from product.models import Product, Category
+from product.utils import undelete_admin, DeletedFilter
 
 
 class TranslationAdminMedia:
@@ -83,6 +84,7 @@ class AttributeValueAdmin(admin.ModelAdmin):
 
 @admin.register(models.Category)
 class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
+    change_form_template = "admin/undelete_change_form.html"
     list_display = (
         'id',
         'display_icon',
@@ -102,7 +104,12 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
         'title_ru',
         'parent',
     )
+    list_filter = (DeletedFilter, )
     fields = ('title', 'parent', 'icon', 'sort_index')
+
+    @staticmethod
+    def admin_manager():
+        return Category.admin_objects
 
     # inlines = [AttributeInLine]
 
@@ -110,14 +117,20 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
     def display_icon(obj):
         return mark_safe(f'<img src="{obj.icon.url}"  height="15" />')
 
+    def response_change(self, request, obj):
+        undelete_admin(self, request, obj)
+        return super(CategoryAdmin, self).response_change(request, obj)
+
 
 @admin.register(models.Product)
 class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
+    change_form_template = "admin/undelete_change_form.html"
     list_display = (
         'id',
         'title_en',
         'title_ru',
         'image_display',
+        'is_deleted',
         'short_description_en',
         'is_limited',
         'tags_display',
@@ -145,19 +158,30 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         'category',
         'rating',
         'created_at',
+        'is_deleted',
     )
 
     list_filter = (
         'category',
         'is_limited',
+        DeletedFilter,
     )
 
     readonly_fields = (
         'rating',
         'created_at',
+        'is_deleted',
     )
 
     inlines = [AttributeValueInLine]
+
+    @staticmethod
+    def admin_manager():
+        return Product.admin_objects
+
+    @staticmethod
+    def is_deleted(obj) -> bool:
+        return obj.deleted_at is not None
 
     def tags_display(self, obj) -> str:
         return ", ".join([tag.title for tag in obj.tags.all()])
@@ -169,6 +193,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
                 product=obj,
                 attribute=attribute,
             )
+        undelete_admin(self, request, obj)
         return super(ProductAdmin, self).response_change(request, obj)
 
     @staticmethod

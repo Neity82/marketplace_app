@@ -1,10 +1,10 @@
 from decimal import Decimal
 from typing import List
 
-from django.core.handlers.wsgi import WSGIRequest
 from django.db import models, transaction
 from django.db.models import Sum, F, Q, QuerySet
 from django.utils.translation import gettext_lazy as _
+from timestamps.models import SoftDeletes
 
 from order import utils
 from product.models import Stock
@@ -324,19 +324,13 @@ class Cart(models.Model):
         return instance
 
     @classmethod
-    def get_cart(cls, request: WSGIRequest) -> "Cart":
+    def get_cart(cls, user: CustomUser, device: str) -> "Cart":
         """
-        Получаем объект корзины из реквеста пользователя, проверяя cookie
-        :param request: django wsgi реквест
+        Получаем объект корзины из пользователя и id устройства
+        :param user: пользователь из запроса
+        :param device:
         :return: объект Корзины
         """
-        user = getattr(request, "user", None)
-        device = request.COOKIES.get("device", None)
-
-        assert user, "can't get user from request!"
-
-        # assert device, "no "device", check static!"
-
         if user.is_anonymous:
             instance = cls._get_anonymous_cart(device=device)
         else:
@@ -445,7 +439,7 @@ class Delivery(models.Model):
         return Decimal(delivery_sum)
 
 
-class Order(models.Model):
+class Order(SoftDeletes):
     """Модель заказа"""
 
     user_id = models.ForeignKey(
@@ -593,23 +587,15 @@ class Order(models.Model):
 
     @classmethod
     def create_order(
-        cls, cart: Cart, delivery_data: dict, payment_data: dict, user: CustomUser
+        cls, cart: Cart, delivery: Delivery, payment_type: str, user: CustomUser
     ) -> "Order":
         """Создание заказа"""
         with transaction.atomic():
-            delivery_type_pk = delivery_data.pop("delivery_type")
-            delivery_type_obj = DeliveryType.objects.filter(id=delivery_type_pk).first()
-            delivery_price = Delivery.get_delivery_sum(
-                cart=cart, delivery_type_obj=delivery_type_obj
-            )
-            delivery_obj = Delivery.objects.create(
-                delivery_type=delivery_type_obj, price=delivery_price, **delivery_data
-            )
 
             order = Order.objects.create(
                 user_id=user,
-                delivery_id=delivery_obj,
-                payment_type=payment_data.get("payment_type"),
+                delivery_id=delivery,
+                payment_type=payment_type,
             )
 
             for cart_entity in CartEntity.objects.filter(
