@@ -15,10 +15,5 @@ def add_daily_offer():
         ).order_by("?").first()
         daily_offer = DailyOffer(product=product_day)
         daily_offer.save()
-    product_day = Product.objects.filter(
-        is_limited=True
-    ).order_by("?").first()
-    daily_offer = DailyOffer(product=product_day)
-    daily_offer.save()
 
 

@@ -8,28 +8,52 @@ from import_export.formats.base_formats import XLS, JSON, YAML
 from modeltranslation.admin import TranslationAdmin
 
 from product import models
-from product.forms import CustomImportForm
+
 from product.resources import ProductResource, StockResource
 
 
 class TranslationAdminMedia:
     class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
-            'modeltranslation/js/tabbed_translation_fields.js',
+            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
+            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
+            "modeltranslation/js/tabbed_translation_fields.js",
         )
         css = {
-            'screen': ('modeltranslation/css/tabbed_translation_fields.css',),
+            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
         }
 
 
 @admin.register(models.Tag)
 class TagAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
+    )
+    list_display_links = (
+        "id",
+        "title_en",
+        "title_ru",
+    )
+    search_fields = (
+        "id",
+        "title_en",
+        "title_ru",
+    )
+    fields = ("title",)
+
+
+@admin.register(models.Attribute)
+class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
+    list_display = (
+        "id",
+        "title_en",
+        "title_ru",
+        "category",
+        "type",
+        "help_text",
+        "rank",
     )
     list_display_links = (
         'id',
@@ -40,26 +64,45 @@ class TagAdmin(TranslationAdmin, TranslationAdminMedia):
         'id',
         'title_en',
         'title_ru',
+        'category',
+        'help_text',
     )
-    fields = ('title',)
-
-
-@admin.register(models.Attribute)
-class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
-    list_display = (
-    'id', 'title_en', 'title_ru', 'category', 'type', 'help_text', 'rank',)
-    list_display_links = ('id', 'title_en', 'title_ru',)
-    search_fields = ('id', 'title_en', 'title_ru', 'category', 'help_text',)
-    fields = ('title', 'type', 'category', 'help_text', 'rank',)
-    list_filter = ('category', 'title_en', 'title_ru', 'rank')
+    fields = (
+        'title',
+        'type',
+        'category',
+        'help_text',
+        'rank',
+    )
+    list_filter = (
+        'category',
+        'title_en',
+        'title_ru',
+        'rank'
+    )
 
 
 @admin.register(models.Unit)
 class UnitAdmin(TranslationAdmin, TranslationAdminMedia):
-    list_display = ('title_en', 'title_ru', 'unit_description',)
-    list_display_links = ('title_en', 'title_ru', 'unit_description',)
-    search_fields = ('title_en', 'title_ru', 'unit_description',)
-    fields = ('title', 'unit_description',)
+    list_display = (
+        'title_en',
+        'title_ru',
+        'unit_description',
+    )
+    list_display_links = (
+        'title_en',
+        'title_ru',
+        'unit_description',
+    )
+    search_fields = (
+        'title_en',
+        'title_ru',
+        'unit_description',
+    )
+    fields = (
+        'title',
+        'unit_description',
+    )
 
 
 class ChildInlineFormSet(BaseInlineFormSet):
@@ -116,7 +159,7 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
 
 
 @admin.register(models.Product)
-class ProductAdmin(ImportMixin, TranslationAdmin, TranslationAdminMedia):
+class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
         'id',
         'title_en',
@@ -180,16 +223,16 @@ class ProductAdmin(ImportMixin, TranslationAdmin, TranslationAdminMedia):
         return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
     tags_display.short_description = _('Tags')
-
-    resource_class = ProductResource
-
-    def get_import_formats(self):
-        formats = (
-          XLS,
-          JSON,
-          YAML,
-          )
-        return [f for f in formats if f().can_import()]
+    #
+    # resource_class = ProductResource
+    #
+    # def get_import_formats(self):
+    #     formats = (
+    #         XLS,
+    #         JSON,
+    #         YAML,
+    #     )
+    #     return [f for f in formats if f().can_import()]
 
 
 @admin.register(models.DailyOffer)
@@ -242,15 +285,15 @@ class StockAdmin(admin.ModelAdmin):
         'product',
     )
 
-    resource_class = StockResource
-
-    def get_import_formats(self):
-        formats = (
-          XLS,
-          JSON,
-          YAML,
-          )
-        return [f for f in formats if f().can_import()]
+    # resource_class = StockResource
+    #
+    # def get_import_formats(self):
+    #     formats = (
+    #         XLS,
+    #         JSON,
+    #         YAML,
+    #     )
+    #     return [f for f in formats if f().can_import()]
 
 
 @admin.register(models.ProductReview)
