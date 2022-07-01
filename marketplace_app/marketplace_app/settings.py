@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,6 +46,10 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'shop.apps.ShopConfig',
     'user.apps.UserConfig',
+    # 'modeltranslation',
+    'django_celery_beat',
+    'import_export_celery',
+    'import_export',
     'payments.apps.PaymentsConfig',
     'timestamps',
 ]
@@ -60,9 +63,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'author.middlewares.AuthorDefaultBackendMiddleware',
 ]
 
-ROOT_URLCONF = 'marketplace_app.urls'
+ROOT_URLCONF = "marketplace_app.urls"
 
 TEMPLATES_PRODUCT_DIR = os.path.join(BASE_DIR, "product", "templates")
 TEMPLATES_INFO_DIR = os.path.join(BASE_DIR, "info", "templates")
@@ -149,7 +153,7 @@ LANGUAGES = [
     ('ru', 'Русский'),
 ]
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'),]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -170,6 +174,8 @@ STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+IMPORT_FILE_ROOT = os.path.join(BASE_DIR, "import_files")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -181,4 +187,39 @@ AUTH_USER_MODEL = 'user.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 # LOGOUT_REDIRECT_URL = '/login/'
 
+# REDIS related settings
+REDIS_HOST = "127.0.0.1"
+# REDIS_HOST = "redis"
+REDIS_PORT = "6379"
+CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
+CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+IMPORT_EXPORT_CELERY_INIT_MODULE = "marketplace_app.celery"
+
+
+def resource_product():
+    from product.resources import ProductResource
+    return ProductResource
+
+
+def resource_stock():
+    from product.resources import StockResource
+    return StockResource
+
+
+IMPORT_EXPORT_CELERY_MODELS = {
+    "Stock": {
+        "app_label": "stock",
+        "model_name": "Stock",
+        "resource": resource_stock,
+    },
+    "Product": {
+        "app_label": "product",
+        "model_name": "Product",
+        "resource": resource_product,
+    }
+}
 

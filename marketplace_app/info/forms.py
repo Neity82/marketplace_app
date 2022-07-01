@@ -9,13 +9,12 @@ def get_choices():
 
 
 class SEOItemForm(forms.ModelForm):
-    """Форма редактирования модели SEO
-    """
+    """Форма редактирования модели SEO"""
 
     def __init__(self, *args, **kwargs):
         super(SEOItemForm, self).__init__(*args, **kwargs)
-        self.fields['path_name'].widget = forms.Select(choices=get_choices())
+        self.fields["path_name"].widget = forms.Select(choices=get_choices())
 
     class Meta:
         model = SEOItem
-        fields = '__all__'
+        fields = "__all__"

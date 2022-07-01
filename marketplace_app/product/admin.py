@@ -14,72 +14,136 @@ from product.utils import undelete_admin, DeletedFilter
 class TranslationAdminMedia:
     class Media:
         js = (
-            'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js',
-            'modeltranslation/js/tabbed_translation_fields.js',
+            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
+            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
+            "modeltranslation/js/tabbed_translation_fields.js",
         )
         css = {
-            'screen': ('modeltranslation/css/tabbed_translation_fields.css',),
+            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
         }
 
 
 @admin.register(models.Tag)
 class TagAdmin(TranslationAdmin, TranslationAdminMedia):
     list_display = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     list_display_links = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     search_fields = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
-    fields = ('title',)
+    fields = ("title",)
 
 
 @admin.register(models.Attribute)
 class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
-    list_display = ('id', 'title_en', 'title_ru', 'category', 'type', 'help_text', 'rank',)
-    list_display_links = ('id', 'title_en', 'title_ru', )
-    search_fields = ('id', 'title_en', 'title_ru', 'category', 'help_text',)
-    fields = ('title', 'type', 'category', 'help_text', 'rank',)
-    list_filter = ('category', 'title_en', 'title_ru', 'rank')
+    list_display = (
+        "id",
+        "title_en",
+        "title_ru",
+        "category",
+        "type",
+        "help_text",
+        "rank",
+    )
+    list_display_links = (
+        "id",
+        "title_en",
+        "title_ru",
+    )
+    search_fields = (
+        "id",
+        "title_en",
+        "title_ru",
+        "category",
+        "help_text",
+    )
+    fields = (
+        "title",
+        "type",
+        "category",
+        "help_text",
+        "rank",
+    )
+    list_filter = (
+        "category",
+        "title_en",
+        "title_ru",
+        "rank"
+    )
 
 
 @admin.register(models.Unit)
 class UnitAdmin(TranslationAdmin, TranslationAdminMedia):
-    list_display = ('title_en', 'title_ru', 'unit_description',)
-    list_display_links = ('title_en', 'title_ru', 'unit_description',)
-    search_fields = ('title_en', 'title_ru', 'unit_description',)
-    fields = ('title', 'unit_description',)
+    list_display = (
+        "title_en",
+        "title_ru",
+        "unit_description",
+    )
+    list_display_links = (
+        "title_en",
+        "title_ru",
+        "unit_description",
+    )
+    search_fields = (
+        "title_en",
+        "title_ru",
+        "unit_description",
+    )
+    fields = (
+        "title",
+        "unit_description",
+    )
 
 
 class ChildInlineFormSet(BaseInlineFormSet):
 
     def __init__(self, *args, **kwargs):
         super(ChildInlineFormSet, self).__init__(*args, **kwargs)
-        self.queryset = self.queryset.order_by('-attribute__rank')
+        self.queryset = self.queryset.order_by("-attribute__rank")
 
 
 class AttributeValueInLine(admin.StackedInline):
     model = models.AttributeValue
     extra = 0
     formset = ChildInlineFormSet
-    readonly_fields = ('attribute',)
+    readonly_fields = ("attribute",)
 
 
 @admin.register(models.AttributeValue)
 class AttributeValueAdmin(admin.ModelAdmin):
-    list_display = ('product', 'attribute', 'value', 'unit',)
-    list_display_links = ('product', 'attribute', 'value', 'unit',)
-    search_fields = ('product', 'attribute', 'value', 'unit',)
-    fields = ('product', 'attribute', 'value', 'unit',)
+    list_display = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
+    list_display_links = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
+    search_fields = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
+    fields = (
+        "product",
+        "attribute",
+        "value",
+        "unit",
+    )
     # inlines = [AttributeInLine]
 
 
@@ -87,26 +151,31 @@ class AttributeValueAdmin(admin.ModelAdmin):
 class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
     change_form_template = "admin/undelete_change_form.html"
     list_display = (
-        'id',
-        'display_icon',
-        'title_en',
-        'title_ru',
-        'parent',
-        'sort_index',
+        "id",
+        "display_icon",
+        "title_en",
+        "title_ru",
+        "parent",
+        "sort_index",
     )
     list_display_links = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     search_fields = (
-        'id',
-        'title_en',
-        'title_ru',
-        'parent',
+        "id",
+        "title_en",
+        "title_ru",
+        "parent",
+    )
+    fields = (
+        "title",
+        "parent",
+        "icon",
+        "sort_index"
     )
     list_filter = (DeletedFilter, )
-    fields = ('title', 'parent', 'icon', 'sort_index')
 
     @staticmethod
     def admin_manager():
@@ -127,51 +196,47 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
 class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     change_form_template = "admin/undelete_change_form.html"
     list_display = (
-        'id',
-        'title_en',
-        'title_ru',
-        'image_display',
-        'is_deleted',
-        'short_description_en',
-        'is_limited',
-        'tags_display',
-        'category',
-        'created_at',
-        'sort_index'
+        "id",
+        "title_en",
+        "title_ru",
+        "image_display",
+        "short_description_en",
+        "is_limited",
+        "tags_display",
+        "category",
+        "created_at",
+        "sort_index"
     )
     list_display_links = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     search_fields = (
-        'id',
-        'title_en',
-        'title_ru',
+        "id",
+        "title_en",
+        "title_ru",
     )
     fields = (
-        'title',
-        'image',
-        'short_description',
-        'long_description',
-        'is_limited',
-        'tags',
-        'category',
-        'rating',
-        'created_at',
-        'is_deleted',
+        "title",
+        "image",
+        "short_description",
+        "long_description",
+        "is_limited",
+        "tags",
+        "category",
+        "rating",
+        "created_at",
     )
-
+    readonly_fields = (
+        "rating",
+        "created_at",
+        "is_deleted",
+    )
     list_filter = (
         'category',
         'is_limited',
         DeletedFilter,
-    )
-
-    readonly_fields = (
-        'rating',
-        'created_at',
-        'is_deleted',
     )
 
     inlines = [AttributeValueInLine]
@@ -201,66 +266,66 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     def image_display(obj):
         return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
-    tags_display.short_description = _('Tags')
+    tags_display.short_description = _("Tags")
 
 
 @admin.register(models.DailyOffer)
 class DailyOfferAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'product',
-        'select_date',
+        "id",
+        "product",
+        "select_date",
     )
     list_display_links = (
-        'id',
-        'product',
+        "id",
+        "product",
     )
     search_fields = (
-        'id',
-        'product',
-        'select_date',
+        "id",
+        "product",
+        "select_date",
     )
     fields = (
-        'product',
-        'select_date',
+        "product",
+        "select_date",
     )
 
 
 @admin.register(models.Stock)
 class StockAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'price',
-        'count',
-        'shop',
-        'product',
+        "id",
+        "price",
+        "count",
+        "shop",
+        "product",
     )
     list_display_links = (
-        'id',
-        'price',
+        "id",
+        "price",
     )
     search_fields = (
-        'id',
-        'price',
+        "id",
+        "price",
     )
     fields = (
-        'price',
-        'count',
-        'shop',
-        'product',
+        "price",
+        "count",
+        "shop",
+        "product",
     )
     list_filter = (
-        'shop',
-        'product',
+        "shop",
+        "product",
     )
 
 
 @admin.register(models.ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
     list_display = (
-        'date',
-        'user',
-        'product',
-        'text',
-        'rating'
+        "date",
+        "user",
+        "product",
+        "text",
+        "rating"
     )

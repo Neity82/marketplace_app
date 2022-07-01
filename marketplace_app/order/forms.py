@@ -74,7 +74,7 @@ class UserInfoForm(forms.Form):
 class DeliveryTypeChoices:
     """Варианты типа доставки при оформлении заказа"""
     # TODO костыль для миграций, джанго очень не любит подобные обращения в таблицу из модулей
-    @db_table_exists('order_deliverytype')
+    @db_table_exists("order_deliverytype")
     def get_choices(self) -> list:
         delivery_types = order_models.DeliveryType.objects.all()
         return [

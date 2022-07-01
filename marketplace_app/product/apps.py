@@ -3,10 +3,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 class ProductConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'product'
-    verbose_name = _("Product")
-    verbose_name_plural = _("Products")
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "product"
+    verbose_name = _("product")
+    verbose_name_plural = _("products")
 
     def ready(self):
-        from . import signals
+        import product.signals

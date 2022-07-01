@@ -48,45 +48,45 @@
                   </div>
                   {% with order.user_id as user %}
                   <div class="Order-info">
-                    <div class="Order-infoType">{% trans "Full name" %}:</div>
+                    <div class="Order-infoType">{% trans "Full name"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ user.get_full_name }}</div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">{% trans "Phone" %}:</div>
+                    <div class="Order-infoType">{% trans "Phone"|capfirst %}:</div>
                     {% phone_normalize phone=user.phone as phone %}
                     <div class="Order-infoContent">{{ phone }}
                     </div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">{% trans "E-mail" %}:</div>
+                    <div class="Order-infoType">{% trans "E-mail"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ user.email }}</div>
                     {% endwith %}
                   </div>
                 </div>
                 <div class="row-block">
                   <div class="Order-info Order-info_delivery">
-                    <div class="Order-infoType">{% trans "Type of delivery" %}:</div>
+                    <div class="Order-infoType">{% trans "Type of delivery"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ order.delivery_id.delivery_type }}</div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">{% trans "City" %}:</div>
+                    <div class="Order-infoType">{% trans "City"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ order.delivery_id.city }}</div>
                   </div>
                   <div class="Order-info">
-                    <div class="Order-infoType">{% trans "Address" %}:</div>
+                    <div class="Order-infoType">{% trans "Address"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ order.delivery_id.address }}</div>
                   </div>
                   <div class="Order-info Order-info_pay">
-                    <div class="Order-infoType">{% trans "Payment" %}:</div>
-                    <div class="Order-infoContent">{{ order.get_payment_display }}</div>
+                    <div class="Order-infoType">{% trans "Payment"|capfirst %}:</div>
+                    <div class="Order-infoContent">{{ order.get_payment_type_display }}</div>
                   </div>
                   <div class="Order-info Order-info_status">
-                    <div class="Order-infoType">{% trans "Status" %}:</div>
+                    <div class="Order-infoType">{% trans "Status"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ order.get_state_display }}</div>
                   </div>
                   {% if order.error %}
                   <div class="Order-info Order-info_error">
-                    <div class="Order-infoType">{% trans "Payment failed" %}:</div>
+                    <div class="Order-infoType">{% trans "Payment failed"|capfirst %}:</div>
                     <div class="Order-infoContent">{{ order.get_error_display }}</div>
                   </div>
                   {% endif %}
@@ -124,7 +124,7 @@
                 </div>
                 <div class="Cart-block Cart-block_row">
                   <div class="Cart-block Cart-block_seller">
-                    <div>Shop:</div>
+                    <div>{% trans "shop"|capfirst %}:</div>
                     <div>{{ entity.stock_id.shop }}</div>
                   </div>
                   <div class="Cart-block Cart-block_amount">{{ entity.count }} шт.</div>
@@ -138,10 +138,10 @@
               <div class="Cart-total">
                 <div class="Cart-block Cart-block_total">
                   <div>
-                    <span class="Cart-block Cart-block_amount">{% trans 'delivery' %}: {{ order.delivery_id.price }}$</span>
+                    <span class="Cart-block Cart-block_amount">{% trans 'delivery'|capfirst %}: {{ order.delivery_id.price }}$</span>
                   </div>
                   <strong class="Cart-title">
-                    Total:
+                    {% trans "total"|capfirst %}:
                     {% with order.discounted_sum_order as discounted_sum_order and order.sum_order as sum_order %}
                     {% if discounted_sum_order == sum_order %}
                       <span class="Cart-price">{{ sum_order }}$</span>
