@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 
 def avatar_directory_path(instance, filename) -> str:
@@ -11,7 +12,7 @@ def avatar_directory_path(instance, filename) -> str:
     )
 
 
-def full_name_analysis(full_name: str) -> dict[str, str]:
+def full_name_analysis(full_name: str) -> Dict[str, str]:
     """
     Функция получает на вход полное имя клиента,
     возвращает фамилию, имя и отчество
@@ -22,7 +23,7 @@ def full_name_analysis(full_name: str) -> dict[str, str]:
     ":rtype: dict[str, str]
     """
 
-    user_name_data = {}
+    user_name_data: Dict[str, str] = {}
     if full_name:
         user_name_data_raw = full_name.split()
         user_name_data_raw_len = len(user_name_data_raw)
