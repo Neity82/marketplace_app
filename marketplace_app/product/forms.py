@@ -1,8 +1,6 @@
 from django import forms
-from import_export.forms import ImportForm
 
 from product.models import ProductReview
-from shop.models import Shop
 
 
 class ProductReviewForm(forms.ModelForm):
@@ -22,14 +20,5 @@ class ProductReviewForm(forms.ModelForm):
         model = ProductReview
         fields = "__all__"
 
-
-class CustomImportForm(ImportForm):
-    """
-    Форма для выбора магазина при импорте
-    на панели администратора
-    """
-    shop = forms.ModelChoiceField(
-        queryset=Shop.objects.all(),
-        required=False)
 
 
