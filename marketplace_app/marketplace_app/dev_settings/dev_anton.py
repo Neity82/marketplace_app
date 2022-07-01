@@ -41,3 +41,5 @@ DATABASES = {
 #         }
 #     }
 # }
+
+REDIS_HOST = "redis"
