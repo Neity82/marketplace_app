@@ -1,9 +1,12 @@
 {% load i18n %}
 {% load static %}
+{% load cache %}
 {% load category_list %}
 {% load user_tags %}
 
+{% cache category_list_cache_time categories_list %}
 {% get_categories as categories %}
+{% endcache %}
 
 <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog mt-5">

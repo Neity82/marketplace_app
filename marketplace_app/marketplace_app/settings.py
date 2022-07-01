@@ -96,6 +96,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'info.views.seo_data',
                 'order.context_processors.cart',
+                'info.context_processors.cache_time',
             ],
         },
     },

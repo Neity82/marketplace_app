@@ -192,15 +192,14 @@ class ProductListView(generic.ListView):
         :rtype: List[Optional[int]]
         """
         result: List[Optional[int]] = []
-        if 'category' not in self.query_params:
-            return result
         category_id: int = (
             int(self.query_params["category"])
             if self.query_params.get("category", "").isdigit()
             else 0
         )
         try:
-            category: models.Category = models.Category.objects.get(id=category_id)
+            category: models.Category = models.Category.objects\
+                                                       .get(id=category_id)
         except models.Category.DoesNotExist:
             return result
         self.context["category_title"] = category.title
@@ -209,14 +208,16 @@ class ProductListView(generic.ListView):
             item[0]
             for item
             in models.Category.objects.only("id")
-                .filter(parent_id=category_id)
-                .values_list("id")
+                              .filter(parent_id=category_id)
+                              .values_list("id")
         ]
         if category.parent_id is not None:
             self.context["parent_category_id"] = \
-                models.Category.objects.only("id").get(id=category.parent_id).id
+                models.Category.objects.only("id")\
+                                       .get(id=category.parent_id).id
             self.context["parent_category_title"] = \
-                models.Category.objects.only("title").get(id=category.parent_id).title
+                models.Category.objects.only("title")\
+                                       .get(id=category.parent_id).title
         return result
 
     def _get_prices_shops(self,
@@ -330,9 +331,10 @@ class ProductListView(generic.ListView):
         if "query" in self.query_params:
             collected_filter &= Q(title__icontains=self.query_params["query"])
             self.context["query"] = self.query_params["query"]
-        categories: List[int] = self._get_categories()
-        if categories:
-            collected_filter &= Q(category__id__in=categories)
+        else:
+            categories: List[int] = self._get_categories()
+            if categories:
+                collected_filter &= Q(category__id__in=categories)
         result: QuerySet = (models.Product.objects.annotate(
             total_count=Sum("stock__count")
         ).filter(collected_filter))
@@ -350,6 +352,7 @@ class ProductListView(generic.ListView):
                     )
                 )
         result = self._get_sorted_list(result, self.sort_by)
+
         return result
 
     def get(self, request, *args, **kwargs):
@@ -417,13 +420,16 @@ class ProductDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProductDetailView, self).get_context_data()
         product_on_page = self.get_object()
-        context["images"] = models.ProductImage.get_product_pics(product_on_page)
-        context["attributes"] = models.AttributeValue.get_all_attributes_of_product(
-            product_on_page)
-        context["comments"] = models.ProductReview.get_comments(product_on_page)
+        context["images"] = \
+            models.ProductImage.get_product_pics(product_on_page)
+        context["attributes"] =\
+            models.AttributeValue.get_all_attributes_of_product(product_on_page)
+        context["comments"] = \
+            models.ProductReview.get_comments(product_on_page)
         context["stocks"] = models.Stock.get_products_in_stock(product_on_page)
 
-        get_product_detail_view.send(sender=self.__class__, user=self.request.user,
+        get_product_detail_view.send(sender=self.__class__,
+                                     user=self.request.user,
                                      product=product_on_page.id)
 
         return context

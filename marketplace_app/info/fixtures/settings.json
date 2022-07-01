@@ -61,5 +61,32 @@
             "description": "Применение SSL при аутентификации на SMTP-сервере для отправки e-mail из формы обратной связи",
             "value": "y"
         }
+    },
+    {
+        "model": "info.settings",
+        "pk": 8,
+        "fields": {
+            "name": "category_list_cache_time",
+            "description": "Время кэширования списка категорий товаров",
+            "value": "86400"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 9,
+        "fields": {
+            "name": "product_list_cache_time",
+            "description": "Время кэширования списка товаров",
+            "value": "86400"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 10,
+        "fields": {
+            "name": "shop_detail_cache_time",
+            "description": "Время кэширования детальной информации о магазине",
+            "value": "86400"
+        }
     }
 ]
