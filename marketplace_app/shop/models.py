@@ -17,7 +17,7 @@ class Shop(models.Model):
     image = models.ImageField(
         verbose_name=_("image"),
         null=True,
-        upload_to='shop_images/'
+        upload_to="shop_images/"
     )
 
     address = models.CharField(
@@ -75,7 +75,7 @@ class Shop(models.Model):
     objects = models.Manager()
 
     class Meta:
-        ordering = ('name',)
+        ordering = ("name",)
         verbose_name = _("shop")
         verbose_name_plural = _("shops")
 

@@ -67,11 +67,11 @@
                     <div class="row-block">
                       <div class="Order-info Order-info_delivery">
                         <div class="Order-infoType">{% trans "Type of delivery" %}:</div>
-                        <div class="Order-infoContent">{{ last_order.delivery_id }}</div>
+                        <div class="Order-infoContent">{{ last_order.delivery_id.delivery_type }}</div>
                       </div>
                       <div class="Order-info Order-info_pay">
                         <div class="Order-infoType">{% trans "Payment" %}:</div>
-                        <div class="Order-infoContent">{{ last_order.get_payment_display }}</div>
+                        <div class="Order-infoContent">{{ last_order.get_payment_type_display }}</div>
                       </div>
                       <div class="Order-info">
                         <div class="Order-infoType">{% trans "Total cost" %}:</div>

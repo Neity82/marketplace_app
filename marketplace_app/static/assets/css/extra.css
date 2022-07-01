@@ -4067,7 +4067,11 @@ a.Cart-title {
 .Rating-star path {
   fill: #f0f0f0;
 }
-.Rating-star_view path {
+.Rating-review-star path {
+  fill: lightgrey;
+}
+.Rating-star_view path,
+.Rating-review-star_view path {
   fill: #ffc000;
 }
 .Rating-title {
@@ -5276,19 +5280,19 @@ a.Cart-title {
 	content: '★';
 }
 .rating-area > input:checked ~ label {
-	color: gold;
+	color: #ffc000;
 	text-shadow: 1px 1px #c60;
 }
 .rating-area:not(:checked) > label:hover,
 .rating-area:not(:checked) > label:hover ~ label {
-	color: gold;
+	color: #ffc000;
 }
 .rating-area > input:checked + label:hover,
 .rating-area > input:checked + label:hover ~ label,
 .rating-area > input:checked ~ label:hover,
 .rating-area > input:checked ~ label:hover ~ label,
 .rating-area > label:hover ~ input:checked ~ label {
-	color: gold;
+	color: #ffc000;
 	text-shadow: 1px 1px goldenrod;
 }
 .rate-area > label:active {

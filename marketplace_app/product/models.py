@@ -21,70 +21,62 @@ class Tag(models.Model):
     """Модель: тэг"""
 
     title = models.CharField(
-        verbose_name=_('title'),
-        help_text=_('Tag title'),
+        verbose_name=_("title"),
+        help_text=_("Tag title"),
         max_length=50,
     )
 
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _('tag')
-        verbose_name_plural = _('tags')
+        verbose_name = _("tag")
+        verbose_name_plural = _("tags")
 
     def __str__(self) -> str:
-        return getattr(self, 'title')
+        return getattr(self, "title")
 
 
 class Category(SoftDeletes):
     """Модель: категория"""
 
-    SEP = ' / '
+    SEP = " / "
 
     parent = models.ForeignKey(
-        'Category',
+        "Category",
         on_delete=models.CASCADE,
-        verbose_name=_('parent id'),
-        related_name='child',
-        help_text=_('Parent category'),
+        verbose_name=_("parent id"),
+        related_name="child",
+        help_text=_("Parent category"),
         null=True,
         blank=True,
         default=None,
     )
 
     title = models.CharField(
-        verbose_name=_('title'),
-        help_text=_('Category title'),
+        verbose_name=_("title"),
+        help_text=_("Category title"),
         max_length=50,
     )
 
     icon = models.ImageField(
-        verbose_name=_('icon'),
-        help_text=_('Category icon'),
+        verbose_name=_("icon"),
+        help_text=_("Category icon"),
         null=True,
         default=None,
         upload_to=category_icon_path,
     )
 
     sort_index = models.SmallIntegerField(
-        verbose_name=_('sort index'),
-        help_text=_('Sort index'),
+        verbose_name=_("sort index"),
+        help_text=_("Sort index"),
         default=0
     )
-
-    # TODO в качестве привязки аттрибутов к категории
-    #  рассмотреть EAV:
-    #   - https://pypi.org/project/eav-django/
-    #   - https://github.com/mvpdev/django-eav
-    #  рассмотреть JSONFiled:
-    #   - https://github.com/jrief/django-entangled
-    #   - https://github.com/abogushov/django-admin-json-editor
 
     admin_objects = models.Manager()
 
     class Meta:
-        verbose_name = _('category')
-        verbose_name_plural = _('categories')
+        verbose_name = _("category")
+        verbose_name_plural = _("categories")
 
     def __str__(self) -> str:
         return self.get_category_recur()
@@ -93,7 +85,7 @@ class Category(SoftDeletes):
         """Рекурсивно получаем тайтлы категорий и их родителей"""
         title = getattr(self, "title")
         parent = getattr(self, "parent")
-        return (f'{parent.get_category_recur()}{self.SEP}{title}'
+        return (f"{parent.get_category_recur()}{self.SEP}{title}"
                 if parent else title)
 
     @classmethod
@@ -108,18 +100,18 @@ class Category(SoftDeletes):
         """
 
         queryset: QuerySet[Product] = Category.objects.prefetch_related(
-            'product'
+            "product"
         ).filter(
             product__stock__count__gt=0,
         ).distinct().annotate(
-            min_price=Min('product__stock__price'),
+            min_price=Min("product__stock__price"),
             selling=Coalesce(
-                Sum('product__stock__order_entity_stock__count'),
+                Sum("product__stock__order_entity_stock__count"),
                 0
             )
         ).order_by(
-            '-sort_index',
-            '-selling'
+            "-sort_index",
+            "-selling"
         )
 
         return queryset[:limit]
@@ -129,20 +121,20 @@ class Unit(models.Model):
     """Модель: Единица измерения для атрибута"""
     title = models.CharField(
         max_length=16,
-        verbose_name=_('unit title'),
+        verbose_name=_("unit title"),
         blank=False,
         null=False,
     )
     unit_description = models.CharField(
         max_length=128,
-        verbose_name=_('unit description'),
+        verbose_name=_("unit description"),
         blank=False,
         null=False,
     )
 
     class Meta:
-        verbose_name = _('unit')
-        verbose_name_plural = _('units')
+        verbose_name = _("unit")
+        verbose_name_plural = _("units")
 
     def __str__(self) -> str:
         return getattr(self, "title")
@@ -153,28 +145,28 @@ class Attribute(models.Model):
     Модель: характеристика
     """
     title = models.CharField(
-        verbose_name=_('title'),
-        help_text=_('Category title'),
+        verbose_name=_("title"),
+        help_text=_("Category title"),
         max_length=50,
     )
 
     class AttributeType(models.TextChoices):
-        TEXT = 'T', _('Text')
-        CHECK = 'C', _('Check')
-        SELECT = 'S', _('Select')
+        TEXT = "T", _("Text")
+        CHECK = "C", _("Check")
+        SELECT = "S", _("Select")
 
     type = models.CharField(
-        verbose_name=_('Field type'),
+        verbose_name=_("Field type"),
         max_length=1,
-        help_text=_('Field type'),
+        help_text=_("Field type"),
         choices=AttributeType.choices,
         default=AttributeType.TEXT
     )
 
     category = models.ForeignKey(
-        'Category',
-        verbose_name=_('attribute\'s category'),
-        related_name='attribute',
+        "Category",
+        verbose_name=_("'attribute\'s category'"),
+        related_name="attribute",
         on_delete=models.CASCADE,
     )
 
@@ -186,7 +178,7 @@ class Attribute(models.Model):
             MaxValueValidator(100),
             MinValueValidator(0),
         ],
-        help_text=_('Rank of importance. 100 - most important'),
+        help_text=_("Rank of importance. 100 - most important"),
     )
 
     help_text = models.CharField(max_length=150)
@@ -206,15 +198,15 @@ class AttributeValue(models.Model):
     """
     value = models.CharField(
         max_length=255,
-        verbose_name=_('value'),
+        verbose_name=_("value"),
         null=True,
         default=None
     )
 
     unit = models.ForeignKey(
-        'Unit',
-        verbose_name=_('unit'),
-        related_name='value_unit',
+        "Unit",
+        verbose_name=_("unit"),
+        related_name="value_unit",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -222,16 +214,16 @@ class AttributeValue(models.Model):
     )
 
     attribute = models.ForeignKey(
-        'Attribute',
-        verbose_name=_('product\'s attribute'),
-        related_name='product_attribute',
+        "Attribute",
+        verbose_name=_("'product\'s attribute'"),
+        related_name="product_attribute",
         on_delete=models.CASCADE,
     )
 
     product = models.ForeignKey(
-        'Product',
-        verbose_name=_('product item'),
-        related_name='product_item',
+        "Product",
+        verbose_name=_("product item"),
+        related_name="product_item",
         on_delete=models.CASCADE,
         default=None,
         blank=False,
@@ -251,16 +243,16 @@ class AttributeValue(models.Model):
     def get_all_attributes_of_product(cls, product: Product) \
             -> QuerySet[AttributeValue]:
         return AttributeValue.objects.filter(product=product)\
-                                     .order_by('-attribute__rank')
+                                     .order_by("-attribute__rank")
 
 
 DiscountDict = TypedDict(
-        'DiscountDict',
+        "DiscountDict",
         {
-            'type': Optional[str],
-            'value': Optional[int],
-            'price': Optional[Decimal],
-            'base': Optional[Decimal],
+            "type": Optional[str],
+            "value": Optional[int],
+            "price": Optional[Decimal],
+            "base": Optional[Decimal],
         }
     )
 
@@ -269,54 +261,54 @@ class Product(SoftDeletes):
     """Модель: продукт"""
 
     title = models.CharField(
-        verbose_name=_('title'),
-        help_text=_('Product title'),
+        verbose_name=_("title"),
+        help_text=_("Product title"),
         max_length=150,
     )
 
     image = models.ImageField(
-        verbose_name=_('image'),
-        help_text=_('Product image'),
+        verbose_name=_("image"),
+        help_text=_("Product image"),
         upload_to=product_image_path,
         blank=True,
     )
 
     short_description = models.CharField(
-        verbose_name=_('short description'),
-        help_text=_('Product short description'),
+        verbose_name=_("short description"),
+        help_text=_("Product short description"),
         max_length=150,
     )
 
     long_description = models.TextField(
-        verbose_name=_('long description'),
-        help_text=_('Product long description'),
+        verbose_name=_("long description"),
+        help_text=_("Product long description"),
         max_length=1500,
     )
 
     is_limited = models.BooleanField(
-        verbose_name=_('is limited'),
-        help_text=_('There is limited edition'),
+        verbose_name=_("is limited"),
+        help_text=_("There is limited edition"),
         default=False,
     )
 
     tags = models.ManyToManyField(
-        'Tag',
-        related_name='products',
-        related_query_name='product',
+        "Tag",
+        related_name="products",
+        related_query_name="product",
         blank=True,
     )
 
     category = models.ForeignKey(
-        'Category',
+        "Category",
         on_delete=models.CASCADE,
-        related_name='product',
-        verbose_name=_('category'),
-        help_text=_('Product category'),
+        related_name="product",
+        verbose_name=_("category"),
+        help_text=_("Product category"),
     )
 
     created_at = models.DateTimeField(
-        verbose_name=_('created at'),
-        help_text=_('Date the product was added'),
+        verbose_name=_("created at"),
+        help_text=_("Date the product was added"),
         auto_now_add=True,
     )
 
@@ -329,23 +321,23 @@ class Product(SoftDeletes):
         FIVE = 5
 
     rating = models.PositiveSmallIntegerField(
-        verbose_name=_('rating'),
-        help_text=_('Product rating'),
+        verbose_name=_("rating"),
+        help_text=_("Product rating"),
         choices=Rating.choices,
         default=Rating.ZERO,
     )
 
     sort_index = models.SmallIntegerField(
-        verbose_name=_('sort index'),
-        help_text=_('Sort index'),
+        verbose_name=_("sort index"),
+        help_text=_("Sort index"),
         default=0
     )
 
     admin_objects = models.Manager()
 
     class Meta:
-        verbose_name = _('product')
-        verbose_name_plural = _('product')
+        verbose_name = _("product")
+        verbose_name_plural = _("product")
 
     def __str__(self) -> str:
         category = getattr(self, "category", None)
@@ -365,7 +357,7 @@ class Product(SoftDeletes):
         avg_price = Stock.objects.filter(
             product=self.pk,
             count__gt=0
-        ).aggregate(avg=Avg('price'))['avg']
+        ).aggregate(avg=Avg("price"))["avg"]
         if avg_price is None:
             return None
         return Decimal(round(avg_price, 2))
@@ -403,7 +395,7 @@ class Product(SoftDeletes):
             return result
         elif discount.discount_mechanism == "F":
             return Decimal(discount.discount_value)
-        return Decimal('NaN')
+        return Decimal("NaN")
 
     @property
     def discount(self) -> DiscountDict:
@@ -430,11 +422,11 @@ class Product(SoftDeletes):
             (
                 Q(
                     product_id=self,
-                    discount_id__discount_type='PD',
+                    discount_id__discount_type="PD",
                     discount_id__is_active=True
                 ) | Q(
                     category_id__in=categories_list,
-                    discount_id__discount_type='PD',
+                    discount_id__discount_type="PD",
                     discount_id__is_active=True
                 )
             ) & (
@@ -450,19 +442,19 @@ class Product(SoftDeletes):
         if not discounts:
             return result
         discount_percent: QuerySet[ProductDiscount] = discounts.filter(
-            discount_id__discount_mechanism='P'
+            discount_id__discount_mechanism="P"
         ).order_by(
-            '-discount_id__discount_value'
+            "-discount_id__discount_value"
         ).first()
         discount_sum: QuerySet[ProductDiscount] = discounts.filter(
-            discount_id__discount_mechanism='S'
+            discount_id__discount_mechanism="S"
         ).order_by(
-            '-discount_id__discount_value'
+            "-discount_id__discount_value"
         ).first()
         discount_fix: QuerySet[ProductDiscount] = discounts.filter(
-            discount_id__discount_mechanism='F'
+            discount_id__discount_mechanism="F"
         ).order_by(
-            'discount_id__discount_value'
+            "discount_id__discount_value"
         ).first()
         max_discount_list = [
             discount_percent,
@@ -483,7 +475,7 @@ class Product(SoftDeletes):
 
     @classmethod
     def get_popular(cls, shop: Union[Shop, None] = None, limit: int = 8) -> \
-            List[Product]:
+            QuerySet[Product]:
         """
         Метод для получения списка популярных товаров в количестве limit.
         Популярность определяется сначала по "индексу сортировки",
@@ -494,19 +486,19 @@ class Product(SoftDeletes):
         :param limit: Необходимое количество товаров
         :type limit: int
         :return: Список товаров
-        :rtype: List[Product]
+        :rtype: QuerySet[Product]
         """
 
         queryset: QuerySet[Product] = Product.objects.prefetch_related(
-            'stock'
+            "stock"
         ).filter(
             stock__count__gt=0
         ).distinct().annotate(
-            avg_price=Avg('stock__price'),
-            selling=Coalesce(Sum('stock__order_entity_stock__count'), 0)
+            avg_price=Avg("stock__price"),
+            selling=Coalesce(Sum("stock__order_entity_stock__count"), 0)
         ).order_by(
-            'sort_index',
-            'selling'
+            "sort_index",
+            "selling"
         )
 
         if shop:
@@ -516,14 +508,14 @@ class Product(SoftDeletes):
 
     def get_shops(self):
         return Shop.objects.filter(stock__product__id=self.pk)\
-                           .only('name', 'id')
+                           .only("name", "id")
 
     @classmethod
     def get_limited_edition(
             cls,
             daily_offer: Union[DailyOffer, None] = None,
             limit: int = 16
-    ) -> List[Product]:
+    ) -> QuerySet[Product]:
         """
         Метод для получения списка товаров ограниченного тиража
 
@@ -532,16 +524,16 @@ class Product(SoftDeletes):
         :param limit: Необходимое количество товаров
         :type limit: int
         :return: Список товаров
-        :rtype: List[Product]
+        :rtype: QuerySet[Product]
         """
 
         queryset: QuerySet[Product] = Product.objects.prefetch_related(
-            'stock'
+            "stock"
         ).filter(
             is_limited=True, stock__count__gt=0
         ).distinct().annotate(
-            avg_price=Avg('stock__price')
-        ).order_by('?').select_related('category__parent')
+            avg_price=Avg("stock__price")
+        ).order_by("?").select_related("category__parent")
 
         if daily_offer:
             queryset = queryset.exclude(
@@ -562,14 +554,14 @@ class Product(SoftDeletes):
         """
 
         queryset: List[Product] = Product.objects.prefetch_related(
-            'stock',
-            'product_discount'
+            "stock",
+            "product_discount"
         ).filter(
             stock__count__gt=0,
             product_discount__discount_id__is_active=True
         ).distinct().annotate(
-            avg_price=Avg('stock__price')
-        ).order_by('?').select_related('category__parent')
+            avg_price=Avg("stock__price")
+        ).order_by("?").select_related("category__parent")
 
         return queryset[:limit]
 
@@ -578,26 +570,26 @@ class DailyOffer(models.Model):
     """Модель: предложение дня"""
 
     product = models.ForeignKey(
-        'Product',
+        "Product",
         on_delete=models.CASCADE,
-        related_name='daily_offer',
-        verbose_name=_('product'),
-        help_text=_('Daily\'s offer product'),
+        related_name="daily_offer",
+        verbose_name=_("product"),
+        help_text=_("Daily\'s offer product"),
     )
     select_date = models.DateField(default=date.today)
 
     text = models.TextField(
-        verbose_name=_('promo text'),
-        help_text=_('Daily offer promo content'),
+        verbose_name=_("promo text"),
+        help_text=_("Daily offer promo content"),
         max_length=1500,
-        default=''
+        default=""
     )
 
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _('daily offer')
-        verbose_name_plural = _('daily offers')
+        verbose_name = _("daily offer")
+        verbose_name_plural = _("daily offers")
 
     def __str__(self) -> str:
         return (
@@ -617,11 +609,11 @@ class DailyOffer(models.Model):
         queryset: QuerySet[DailyOffer] = DailyOffer.objects.filter(
             select_date=date.today()
         ).select_related(
-            'product__category'
+            "product__category"
         )
 
         if queryset.exists():
-            daily_offer: DailyOffer = queryset.latest('select_date')
+            daily_offer: DailyOffer = queryset.latest("select_date")
             return daily_offer
         return None
 
@@ -630,18 +622,18 @@ class Stock(models.Model):
     """Модель: цена"""
 
     shop = models.ForeignKey(
-        'shop.Shop',
+        "shop.Shop",
         on_delete=models.CASCADE,
-        verbose_name=_('shop id'),
-        related_name='stock',
-        help_text=_('Stock\'s shop'),
+        verbose_name=_("shop id"),
+        related_name="stock",
+        help_text=_("Stock\'s shop"),
     )
     product = models.ForeignKey(
-        'Product',
+        "Product",
         on_delete=models.CASCADE,
-        verbose_name=_('product id'),
-        related_name='stock',
-        help_text=_('Stock\'s product'),
+        verbose_name=_("product id"),
+        related_name="stock",
+        help_text=_("Stock\'s product"),
     )
     price = models.DecimalField(max_digits=9, decimal_places=2)
     count = models.PositiveIntegerField(default=0)
@@ -649,8 +641,8 @@ class Stock(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _('stock')
-        verbose_name_plural = _('stocks')
+        verbose_name = _("stock")
+        verbose_name_plural = _("stocks")
 
     def __str__(self):
         return f'Stock: product: {getattr(self.product, "title")} ' \
@@ -658,7 +650,7 @@ class Stock(models.Model):
 
     @property
     def pk(self) -> int:
-        return getattr(self, 'id')
+        return getattr(self, "id")
 
     @staticmethod
     def get_products_in_stock_by_shop(shop: Shop) -> QuerySet[Stock]:
@@ -675,31 +667,31 @@ class ProductReview(models.Model):
     """Модель: Отзыв о продукте"""
 
     product = models.ForeignKey(
-        'Product',
+        "Product",
         on_delete=models.CASCADE,
-        verbose_name=_('User product view product'),
-        related_name='user_product_view',
-        help_text=_('Preview\'s product'),
+        verbose_name=_("User product view product"),
+        related_name="user_product_view",
+        help_text=_("Preview\'s product"),
     )
     user = models.ForeignKey(
-        'user.CustomUser',
+        "user.CustomUser",
         on_delete=models.CASCADE,
-        verbose_name=_('User product view user'),
-        related_name='user_product_view',
-        help_text=_('Preview\'s user'),
+        verbose_name=_("User product view user"),
+        related_name="user_product_view",
+        help_text=_("Preview\'s user"),
     )
     date = models.DateField(auto_now_add=True)
 
     text = models.TextField(
-        verbose_name=_('review content'),
-        help_text=_('Review content'),
+        verbose_name=_("review content"),
+        help_text=_("Review content"),
         max_length=1500,
-        default=''
+        default=""
     )
 
     rating = models.PositiveSmallIntegerField(
-        verbose_name=_('rating'),
-        help_text=_('Product rating'),
+        verbose_name=_("rating"),
+        help_text=_("Product rating"),
         blank=True,
         null=True
         )
@@ -707,8 +699,8 @@ class ProductReview(models.Model):
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _('user product view')
-        verbose_name_plural = _('user product views')
+        verbose_name = _("user\'s review")
+        verbose_name_plural = _("user\'s review")
 
     def __str__(self) -> str:
         return (
@@ -726,22 +718,22 @@ class ProductImage(models.Model):
 
     product = models.ForeignKey(
         Product,
-        related_name='product',
-        verbose_name=_('product of image'),
-        help_text=_('Product image'),
+        related_name="product",
+        verbose_name=_("product of image"),
+        help_text=_("Product image"),
         on_delete=models.CASCADE,
     )
     image = models.ImageField(
-        verbose_name=_('image'),
-        help_text=_('Product image'),
+        verbose_name=_("image"),
+        help_text=_("Product image"),
         upload_to=product_image_path,
         blank=True,
     )
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _('product image')
-        verbose_name_plural = _('product images')
+        verbose_name = _("product image")
+        verbose_name_plural = _("product images")
 
     @classmethod
     def get_product_pics(cls, product: Product) -> List[ProductImage]:

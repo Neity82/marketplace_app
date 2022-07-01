@@ -104,3 +104,4 @@ class CartAdmin(admin.ModelAdmin):
             else:
                 result = getattr(user, "email")
         return result
+

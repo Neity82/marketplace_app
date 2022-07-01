@@ -4,7 +4,7 @@ from product.models import ProductReview
 
 
 class ProductReviewForm(forms.ModelForm):
-    """Форма для создания нового пользователя."""
+    """Форма для создания нового отзыва."""
 
     text = forms.CharField(
         widget=forms.Textarea(
@@ -18,4 +18,7 @@ class ProductReviewForm(forms.ModelForm):
 
     class Meta:
         model = ProductReview
-        fields = '__all__'
+        fields = "__all__"
+
+
+

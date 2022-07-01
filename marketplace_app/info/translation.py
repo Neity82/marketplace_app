@@ -4,9 +4,9 @@ from .models import SEOItem, Banner
 
 @register(SEOItem)
 class SEOTranslationOptions(TranslationOptions):
-    fields = ('meta_title', 'meta_description')
+    fields = ("meta_title", "meta_description")
 
 
 @register(Banner)
 class BannerTranslationOptions(TranslationOptions):
-    fields = ('title', 'text', )
+    fields = ("title", "text", )

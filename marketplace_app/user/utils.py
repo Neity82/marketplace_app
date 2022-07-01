@@ -1,29 +1,47 @@
 import os
-from typing import Tuple, List
 
 
 def avatar_directory_path(instance, filename) -> str:
     """Функция формирует путь для размещения фотографии/аватара пользователя"""
 
     extension = os.path.splitext(filename)
-    return 'avatar/user_{id}/{extension}'.format(
+    return "avatar/user_{id}/{extension}".format(
         id=instance.id,
         extension=extension
     )
 
 
-def full_name_analysis(name: List[str]) -> Tuple[str, str, str]:
+def full_name_analysis(full_name: str) -> dict[str, str]:
     """
     Функция получает на вход полное имя клиента,
     возвращает фамилию, имя и отчество
+
+    :param full_name: ФИО пользователя
+    :type full_name: str
+    :return: Словарь с разобранными данными ФИО
+    ":rtype: dict[str, str]
     """
 
-    last_name, first_name, middle_name = str(), str(), str()
-    if len(name) == 3:
-        last_name, first_name, middle_name = name[0], name[1], name[2]
-    elif len(name) == 2:
-        last_name, first_name = name[0], name[1]
-    else:
-        last_name = name[0]
+    user_name_data = {}
+    if full_name:
+        user_name_data_raw = full_name.split()
+        user_name_data_raw_len = len(user_name_data_raw)
+        if user_name_data_raw_len == 3:
+            user_name_data.update(first_name=user_name_data_raw[1])
+            user_name_data.update(last_name=user_name_data_raw[0])
+            user_name_data.update(middle_name=user_name_data_raw[2])
 
-    return last_name, first_name, middle_name
+        elif user_name_data_raw_len == 2:
+            user_name_data.update(first_name=user_name_data_raw[1])
+            user_name_data.update(last_name=user_name_data_raw[0])
+
+        elif user_name_data_raw_len == 1:
+            user_name_data.update(first_name=user_name_data_raw[0])
+
+        elif user_name_data_raw_len > 3:
+            user_name_data.update(last_name=user_name_data_raw[0])
+            user_name_data.update(middle_name=user_name_data_raw[-1])
+            user_name_data.update(first_name=" ".join(user_name_data_raw[1:-1]))
+    else:
+        user_name_data = full_name
+    return user_name_data
