@@ -21,7 +21,6 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserAddForm
     save_on_top = True
 
-<<<<<<< HEAD
     list_display = [
         "id",
         "email",
@@ -34,11 +33,8 @@ class CustomUserAdmin(UserAdmin):
         "id",
         "email"
     ]
-=======
-    list_display = ['id', 'email', 'last_name', 'first_name', 'middle_name', 'phone']
-    list_display_links = ['id', 'email']
+
     list_filter = (DeletedFilter, )
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
 
     fieldsets = (
         (None, {

@@ -3,15 +3,11 @@ from django.forms import BaseInlineFormSet
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
-from import_export.admin import ImportMixin
-from import_export.formats.base_formats import XLS, JSON, YAML
 from modeltranslation.admin import TranslationAdmin
 
 from product import models
 from product.models import Product, Category
 from product.utils import undelete_admin, DeletedFilter
-
-from product.resources import ProductResource, StockResource
 
 
 class TranslationAdminMedia:
@@ -178,11 +174,7 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
         "icon",
         "sort_index"
     )
-<<<<<<< HEAD
-=======
     list_filter = (DeletedFilter, )
-    fields = ('title', 'parent', 'icon', 'sort_index')
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
 
     @staticmethod
     def admin_manager():
@@ -203,7 +195,6 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
 class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     change_form_template = "admin/undelete_change_form.html"
     list_display = (
-<<<<<<< HEAD
         "id",
         "title_en",
         "title_ru",
@@ -214,19 +205,6 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "category",
         "created_at",
         "sort_index"
-=======
-        'id',
-        'title_en',
-        'title_ru',
-        'image_display',
-        'is_deleted',
-        'short_description_en',
-        'is_limited',
-        'tags_display',
-        'category',
-        'created_at',
-        'sort_index'
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
     )
     list_display_links = (
         "id",
@@ -239,7 +217,6 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "title_ru",
     )
     fields = (
-<<<<<<< HEAD
         "title",
         "image",
         "short_description",
@@ -250,39 +227,15 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "rating",
         "created_at",
     )
-
-    list_filter = (
-        "category",
-        "is_limited",
-    )
-
     readonly_fields = (
         "rating",
         "created_at",
-=======
-        'title',
-        'image',
-        'short_description',
-        'long_description',
-        'is_limited',
-        'tags',
-        'category',
-        'rating',
-        'created_at',
-        'is_deleted',
+        "is_deleted",
     )
-
     list_filter = (
         'category',
         'is_limited',
         DeletedFilter,
-    )
-
-    readonly_fields = (
-        'rating',
-        'created_at',
-        'is_deleted',
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
     )
 
     inlines = [AttributeValueInLine]

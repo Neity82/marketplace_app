@@ -72,19 +72,7 @@ class Category(SoftDeletes):
         default=0
     )
 
-<<<<<<< HEAD
-    objects = models.Manager()
-=======
-    # TODO в качестве привязки аттрибутов к категории
-    #  рассмотреть EAV:
-    #   - https://pypi.org/project/eav-django/
-    #   - https://github.com/mvpdev/django-eav
-    #  рассмотреть JSONFiled:
-    #   - https://github.com/jrief/django-entangled
-    #   - https://github.com/abogushov/django-admin-json-editor
-
     admin_objects = models.Manager()
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
 
     class Meta:
         verbose_name = _("category")

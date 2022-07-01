@@ -15,11 +15,10 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 
 from info.models import Banner
-from product.signals import product_view
+from product.signals import get_product_detail_view
 from shop.models import Shop
 from product.forms import ProductReviewForm
 from product import models
-from user.models import UserProductView
 
 
 class IndexView(generic.TemplateView):
@@ -158,8 +157,8 @@ class ProductListView(generic.ListView):
         ).filter(
             attribute__category__id=self.query_params["category"]
         ).values(
-             "attribute__id", "attribute__title", "attribute__type", "value"
-         ))
+            "attribute__id", "attribute__title", "attribute__type", "value"
+        ))
         attr_values = sorted(
             attr_values, key=lambda item: item["attribute__id"]
         )
@@ -210,8 +209,8 @@ class ProductListView(generic.ListView):
             item[0]
             for item
             in models.Category.objects.only("id")
-                               .filter(parent_id=category_id)
-                               .values_list("id")
+                .filter(parent_id=category_id)
+                .values_list("id")
         ]
         if category.parent_id is not None:
             self.context["parent_category_id"] = \
@@ -231,23 +230,20 @@ class ProductListView(generic.ListView):
         :rtype: Dict[int, Decimal]
         """
         self.context["shops"] = \
-            Shop.objects.only("id", "name")\
-                        .filter(
-                            Q(stock__count__gt=0) &
-                            Q(stock__product__in=products)
-                        ).distinct().order_by("name")
+            Shop.objects.only("id", "name") \
+                .filter(
+                Q(stock__count__gt=0) &
+                Q(stock__product__in=products)
+            ).distinct().order_by("name")
         prices: Dict[int, Decimal] = {
             item.id: item.discount["price"]
             for item
             in products
         }
-<<<<<<< HEAD
+
         self.context["min_price"] = int(min(prices.values()))
         self.context["max_price"] = int(max(prices.values()))
-=======
-        self.context['min_price'] = int(min(prices.values()))
-        self.context['max_price'] = int(max(prices.values()))
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
+
         return prices
 
     def _get_base_filters(self, prices: Dict[int, Decimal]) -> Q:
@@ -275,13 +271,10 @@ class ProductListView(generic.ListView):
                     idx for idx, price in prices.items()
                     if (min_price <= price <= max_price)
                 ]
-<<<<<<< HEAD
+
                 self.context["filter_min_price"] = int(min_price)
                 self.context["filter_max_price"] = int(max_price)
-=======
-                self.context['filter_min_price'] = int(min_price)
-                self.context['filter_max_price'] = int(max_price)
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
+
                 if filtered_by_price:
                     result &= Q(id__in=filtered_by_price)
         # Фильтр по названию
@@ -383,9 +376,9 @@ class ProductListView(generic.ListView):
             self.query_params["shop"] = request.POST.getlist("shop")
         for name in tuple(self.query_params.keys()):
             if (
-                name == "csrfmiddlewaretoken" or
-                self.query_params[name] == "" or
-                name == "page"
+                    name == "csrfmiddlewaretoken" or
+                    self.query_params[name] == "" or
+                    name == "page"
             ):
                 del self.query_params[name]
         # Восстанавливаем значение поиска или категории, если есть
@@ -400,15 +393,11 @@ class ProductListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context: Dict[str, Any] = super().get_context_data(**kwargs)
         context.update({**self.context})
-<<<<<<< HEAD
-        if "category" in self.query_params:
-            context["attributes"] = self._get_attributes()
-        context["base_url"] = urlencode(self.query_params)
-=======
+
         if 'category' in self.query_params:
             context['attributes'] = self._get_attributes()
         context['base_url'] = urlencode(self.query_params, True)
->>>>>>> 1797d9f1756005ab8f257a6239f444f0c0e947d6
+
         return context
 
 
@@ -434,8 +423,8 @@ class ProductDetailView(FormMixin, DetailView):
         context["comments"] = models.ProductReview.get_comments(product_on_page)
         context["stocks"] = models.Stock.get_products_in_stock(product_on_page)
 
-        product_view.send(sender=self.__class__, user=self.request.user,
-                          product=product_on_page.id)
+        get_product_detail_view.send(sender=self.__class__, user=self.request.user,
+                                     product=product_on_page.id)
 
         return context
 
