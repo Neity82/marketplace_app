@@ -1,0 +1,14 @@
+{% extends 'admin/change_list.html' %}
+
+{% block object-tools %}
+    <div class="actions">
+        <p>Clear cache</p>
+        <form action="clear_cache/" method="POST">
+            {% csrf_token %}
+            <button type="submit" name="category" value="0" class="button">Category list</button>
+            <button type="submit" name="product" value="0" class="button">Catalog</button>
+        </form>
+    </div>
+    <br />
+    {{ block.super }}
+{% endblock %}

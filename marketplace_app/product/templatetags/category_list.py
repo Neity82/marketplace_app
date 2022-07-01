@@ -11,6 +11,7 @@ def get_categories():
     """
     Формируем словарь списков из категорий
     """
+
     categories: OrderedDict[int, Dict[str, Union[Category, List[Category]]]] =\
         collections.OrderedDict()
     for item in (Category.objects.filter(parent_id=None)

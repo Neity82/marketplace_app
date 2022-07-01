@@ -198,8 +198,6 @@ class ProductListView(generic.ListView):
         :rtype: List[Optional[int]]
         """
         result: List[Optional[int]] = []
-        if 'category' not in self.query_params:
-            return result
         category_id: int = (
             int(self.query_params['category'])
             if self.query_params.get("category", "").isdigit()
@@ -332,9 +330,10 @@ class ProductListView(generic.ListView):
         if 'query' in self.query_params:
             collected_filter &= Q(title__icontains=self.query_params['query'])
             self.context['query'] = self.query_params['query']
-        categories: List[int] = self._get_categories()
-        if categories:
-            collected_filter &= Q(category__id__in=categories)
+        else:
+            categories: List[int] = self._get_categories()
+            if categories:
+                collected_filter &= Q(category__id__in=categories)
         result: QuerySet = (Product.objects.annotate(
             total_count=Sum("stock__count")
         ).filter(collected_filter))
@@ -352,6 +351,7 @@ class ProductListView(generic.ListView):
                     )
                 )
         result = self._get_sorted_list(result, self.sort_by)
+
         return result
 
     def get(self, request, *args, **kwargs):
