@@ -4,6 +4,8 @@ from typing import Union
 
 from django.urls import URLResolver, get_resolver, URLPattern
 
+DEFAULT_CACHE_TIME = 30000
+
 
 def banner_image_path(instance, filename) -> str:
     """Функция формирует путь для размещения изображения баннера"""
