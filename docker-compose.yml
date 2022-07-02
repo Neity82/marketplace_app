@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+
+  web:
+    build: ./marketplace_app
+    command: sh -c "bin/init.sh && gunicorn marketplace_app.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - ./marketplace_app:/usr/src/app
+      - static:/usr/src/app/static
+      - media:/usr/src/app/media
+    expose:
+      - 8000
+    env_file:
+      - ./.env.app.dev
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    env_file:
+      - ./.env.db.dev
+
+  nginx:
+    image: nginx:1.19.8-alpine
+    depends_on:
+      - web
+    ports:
+      - "80:80"
+    volumes:
+      - static:/var/www/html/static
+      - media:/var/www/html/media
+      - ./nginx:/etc/nginx/conf.d
+
+volumes:
+  postgres_data:
+  static:
+  media:
