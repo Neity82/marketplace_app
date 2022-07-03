@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+import environ
+
+
+env = environ.Env()
+environ.Env.read_env()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,10 +29,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-4(r-gu$)q!a3%wf!pv#6y2$%=)%3fgguhlx%sn(jw3l-)7_t)t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
-
+DEBUG = env.get_value('DEBUG', default=1)
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", '127.0.0.1').split(" ")
 
 # Application definition
 
@@ -110,11 +114,19 @@ WSGI_APPLICATION = 'marketplace_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': env.get_value('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
+        'NAME': env.get_value('DB_NAME', default='default'),
+        'USER': env.get_value('DB_USER', default='admin'),
+        'PASSWORD': env.get_value('DB_PASSWORD', default='password'),
+        'HOST': env.get_value('DB_HOST', default='127.0.0.1'),
+        'PORT': env.get_value('DB_PORT', default='5432'),
+        'TEST': {
+            'NAME': f'test_{env.get_value("DB_NAME", default="test_default")}',
+            'USER': env.get_value('DB_USER', default='test_admin'),
+        },
     }
-}
 
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -159,7 +171,10 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
 
 STATICFILES_DIRS = [
@@ -222,4 +237,3 @@ IMPORT_EXPORT_CELERY_MODELS = {
         "resource": resource_product,
     }
 }
-
