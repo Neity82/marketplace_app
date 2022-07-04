@@ -7,3 +7,6 @@ class InfoConfig(AppConfig):
     verbose_name = _("info")
     verbose_name_plural = _("info")
     default_auto_field = "django.db.models.BigAutoField"
+
+    def ready(self):
+        import info.signals
