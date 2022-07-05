@@ -606,6 +606,7 @@
     "model": "product.category",
     "pk": 1,
     "fields": {
+      "deleted_at": null,
       "parent": 4,
       "title": "accessories",
       "title_en": "accessories",
@@ -618,6 +619,7 @@
     "model": "product.category",
     "pk": 2,
     "fields": {
+      "deleted_at": null,
       "parent": 4,
       "title": "cameras",
       "title_en": "cameras",
@@ -630,6 +632,7 @@
     "model": "product.category",
     "pk": 3,
     "fields": {
+      "deleted_at": null,
       "parent": 4,
       "title": "mobiles",
       "title_en": "mobiles",
@@ -642,6 +645,7 @@
     "model": "product.category",
     "pk": 4,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "electronics",
       "title_en": "electronics",
@@ -654,6 +658,7 @@
     "model": "product.category",
     "pk": 5,
     "fields": {
+      "deleted_at": null,
       "parent": 4,
       "title": "computers",
       "title_en": "computers",
@@ -666,10 +671,11 @@
     "model": "product.category",
     "pk": 6,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "lightnings",
       "title_en": "lightnings",
-      "title_ru": "свет",
+      "title_ru": "освещение",
       "icon": "category/2022-05-05_205030.434482_lightings.lightings_.png",
       "sort_index": 0
     }
@@ -678,6 +684,7 @@
     "model": "product.category",
     "pk": 7,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "furniture",
       "title_en": "furniture",
@@ -690,6 +697,7 @@
     "model": "product.category",
     "pk": 8,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "clothings",
       "title_en": "clothings",
@@ -702,6 +710,7 @@
     "model": "product.category",
     "pk": 9,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "appliances",
       "title_en": "appliances",
@@ -714,6 +723,7 @@
     "model": "product.category",
     "pk": 10,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "audio",
       "title_en": "audio",
@@ -726,6 +736,7 @@
     "model": "product.category",
     "pk": 11,
     "fields": {
+      "deleted_at": null,
       "parent": null,
       "title": "kitchen",
       "title_en": "kitchen",
@@ -738,6 +749,7 @@
     "model": "product.category",
     "pk": 12,
     "fields": {
+      "deleted_at": null,
       "parent": 11,
       "title": "teapots",
       "title_en": "teapots",
@@ -750,6 +762,7 @@
     "model": "product.category",
     "pk": 13,
     "fields": {
+      "deleted_at": null,
       "parent": 11,
       "title": "microvawes",
       "title_en": "microvawes",
@@ -762,6 +775,7 @@
     "model": "product.product",
     "pk": 1,
     "fields": {
+      "deleted_at": null,
       "title": "Acer Nitro 5 AN515-55-53E5 Gaming Laptop",
       "title_en": "Acer Nitro 5 AN515-55-53E5 Gaming Laptop",
       "title_ru": "Acer Nitro 5 AN515-55-53E5 Gaming Laptop",
@@ -788,6 +802,7 @@
     "model": "product.product",
     "pk": 34,
     "fields": {
+      "deleted_at": null,
       "title": "ASUS TUF Dash 15 (2021) Ultra Slim Gaming Laptop",
       "title_en": "ASUS TUF Dash 15 (2021) Ultra Slim Gaming Laptop",
       "title_ru": "ASUS TUF Dash 15 (2021) Ultra Slim Gaming Laptop",
@@ -814,6 +829,7 @@
     "model": "product.product",
     "pk": 35,
     "fields": {
+      "deleted_at": null,
       "title": "Samsung Galaxy Tab A8 Android Tablet",
       "title_en": "Samsung Galaxy Tab A8 Android Tablet",
       "title_ru": "Samsung Galaxy Tab A8 Android Tablet",
@@ -830,8 +846,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        36,
         35,
+        36,
         37
       ]
     }
@@ -840,6 +856,7 @@
     "model": "product.product",
     "pk": 36,
     "fields": {
+      "deleted_at": null,
       "title": "CYBERRPOWERPC Gamer Xtreme VR Gaming PC",
       "title_en": "CYBERRPOWERPC Gamer Xtreme VR Gaming PC",
       "title_ru": "CYBERRPOWERPC Gamer Xtreme VR Gaming PC",
@@ -856,9 +873,9 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        39,
+        3,
         38,
-        3
+        39
       ]
     }
   },
@@ -866,6 +883,7 @@
     "model": "product.product",
     "pk": 37,
     "fields": {
+      "deleted_at": null,
       "title": "Lenovo IdeaPad 3 Laptop",
       "title_en": "Lenovo IdeaPad 3 Laptop",
       "title_ru": "Lenovo IdeaPad 3 Laptop",
@@ -882,8 +900,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        41,
-        40
+        40,
+        41
       ]
     }
   },
@@ -891,6 +909,7 @@
     "model": "product.product",
     "pk": 38,
     "fields": {
+      "deleted_at": null,
       "title": "Toshiba EM925A5A-BS Microwave",
       "title_en": "Toshiba EM925A5A-BS Microwave",
       "title_ru": "Toshiba EM925A5A-BS Microwave",
@@ -907,8 +926,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        43,
-        42
+        42,
+        43
       ]
     }
   },
@@ -916,6 +935,7 @@
     "model": "product.product",
     "pk": 39,
     "fields": {
+      "deleted_at": null,
       "title": "Black+Decker EM720CB7",
       "title_en": "Black+Decker EM720CB7",
       "title_ru": "Black+Decker EM720CB7",
@@ -941,6 +961,7 @@
     "model": "product.product",
     "pk": 40,
     "fields": {
+      "deleted_at": null,
       "title": "Panasonic Microwave Oven",
       "title_en": "Panasonic Microwave Oven",
       "title_ru": "Panasonic Microwave Oven",
@@ -966,6 +987,7 @@
     "model": "product.product",
     "pk": 41,
     "fields": {
+      "deleted_at": null,
       "title": "COMFEE' EM720CPL-PMB",
       "title_en": "COMFEE' EM720CPL-PMB",
       "title_ru": "COMFEE' EM720CPL-PMB",
@@ -991,6 +1013,7 @@
     "model": "product.product",
     "pk": 42,
     "fields": {
+      "deleted_at": null,
       "title": "Panasonic Microwave Oven NN-SN936B",
       "title_en": "Panasonic Microwave Oven NN-SN936B",
       "title_ru": "Panasonic Microwave Oven NN-SN936B",
@@ -1016,6 +1039,7 @@
     "model": "product.product",
     "pk": 43,
     "fields": {
+      "deleted_at": null,
       "title": "Amazon Basics Electric Glass and Steel",
       "title_en": "Amazon Basics Electric Glass and Steel",
       "title_ru": "Amazon Basics Electric Glass and Steel",
@@ -1032,8 +1056,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        48,
-        47
+        47,
+        48
       ]
     }
   },
@@ -1041,6 +1065,7 @@
     "model": "product.product",
     "pk": 44,
     "fields": {
+      "deleted_at": null,
       "title": "MEISON Electric Kettles",
       "title_en": "MEISON Electric Kettles",
       "title_ru": "MEISON Electric Kettles",
@@ -1057,8 +1082,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        49,
-        47
+        47,
+        49
       ]
     }
   },
@@ -1066,6 +1091,7 @@
     "model": "product.product",
     "pk": 45,
     "fields": {
+      "deleted_at": null,
       "title": "Fellow Stagg EKG Electric Gooseneck Kettle",
       "title_en": "Fellow Stagg EKG Electric Gooseneck Kettle",
       "title_ru": "Fellow Stagg EKG Electric Gooseneck Kettle",
@@ -1091,6 +1117,7 @@
     "model": "product.product",
     "pk": 46,
     "fields": {
+      "deleted_at": null,
       "title": "Ovente Electric Hot Water Kettle",
       "title_en": "Ovente Electric Hot Water Kettle",
       "title_ru": "Ovente Electric Hot Water Kettle",
@@ -1116,6 +1143,7 @@
     "model": "product.product",
     "pk": 47,
     "fields": {
+      "deleted_at": null,
       "title": "Hamilton Beach Electric Tea Kettle",
       "title_en": "Hamilton Beach Electric Tea Kettle",
       "title_ru": "Hamilton Beach Electric Tea Kettle",
@@ -1141,6 +1169,7 @@
     "model": "product.product",
     "pk": 48,
     "fields": {
+      "deleted_at": null,
       "title": "Focusrite Scarlett Solo 3rd Gen",
       "title_en": "Focusrite Scarlett Solo 3rd Gen",
       "title_ru": "Focusrite Scarlett Solo 3rd Gen",
@@ -1157,8 +1186,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        54,
-        53
+        53,
+        54
       ]
     }
   },
@@ -1166,6 +1195,7 @@
     "model": "product.product",
     "pk": 49,
     "fields": {
+      "deleted_at": null,
       "title": "Rockford Fosgate T1462",
       "title_en": "Rockford Fosgate T1462",
       "title_ru": "Rockford Fosgate T1462",
@@ -1182,8 +1212,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        55,
-        53
+        53,
+        55
       ]
     }
   },
@@ -1191,6 +1221,7 @@
     "model": "product.product",
     "pk": 50,
     "fields": {
+      "deleted_at": null,
       "title": "UA Volt 2 USB Audio Interface",
       "title_en": "UA Volt 2 USB Audio Interface",
       "title_ru": "UA Volt 2 USB Audio Interface",
@@ -1207,8 +1238,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        56,
-        53
+        53,
+        56
       ]
     }
   },
@@ -1216,6 +1247,7 @@
     "model": "product.product",
     "pk": 51,
     "fields": {
+      "deleted_at": null,
       "title": "VIZIO V-Series",
       "title_en": "VIZIO V-Series",
       "title_ru": "VIZIO V-Series",
@@ -1232,8 +1264,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        57,
-        53
+        53,
+        57
       ]
     }
   },
@@ -1241,6 +1273,7 @@
     "model": "product.product",
     "pk": 52,
     "fields": {
+      "deleted_at": null,
       "title": "Logitech Z906",
       "title_en": "Logitech Z906",
       "title_ru": "Logitech Z906",
@@ -1257,8 +1290,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        58,
-        53
+        53,
+        58
       ]
     }
   },
@@ -1266,6 +1299,7 @@
     "model": "product.product",
     "pk": 53,
     "fields": {
+      "deleted_at": null,
       "title": "Galanz GLR12TRDEFR Refrigerator,",
       "title_en": "Galanz GLR12TRDEFR Refrigerator,",
       "title_ru": "Galanz GLR12TRDEFR Refrigerator,",
@@ -1282,8 +1316,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        60,
-        59
+        59,
+        60
       ]
     }
   },
@@ -1291,6 +1325,7 @@
     "model": "product.product",
     "pk": 54,
     "fields": {
+      "deleted_at": null,
       "title": "Hamilton Beach Electric Indoor Searing Grill",
       "title_en": "Hamilton Beach Electric Indoor Searing Grill",
       "title_ru": "Hamilton Beach Electric Indoor Searing Grill",
@@ -1307,9 +1342,9 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        61,
+        52,
         59,
-        52
+        61
       ]
     }
   },
@@ -1317,6 +1352,7 @@
     "model": "product.product",
     "pk": 55,
     "fields": {
+      "deleted_at": null,
       "title": "Vitamix A2300 Ascent Series Smart Blender",
       "title_en": "Vitamix A2300 Ascent Series Smart Blender",
       "title_ru": "Vitamix A2300 Ascent Series Smart Blender",
@@ -1333,8 +1369,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        62,
-        59
+        59,
+        62
       ]
     }
   },
@@ -1342,6 +1378,7 @@
     "model": "product.product",
     "pk": 56,
     "fields": {
+      "deleted_at": null,
       "title": "Summit ACR45L 20",
       "title_en": "Summit ACR45L 20",
       "title_ru": "Summit ACR45L 20",
@@ -1358,8 +1395,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        63,
         59,
+        63,
         64
       ]
     }
@@ -1368,6 +1405,7 @@
     "model": "product.product",
     "pk": 57,
     "fields": {
+      "deleted_at": null,
       "title": "Summit Appliance CSD4B24",
       "title_en": "Summit Appliance CSD4B24",
       "title_ru": "Summit Appliance CSD4B24",
@@ -1384,9 +1422,9 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
+        59,
         63,
-        65,
-        59
+        65
       ]
     }
   },
@@ -1394,6 +1432,7 @@
     "model": "product.product",
     "pk": 58,
     "fields": {
+      "deleted_at": null,
       "title": "Workout Pants",
       "title_en": "Workout Pants",
       "title_ru": "Workout Pants",
@@ -1410,8 +1449,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        67,
-        66
+        66,
+        67
       ]
     }
   },
@@ -1419,6 +1458,7 @@
     "model": "product.product",
     "pk": 59,
     "fields": {
+      "deleted_at": null,
       "title": "Baby Boys' Rompers",
       "title_en": "Baby Boys' Rompers",
       "title_ru": "Baby Boys' Rompers",
@@ -1444,6 +1484,7 @@
     "model": "product.product",
     "pk": 60,
     "fields": {
+      "deleted_at": null,
       "title": "Baby Girls Summer Clothes",
       "title_en": "Baby Girls Summer Clothes",
       "title_ru": "Baby Girls Summer Clothes",
@@ -1468,6 +1509,7 @@
     "model": "product.product",
     "pk": 61,
     "fields": {
+      "deleted_at": null,
       "title": "adidas Cap",
       "title_en": "adidas Cap",
       "title_ru": "adidas Cap",
@@ -1484,9 +1526,9 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        70,
+        66,
         69,
-        66
+        70
       ]
     }
   },
@@ -1494,6 +1536,7 @@
     "model": "product.product",
     "pk": 62,
     "fields": {
+      "deleted_at": null,
       "title": "Men's Rapid Rivers Pant",
       "title_en": "Men's Rapid Rivers Pant",
       "title_ru": "Men's Rapid Rivers Pant",
@@ -1510,8 +1553,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        67,
-        66
+        66,
+        67
       ]
     }
   },
@@ -1519,6 +1562,7 @@
     "model": "product.product",
     "pk": 63,
     "fields": {
+      "deleted_at": null,
       "title": "Contemporary Velvet Upholstered Bed",
       "title_en": "Contemporary Velvet Upholstered Bed",
       "title_ru": "Contemporary Velvet Upholstered Bed",
@@ -1544,6 +1588,7 @@
     "model": "product.product",
     "pk": 64,
     "fields": {
+      "deleted_at": null,
       "title": "ZINUS Josh Loveseat Sofa",
       "title_en": "ZINUS Josh Loveseat Sofa",
       "title_ru": "ZINUS Josh Loveseat Sofa",
@@ -1560,8 +1605,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        73,
-        71
+        71,
+        73
       ]
     }
   },
@@ -1569,6 +1614,7 @@
     "model": "product.product",
     "pk": 65,
     "fields": {
+      "deleted_at": null,
       "title": "Children's Dresser",
       "title_en": "Children's Dresser",
       "title_ru": "Children's Dresser",
@@ -1585,8 +1631,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        74,
-        71
+        71,
+        74
       ]
     }
   },
@@ -1594,6 +1640,7 @@
     "model": "product.product",
     "pk": 66,
     "fields": {
+      "deleted_at": null,
       "title": "L Shaped Desk",
       "title_en": "L Shaped Desk",
       "title_ru": "L Shaped Desk",
@@ -1610,8 +1657,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        75,
-        71
+        71,
+        75
       ]
     }
   },
@@ -1619,6 +1666,7 @@
     "model": "product.product",
     "pk": 67,
     "fields": {
+      "deleted_at": null,
       "title": "Platform 2 Urban Bed Drawers",
       "title_en": "Platform 2 Urban Bed Drawers",
       "title_ru": "Platform 2 Urban Bed Drawers",
@@ -1644,6 +1692,7 @@
     "model": "product.product",
     "pk": 68,
     "fields": {
+      "deleted_at": null,
       "title": "UBeesize LED Video Light Kit",
       "title_en": "UBeesize LED Video Light Kit",
       "title_ru": "UBeesize LED Video Light Kit",
@@ -1660,8 +1709,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        77,
-        76
+        76,
+        77
       ]
     }
   },
@@ -1669,6 +1718,7 @@
     "model": "product.product",
     "pk": 69,
     "fields": {
+      "deleted_at": null,
       "title": "KCO Lighting Antique Brass 4-Light Ceiling",
       "title_en": "KCO Lighting Antique Brass 4-Light Ceiling",
       "title_ru": "KCO Lighting Antique Brass 4-Light Ceiling",
@@ -1685,8 +1735,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        78,
-        77
+        77,
+        78
       ]
     }
   },
@@ -1694,6 +1744,7 @@
     "model": "product.product",
     "pk": 70,
     "fields": {
+      "deleted_at": null,
       "title": "Optimant Lighting Gold Pendant Lighting",
       "title_en": "Optimant Lighting Gold Pendant Lighting",
       "title_ru": "Optimant Lighting Gold Pendant Lighting",
@@ -1710,8 +1761,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        79,
-        77
+        77,
+        79
       ]
     }
   },
@@ -1719,6 +1770,7 @@
     "model": "product.product",
     "pk": 71,
     "fields": {
+      "deleted_at": null,
       "title": "Charge LED 10W Line Voltage Track Head",
       "title_en": "Charge LED 10W Line Voltage Track Head",
       "title_ru": "Charge LED 10W Line Voltage Track Head",
@@ -1735,8 +1787,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        80,
-        77
+        77,
+        80
       ]
     }
   },
@@ -1744,6 +1796,7 @@
     "model": "product.product",
     "pk": 72,
     "fields": {
+      "deleted_at": null,
       "title": "Westinghouse Lighting 7224900",
       "title_en": "Westinghouse Lighting 7224900",
       "title_ru": "Westinghouse Lighting 7224900",
@@ -1768,6 +1821,7 @@
     "model": "product.product",
     "pk": 73,
     "fields": {
+      "deleted_at": null,
       "title": "SAMSUNG Galaxy S22 Ultra Smartphone",
       "title_en": "SAMSUNG Galaxy S22 Ultra Smartphone",
       "title_ru": "SAMSUNG Galaxy S22 Ultra Smartphone",
@@ -1793,6 +1847,7 @@
     "model": "product.product",
     "pk": 74,
     "fields": {
+      "deleted_at": null,
       "title": "Motorola One 5G Ace",
       "title_en": "Motorola One 5G Ace",
       "title_ru": "Motorola One 5G Ace",
@@ -1809,8 +1864,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        82,
-        81
+        81,
+        82
       ]
     }
   },
@@ -1818,6 +1873,7 @@
     "model": "product.product",
     "pk": 75,
     "fields": {
+      "deleted_at": null,
       "title": "OnePlus Nord N200",
       "title_en": "OnePlus Nord N200",
       "title_ru": "OnePlus Nord N200",
@@ -1843,6 +1899,7 @@
     "model": "product.product",
     "pk": 76,
     "fields": {
+      "deleted_at": null,
       "title": "Google Pixel 6",
       "title_en": "Google Pixel 6",
       "title_ru": "Google Pixel 6",
@@ -1859,8 +1916,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        84,
-        81
+        81,
+        84
       ]
     }
   },
@@ -1868,6 +1925,7 @@
     "model": "product.product",
     "pk": 77,
     "fields": {
+      "deleted_at": null,
       "title": "TCL 20 SE",
       "title_en": "TCL 20 SE",
       "title_ru": "TCL 20 SE",
@@ -1884,8 +1942,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        85,
-        81
+        81,
+        85
       ]
     }
   },
@@ -1893,6 +1951,7 @@
     "model": "product.product",
     "pk": 78,
     "fields": {
+      "deleted_at": null,
       "title": "Nokia XR20 5G",
       "title_en": "Nokia XR20 5G",
       "title_ru": "Nokia XR20 5G",
@@ -1909,8 +1968,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        86,
-        81
+        81,
+        86
       ]
     }
   },
@@ -1918,6 +1977,7 @@
     "model": "product.product",
     "pk": 79,
     "fields": {
+      "deleted_at": null,
       "title": "Canon EOS Rebel T7",
       "title_en": "Canon EOS Rebel T7",
       "title_ru": "Canon EOS Rebel T7",
@@ -1934,8 +1994,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        88,
-        87
+        87,
+        88
       ]
     }
   },
@@ -1943,6 +2003,7 @@
     "model": "product.product",
     "pk": 80,
     "fields": {
+      "deleted_at": null,
       "title": "Webcam 1080p HD Computer Camera",
       "title_en": "Webcam 1080p HD Computer Camera",
       "title_ru": "Webcam 1080p HD Computer Camera",
@@ -1959,8 +2020,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        89,
-        87
+        87,
+        89
       ]
     }
   },
@@ -1968,6 +2029,7 @@
     "model": "product.product",
     "pk": 81,
     "fields": {
+      "deleted_at": null,
       "title": "Blink Mini",
       "title_en": "Blink Mini",
       "title_ru": "Blink Mini",
@@ -1992,6 +2054,7 @@
     "model": "product.product",
     "pk": 82,
     "fields": {
+      "deleted_at": null,
       "title": "Kodak PIXPRO Astro Zoom AZ421-RD",
       "title_en": "Kodak PIXPRO Astro Zoom AZ421-RD",
       "title_ru": "Kodak PIXPRO Astro Zoom AZ421-RD",
@@ -2008,8 +2071,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        90,
-        87
+        87,
+        90
       ]
     }
   },
@@ -2017,6 +2080,7 @@
     "model": "product.product",
     "pk": 83,
     "fields": {
+      "deleted_at": null,
       "title": "KODAK Printomatic Digital Instant Print Camera",
       "title_en": "KODAK Printomatic Digital Instant Print Camera",
       "title_ru": "KODAK Printomatic Digital Instant Print Camera",
@@ -2033,8 +2097,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        90,
-        87
+        87,
+        90
       ]
     }
   },
@@ -2042,6 +2106,7 @@
     "model": "product.product",
     "pk": 84,
     "fields": {
+      "deleted_at": null,
       "title": "Canon PowerShot ELPH",
       "title_en": "Canon PowerShot ELPH",
       "title_ru": "Canon PowerShot ELPH",
@@ -2058,8 +2123,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        88,
-        87
+        87,
+        88
       ]
     }
   },
@@ -2067,6 +2132,7 @@
     "model": "product.product",
     "pk": 85,
     "fields": {
+      "deleted_at": null,
       "title": "eufy Security, eufyCam 2C 2-Cam Kit",
       "title_en": "eufy Security, eufyCam 2C 2-Cam Kit",
       "title_ru": "eufy Security, eufyCam 2C 2-Cam Kit",
@@ -2083,8 +2149,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        91,
-        87
+        87,
+        91
       ]
     }
   },
@@ -2092,6 +2158,7 @@
     "model": "product.product",
     "pk": 86,
     "fields": {
+      "deleted_at": null,
       "title": "Panasonic RP-HJE120-K",
       "title_en": "Panasonic RP-HJE120-K",
       "title_ru": "Panasonic RP-HJE120-K",
@@ -2108,8 +2175,8 @@
       "rating": 0,
       "sort_index": 0,
       "tags": [
-        92,
-        45
+        45,
+        92
       ]
     }
   },
@@ -2117,6 +2184,7 @@
     "model": "product.product",
     "pk": 87,
     "fields": {
+      "deleted_at": null,
       "title": "Sony MDR-ZX110",
       "title_en": "Sony MDR-ZX110",
       "title_ru": "Sony MDR-ZX110",
@@ -2142,6 +2210,7 @@
     "model": "product.product",
     "pk": 88,
     "fields": {
+      "deleted_at": null,
       "title": "Anker 4-Port USB 3.0 Hub",
       "title_en": "Anker 4-Port USB 3.0 Hub",
       "title_ru": "Anker 4-Port USB 3.0 Hub",
@@ -2167,6 +2236,7 @@
     "model": "product.product",
     "pk": 89,
     "fields": {
+      "deleted_at": null,
       "title": "Lenovo - USB Cable - 6.ft - 24 Pin USB-C",
       "title_en": "Lenovo - USB Cable - 6.ft - 24 Pin USB-C",
       "title_ru": "Lenovo - USB Cable - 6.ft - 24 Pin USB-C",
@@ -2185,56 +2255,6 @@
       "tags": [
         97
       ]
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 1,
-    "fields": {
-      "shop": 992,
-      "product": 58,
-      "price": "500.00",
-      "count": 100
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 2,
-    "fields": {
-      "shop": 992,
-      "product": 59,
-      "price": "100.00",
-      "count": 12
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 3,
-    "fields": {
-      "shop": 992,
-      "product": 60,
-      "price": "150.00",
-      "count": 14
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 4,
-    "fields": {
-      "shop": 992,
-      "product": 62,
-      "price": "350.00",
-      "count": 55
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 5,
-    "fields": {
-      "shop": 992,
-      "product": 61,
-      "price": "540.00",
-      "count": 33
     }
   },
   {
@@ -2275,236 +2295,6 @@
       "product": 36,
       "price": "3400.00",
       "count": 12
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 10,
-    "fields": {
-      "shop": 990,
-      "product": 1,
-      "price": "4567.00",
-      "count": 12
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 11,
-    "fields": {
-      "shop": 990,
-      "product": 34,
-      "price": "5000.00",
-      "count": 11
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 12,
-    "fields": {
-      "shop": 991,
-      "product": 43,
-      "price": "300.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 13,
-    "fields": {
-      "shop": 991,
-      "product": 38,
-      "price": "350.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 14,
-    "fields": {
-      "shop": 991,
-      "product": 39,
-      "price": "500.00",
-      "count": 12
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 15,
-    "fields": {
-      "shop": 991,
-      "product": 40,
-      "price": "440.00",
-      "count": 11
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 16,
-    "fields": {
-      "shop": 991,
-      "product": 41,
-      "price": "430.00",
-      "count": 8
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 17,
-    "fields": {
-      "shop": 991,
-      "product": 45,
-      "price": "200.00",
-      "count": 12
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 18,
-    "fields": {
-      "shop": 991,
-      "product": 46,
-      "price": "500.00",
-      "count": 4
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 19,
-    "fields": {
-      "shop": 991,
-      "product": 47,
-      "price": "300.00",
-      "count": 33
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 20,
-    "fields": {
-      "shop": 990,
-      "product": 78,
-      "price": "700.00",
-      "count": 11
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 21,
-    "fields": {
-      "shop": 990,
-      "product": 73,
-      "price": "670.00",
-      "count": 2
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 22,
-    "fields": {
-      "shop": 990,
-      "product": 75,
-      "price": "450.00",
-      "count": 6
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 23,
-    "fields": {
-      "shop": 990,
-      "product": 76,
-      "price": "890.00",
-      "count": 3
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 24,
-    "fields": {
-      "shop": 990,
-      "product": 74,
-      "price": "2000.00",
-      "count": 7
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 25,
-    "fields": {
-      "shop": 990,
-      "product": 79,
-      "price": "670.00",
-      "count": 7
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 26,
-    "fields": {
-      "shop": 990,
-      "product": 80,
-      "price": "770.00",
-      "count": 6
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 27,
-    "fields": {
-      "shop": 990,
-      "product": 81,
-      "price": "880.00",
-      "count": 9
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 28,
-    "fields": {
-      "shop": 990,
-      "product": 82,
-      "price": "1200.00",
-      "count": 3
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 29,
-    "fields": {
-      "shop": 990,
-      "product": 83,
-      "price": "360.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 30,
-    "fields": {
-      "shop": 990,
-      "product": 84,
-      "price": "550.00",
-      "count": 7
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 31,
-    "fields": {
-      "shop": 990,
-      "product": 51,
-      "price": "350.00",
-      "count": 8
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 32,
-    "fields": {
-      "shop": 990,
-      "product": 48,
-      "price": "1200.00",
-      "count": 6
     }
   },
   {
@@ -2609,202 +2399,12 @@
   },
   {
     "model": "product.stock",
-    "pk": 46,
-    "fields": {
-      "shop": 996,
-      "product": 1,
-      "price": "1200.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 47,
-    "fields": {
-      "shop": 996,
-      "product": 38,
-      "price": "340.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 48,
-    "fields": {
-      "shop": 996,
-      "product": 36,
-      "price": "340.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 49,
-    "fields": {
-      "shop": 996,
-      "product": 43,
-      "price": "550.00",
-      "count": 11
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 50,
-    "fields": {
-      "shop": 996,
-      "product": 44,
-      "price": "530.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
     "pk": 51,
     "fields": {
       "shop": 995,
       "product": 49,
       "price": "1200.00",
       "count": 3
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 52,
-    "fields": {
-      "shop": 996,
-      "product": 48,
-      "price": "500.00",
-      "count": 5
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 53,
-    "fields": {
-      "shop": 996,
-      "product": 50,
-      "price": "670.00",
-      "count": 8
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 54,
-    "fields": {
-      "shop": 996,
-      "product": 72,
-      "price": "355.00",
-      "count": 2
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 55,
-    "fields": {
-      "shop": 996,
-      "product": 51,
-      "price": "1300.00",
-      "count": 5
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 56,
-    "fields": {
-      "shop": 996,
-      "product": 52,
-      "price": "555.00",
-      "count": 4
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 57,
-    "fields": {
-      "shop": 996,
-      "product": 46,
-      "price": "500.00",
-      "count": 5
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 58,
-    "fields": {
-      "shop": 996,
-      "product": 57,
-      "price": "560.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 59,
-    "fields": {
-      "shop": 996,
-      "product": 54,
-      "price": "440.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 60,
-    "fields": {
-      "shop": 996,
-      "product": 53,
-      "price": "890.00",
-      "count": 14
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 61,
-    "fields": {
-      "shop": 996,
-      "product": 56,
-      "price": "570.00",
-      "count": 5
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 62,
-    "fields": {
-      "shop": 996,
-      "product": 78,
-      "price": "620.00",
-      "count": 7
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 63,
-    "fields": {
-      "shop": 996,
-      "product": 71,
-      "price": "670.00",
-      "count": 4
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 64,
-    "fields": {
-      "shop": 996,
-      "product": 86,
-      "price": "680.00",
-      "count": 1
-    }
-  },
-  {
-    "model": "product.stock",
-    "pk": 65,
-    "fields": {
-      "shop": 996,
-      "product": 87,
-      "price": "120.00",
-      "count": 1
     }
   },
   {
@@ -2819,22 +2419,1422 @@
   },
   {
     "model": "product.stock",
-    "pk": 67,
+    "pk": 69,
+    "fields": {
+      "shop": 996,
+      "product": 1,
+      "price": "2169.00",
+      "count": 427
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 70,
+    "fields": {
+      "shop": 996,
+      "product": 34,
+      "price": "3062.00",
+      "count": 417
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 71,
+    "fields": {
+      "shop": 996,
+      "product": 35,
+      "price": "2407.00",
+      "count": 274
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 72,
+    "fields": {
+      "shop": 996,
+      "product": 36,
+      "price": "417.00",
+      "count": 403
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 73,
+    "fields": {
+      "shop": 996,
+      "product": 37,
+      "price": "391.00",
+      "count": 52
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 74,
+    "fields": {
+      "shop": 996,
+      "product": 38,
+      "price": "636.00",
+      "count": 445
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 75,
+    "fields": {
+      "shop": 996,
+      "product": 39,
+      "price": "2245.00",
+      "count": 145
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 76,
+    "fields": {
+      "shop": 996,
+      "product": 40,
+      "price": "3202.00",
+      "count": 422
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 77,
+    "fields": {
+      "shop": 996,
+      "product": 59,
+      "price": "968.00",
+      "count": 392
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 78,
+    "fields": {
+      "shop": 996,
+      "product": 41,
+      "price": "442.00",
+      "count": 93
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 79,
+    "fields": {
+      "shop": 996,
+      "product": 42,
+      "price": "3168.00",
+      "count": 50
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 80,
+    "fields": {
+      "shop": 996,
+      "product": 43,
+      "price": "3569.00",
+      "count": 436
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 81,
+    "fields": {
+      "shop": 996,
+      "product": 44,
+      "price": "1482.00",
+      "count": 334
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 82,
+    "fields": {
+      "shop": 996,
+      "product": 45,
+      "price": "3321.00",
+      "count": 142
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 83,
+    "fields": {
+      "shop": 996,
+      "product": 46,
+      "price": "2256.00",
+      "count": 364
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 84,
+    "fields": {
+      "shop": 996,
+      "product": 47,
+      "price": "3127.00",
+      "count": 263
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 85,
+    "fields": {
+      "shop": 996,
+      "product": 48,
+      "price": "731.00",
+      "count": 323
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 86,
+    "fields": {
+      "shop": 996,
+      "product": 49,
+      "price": "3174.00",
+      "count": 310
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 87,
+    "fields": {
+      "shop": 996,
+      "product": 50,
+      "price": "3273.00",
+      "count": 104
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 88,
+    "fields": {
+      "shop": 996,
+      "product": 51,
+      "price": "2041.00",
+      "count": 378
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 89,
+    "fields": {
+      "shop": 996,
+      "product": 52,
+      "price": "3048.00",
+      "count": 487
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 90,
+    "fields": {
+      "shop": 996,
+      "product": 53,
+      "price": "656.00",
+      "count": 497
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 91,
+    "fields": {
+      "shop": 996,
+      "product": 54,
+      "price": "821.00",
+      "count": 242
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 92,
+    "fields": {
+      "shop": 996,
+      "product": 55,
+      "price": "2174.00",
+      "count": 87
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 93,
+    "fields": {
+      "shop": 996,
+      "product": 56,
+      "price": "924.00",
+      "count": 494
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 94,
+    "fields": {
+      "shop": 996,
+      "product": 57,
+      "price": "2131.00",
+      "count": 169
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 95,
+    "fields": {
+      "shop": 996,
+      "product": 58,
+      "price": "3945.00",
+      "count": 17
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 96,
+    "fields": {
+      "shop": 996,
+      "product": 60,
+      "price": "1217.00",
+      "count": 477
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 97,
+    "fields": {
+      "shop": 996,
+      "product": 61,
+      "price": "300.00",
+      "count": 222
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 98,
+    "fields": {
+      "shop": 996,
+      "product": 62,
+      "price": "2910.00",
+      "count": 172
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 99,
+    "fields": {
+      "shop": 996,
+      "product": 63,
+      "price": "1747.00",
+      "count": 194
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 100,
+    "fields": {
+      "shop": 996,
+      "product": 64,
+      "price": "431.00",
+      "count": 159
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 101,
+    "fields": {
+      "shop": 996,
+      "product": 65,
+      "price": "3139.00",
+      "count": 57
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 102,
+    "fields": {
+      "shop": 996,
+      "product": 66,
+      "price": "744.00",
+      "count": 252
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 103,
+    "fields": {
+      "shop": 996,
+      "product": 67,
+      "price": "3952.00",
+      "count": 387
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 104,
+    "fields": {
+      "shop": 996,
+      "product": 68,
+      "price": "2510.00",
+      "count": 434
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 105,
+    "fields": {
+      "shop": 996,
+      "product": 69,
+      "price": "2132.00",
+      "count": 32
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 106,
+    "fields": {
+      "shop": 996,
+      "product": 70,
+      "price": "1056.00",
+      "count": 262
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 107,
+    "fields": {
+      "shop": 996,
+      "product": 71,
+      "price": "2168.00",
+      "count": 55
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 108,
+    "fields": {
+      "shop": 996,
+      "product": 72,
+      "price": "3330.00",
+      "count": 173
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 109,
+    "fields": {
+      "shop": 996,
+      "product": 73,
+      "price": "3968.00",
+      "count": 260
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 110,
+    "fields": {
+      "shop": 996,
+      "product": 74,
+      "price": "2804.00",
+      "count": 169
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 111,
+    "fields": {
+      "shop": 996,
+      "product": 75,
+      "price": "3671.00",
+      "count": 22
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 112,
+    "fields": {
+      "shop": 996,
+      "product": 76,
+      "price": "3189.00",
+      "count": 146
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 113,
+    "fields": {
+      "shop": 996,
+      "product": 77,
+      "price": "3011.00",
+      "count": 264
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 114,
+    "fields": {
+      "shop": 996,
+      "product": 78,
+      "price": "2102.00",
+      "count": 313
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 115,
+    "fields": {
+      "shop": 996,
+      "product": 79,
+      "price": "1913.00",
+      "count": 87
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 116,
+    "fields": {
+      "shop": 996,
+      "product": 80,
+      "price": "2016.00",
+      "count": 423
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 117,
+    "fields": {
+      "shop": 996,
+      "product": 81,
+      "price": "1925.00",
+      "count": 443
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 118,
+    "fields": {
+      "shop": 996,
+      "product": 82,
+      "price": "1019.00",
+      "count": 252
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 119,
+    "fields": {
+      "shop": 996,
+      "product": 83,
+      "price": "1518.00",
+      "count": 498
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 120,
+    "fields": {
+      "shop": 996,
+      "product": 84,
+      "price": "783.00",
+      "count": 84
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 121,
+    "fields": {
+      "shop": 996,
+      "product": 85,
+      "price": "2875.00",
+      "count": 26
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 122,
+    "fields": {
+      "shop": 996,
+      "product": 86,
+      "price": "970.00",
+      "count": 437
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 123,
+    "fields": {
+      "shop": 996,
+      "product": 87,
+      "price": "692.00",
+      "count": 64
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 124,
+    "fields": {
+      "shop": 996,
+      "product": 88,
+      "price": "3029.00",
+      "count": 435
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 125,
     "fields": {
       "shop": 996,
       "product": 89,
-      "price": "400.00",
+      "price": "1271.00",
+      "count": 411
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 126,
+    "fields": {
+      "shop": 990,
+      "product": 1,
+      "price": "3795.00",
+      "count": 392
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 127,
+    "fields": {
+      "shop": 990,
+      "product": 34,
+      "price": "337.00",
+      "count": 162
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 128,
+    "fields": {
+      "shop": 990,
+      "product": 35,
+      "price": "3300.00",
+      "count": 227
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 129,
+    "fields": {
+      "shop": 990,
+      "product": 36,
+      "price": "3116.00",
+      "count": 145
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 130,
+    "fields": {
+      "shop": 990,
+      "product": 37,
+      "price": "708.00",
+      "count": 126
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 131,
+    "fields": {
+      "shop": 990,
+      "product": 38,
+      "price": "3121.00",
+      "count": 293
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 132,
+    "fields": {
+      "shop": 990,
+      "product": 39,
+      "price": "1851.00",
+      "count": 247
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 133,
+    "fields": {
+      "shop": 990,
+      "product": 40,
+      "price": "1334.00",
+      "count": 379
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 134,
+    "fields": {
+      "shop": 990,
+      "product": 41,
+      "price": "3605.00",
+      "count": 438
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 135,
+    "fields": {
+      "shop": 990,
+      "product": 42,
+      "price": "3478.00",
+      "count": 15
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 136,
+    "fields": {
+      "shop": 990,
+      "product": 48,
+      "price": "3120.00",
+      "count": 111
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 137,
+    "fields": {
+      "shop": 990,
+      "product": 49,
+      "price": "397.00",
+      "count": 2
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 138,
+    "fields": {
+      "shop": 990,
+      "product": 50,
+      "price": "576.00",
+      "count": 124
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 139,
+    "fields": {
+      "shop": 990,
+      "product": 51,
+      "price": "1154.00",
+      "count": 376
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 140,
+    "fields": {
+      "shop": 990,
+      "product": 52,
+      "price": "2641.00",
+      "count": 486
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 141,
+    "fields": {
+      "shop": 990,
+      "product": 53,
+      "price": "265.00",
+      "count": 235
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 142,
+    "fields": {
+      "shop": 990,
+      "product": 54,
+      "price": "877.00",
+      "count": 379
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 143,
+    "fields": {
+      "shop": 990,
+      "product": 55,
+      "price": "2598.00",
+      "count": 208
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 144,
+    "fields": {
+      "shop": 990,
+      "product": 56,
+      "price": "2670.00",
+      "count": 170
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 145,
+    "fields": {
+      "shop": 990,
+      "product": 57,
+      "price": "3784.00",
+      "count": 98
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 146,
+    "fields": {
+      "shop": 990,
+      "product": 73,
+      "price": "1134.00",
+      "count": 484
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 147,
+    "fields": {
+      "shop": 990,
+      "product": 74,
+      "price": "541.00",
+      "count": 23
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 148,
+    "fields": {
+      "shop": 990,
+      "product": 75,
+      "price": "858.00",
+      "count": 48
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 149,
+    "fields": {
+      "shop": 990,
+      "product": 76,
+      "price": "1487.00",
+      "count": 70
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 150,
+    "fields": {
+      "shop": 990,
+      "product": 77,
+      "price": "475.00",
+      "count": 380
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 151,
+    "fields": {
+      "shop": 990,
+      "product": 78,
+      "price": "3247.00",
+      "count": 150
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 152,
+    "fields": {
+      "shop": 990,
+      "product": 79,
+      "price": "3151.00",
+      "count": 372
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 153,
+    "fields": {
+      "shop": 990,
+      "product": 80,
+      "price": "1406.00",
+      "count": 353
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 154,
+    "fields": {
+      "shop": 990,
+      "product": 81,
+      "price": "3412.00",
+      "count": 20
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 155,
+    "fields": {
+      "shop": 990,
+      "product": 82,
+      "price": "683.00",
+      "count": 136
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 156,
+    "fields": {
+      "shop": 990,
+      "product": 83,
+      "price": "3600.00",
+      "count": 143
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 157,
+    "fields": {
+      "shop": 990,
+      "product": 84,
+      "price": "1217.00",
+      "count": 143
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 158,
+    "fields": {
+      "shop": 990,
+      "product": 85,
+      "price": "490.00",
+      "count": 78
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 159,
+    "fields": {
+      "shop": 990,
+      "product": 86,
+      "price": "1834.00",
+      "count": 255
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 160,
+    "fields": {
+      "shop": 990,
+      "product": 87,
+      "price": "1747.00",
+      "count": 61
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 161,
+    "fields": {
+      "shop": 990,
+      "product": 88,
+      "price": "2248.00",
+      "count": 216
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 162,
+    "fields": {
+      "shop": 990,
+      "product": 89,
+      "price": "1382.00",
+      "count": 281
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 163,
+    "fields": {
+      "shop": 991,
+      "product": 38,
+      "price": "201.00",
+      "count": 14
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 164,
+    "fields": {
+      "shop": 991,
+      "product": 39,
+      "price": "335.00",
+      "count": 15
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 165,
+    "fields": {
+      "shop": 991,
+      "product": 40,
+      "price": "224.00",
+      "count": 9
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 166,
+    "fields": {
+      "shop": 991,
+      "product": 41,
+      "price": "339.00",
+      "count": 17
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 167,
+    "fields": {
+      "shop": 991,
+      "product": 42,
+      "price": "250.00",
+      "count": 19
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 168,
+    "fields": {
+      "shop": 991,
+      "product": 43,
+      "price": "224.00",
+      "count": 1
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 169,
+    "fields": {
+      "shop": 991,
+      "product": 44,
+      "price": "218.00",
+      "count": 9
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 170,
+    "fields": {
+      "shop": 991,
+      "product": 45,
+      "price": "378.00",
+      "count": 10
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 171,
+    "fields": {
+      "shop": 991,
+      "product": 46,
+      "price": "380.00",
+      "count": 11
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 172,
+    "fields": {
+      "shop": 991,
+      "product": 47,
+      "price": "349.00",
+      "count": 16
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 173,
+    "fields": {
+      "shop": 992,
+      "product": 59,
+      "price": "258.00",
+      "count": 13
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 174,
+    "fields": {
+      "shop": 992,
+      "product": 58,
+      "price": "388.00",
+      "count": 2
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 175,
+    "fields": {
+      "shop": 992,
+      "product": 60,
+      "price": "239.00",
+      "count": 5
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 176,
+    "fields": {
+      "shop": 992,
+      "product": 61,
+      "price": "243.00",
+      "count": 12
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 177,
+    "fields": {
+      "shop": 992,
+      "product": 62,
+      "price": "248.00",
+      "count": 4
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 178,
+    "fields": {
+      "shop": 993,
+      "product": 1,
+      "price": "3143.00",
+      "count": 5
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 179,
+    "fields": {
+      "shop": 993,
+      "product": 34,
+      "price": "1011.00",
+      "count": 11
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 180,
+    "fields": {
+      "shop": 993,
+      "product": 35,
+      "price": "1968.00",
       "count": 8
     }
   },
   {
     "model": "product.stock",
-    "pk": 68,
+    "pk": 181,
     "fields": {
-      "shop": 996,
+      "shop": 993,
+      "product": 36,
+      "price": "2983.00",
+      "count": 20
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 182,
+    "fields": {
+      "shop": 993,
+      "product": 37,
+      "price": "2188.00",
+      "count": 5
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 183,
+    "fields": {
+      "shop": 993,
+      "product": 73,
+      "price": "2929.00",
+      "count": 18
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 184,
+    "fields": {
+      "shop": 993,
+      "product": 74,
+      "price": "1354.00",
+      "count": 8
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 185,
+    "fields": {
+      "shop": 993,
+      "product": 75,
+      "price": "1672.00",
+      "count": 11
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 186,
+    "fields": {
+      "shop": 993,
+      "product": 76,
+      "price": "2179.00",
+      "count": 2
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 187,
+    "fields": {
+      "shop": 993,
+      "product": 77,
+      "price": "2714.00",
+      "count": 1
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 188,
+    "fields": {
+      "shop": 993,
+      "product": 78,
+      "price": "3785.00",
+      "count": 15
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 189,
+    "fields": {
+      "shop": 993,
+      "product": 79,
+      "price": "2679.00",
+      "count": 11
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 190,
+    "fields": {
+      "shop": 993,
+      "product": 80,
+      "price": "2924.00",
+      "count": 2
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 191,
+    "fields": {
+      "shop": 993,
+      "product": 81,
+      "price": "2270.00",
+      "count": 17
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 192,
+    "fields": {
+      "shop": 993,
+      "product": 82,
+      "price": "3657.00",
+      "count": 13
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 193,
+    "fields": {
+      "shop": 993,
+      "product": 83,
+      "price": "1289.00",
+      "count": 17
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 194,
+    "fields": {
+      "shop": 993,
+      "product": 84,
+      "price": "1472.00",
+      "count": 6
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 195,
+    "fields": {
+      "shop": 993,
+      "product": 85,
+      "price": "2912.00",
+      "count": 2
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 196,
+    "fields": {
+      "shop": 994,
+      "product": 38,
+      "price": "596.00",
+      "count": 18
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 197,
+    "fields": {
+      "shop": 994,
+      "product": 39,
+      "price": "640.00",
+      "count": 14
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 198,
+    "fields": {
+      "shop": 994,
+      "product": 40,
+      "price": "1091.00",
+      "count": 16
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 199,
+    "fields": {
+      "shop": 994,
+      "product": 41,
+      "price": "961.00",
+      "count": 10
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 200,
+    "fields": {
+      "shop": 994,
+      "product": 42,
+      "price": "1224.00",
+      "count": 15
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 201,
+    "fields": {
+      "shop": 994,
+      "product": 43,
+      "price": "1297.00",
+      "count": 17
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 202,
+    "fields": {
+      "shop": 994,
+      "product": 44,
+      "price": "308.00",
+      "count": 14
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 203,
+    "fields": {
+      "shop": 994,
+      "product": 45,
+      "price": "685.00",
+      "count": 11
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 204,
+    "fields": {
+      "shop": 994,
+      "product": 46,
+      "price": "964.00",
+      "count": 18
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 205,
+    "fields": {
+      "shop": 994,
+      "product": 47,
+      "price": "1191.00",
+      "count": 15
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 206,
+    "fields": {
+      "shop": 995,
+      "product": 68,
+      "price": "930.00",
+      "count": 4
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 207,
+    "fields": {
+      "shop": 995,
+      "product": 69,
+      "price": "1042.00",
+      "count": 6
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 208,
+    "fields": {
+      "shop": 995,
+      "product": 70,
+      "price": "354.00",
+      "count": 16
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 209,
+    "fields": {
+      "shop": 995,
       "product": 71,
-      "price": "600.00",
-      "count": 7
+      "price": "235.00",
+      "count": 6
+    }
+  },
+  {
+    "model": "product.stock",
+    "pk": 210,
+    "fields": {
+      "shop": 995,
+      "product": 72,
+      "price": "816.00",
+      "count": 1
     }
   }
 ]

@@ -23,50 +23,50 @@
     "model": "order.delivery",
     "pk": 3,
     "fields": {
-      "price":  200,
       "delivery_type": 1,
       "city": "Москва",
-      "address": "ул.Верещагина, д.52, стр.1"
+      "address": "ул.Верещагина, д.52, стр.1",
+      "price": "200.00"
     }
   },
   {
     "model": "order.delivery",
     "pk": 4,
     "fields": {
-      "price":  500,
       "delivery_type": 2,
       "city": "Москва",
-      "address": "ул.Верещагина, д.52, стр.1"
+      "address": "ул.Верещагина, д.52, стр.1",
+      "price": "500.00"
     }
   },
   {
     "model": "order.delivery",
     "pk": 5,
     "fields": {
-      "price":  200,
       "delivery_type": 1,
       "city": "Санкт-Петербург",
-      "address": "пр.Мира, д.41, кор.1,  оф.4"
+      "address": "пр.Мира, д.41, кор.1,  оф.4",
+      "price": "200.00"
     }
   },
   {
     "model": "order.delivery",
     "pk": 6,
     "fields": {
-      "price":  200,
       "delivery_type": 1,
       "city": "Санкт-Петербург",
-      "address": "пр.Мира, д.41, кор.1,  оф.4"
+      "address": "пр.Мира, д.41, кор.1,  оф.4",
+      "price": "200.00"
     }
   },
   {
     "model": "order.delivery",
     "pk": 7,
     "fields": {
-      "price":  500,
       "delivery_type": 2,
       "city": "Санкт-Петербург",
-      "address": "пр.Мира, д.41, кор.1,  оф.4"
+      "address": "пр.Мира, д.41, кор.1,  оф.4",
+      "price": "500.00"
     }
   },
   {
@@ -75,33 +75,35 @@
     "fields": {
       "delivery_type": 2,
       "city": "Vologda",
-      "address": "ул.Приморская, д.111, кор.5, оф.15"
+      "address": "ул.Приморская, д.111, кор.5, оф.15",
+      "price": "200.00"
     }
   },
   {
     "model": "order.delivery",
     "pk": 9,
     "fields": {
-      "price":  0,
       "delivery_type": 1,
       "city": "Москва",
-      "address": "ул.Приморская, д.111, кор.5, оф.15"
+      "address": "ул.Приморская, д.111, кор.5, оф.15",
+      "price": "0.00"
     }
   },
   {
     "model": "order.delivery",
     "pk": 10,
     "fields": {
-      "price":  500,
       "delivery_type": 2,
       "city": "Москва",
-      "address": "ул.Приморская, д.111, кор.5, оф.15"
+      "address": "ул.Приморская, д.111, кор.5, оф.15",
+      "price": "500.00"
     }
   },
   {
     "model": "order.order",
     "pk": 13,
     "fields": {
+      "deleted_at": null,
       "user_id": 16,
       "datetime": "2022-06-13T19:24:49.525Z",
       "delivery_id": 3,
@@ -115,6 +117,7 @@
     "model": "order.order",
     "pk": 14,
     "fields": {
+      "deleted_at": null,
       "user_id": 17,
       "datetime": "2022-06-13T19:26:46.476Z",
       "delivery_id": 4,
@@ -128,6 +131,7 @@
     "model": "order.order",
     "pk": 15,
     "fields": {
+      "deleted_at": null,
       "user_id": 16,
       "datetime": "2022-06-13T19:27:18.159Z",
       "delivery_id": 6,
@@ -141,6 +145,7 @@
     "model": "order.order",
     "pk": 16,
     "fields": {
+      "deleted_at": null,
       "user_id": 18,
       "datetime": "2022-06-13T19:28:02.386Z",
       "delivery_id": 6,
@@ -154,6 +159,7 @@
     "model": "order.order",
     "pk": 17,
     "fields": {
+      "deleted_at": null,
       "user_id": 20,
       "datetime": "2022-06-13T19:28:40.213Z",
       "delivery_id": 7,
@@ -167,6 +173,7 @@
     "model": "order.order",
     "pk": 18,
     "fields": {
+      "deleted_at": null,
       "user_id": 21,
       "datetime": "2022-06-13T19:29:40.363Z",
       "delivery_id": 9,
@@ -180,6 +187,7 @@
     "model": "order.order",
     "pk": 19,
     "fields": {
+      "deleted_at": null,
       "user_id": 20,
       "datetime": "2022-06-13T19:30:13.891Z",
       "delivery_id": 10,
@@ -193,7 +201,7 @@
     "model": "order.orderentity",
     "pk": 23,
     "fields": {
-      "stock_id": 1,
+      "stock_id": 7,
       "order_id": 13,
       "price": 2000,
       "discounted_price": null,
@@ -215,7 +223,7 @@
     "model": "order.orderentity",
     "pk": 25,
     "fields": {
-      "stock_id": 3,
+      "stock_id": 42,
       "order_id": 13,
       "price": 135,
       "discounted_price": null,
@@ -237,7 +245,7 @@
     "model": "order.orderentity",
     "pk": 27,
     "fields": {
-      "stock_id": 17,
+      "stock_id": 43,
       "order_id": 15,
       "price": 3000,
       "discounted_price": 2000,
@@ -270,7 +278,7 @@
     "model": "order.orderentity",
     "pk": 30,
     "fields": {
-      "stock_id": 16,
+      "stock_id": 42,
       "order_id": 17,
       "price": 100,
       "discounted_price": 99,
@@ -310,6 +318,4 @@
       "count": 2
     }
   }
-
-
 ]
