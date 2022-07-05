@@ -3,7 +3,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseRedirect
 from django.core.cache import cache
-from django.urls import path
+from django.urls import path, reverse
 from .forms import SEOItemForm
 from .models import Banner, SEOItem, Settings
 
@@ -44,16 +44,25 @@ class SettingsAdmin(admin.ModelAdmin):
     def clear_cache(self, request: HttpRequest) -> None:
         """Функция для сброса кэша
         """
+        key: str = ''
         if "category" in request.POST:
-            cache.delete("categories_list")
+            key = make_template_fragment_key("categories_list")
         elif "product" in request.POST:
-            cache.delete("product_list")
+            key = make_template_fragment_key("product_list")
         elif "top_product" in request.POST:
-            cache.delete("top_product_list")
+            key = make_template_fragment_key("top_product_list")
         elif "banner" in request.POST:
             key = make_template_fragment_key("banner_list")
+        if key:
             cache.delete(key)
-        return HttpResponseRedirect("../")
+        return HttpResponseRedirect(
+            reverse(
+                'admin:{app_label}_{model_name}_changelist'.format(
+                    app_label=self.opts.app_label,
+                    model_name=self.opts.model_name
+                )
+            )
+        )
 
 
 @admin.register(SEOItem)
