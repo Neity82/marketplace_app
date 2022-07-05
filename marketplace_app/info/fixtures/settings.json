@@ -88,5 +88,23 @@
             "description": "Время кэширования детальной информации о магазине",
             "value": "86400"
         }
+    },
+    {
+        "model": "info.settings",
+        "pk": 11,
+        "fields": {
+            "name": "top_product_list_cache_time",
+            "description": "Время кэширования списка топ-товаров на главной странице",
+            "value": "3600"
+        }
+    },
+    {
+        "model": "info.settings",
+        "pk": 12,
+        "fields": {
+            "name": "banner_list_cache_time",
+            "description": "Время кэширования списка баннеров на главной странице",
+            "value": "600"
+        }
     }
 ]

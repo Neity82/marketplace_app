@@ -23,7 +23,12 @@ def full_name_analysis(full_name: str) -> Dict[str, str]:
     ":rtype: dict[str, str]
     """
 
-    user_name_data: Dict[str, str] = {}
+    user_name_data: Dict[str, str] = {
+        "first_name": "",
+        "last_name": "",
+        "middle_name": ""
+    }
+
     if full_name:
         user_name_data_raw = full_name.split()
         user_name_data_raw_len = len(user_name_data_raw)
@@ -43,6 +48,5 @@ def full_name_analysis(full_name: str) -> Dict[str, str]:
             user_name_data.update(last_name=user_name_data_raw[0])
             user_name_data.update(middle_name=user_name_data_raw[-1])
             user_name_data.update(first_name=" ".join(user_name_data_raw[1:-1]))
-    else:
-        user_name_data = full_name
+
     return user_name_data
