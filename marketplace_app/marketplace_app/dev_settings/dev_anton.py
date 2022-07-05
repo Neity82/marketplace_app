@@ -13,10 +13,10 @@ DATABASES = {
         "NAME": os.getenv(
             "SQL_DATABASE", default=os.path.join(BASE_DIR, "db.sqlite3")
         ),
-        "USER": os.getenv("SQL_USER", default="user"),
-        "PASSWORD": os.getenv("SQL_PASSWORD", default="password"),
-        "HOST": os.getenv("SQL_HOST", default="localhost"),
-        "PORT": os.getenv("SQL_PORT", default="5432"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
 
@@ -41,3 +41,5 @@ DATABASES = {
 #         }
 #     }
 # }
+
+REDIS_HOST = "redis"
