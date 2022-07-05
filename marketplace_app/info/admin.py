@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.core.cache.utils import make_template_fragment_key
-from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponseRedirect
 from django.core.cache import cache
 from django.urls import path, reverse
@@ -44,7 +43,7 @@ class SettingsAdmin(admin.ModelAdmin):
     def clear_cache(self, request: HttpRequest) -> HttpResponseRedirect:
         """Функция для сброса кэша
         """
-        key: str = ''
+        key: str = ""
         if "category" in request.POST:
             cache.delete("categories_list")
             key = make_template_fragment_key("categories_list")
@@ -66,7 +65,6 @@ class SettingsAdmin(admin.ModelAdmin):
                 )
             )
         )
-
 
 
 @admin.register(SEOItem)
