@@ -261,11 +261,13 @@ class Cart(models.Model):
             else:
                 product_discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
 
-        basket_discount_sum = get_basket_discount(
-            len(cart_objects), old_sum
-        )
-        if basket_discount_sum != 0:
-            return old_sum, min(product_discount_sum, basket_discount_sum)
+        basket_discount_sum = Decimal(0.0)
+        if len(cart_objects) > 0:
+            basket_discount_sum = get_basket_discount(
+                len(cart_objects), old_sum
+            )
+            if basket_discount_sum != 0:
+                return old_sum, min(product_discount_sum, basket_discount_sum)
         return old_sum, product_discount_sum
 
     def get_min_sum(self) -> Decimal:
