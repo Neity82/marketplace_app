@@ -2,6 +2,7 @@
 {% load static %}
 {% load i18n %}
 {% load user_tags %}
+{% load cache %}
 
 {% block head %}
   {% include "head.html" %}
@@ -31,7 +32,8 @@
       </div>
     </div>
   </div>
-  <div class="Section">
+  {% cache product_detail_cache_time product_detail_cache %}
+    <div class="Section">
     <div class="wrap">
       {% with product.discount as discount %}
       <div class="Product">
@@ -310,6 +312,7 @@
       {% endwith %}
     </div>
   </div>
+  {% endcache %}
 </div>
 {% endblock %}
 

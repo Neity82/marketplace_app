@@ -106,5 +106,14 @@
             "description": "Время кэширования списка баннеров на главной странице",
             "value": "600"
         }
+    },
+    {
+        "model": "info.settings",
+        "pk": 13,
+        "fields": {
+            "name": "product_detail_cache_time",
+            "description": "Время кэширования детальной страницы товаров",
+            "value": "86400"
+        }
     }
 ]
