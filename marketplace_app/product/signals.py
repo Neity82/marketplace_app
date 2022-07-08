@@ -18,6 +18,11 @@ def clear_product_list_cache(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Product)
+def clear_product_list_cache(sender, instance, **kwargs):
+    cache.delete("product_detail_cache")
+
+
+@receiver(post_save, sender=Product)
 def clear_banner_list_cache(sender, instance, **kwargs):
     key = make_template_fragment_key("top_product_list")
     cache.delete(key)
