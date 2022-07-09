@@ -140,3 +140,4 @@ dmypy.json
 
 marketplace_app/marketplace_app/dev_settings
 /marketplace_app/venv1/
+gettext/
