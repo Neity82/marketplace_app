@@ -45,7 +45,7 @@ class ContactsDetailView(generic.DetailView):
 
     def get_object(self, queryset=None):
         """Метод получения объекта магазина для вывода контактов"""
-        return Shop.objects.get(name="megano")
+        return Shop.objects.get(id=1)
 
     def get_context_data(self, **kwargs):
         """Метод формирования контекста страницы (дабавление формы)"""
@@ -62,7 +62,7 @@ class ContactsFormView(generic.detail.SingleObjectMixin, generic.FormView):
 
     def get_object(self, queryset=None):
         """Метод получения объекта магазина для вывода контактов"""
-        return Shop.objects.get(name="megano")
+        return Shop.objects.get(id=1)
 
     def get_success_url(self) -> str:
         """Метод получения страницы редиректа при успешной обработке формы"""

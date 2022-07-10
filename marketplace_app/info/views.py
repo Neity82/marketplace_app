@@ -77,5 +77,5 @@ class AboutView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["shop"] = Shop.objects.get(name="megano")
+        context["shop"] = Shop.objects.get(id=1)
         return context
