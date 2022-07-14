@@ -20,7 +20,7 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% translate "Catalog" %}
+        <h1 class="Middle-title">{% translate "catalog" %}
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
@@ -28,7 +28,7 @@
           </li>
           {% if category_title %}
             <li class="breadcrumbs-item">
-              <a href="{% url 'product:list' %}">{% translate "Catalog" %}</a>
+              <a href="{% url 'product:list' %}">{% translate "catalog" %}</a>
             </li>
             {% if parent_category_id %}
             <li class="breadcrumbs-item">
@@ -40,7 +40,7 @@
             </li>
           {% else %}
             <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>{% translate "Catalog" %}</span>
+              <span>{% translate "catalog" %}</span>
             </li>
           {% endif %}
         </ul>
@@ -52,7 +52,7 @@
       <div class="Section-column">
         <div class="Section-columnSection">
           <header class="Section-header">
-            <strong class="Section-title">{% translate "Filter"|capfirst %}</strong>
+            <strong class="Section-title">{% translate "filter"|capfirst %}</strong>
           </header>
           <div class="Section-columnContent">
             <form class="form" name="filter" action="{{ request.get_full_path }}" method="post">
@@ -61,14 +61,14 @@
               <div class="form-group">
                 <div class="range Section-columnRange">
                   <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="{{ min_price }}" data-max="{{ max_price }}" data-from="{% if filter_min_price %}{{ filter_min_price }}{% else %}{{ min_price }}{% endif %}" data-to="{% if filter_max_price %}{{ filter_max_price }}{% else %}{{ max_price }}{% endif %}"/>
-                  <div class="range-price">{% translate "Price" %}:&#32;
+                  <div class="range-price">{% translate "price" %}:&#32;
                     <div class="rangePrice"></div>
                   </div>
                 </div>
               </div>
               {% endif %}
               <div class="form-group">
-                <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="{% translate 'Title'|capfirst %}" {% if title %}value="{{ title }}"{% endif %}/>
+                <input class="form-input form-input_full" id="title" name="title" type="text" placeholder="{% translate 'title'|capfirst %}" {% if title %}value="{{ title }}"{% endif %}/>
               </div>
               {% if shops %}
               <div class="form-group">
@@ -91,66 +91,37 @@
                     <span class="toggle-text">{{ attribute.title|lower }}</span>
                   </label>
                 {% elif attribute.type == "S" %}
-                {% if id in attr_filter %}
-                {% with attr_filter|dict_key:id as values %}
                 <select class="form-select" name="attr_s_{{ attribute.id }}" size="1">
-                  <option value="">{{ attribute.title|lower }}</option>
-                  {% for value in attribute.values %}
-                  <option value="{{ value }}"{% if value in values %} selected="selected"{% endif %}>{{ value }}</option>
-                  {% endfor %}
+                  {% if id in attr_filter %}
+                    <option value="">{{ attribute.title|lower }}</option>
+                    {% with attr_filter|dict_key:id as values %}
+                    {% for value in attribute.values %}
+                    <option value="{{ value }}"{% if value in values %} selected="selected"{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                    {% endwith %}
+                  {% else %}
+                    <option value="" selected="selected">{{ attribute.title|lower }}</option>
+                    {% for value in attribute.values %}
+                    <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                  {% endif %}
                 </select>
-                {% endwith %}
-                {% endif %}
                 {% endif %}
               </div>
               {% endwith %}
               {% endfor %}
-              {% comment %} <div class="form-group">
-                <label class="toggle">
-                  <input type="checkbox"/>
-                  <span class="toggle-box">
-                  </span>
-                  <span class="toggle-text">Только товары в наличии
-                  </span>
-                </label>
-              </div>
-              <div class="form-group">
-                <label class="toggle">
-                  <input type="checkbox"/>
-                  <span class="toggle-box">
-                  </span>
-                  <span class="toggle-text">С бесплатной доставкой
-                  </span>
-                </label>
-              </div> {% endcomment %}
               <div class="form-group">
                 <div class="buttons" onClick="javascript:document.filter.submit();">
-                  <span class="btn btn_square btn_dark btn_narrow">{% translate "Filter" %}</span>
+                  <span class="btn btn_square btn_dark btn_narrow">{% translate "filter" %}</span>
                 </div>
               </div>
             </form>
           </div>
         </div>
-        {% comment %} <div class="Section-columnSection">
-          <header class="Section-header">
-            <strong class="Section-title">Popular tags
-            </strong>
-          </header>
-          <div class="Section-columnContent">
-            <div class="buttons">
-              <a class="btn btn_default btn_sm" href="#">Video</a>
-              <a class="btn btn_default btn_sm" href="#">Development</a>
-              <a class="btn btn_default btn_sm" href="#">Gaming</a>
-              <a class="btn btn_default btn_sm" href="#">Asus</a>
-              <a class="btn btn_default btn_sm" href="#">Development</a>
-              <a class="btn btn_default btn_sm" href="#">Video</a>
-            </div>
-          </div>
-        </div> {% endcomment %}
       </div>
       <div class="Section-content">
         <div class="Sort">
-          <div class="Sort-title">{% translate "Sort by:" %}</div>
+          <div class="Sort-title">{% translate "sort by:"|capfirst %}</div>
           <div class="Sort-variants">
             <a class="Sort-sortBy{% if sort_by == 'popularity' %} Sort-sortBy_inc{% elif sort_by == '-popularity'%} Sort-sortBy_dec{% endif %}"
               href="/catalog/?sort_by={% if sort_by == 'popularity' %}-popularity{% else %}popularity{% endif %}&{{ base_url }}">
@@ -170,25 +141,23 @@
             </a>
           </div>
         </div>
-        {% cache product_list_cache_time product_list %}        
-          <div class="Cards">
-            {% for product in products|get_items:"0:4" %}
-            <div class="Card">
-              {% include "card.html" %}
-            </div>
-            {% endfor %}
-            {% for product in products|get_items:"4:6" %}
-            <div class="Card hide_md">
-              {% include "card.html" %}
-            </div>
-            {% endfor %}
-            {% for product in products|get_items:"6:8" %}
-            <div class="Card hide_md hide_1450">
-              {% include "card.html" %}
-            </div>
-            {% endfor %}
+        <div class="Cards">
+          {% for product in products|get_items:"0:4" %}
+          <div class="Card">
+            {% include "card.html" %}
           </div>
-        {% endcache %}
+          {% endfor %}
+          {% for product in products|get_items:"4:6" %}
+          <div class="Card hide_md">
+            {% include "card.html" %}
+          </div>
+          {% endfor %}
+          {% for product in products|get_items:"6:8" %}
+          <div class="Card hide_md hide_1450">
+            {% include "card.html" %}
+          </div>
+          {% endfor %}
+        </div>
         <div class="Pagination">
           <div class="Pagination-ins">
             {% if page_obj.has_previous %}

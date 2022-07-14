@@ -20,13 +20,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans 'Megano Product' %}</h1>
+        <h1 class="Middle-title">{% trans 'megano product' %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
             <a href="{% url 'product:home' %}">{% trans "home" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>{% trans 'Product' %}</span>
+            <span>{% trans 'product' %}</span>
           </li>
         </ul>
       </div>
@@ -68,7 +68,7 @@
                   {% if discount.base %}
                     <div class="ProductCard-price">${{ discount.price }}</div>
                   {% else %}
-                    <div class="ProductCard-price">{% trans 'The product is over' %}</div>
+                    <div class="ProductCard-price">{% trans 'the product is over'|capfirst %}</div>
                   {% endif %}
                   {% if discount.type %}
                     <div class="ProductCard-priceOld">${{ discount.base }}</div>
@@ -95,13 +95,13 @@
               <div class="ProductCard-cartElement">
                 <a class="btn btn_primary product add_to_cart" id="add-to-cart" href="{% url 'order:add-to-cart' product.id %}">
                   <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                  <span class="btn-content">{% trans 'Add To Cart' %}</span>
+                  <span class="btn-content">{% trans 'add to cart'|capfirst %}</span>
                 </a>
               </div>
             </div>
             <div class="ProductCard-footer">
               <div class="ProductCard-tags">
-                <strong class="ProductCard-tagsTitle">{% trans 'Tags' %}:
+                <strong class="ProductCard-tagsTitle">{% trans 'tags' %}:
                 </strong>
                   {% for tag in product.tags.all %}
                     <a href="to_tag_{{tag}}">{{ tag }}
@@ -115,16 +115,16 @@
         <div class="Tabs Tabs_default">
           <div class="Tabs-links">
             <a class="Tabs-link_ACTIVE Tabs-link" href="#description">
-              <span>{% trans 'Description' %}</span>
+              <span>{% trans 'description' %}</span>
             </a>
             <a class="Tabs-link" href="#sellers">
-              <span>{% trans 'Shops' %}</span>
+              <span>{% trans 'shops' %}</span>
             </a>
             <a class="Tabs-link" href="#addit">
-              <span>{% trans 'AdditionaL Info' %}</span>
+              <span>{% trans 'additionaL info' %}</span>
             </a>
             <a class="Tabs-link" href="#reviews">
-              <span>{% trans 'Reviews' %} ({{ comments|length }})</span>
+              <span>{% trans 'reviews' %} ({{ comments|length }})</span>
             </a>
           </div>
           <div class="Tabs-wrap">
@@ -132,7 +132,7 @@
               <header class="Section-header">
                 <h3 class="Section-title">
                   {% if not comments %}
-                    {% trans "No reviews" %}
+                    {% trans "no reviews"|capfirst %}
                   {% endif %}
                 </h3>
               </header>
@@ -194,17 +194,17 @@
                 {% endfor %}
               </div>
               <header class="Section-header Section-header_product">
-                <h3 class="Section-title">{% trans 'Add Review' %}</h3>
+                <h3 class="Section-title">{% trans 'add review'|capfirst %}</h3>
               </header>
               <div class="Tabs-addComment">
 
                 {% if user.is_anonymous %}
-                <button id="login_btn_middle" class="ControlPanel-title link" id='login'>{% trans 'Login for review' %}</button>
+                <button id="login_btn_middle" class="ControlPanel-title link" id='login'>{% trans 'login for review'|capfirst %}</button>
                 {% else %}
                 <form class="form" action="/products/{{product.id}}/" method="post">
                   {% csrf_token %}
                   <div class="form-group">
-                    <label class="rating-form-label" for="">{% trans 'Rate the product' %}</label>
+                    <label class="rating-form-label" for="">{% trans 'rate the product'|capfirst %}</label>
                     <div class="rating-area">
                       <input type="radio" id="star-5" name="rating" value="5">
                       <label for="star-5" title="Оценка «5»"></label>	
@@ -223,7 +223,7 @@
                     {{ form.text }}
                   </div>
                   <div class="form-group">
-                    <button class="btn btn_muted" type="submit">{% trans 'Submit Review' %}</button>
+                    <button class="btn btn_muted" type="submit">{% trans 'submit review'|capfirst %}</button>
                   </div>
                 </form>
                 {% endif %}
@@ -242,9 +242,9 @@
               <div class="table">
                 <table>
                   <tr>
-                    <th>{% trans "Attribute" %}
+                    <th>{% trans "attribute"|capfirst %}
                     </th>
-                    <th>{% trans "Value" %}
+                    <th>{% trans "value"|capfirst %}
                     </th>
                   </tr>
                   {% for attribute in attributes %}
@@ -282,7 +282,7 @@
                   <div class="Categories-block Categories-button">
                     <a id="add-to-cart-shop" class="btn btn_primary add_to_cart_shop product" href="{% url 'order:add-to-cart-shop' product.id stock.id %}">
                       <img class="btn-icon" src="{% static 'assets/img/icons/card/cart_white.svg' %}" alt="cart_white.svg"/>
-                      <span class="btn-content">{% trans 'Buy' %}</span>
+                      <span class="btn-content">{% trans 'buy'|capfirst %}</span>
                     </a>
                   </div>
                 </div>

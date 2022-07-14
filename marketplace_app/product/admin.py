@@ -266,7 +266,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     def image_display(obj):
         return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
-    tags_display.short_description = _("Tags")
+    tags_display.short_description = _("tags")
 
 
 @admin.register(models.DailyOffer)
