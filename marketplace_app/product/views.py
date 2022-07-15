@@ -10,11 +10,13 @@ from django.urls import reverse
 from django.views import generic
 from django.shortcuts import redirect
 from datetime import date, timedelta
+from django.core.cache import cache
 
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 
-from info.models import Banner
+from info.models import Banner, Settings
+from info.utils import DEFAULT_CACHE_TIME
 from product.signals import get_product_detail_view
 from shop.models import Shop
 from product.forms import ProductReviewForm
@@ -138,7 +140,10 @@ class ProductListView(generic.ListView):
             return queryset.order_by("created_at")
         elif sort_by == "-novelty":
             return queryset.order_by("-created_at")
-        return queryset
+        return sorted(
+            queryset,
+            key=lambda item: item.discount["price"]
+        )
 
     class AttributeDict(TypedDict):
         id: int
@@ -231,11 +236,12 @@ class ProductListView(generic.ListView):
         :rtype: Dict[int, Decimal]
         """
         self.context["shops"] = \
-            Shop.objects.only("id", "name") \
-                .filter(
-                Q(stock__count__gt=0) &
-                Q(stock__product__in=products)
-            ).distinct().order_by("name")
+            list(
+                Shop.objects.only("id", "name").filter(
+                    Q(stock__count__gt=0) &
+                    Q(stock__product__in=products)
+                ).distinct().order_by("name")
+            )
         prices: Dict[int, Decimal] = {
             item.id: item.discount["price"]
             for item
@@ -327,6 +333,25 @@ class ProductListView(generic.ListView):
         return result
 
     def get_queryset(self):
+        # Строка-идентификатор для поиска кэша
+        # конкретного набора (по параметрам)
+        cache_suffix_params = self.query_params.copy()
+        cache_suffix_params.update({'sort_by': self.sort_by})
+        cache_suffix = urlencode(cache_suffix_params)
+        # Если есть кэш данного набора, то возвращаем его
+        product_list_cache = cache.get(
+            f'product_list_set_{cache_suffix}',
+            default=None
+        )
+        context_cache = cache.get(
+            f'product_list_context_{cache_suffix}',
+            default=None
+        )
+
+        if product_list_cache is not None and context_cache is not None:
+            self.context = context_cache.copy()
+            return product_list_cache
+        # Если кэша не найдено
         collected_filter: Q = Q(total_count__gt=0)
         if "query" in self.query_params:
             collected_filter &= Q(title__icontains=self.query_params["query"])
@@ -352,7 +377,24 @@ class ProductListView(generic.ListView):
                     )
                 )
         result = self._get_sorted_list(result, self.sort_by)
-
+        # Формируем кэш данного набора параметров
+        product_list_cache_time_setting: Settings = \
+            Settings.objects.filter(name="product_list_cache_time").first()
+        product_list_cache_time = (
+            int(product_list_cache_time_setting.value)
+            if product_list_cache_time_setting
+            else DEFAULT_CACHE_TIME
+        )
+        cache.set(
+            f'product_list_set_{cache_suffix}',
+            result,
+            product_list_cache_time
+        )
+        cache.set(
+            f'product_list_context_{cache_suffix}',
+            self.context,
+            product_list_cache_time
+        )
         return result
 
     def get(self, request, *args, **kwargs):
@@ -396,11 +438,9 @@ class ProductListView(generic.ListView):
     def get_context_data(self, **kwargs):
         context: Dict[str, Any] = super().get_context_data(**kwargs)
         context.update({**self.context})
-
         if 'category' in self.query_params:
             context['attributes'] = self._get_attributes()
         context['base_url'] = urlencode(self.query_params, True)
-
         return context
 
 

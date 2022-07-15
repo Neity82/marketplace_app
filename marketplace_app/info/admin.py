@@ -8,14 +8,6 @@ from .models import Banner, SEOItem, Settings
 
 from modeltranslation.admin import TranslationAdmin
 
-CACHES_DICT = {
-    "category": "categories_list",
-    "product": "product_list",
-    "top_product": "top_product_list",
-    "banner": "banner_list",
-    "product_detail": "product_detail_cache",
-}
-
 
 @admin.register(Banner)
 class BannerAdmin(TranslationAdmin):
@@ -51,13 +43,11 @@ class SettingsAdmin(admin.ModelAdmin):
     def clear_cache(self, request: HttpRequest) -> HttpResponseRedirect:
         """Функция для сброса кэша
         """
-        key: str = ""
-        for cache_name_html, cache_name in CACHES_DICT.items():
-            if cache_name_html in request.POST:
-                key = make_template_fragment_key(cache_name)
-                break
-        if key:
-            cache.delete(key)
+        key: str = request.POST.get('cache', None)
+        if key is not None:
+            for cache_key in cache._cache.keys():
+                if key in cache_key:
+                    del cache._cache[cache_key]
         return HttpResponseRedirect(
             reverse(
                 "admin:{app_label}_{model_name}_changelist".format(
