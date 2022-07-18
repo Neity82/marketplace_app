@@ -10,65 +10,61 @@ class FeedBackForm(forms.Form):
     """
 
     name = forms.CharField(
-        label=_("Your name"),
+        label=_("name").capitalize(),
         min_length=5,
         max_length=150,
         required=True,
-        help_text=_("Your name"),
         widget=forms.TextInput(
             attrs={
                 "class": "form-input",
                 "id": "name",
                 "name": "name",
-                "placeholder": _("Name")
+                "placeholder": _("name").capitalize()
             }
         )
     )
 
     email = forms.CharField(
-        label=_("Your email"),
+        label=_("e-mail").capitalize(),
         min_length=5,
         max_length=150,
         required=True,
-        help_text=_("Your email"),
         widget=forms.TextInput(
             attrs={
                 "class": "form-input",
                 "id": "mail",
                 "name": "mail",
-                "placeholder": _("Email")
+                "placeholder": _("e-mail").capitalize()
             }
         )
     )
 
     site = forms.CharField(
-        label=_("Your site"),
+        label=_("website").capitalize(),
         min_length=5,
         max_length=150,
         required=True,
-        help_text=_("Your site"),
         widget=forms.TextInput(
             attrs={
                 "class": "form-input",
                 "id": "site",
                 "name": "site",
-                "placeholder": _("Website")
+                "placeholder": _("website").capitalize()
             }
         )
     )
 
     message = forms.CharField(
-        label=_("Your message"),
+        label=_("message").capitalize(),
         min_length=5,
         max_length=500,
         required=True,
-        help_text=_("Your message"),
         widget=forms.Textarea(
             attrs={
                 "class": "form-textarea",
                 "id": "message",
                 "name": "message",
-                "placeholder": _("Message")
+                "placeholder": _("message").capitalize()
             }
         )
     )

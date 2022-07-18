@@ -20,13 +20,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans 'Checkout' %}</h1>
+        <h1 class="Middle-title">{% trans 'checkout'|upper %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
+            <a href="{% url 'product:home' %}">{% trans "home"|upper %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>{% trans 'Checkout' %}</span>
+            <span>{% trans 'checkout'|upper %}</span>
           </li>
         </ul>
       </div>
@@ -37,25 +37,28 @@
       <div class="Section-column">
         <div class="Section-columnSection">
           <header class="Section-header">
-            <strong class="Section-title">{% trans 'Progress' %}
-            </strong>
+            <strong class="Section-title">{% trans 'progress'|capfirst %}</strong>
           </header>
           <div class="Section-columnContent">
             <ul class="menu menu_vt Order-navigate">
               <li class="menu-item_ACTIVE menu-item" value="1">
-                <a class="menu-link order-navigate-link" href="user_info_form">{% trans 'Step' %} 1 {% trans 'User info' %}
+                <a class="menu-link order-navigate-link" href="user_info_form">
+                  {% trans 'step'|capfirst %} 1 {% trans 'user info'|capfirst %}
                 </a>
               </li>
               <li class="menu-item" value="2">
-                <a class="menu-link order-navigate-link" href="delivery_form">{% trans 'Step' %} 2 {% trans 'Delivery type' %}
+                <a class="menu-link order-navigate-link" href="delivery_form">
+                  {% trans 'step'|capfirst %} 2 {% trans 'delivery type'|capfirst %}
                 </a>
               </li>
               <li class="menu-item" value="3">
-                <a class="menu-link order-navigate-link" href="payment_form">{% trans 'Step' %} 3 {% trans 'Payment type' %}
+                <a class="menu-link order-navigate-link" href="payment_form">
+                  {% trans 'step'|capfirst %} 3 {% trans 'payment type'|capfirst %}
                 </a>
               </li>
               <li class="menu-item" value="4">
-                <a class="menu-link order-navigate-link" href="confirm">{% trans 'Step' %} 4 {% trans 'Confirmation' %}
+                <a class="menu-link order-navigate-link" href="confirm">
+                  {% trans 'step'|capfirst %} 4 {% trans 'confirmation'|capfirst %}
                 </a>
               </li>
             </ul>

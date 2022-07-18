@@ -19,14 +19,13 @@
     <div class="Middle-top">
       <div class="wrap">
         <div class="Middle-header">
-          <h1 class="Middle-title">{% translate "Contact Megano" %}
-          </h1>
+          <h1 class="Middle-title">{% translate "сontact Megano"|upper %}</h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
             <li class="breadcrumbs-item">
-              <a href="{% url 'product:home' %}">{% translate "home" %}</a>
+              <a href="{% url 'product:home' %}">{% translate "home"|upper %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current">
-              <span>{% translate "Contact" %}</span>
+              <span>{% translate "сontact"|upper %}</span>
             </li>
           </ul>
         </div>
@@ -38,7 +37,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="{% translate "Shipping & Returns" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="{% translate 'Shipping & Returns' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Shipping & Returns" %}</strong>
@@ -49,7 +48,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/moneyBack.svg' %}" alt="{% translate "Money Back" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/moneyBack.svg' %}" alt="{% translate 'Money Back' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Money Back" %}</strong>
@@ -60,7 +59,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="{% translate "Support Policy" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="{% translate 'Support Policy' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Support Policy" %}</strong>
@@ -71,7 +70,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="{% translate "Quality Guarantee" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="{% translate 'Quality Guarantee' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Quality Guarantee" %}</strong>
@@ -109,37 +108,39 @@
           <div class="Contacts Contacts_main">
             <div class="Contacts-block">
               <div class="media">
-                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/phone.svg' %}" alt="{% translate "phone" %}"/>
+                <div class="media-image">
+                  <img src="{% static 'assets/img/icons/contacts/phone.svg' %}" alt="{% translate 'phone' %}"/>
                 </div>
                 <div class="media-content">
-                  {% translate "Phone" %}: {{shop.phone|slice:"0:2"}} ({{shop.phone|slice:"2:5"}}) {{shop.phone|slice:"5:8"}}-{{shop.phone|slice:"8:12"}}-{{shop.phone|slice:"12:15"}}
+                  {% translate "phone"|capfirst %}: {{shop.phone|slice:"0:2"}} ({{shop.phone|slice:"2:5"}}) {{shop.phone|slice:"5:8"}}-{{shop.phone|slice:"8:12"}}-{{shop.phone|slice:"12:15"}}
                   <br>
-                  {% translate "Mobile" %}: {{shop.mobile|slice:"0:2"}} ({{shop.mobile|slice:"2:5"}}) {{shop.mobile|slice:"5:8"}}-{{shop.mobile|slice:"8:12"}}-{{shop.mobile|slice:"12:15"}}
+                  {% translate "mobile"|capfirst %}: {{shop.mobile|slice:"0:2"}} ({{shop.mobile|slice:"2:5"}}) {{shop.mobile|slice:"5:8"}}-{{shop.mobile|slice:"8:12"}}-{{shop.mobile|slice:"12:15"}}
                 </div>
               </div>
             </div>
             <div class="Contacts-block">
               <div class="media">
-                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/address.svg' %}" alt="{% translate "address" %}"/>
+                <div class="media-image">
+                  <img src="{% static 'assets/img/icons/contacts/address.svg' %}" alt="{% translate 'address' %}"/>
                 </div>
                 <div class="media-content">{{ shop.address }}</div>
               </div>
             </div>
             <div class="Contacts-block">
               <div class="media">
-                <div class="media-image"><img src="{% static 'assets/img/icons/contacts/mail.svg' %}" alt="{% translate "mail" %}"/>
+                <div class="media-image">
+                  <img src="{% static 'assets/img/icons/contacts/mail.svg' %}" alt="{% translate 'e-mail' %}"/>
                 </div>
                 <div class="media-content">
-                  {% translate "General" %}: {{ shop.email_general }}
+                  {% translate "general"|capfirst %}: {{ shop.email_general }}
                   <br>
-                  {% translate "Editor" %}:  {{ shop.email_editor }}
+                  {% translate "editor"|capfirst %}:  {{ shop.email_editor }}
                 </div>
               </div>
             </div>
           </div>
           <header class="Section-header Section-header_sm">
-            <h2 class="Section-title">{% translate "Contact Form" %}
-            </h2>
+            <h2 class="Section-title">{% translate "Contact Form" %}</h2>
           </header>
           <form class="form form_contacts" action="/contacts/" method="post" name="feedback">
             <div class="form-group">

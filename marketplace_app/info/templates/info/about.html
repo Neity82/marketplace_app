@@ -22,7 +22,7 @@
           <h1 class="Middle-title">{% translate "About Megano" %}
           </h1>
           <ul class="breadcrumbs Middle-breadcrumbs">
-            <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% translate "home" %}</a>
+            <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% translate "home"|upper %}</a>
             </li>
             <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% translate "About Us" %}</span>
             </li>
@@ -36,7 +36,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="{% translate "Shipping & Returns" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="{% translate 'Shipping & Returns' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Shipping & Returns" %}</strong>
@@ -47,7 +47,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/moneyBack.svg' %}" alt="{% translate "Money Back" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/moneyBack.svg' %}" alt="{% translate 'Money Back' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Money Back" %}</strong>
@@ -58,7 +58,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="{% translate "Support Policy" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="{% translate 'Support Policy' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Support Policy" %}</strong>
@@ -69,7 +69,7 @@
           <div class="Section-columnSection Section-columnSection_mark">
             <div class="media media_advantage">
               <div class="media-image">
-                <img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="{% translate "Quality Guarantee" %}"/>
+                <img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="{% translate 'Quality Guarantee' %}"/>
               </div>
               <div class="media-content">
                 <strong class="media-title">{% translate "Quality Guarantee" %}</strong>

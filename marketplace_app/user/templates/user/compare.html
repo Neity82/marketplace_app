@@ -19,13 +19,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans "Comparison of products" %}</h1>
+        <h1 class="Middle-title">{% trans "comparison of products"|upper %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
+            <a href="{% url 'product:home' %}">{% trans "home"|upper %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            {% trans "Comparison of products" %}<span></span>
+            {% trans "comparison of products"|upper %}<span></span>
           </li>
         </ul>
       </div>
@@ -36,7 +36,6 @@
       <article class="Article">
         <p>
           {% trans 'Diverse and rich experience, constant quantitative growth and the scope of our activity provides a wide range of (specialists) participation in the formation of the personnel training system, meets the urgent needs. Ideological considerations of the highest order, as well as consultation with a broad asset, require the definition and clarification of the appropriate activation conditions.' %}
-          <!-- Разнообразный и богатый опыт постоянный количественный рост и сфера нашей активности обеспечивает широкому кругу (специалистов) участие в формировании системы обучения кадров, соответствует насущным потребностям. Идейные соображения высшего порядка, а также консультация с широким активом требуют определения и уточнения соответствующий условий активизации. -->
         </p>
       </article>
       
@@ -57,9 +56,9 @@
         <div class="Compare-categories Compare-row">
           <div class="Compare-category">
             {% if cat_selected == 0 %}
-              <p class="selected">{% trans 'ALL' %} <span>{{ total_count }}</span></p>
+              <p class="selected">{% trans 'all'|upper %} <span>{{ total_count }}</span></p>
             {% else %}
-              <a href="{% url 'user:compare_list' pk=0 %}">{% trans 'ALL' %} <span>{{ total_count }}</span></a>
+              <a href="{% url 'user:compare_list' pk=0 %}">{% trans 'all'|upper %} <span>{{ total_count }}</span></a>
             {% endif %}
           </div>
 
@@ -142,7 +141,7 @@
         </div>
 
         <div class="Compare-row">
-          <div class="Compare-title">{% trans 'Rating' %}</div>
+          <div class="Compare-title">{% trans 'rating'|capfirst %}</div>
           <div class="Compare-products">
             {% for item in compare %}
             {% with item.product as product %}
@@ -225,7 +224,7 @@
         {% endif %}
         
         <div class="Compare-row">
-          <div class="Compare-title">{% trans 'Price' %}</div>
+          <div class="Compare-title">{% trans 'price'|capfirst %}</div>
           <div class="Compare-products">
           {% for item in compare %}
             {% with item.product as product %}

@@ -19,10 +19,10 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans "Account" %}</h1>
+        <h1 class="Middle-title">{% trans "account"|upper %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% trans "home" %}</a></li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans "Account" %}</span></li>
+          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% trans "home"|upper %}</a></li>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans "account"|upper %}</span></li>
         </ul>
       </div>
     </div>
@@ -61,29 +61,29 @@
                         <span class="Order-dateOrder">{{ last_order.datetime.date|date:"d.m.Y" }}</span>
                       </a>
                       <div class="Account-editLink">
-                        <a href="{% url 'user:user_orders_list' request.user.id %}">{% trans "Order history" %}</a>
+                        <a href="{% url 'user:user_orders_list' request.user.id %}">{% trans "order history"|capfirst %}</a>
                       </div>
                     </div>
                     <div class="row-block">
                       <div class="Order-info Order-info_delivery">
-                        <div class="Order-infoType">{% trans "Type of delivery" %}:</div>
+                        <div class="Order-infoType">{% trans "type delivery"|capfirst %}:</div>
                         <div class="Order-infoContent">{{ last_order.delivery_id.delivery_type }}</div>
                       </div>
                       <div class="Order-info Order-info_pay">
-                        <div class="Order-infoType">{% trans "Payment" %}:</div>
+                        <div class="Order-infoType">{% trans "payment"|capfirst %}:</div>
                         <div class="Order-infoContent">{{ last_order.get_payment_type_display }}</div>
                       </div>
                       <div class="Order-info">
-                        <div class="Order-infoType">{% trans "Total cost" %}:</div>
+                        <div class="Order-infoType">{% trans "total cost"|capfirst %}:</div>
                         <div class="Order-infoContent">{{ last_order.discounted_sum_order }}$</div> 
                       </div>
                       <div class="Order-info Order-info_status">
-                        <div class="Order-infoType">{% trans "Status" %}:</div>
+                        <div class="Order-infoType">{% trans "status"|capfirst %}:</div>
                         <div class="Order-infoContent">{{ last_order.get_state_display }}</div>
                       </div>
                       {% if last_order.error %}
                       <div class="Order-info Order-info_error">
-                        <div class="Order-infoType">{% trans "Payment failed" %}:</div>
+                        <div class="Order-infoType">{% trans "payment failed"|capfirst %}:</div>
                         <div class="Order-infoContent">{{ last_order.get_error_display }}</div>
                       </div>
                       {% endif %}
@@ -99,8 +99,7 @@
           <div class="Account-group">
             <div class="Account-column Account-column_full">
               <header class="Section-header">
-                <h2 class="Section-title">{% trans "Viewing history" %}
-                </h2>
+                <h2 class="Section-title">{% trans "viewing history"|capfirst %}</h2>
               </header>
               {% if product_view %}
               <div class="Cards Cards_account">

@@ -165,7 +165,7 @@ class Attribute(models.Model):
 
     category = models.ForeignKey(
         "Category",
-        verbose_name=_("'attribute\'s category'"),
+        verbose_name=_("attribute\'s category"),
         related_name="attribute",
         on_delete=models.CASCADE,
     )
@@ -215,7 +215,7 @@ class AttributeValue(models.Model):
 
     attribute = models.ForeignKey(
         "Attribute",
-        verbose_name=_("'product\'s attribute'"),
+        verbose_name=_("product\'s attribute"),
         related_name="product_attribute",
         on_delete=models.CASCADE,
     )
@@ -669,14 +669,14 @@ class ProductReview(models.Model):
     product = models.ForeignKey(
         "Product",
         on_delete=models.CASCADE,
-        verbose_name=_("User product view product"),
+        verbose_name=_("Product"),
         related_name="user_product_view",
         help_text=_("Preview\'s product"),
     )
     user = models.ForeignKey(
         "user.CustomUser",
         on_delete=models.CASCADE,
-        verbose_name=_("User product view user"),
+        verbose_name=_("User"),
         related_name="user_product_view",
         help_text=_("Preview\'s user"),
     )
@@ -719,7 +719,7 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product,
         related_name="product",
-        verbose_name=_("product of image"),
+        verbose_name=_("product"),
         help_text=_("Product image"),
         on_delete=models.CASCADE,
     )

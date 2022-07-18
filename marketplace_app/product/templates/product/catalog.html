@@ -150,7 +150,7 @@
       </div>
       <div class="Section-content">
         <div class="Sort">
-          <div class="Sort-title">{% translate "Sort by:" %}</div>
+          <div class="Sort-title">{% translate "Sort by" %}:</div>
           <div class="Sort-variants">
             <a class="Sort-sortBy{% if sort_by == 'popularity' %} Sort-sortBy_inc{% elif sort_by == '-popularity'%} Sort-sortBy_dec{% endif %}"
               href="/catalog/?sort_by={% if sort_by == 'popularity' %}-popularity{% else %}popularity{% endif %}&{{ base_url }}">

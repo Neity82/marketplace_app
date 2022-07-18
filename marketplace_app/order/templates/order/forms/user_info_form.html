@@ -4,7 +4,7 @@
 {% load l10n %}
 
 {% block order_form %}
-  <p>Step {{ wizard.steps.step1 }} of 4</p>
+  <p>{% trans "step"|capfirst %} {{ wizard.steps.step1 }} {% trans "of" %} 4</p>
   <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
   <form class="form order-form" action="" method="post">{% csrf_token %}
 
@@ -13,22 +13,19 @@
 
         <div class="form-group">
           {{ form.errors.full_name }}
-          <label class="form-label" for="full_name">{% trans 'Full name' %}
-          </label>
+          <label class="form-label" for="full_name">{% trans 'full name'|capfirst %}</label>
           <input class="form-input" id="full_name" name="user_info_form-full_name" type="text" value="{{ form.data.full_name }}" required="required"/>
         </div>
 
         <div class="form-group">
             {{ form.errors.phone }}
-          <label class="form-label" for="phone">{% trans 'Phone' %}
-          </label>
+          <label class="form-label" for="phone">{% trans 'phone'|capfirst %}</label>
           <input class="form-input" id="phone" name="user_info_form-phone" type="text" value="{{ form.data.phone }}" required="required"/>
         </div>
 
         <div class="form-group">
           {{ form.errors.email }}
-          <label class="form-label" for="email">Email
-          </label>
+          <label class="form-label" for="email">{% trans "e-mail"|capfirst %}</label>
           <input class="form-input" id="email" name="user_info_form-email" type="text" value="{{ form.data.email }}" data-validate="require" required="required"/>
         </div>
       </div>
@@ -36,21 +33,18 @@
         <div class="row-block">
         <div class="form-group">
           {{ form.errors.password1 }}
-          <label class="form-label" for="password">{% trans 'Password' %}
-          </label>
-          <input class="form-input" id="password" name="user_info_form-password1" type="password" placeholder="{% trans 'Type your password' %}"/>
+          <label class="form-label" for="password">{% trans 'password'|capfirst %}</label>
+          <input class="form-input" id="password" name="user_info_form-password1" type="password" placeholder="{% trans 'type your password'|capfirst %}"/>
         </div>
 
         <div class="form-group">
           {{ form.errors.password2 }}
-          <label class="form-label" for="passwordReply">{% trans 'Confirm password' %}
-          </label>
-          <input class="form-input" id="passwordReply" name="user_info_form-password2" type="password" placeholder="{% trans 'Retype password' %}"/>
+          <label class="form-label" for="passwordReply">{% trans 'confirm password'|capfirst %}</label>
+          <input class="form-input" id="passwordReply" name="user_info_form-password2" type="password" placeholder="{% trans 'retype password'|capfirst %}"/>
         </div>
 
         <div class="form-group">
-          <a id="order-login-btn" class="btn btn_muted Order-btnReg">{% trans 'I already have account' %}
-          </a>
+          <a id="order-login-btn" class="btn btn_muted Order-btnReg">{% trans 'I already have account' %}</a>
         </div>
       </div>
       {% else %}

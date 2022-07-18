@@ -19,16 +19,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% translate "Payment" %}
-        </h1>
+        <h1 class="Middle-title">{% translate "payment"|upper %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% translate "Home" %}
-            </a>
+            <a href="{% url 'product:home' %}">{% translate "home"|upper %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>{% translate "Payment" %}
-            </span>
+            <span>{% translate "payment"|upper %}</span>
           </li>
         </ul>
       </div>
@@ -40,20 +37,18 @@
         {% csrf_token %}
         <div class="Payment-card">
           <div class="form-group">
-            <label class="form-label">{% translate "Card number" %}
-            </label>
+            <label class="form-label">{% translate "сard number"|capfirst %}</label>
             {{ form.card }}
             {# <input class="form-input Payment-bill" id="numero1" name="{{ form.card.name }}" type="text" placeholder="9999 9999" data-mask="9999 9999" data-validate="require pay"/>#}
           </div>
           {% if payment_type %}
             <div class="form-group">
-              <a class="btn btn_success Payment-generate" href="#">{% translate "Generate random number" %}
-              </a>
+              <a class="btn btn_success Payment-generate" href="#">{% translate "Generate random number" %}</a>
             </div>
           {% endif %}
         </div>
         <div class="Payment-pay">
-          <input type="submit" class="btn btn_primary" value="{% translate "Pay" %}">
+          <input type="submit" class="btn btn_primary" value="{% translate 'pay'|capfirst %}">
         </div>
       </form>
     </div>

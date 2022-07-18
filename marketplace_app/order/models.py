@@ -396,7 +396,7 @@ class Delivery(models.Model):
     delivery_type = models.ForeignKey(
         DeliveryType,
         on_delete=models.CASCADE,
-        verbose_name=_("delivery_type"),
+        verbose_name=_("delivery type"),
         related_name="delivery_delivery_type",
         help_text=_("Delivery type"),
         null=True,
@@ -452,7 +452,9 @@ class Order(SoftDeletes):
         help_text=_("Order user"),
     )
     datetime = models.DateTimeField(
-        auto_now_add=True, verbose_name=_("order date"), help_text=_("Order date")
+        auto_now_add=True,
+        verbose_name=_("order date"),
+        help_text=_("Order date")
     )
     delivery_id = models.ForeignKey(
         Delivery,
