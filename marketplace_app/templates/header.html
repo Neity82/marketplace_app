@@ -4,9 +4,7 @@
 {% load category_list %}
 {% load user_tags %}
 
-{% cache category_list_cache_time categories_list %}
 {% get_categories as categories %}
-{% endcache %}
 
 <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog mt-5">
@@ -26,10 +24,10 @@
       <div class="row-block">
         <div class="row ControlPanel-rowSplit">
           <div class="row-block">
-            <a class="ControlPanel-title" href="free_delivery">{% translate "Free Delivery" %}</a>
+            <a class="ControlPanel-title" href="free_delivery">{% translate "free delivery" %}</a>
           </div>
           <div class="row-block hide_700">
-            <span class="ControlPanel-title">{% translate "Follow Us" %}</span>
+            <span class="ControlPanel-title">{% translate "follow us" %}</span>
             <ul class="menu menu_img menu_smallImg ControlPanel-menu">
               <li class="menu-item">
                 <a class="menu-link" href="#">
@@ -81,12 +79,12 @@
             </a>
             <span class="ControlPanel-title"> / </span>
             <a id="logout-btn" class="ControlPanel-title" href="{% url 'user:logout' %}">
-              {% translate "Log Out" %}
+              {% translate "log out" %}
             </a>
             {% else %}
-            <button id="login_btn" class="ControlPanel-title link">{% translate "Login" %}</button>
+            <button id="login_btn" class="ControlPanel-title link">{% translate "login" %}</button>
             <span class="ControlPanel-title"> / </span>
-            <button id="sign_up_btn" class="ControlPanel-title link">{% translate "Register" %}</button>
+            <button id="sign_up_btn" class="ControlPanel-title link">{% translate "register" %}</button>
             {% endif %}
           </div>
         </div>
@@ -169,7 +167,7 @@
           <div class="CategoriesButton-icon">
             <img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg"/>
           </div>
-          <span class="CategoriesButton-text">{% translate "All Departments" %}</span>
+          <span class="CategoriesButton-text">{% translate "all departments" %}</span>
           <div class="CategoriesButton-arrow"></div>
         </div>
 

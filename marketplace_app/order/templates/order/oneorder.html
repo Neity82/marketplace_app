@@ -18,10 +18,10 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans "order"|upper %} №{{ order.id }}</h1>
+        <h1 class="Middle-title">{% trans "order" %} №{{ order.id }}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% trans "home"|upper %}</a>
+            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
           </li>
           <li class="breadcrumbs-item">
             <a href="{% url 'user:user_orders_list' pk=user.pk %}">{% trans "order history"|capfirst %}</a>

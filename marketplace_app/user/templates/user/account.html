@@ -19,10 +19,10 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans "account"|upper %}</h1>
+        <h1 class="Middle-title">{% trans "account" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
-          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% trans "home"|upper %}</a></li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans "account"|upper %}</span></li>
+          <li class="breadcrumbs-item"><a href="{% url 'product:home' %}">{% trans "home" %}</a></li>
+          <li class="breadcrumbs-item breadcrumbs-item_current"><span>{% trans "account" %}</span></li>
         </ul>
       </div>
     </div>
@@ -44,7 +44,7 @@
             </div>
             <div class="Account-column">
               <div class="Account-name">{{ user.get_full_name }}
-              </div><a class="Account-editLink" href="{% url 'user:user_profile' pk=user.id %}">{% trans "Edit Profile" %}</a>
+              </div><a class="Account-editLink" href="{% url 'user:user_profile' pk=user.id %}">{% trans "edit profile"|capfirst %}</a>
             </div>
           </div>
           <div class="Account-group">

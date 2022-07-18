@@ -17,13 +17,13 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% trans "profile"|upper %}</h1>
+        <h1 class="Middle-title">{% trans "profile" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% trans "home"|upper %}</a>
+            <a href="{% url 'product:home' %}">{% trans "home" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>{% trans "profile"|upper %}</span>
+            <span>{% trans "profile" %}</span>
           </li>
         </ul>
       </div>
@@ -39,7 +39,7 @@
             <div class="row">
               <div class="row-block">
                 <div class="form-group">
-                  <label class="form-label" for="{{ form.avatar.id_for_label }}">{{ form.avatar.label }}</label>
+                  <label class="form-label" for="{{ form.avatar.id_for_label }}">{% trans "avatar"|capfirst %}</label>
                   
                   <div class="Profile-avatar Profile-avatar_noimg">
                     <div class="Profile-img">
@@ -69,7 +69,7 @@
                 </div>
                 <div class="form-group">
                   <p>
-                    <label class="form-label" for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label>
+                    <label class="form-label" for="{{ form.full_name.id_for_label }}">{% trans "full name"|capfirst %}</label>
                     <div class="form-error">{{ form.full_name.errors }}
                       {{ form.full_name }}
                     </div>
@@ -79,7 +79,7 @@
               <div class="row-block">
                 <div class="form-group">
                   <p>
-                    <label class="form-label" for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                    <label class="form-label" for="{{ form.phone.id_for_label }}">{% trans "phone"|capfirst %}</label>
                     <div class="form-error">{{ form.phone.errors }}
                       {{ form.phone }}
                     </div>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="form-group">
                   <p>
-                    <label class="form-label" for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                    <label class="form-label" for="{{ form.email.id_for_label }}">{% trans "e-mail"|capfirst %}</label>
                     <div class="form-error">{{ form.email.errors }}
                       {{ form.email }}
                     </div>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="form-group">
                   <p>
-                    <label class="form-label" for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                    <label class="form-label" for="{{ form.password1.id_for_label }}">{% trans "password"|capfirst %}</label>
                     <div class="form-error">{{ form.password1.errors }}
                       {{ form.password1 }}
                     </div>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="form-group">
                   <p>
-                    <label class="form-label" for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                    <label class="form-label" for="{{ form.password2.id_for_label }}">{% trans "confirm password"|capfirst %}</label>
                     <div class="form-error">{{ form.password2.errors }}
                       {{ form.password2 }}
                     </div>

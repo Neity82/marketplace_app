@@ -9,21 +9,18 @@ from user.models import UserProductView
 
 @receiver(post_save, sender=Category)
 def clear_category_list_cache(sender, instance, **kwargs):
-    cache.delete("categories_list")
+    for key in cache._cache.keys():
+        if "category_list" in key:
+            del cache._cache[key]
 
 
 @receiver(post_save, sender=Product)
 def clear_product_list_cache(sender, instance, **kwargs):
-    cache.delete("product_list")
-
-
-@receiver(post_save, sender=Product)
-def clear_product_list_cache(sender, instance, **kwargs):
-    cache.delete("product_detail_cache")
-
-
-@receiver(post_save, sender=Product)
-def clear_banner_list_cache(sender, instance, **kwargs):
+    for key in cache._cache.keys():
+        if "product_list_" in key:
+            del cache._cache[key]
+    key = make_template_fragment_key("product_detail_cache")
+    cache.delete(key)
     key = make_template_fragment_key("top_product_list")
     cache.delete(key)
 

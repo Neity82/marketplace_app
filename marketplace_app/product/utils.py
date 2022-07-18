@@ -34,21 +34,21 @@ def undelete_admin(admin_model: admin.ModelAdmin, request: WSGIRequest, obj):
 
 
 class DeletedFilter(admin.SimpleListFilter):
-    title = _('deleted')
-    parameter_name = 'deleted_at'
+    title = _("deleted")
+    parameter_name = "deleted_at"
 
     def lookups(self, request, model_admin):
         return (
-            ('Yes', _('deleted')),
-            ('No', _('active')),
+            ("Yes", _("deleted")),
+            ("No", _("active")),
         )
 
     def queryset(self, request, queryset):
-        if self.value() == 'Yes':
+        if self.value() == "Yes":
             return queryset.filter(
                 deleted_at__isnull=False,
             )
-        if self.value() == 'No':
+        if self.value() == "No":
             return queryset.filter(
                 deleted_at__isnull=True,
             )

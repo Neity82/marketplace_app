@@ -3,7 +3,6 @@
 from django.urls import path
 
 from order import views
-from order import utils
 
 app_name = "order"
 

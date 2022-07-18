@@ -1,6 +1,7 @@
 from django.core import mail
 from django import forms
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import ugettext_lazy
+
 from marketplace_app.settings import DEBUG
 from info.models import Settings
 
@@ -10,7 +11,6 @@ class FeedBackForm(forms.Form):
     """
 
     name = forms.CharField(
-        label=_("name").capitalize(),
         min_length=5,
         max_length=150,
         required=True,
@@ -19,13 +19,12 @@ class FeedBackForm(forms.Form):
                 "class": "form-input",
                 "id": "name",
                 "name": "name",
-                "placeholder": _("name").capitalize()
+                "placeholder": ugettext_lazy("name")
             }
         )
     )
 
     email = forms.CharField(
-        label=_("e-mail").capitalize(),
         min_length=5,
         max_length=150,
         required=True,
@@ -34,13 +33,12 @@ class FeedBackForm(forms.Form):
                 "class": "form-input",
                 "id": "mail",
                 "name": "mail",
-                "placeholder": _("e-mail").capitalize()
+                "placeholder": ugettext_lazy("e-mail")
             }
         )
     )
 
     site = forms.CharField(
-        label=_("website").capitalize(),
         min_length=5,
         max_length=150,
         required=True,
@@ -49,13 +47,12 @@ class FeedBackForm(forms.Form):
                 "class": "form-input",
                 "id": "site",
                 "name": "site",
-                "placeholder": _("website").capitalize()
+                "placeholder": ugettext_lazy("website")
             }
         )
     )
 
     message = forms.CharField(
-        label=_("message").capitalize(),
         min_length=5,
         max_length=500,
         required=True,
@@ -64,7 +61,7 @@ class FeedBackForm(forms.Form):
                 "class": "form-textarea",
                 "id": "message",
                 "name": "message",
-                "placeholder": _("message").capitalize()
+                "placeholder": ugettext_lazy("message")
             }
         )
     )

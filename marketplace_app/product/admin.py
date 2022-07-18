@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.forms import BaseInlineFormSet
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django.core.cache import cache
 
 from modeltranslation.admin import TranslationAdmin
 
@@ -266,7 +265,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
     def image_display(obj):
         return mark_safe(f'<img src="{obj.image.url}"  height="150" />')
 
-    tags_display.short_description = _("Tags")
+    tags_display.short_description = _("tags")
 
 
 @admin.register(models.DailyOffer)

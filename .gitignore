@@ -141,3 +141,5 @@ dmypy.json
 marketplace_app/marketplace_app/dev_settings
 /marketplace_app/venv1/
 gettext/
+marketplace_app/pytest.ini
+marketplace_app/product/tests/test_list/conftest.py

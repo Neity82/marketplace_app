@@ -26,7 +26,7 @@
                   <strong class="Slider-title">{{ item.title }}</strong>
                   <div class="Slider-text">{{ item.text }}</div>
                   <div class="Slider-footer">
-                    <a class="btn btn_primary" href="{{ item.url }}">{% trans "Get Started" %}</a>
+                    <a class="btn btn_primary" href="{{ item.url }}">{% trans "get started"|capfirst %}</a>
                   </div>
                 </div>
                 <div class="row-block">
@@ -93,7 +93,7 @@
           {% with product.discount as discount %}
           <div class="Section-columnSection Section-columnSection_mark">
             <header class="Section-columnHeader">
-              <strong class="Section-columnTitle">{% trans 'Limited Deals' %}</strong>
+              <strong class="Section-columnTitle">{% trans 'limited deals' %}</strong>
             </header>
             <div class="Card">
               {% url 'product:detail' product.id as product_url %}
@@ -155,7 +155,7 @@
         {% cache top_product_list_cache_time top_product_list %}
         <div class="Section-content">
           <header class="Section-header">
-            <h2 class="Section-title">{% translate "Popular Products" %}
+            <h2 class="Section-title">{% translate "popular products" %}
             </h2>
           </header>
           <div class="Cards">
@@ -187,7 +187,7 @@
         <div class="Section-content">
           <div class="Slider Slider_carousel">
             <header class="Section-header">
-              <h2 class="Section-title">{% translate "Hot Offers" %}</h2>
+              <h2 class="Section-title">{% trans "hot offers" %}</h2>
               <div class="Section-control">
                 <div class="Slider-navigate"></div>
               </div>
@@ -218,10 +218,8 @@
                 <img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="shipping.svg"/>
               </div>
               <div class="media-content">
-                <strong class="media-title">{% translate "Shipping & Returns" %}
-                </strong>
-                <p class="media-text">{% translate "World wide shipping" %}
-                </p>
+                <strong class="media-title">{% translate "shipping & returns" %}</strong>
+                <p class="media-text">{% translate "world wide shipping"|capfirst %}</p>
               </div>
             </div>
           </div>
@@ -231,9 +229,9 @@
                 <img src="{% static 'assets/img/icons/advantages/moneyBack.svg' %}" alt="moneyBack.svg"/>
               </div>
               <div class="media-content">
-                <strong class="media-title">{% translate "Money Back" %}
+                <strong class="media-title">{% translate "money back" %}
                 </strong>
-                <p class="media-text">{% translate "Guaranted payments" %}
+                <p class="media-text">{% translate "guaranted payments"|capfirst %}
                 </p>
               </div>
             </div>
@@ -244,9 +242,9 @@
                 <img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="support.svg"/>
               </div>
               <div class="media-content">
-                <strong class="media-title">{% translate "Support Policy" %}
+                <strong class="media-title">{% translate "support policy" %}
                 </strong>
-                <p class="media-text">{% translate "Fast support team" %}
+                <p class="media-text">{% translate "fast support team"|capfirst %}
                 </p>
               </div>
             </div>
@@ -257,9 +255,9 @@
                 <img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="quality.svg"/>
               </div>
               <div class="media-content">
-                <strong class="media-title">{% translate "Quality Guarantee" %}
+                <strong class="media-title">{% translate "quality guarantee" %}
                 </strong>
-                <p class="media-text">{% translate "Best guaranted items" %}
+                <p class="media-text">{% translate "best guaranted items"|capfirst %}
                 </p>
               </div>
             </div>
@@ -268,7 +266,7 @@
         <div class="Section-content">
           <div class="Slider Slider_carousel">
             <header class="Section-header Section-header_close">
-              <h2 class="Section-title">{% translate "Limited edition" %}</h2>
+              <h2 class="Section-title">{% trans "limited edition" %}</h2>
               <div class="Section-control">
                 <div class="Slider-navigate"></div>
               </div>

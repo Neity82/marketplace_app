@@ -22,10 +22,10 @@
         <h1 class="Middle-title">{{ shop.name }}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% translate "home"|capfirst %}</a>
+            <a href="{% url 'product:home' %}">{% translate "home" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <a href="{% url 'shop:list' %}">{% translate "shops"|capfirst %}</a>
+            <a href="{% url 'shop:list' %}">{% translate "shops" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
             <span>{{ shop.name }}</span>
@@ -45,7 +45,7 @@
                   <img src="{% static 'assets/img/icons/advantages/shipping.svg' %}" alt="shipping.svg"/>
                 </div>
                 <div class="media-content">
-                  <strong class="media-title">{% translate "Shipping & Returns" %}</strong>
+                  <strong class="media-title">{% translate "shipping & returns" %}</strong>
                   <p class="media-text">{{ shop.shipping_policy }}</p>
                 </div>
               </div>
@@ -58,7 +58,7 @@
                   <img src="{% static 'assets/img/icons/advantages/moneyBack.svg' %}" alt="moneyBack.svg"/>
                 </div>
                 <div class="media-content">
-                  <strong class="media-title">{% translate "Money Back" %}</strong>
+                  <strong class="media-title">{% translate "money back" %}</strong>
                   <p class="media-text">{{ shop.refund_policy }}</p>
                 </div>
               </div>
@@ -71,7 +71,7 @@
                   <img src="{% static 'assets/img/icons/advantages/support.svg' %}" alt="support.svg"/>
                 </div>
                 <div class="media-content">
-                  <strong class="media-title">{% translate "Support Policy" %}</strong>
+                  <strong class="media-title">{% translate "support policy" %}</strong>
                   <p class="media-text">{{ shop.support_policy }}</p>
                 </div>
               </div>
@@ -84,7 +84,7 @@
                   <img src="{% static 'assets/img/icons/advantages/quality.svg' %}" alt="quality.svg"/>
                 </div>
                 <div class="media-content">
-                  <strong class="media-title">{% translate "Quality Guarantee" %}</strong>
+                  <strong class="media-title">{% translate "quality guarantee" %}</strong>
                   <p class="media-text">{{ shop.quality_policy }}</p>
                 </div>
               </div>
@@ -139,7 +139,7 @@
         {% endcache %}
         <div class="Section-columnSection">
           <header class="Section-header">
-            <strong class="Section-title">{% translate "Follow Us" %}</strong>
+            <strong class="Section-title">{% translate "follow us" %}</strong>
           </header>
           <div class="Section-columnContent">
             <div class="Footer-payments Footer-payments_column">
@@ -192,7 +192,7 @@
           </div>
         </div>
         <header class="Section-header">
-          <h2 class="Section-title">{% translate "popular Products"|capfirst %}</h2>
+          <h2 class="Section-title">{% translate "popular products"|capfirst %}</h2>
         </header>
         <div class="Cards">
           {% if products %}

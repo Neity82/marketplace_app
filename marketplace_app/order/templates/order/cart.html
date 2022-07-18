@@ -22,14 +22,14 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% translate "cart"|upper %}
+        <h1 class="Middle-title">{% translate "cart" %}
         </h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
-            <a href="{% url 'product:home' %}">{% translate "home"|upper %}</a>
+            <a href="{% url 'product:home' %}">{% translate "home" %}</a>
           </li>
           <li class="breadcrumbs-item breadcrumbs-item_current">
-            <span>{% translate "cart"|upper %}</span>
+            <span>{% translate "cart" %}</span>
           </li>
         </ul>
       </div>
@@ -52,7 +52,7 @@
             <div class="Cart-block Cart-block_info">
               <a class="Cart-title" href="{% url 'product:detail' cart_entity.stock.product.id %}">{{ cart_entity.stock.product.title }}</a>
               <div class="Cart-desc">{{ cart_entity.stock.product.short_description }}</div>
-              <div class="Cart-quantity">{% translate "In stock" %}: {{ cart_entity.stock.count }}</div>
+              <div class="Cart-quantity">{% translate "in stock"|capfirst %}: {{ cart_entity.stock.count }}</div>
             </div>
             <div class="Cart-block Cart-block_price">
               {% comment %} {% if cart_entity.stock.product.discount.type %} {% endcomment %}

@@ -15,7 +15,6 @@ class CustomUserManager(BaseUserManager):
         """
         if not email:
             raise ValueError(_("The email address must be specified"))
-            # Адрес электронной почты должен быть указан
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
