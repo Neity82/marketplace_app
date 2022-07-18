@@ -32,8 +32,7 @@
       </div>
     </div>
   </div>
-  {% cache product_detail_cache_time product_detail_cache %}
-    <div class="Section">
+  <div class="Section">
     <div class="wrap">
       {% with product.discount as discount %}
       <div class="Product">
@@ -312,7 +311,6 @@
       {% endwith %}
     </div>
   </div>
-  {% endcache %}
 </div>
 {% endblock %}
 

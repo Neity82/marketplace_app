@@ -45,9 +45,10 @@ class SettingsAdmin(admin.ModelAdmin):
         """
         key: str = request.POST.get('cache', None)
         if key is not None:
-            for cache_key in cache._cache.keys():
+            for key_string in list(cache._cache.keys()):
+                _, _, cache_key = key_string.split(sep=':')
                 if key in cache_key:
-                    del cache._cache[cache_key]
+                    cache.delete(cache_key)
         return HttpResponseRedirect(
             reverse(
                 "admin:{app_label}_{model_name}_changelist".format(

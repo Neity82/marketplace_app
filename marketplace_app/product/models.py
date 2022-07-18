@@ -693,7 +693,7 @@ class ProductReview(models.Model):
         verbose_name=_("rating"),
         help_text=_("product rating"),
         blank=True,
-        null=True
+        default=0
         )
 
     objects = models.Manager()

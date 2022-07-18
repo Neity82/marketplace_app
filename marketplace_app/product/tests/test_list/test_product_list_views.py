@@ -259,7 +259,6 @@ class ProductListTest(TestCase):
     def test_attribute_filters(self) -> None:
         category = self._get_random_category()
         data = {'category': category.id}
-        data = {'category': 1}
         response = self.client.get(self.base_url, data=data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('attributes', response.context_data)

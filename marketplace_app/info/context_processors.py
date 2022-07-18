@@ -10,6 +10,5 @@ def cache_time(request: WSGIRequest) -> dict:
 
     return {
         "top_product_list_cache_time": top_product_cache.value if top_product_cache else DEFAULT_CACHE_TIME,
-        "banner_list_cache_time": banner_cache.value if banner_cache else DEFAULT_CACHE_TIME,
-        "product_detail_cache_time": banner_cache.value if banner_cache else DEFAULT_CACHE_TIME,
+        "banner_list_cache_time": banner_cache.value if banner_cache else DEFAULT_CACHE_TIME
     }

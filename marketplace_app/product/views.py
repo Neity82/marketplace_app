@@ -23,6 +23,10 @@ from product.forms import ProductReviewForm
 from product import models
 
 
+PRODUCT_DETAIL_QUERYSET_CACHE_KEY = 'product_detail_{product_id}_queryset_cache'
+PRODUCT_DETAIL_CONTEXT_CACHE_KEY = 'product_detail_{product_id}_context_cache'
+
+
 class IndexView(generic.TemplateView):
     """
         Представление страницы index.html
@@ -457,16 +461,75 @@ class ProductDetailView(FormMixin, DetailView):
     context_object_name = "product"
     form_class = ProductReviewForm
 
+    def get_queryset(self):
+        product_detail_cache = None
+        product_id = self.kwargs.get('pk')
+        if product_id is not None:
+            cache_key = \
+                PRODUCT_DETAIL_QUERYSET_CACHE_KEY.format(product_id=product_id)
+            product_detail_cache = cache.get(
+                cache_key,
+                default=None
+            )
+        if product_detail_cache is None:
+            queryset = super(ProductDetailView, self).get_queryset()
+            product_detail_cache_time_setting: Settings = \
+                Settings.objects.filter(name="product_detail_cache_time").first()
+            product_detail_cache_time = (
+                int(product_detail_cache_time_setting.value)
+                if product_detail_cache_time_setting
+                else DEFAULT_CACHE_TIME
+            )
+            cache.set(
+                cache_key,
+                queryset,
+                product_detail_cache_time
+            )
+        else:
+            queryset = product_detail_cache
+        return queryset
+
     def get_context_data(self, **kwargs):
+
+        product_id = self.object.id
+        cache_key = \
+            PRODUCT_DETAIL_CONTEXT_CACHE_KEY.format(product_id=product_id)
+        # Если есть кэш данного набора, то возвращаем его
+        product_detail_cache = cache.get(
+            cache_key,
+            default=None
+        )
+
         context = super(ProductDetailView, self).get_context_data()
         product_on_page = self.get_object()
-        context["images"] = \
-            models.ProductImage.get_product_pics(product_on_page)
-        context["attributes"] =\
-            models.AttributeValue.get_all_attributes_of_product(product_on_page)
-        context["comments"] = \
-            models.ProductReview.get_comments(product_on_page)
-        context["stocks"] = models.Stock.get_products_in_stock(product_on_page)
+        if product_detail_cache is None:
+            cached_context = dict()
+            cached_context["images"] = \
+                models.ProductImage.get_product_pics(product_on_page)
+            cached_context["attributes"] = \
+                models.AttributeValue.get_all_attributes_of_product(product_on_page)
+            cached_context["comments"] = \
+                models.ProductReview.get_comments(product_on_page)
+            cached_context["stocks"] = \
+                models.Stock.get_products_in_stock(product_on_page)
+
+            # Формируем кэш данного набора параметров
+            product_detail_cache_time_setting: Settings = \
+                Settings.objects.filter(name="product_detail_cache_time").first()
+            product_detail_cache_time = (
+                int(product_detail_cache_time_setting.value)
+                if product_detail_cache_time_setting
+                else DEFAULT_CACHE_TIME
+            )
+            cache.set(
+                cache_key,
+                cached_context,
+                product_detail_cache_time
+            )
+        else:
+            cached_context = product_detail_cache
+
+        context.update(**cached_context)
 
         get_product_detail_view.send(sender=self.__class__,
                                      user=self.request.user,
@@ -483,6 +546,13 @@ class ProductDetailView(FormMixin, DetailView):
         form = ProductReviewForm(post_data)
         if form.is_valid():
             form.save()
+            product_id = product_item.id
+            cache_keys = [
+                PRODUCT_DETAIL_QUERYSET_CACHE_KEY.format(product_id=product_id),
+                PRODUCT_DETAIL_CONTEXT_CACHE_KEY.format(product_id=product_id)
+            ]
+            cache.delete_many(cache_keys)
+
         if "rating" in post_data:
             avg_rating = models.ProductReview.objects.filter(
                 product=product_item
