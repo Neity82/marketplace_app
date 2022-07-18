@@ -170,6 +170,15 @@ class OrderDetail(generic.DetailView):
 
         return obj
 
+    def get_context_data(self, **kwargs):
+        kwargs.setdefault("view", self)
+        kwargs.update({"order": self.get_object()})
+        kwargs.update(
+            {"payment": Payment.objects.filter(order=self.get_object()).first()}
+        )
+
+        return kwargs
+
 
 class OrderView(SessionWizardView):
     """Вью оформления заказа"""

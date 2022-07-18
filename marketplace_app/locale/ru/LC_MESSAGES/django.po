@@ -744,13 +744,13 @@ msgstr "Общая стоимость:"
 #: .\order\templates\order\forms\payment_form.html:43
 #: .\order\templates\order\forms\user_info_form.html:63
 msgid "prev step"
-msgstr ""
+msgstr "Назад"
 
 #: .\order\templates\order\forms\delivery_form.html:71
 #: .\order\templates\order\forms\payment_form.html:46
 #: .\order\templates\order\forms\user_info_form.html:67
 msgid "next step"
-msgstr ""
+msgstr "Дальше"
 
 #: .\order\templates\order\forms\user_info_form.html:41
 #, fuzzy
@@ -772,7 +772,7 @@ msgstr "пароль"
 
 #: .\order\templates\order\forms\user_info_form.html:52
 msgid "I already have account"
-msgstr ""
+msgstr "У меня уже есть аккаунт"
 
 #: .\order\templates\order\oneorder.html:21
 #: .\order\templates\order\oneorder.html:30
@@ -822,12 +822,12 @@ msgstr "Оплатить"
 
 #: .\order\templates\order\order.html:40
 msgid "Progress"
-msgstr ""
+msgstr "Прогресс"
 
 #: .\order\templates\order\order.html:46 .\order\templates\order\order.html:50
 #: .\order\templates\order\order.html:54 .\order\templates\order\order.html:58
 msgid "Step"
-msgstr ""
+msgstr "Шаг"
 
 #: .\order\templates\order\order.html:46
 #, fuzzy
@@ -899,15 +899,15 @@ msgstr "некорректный запрос"
 
 #: .\payments\models.py:13
 msgid "Processing"
-msgstr ""
+msgstr "Проверяется"
 
 #: .\payments\models.py:14
 msgid "Canceled"
-msgstr ""
+msgstr "Отменено"
 
 #: .\payments\models.py:15
 msgid "Success"
-msgstr ""
+msgstr "Успешно"
 
 #: .\payments\models.py:16
 #, fuzzy
@@ -923,7 +923,7 @@ msgstr "Оплачен"
 
 #: .\payments\models.py:31
 msgid "card number"
-msgstr ""
+msgstr "Номер карты"
 
 #: .\payments\models.py:35
 #, fuzzy
@@ -960,7 +960,7 @@ msgstr "оплата"
 #: .\payments\models.py:60
 #, python-brace-format
 msgid "{model} for {order}"
-msgstr ""
+msgstr "{model} по {order}"
 
 #: .\payments\templates\payments\payment_form.html:26
 #: .\payments\templates\payments\progress.html:26
@@ -971,11 +971,11 @@ msgstr "Домой"
 
 #: .\payments\templates\payments\payment_form.html:43
 msgid "Card number"
-msgstr ""
+msgstr "Номер карты"
 
 #: .\payments\templates\payments\payment_form.html:50
 msgid "Generate random number"
-msgstr ""
+msgstr "Сгенерировать случайное число"
 
 #: .\payments\templates\payments\payment_form.html:56
 #, fuzzy
@@ -992,7 +992,7 @@ msgstr "Ошибка оплаты"
 
 #: .\payments\templates\payments\progress.html:38
 msgid "Waiting for payment confirmation by the payment system"
-msgstr ""
+msgstr "Ожидается подтверждение платежной системой"
 
 #: .\product\admin.py:269 .\product\templates\product\product.html:104
 msgid "Tags"

@@ -82,7 +82,7 @@
                   </div>
                   <div class="Order-info Order-info_status">
                     <div class="Order-infoType">{% trans "Status"|capfirst %}:</div>
-                    <div class="Order-infoContent">{{ order.get_state_display }}</div>
+                    <div class="Order-infoContent">{{ payment.status }}</div>
                   </div>
                   {% if order.error %}
                   <div class="Order-info Order-info_error">
@@ -154,7 +154,7 @@
                 </div>
                 {% if order.state == 'not paid' %}
                 <div class="Cart-block">
-                  <a class="btn btn_primary btn_lg" href="#">{% trans "To pay" %}</a>
+                  <a class="btn btn_primary btn_lg" href="{% url "order:payment" pk=order.pk %}">{% trans "To pay" %}</a>
                 </div>
                 {% endif %}
               </div>
