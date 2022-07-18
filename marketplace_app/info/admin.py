@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.core.cache.utils import make_template_fragment_key
 from django.http import HttpRequest, HttpResponseRedirect
 from django.core.cache import cache
 from django.urls import path, reverse
@@ -43,7 +42,7 @@ class SettingsAdmin(admin.ModelAdmin):
     def clear_cache(self, request: HttpRequest) -> HttpResponseRedirect:
         """Функция для сброса кэша
         """
-        key: str = request.POST.get('cache', None)
+        key: str = request.POST.get("cache", None)
         if key is not None:
             for cache_key in cache._cache.keys():
                 if key in cache_key:

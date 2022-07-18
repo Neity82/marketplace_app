@@ -14,7 +14,7 @@ class CustomUserManager(BaseUserManager):
         с указанным адресом электронной почты и паролем.
         """
         if not email:
-            raise ValueError(_("Адрес электронной почты должен быть указан"))
+            raise ValueError(_("The email address must be specified"))
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -31,7 +31,8 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_active", True)
 
         if extra_fields.get("is_staff") is not True:
-            raise ValueError(_("Суперпользователь должен иметь is_staff=True."))
+            raise ValueError(_("The superuser must have is_staff=True."))
+            # Суперпользователь должен иметь
         if extra_fields.get("is_superuser") is not True:
-            raise ValueError(_("Суперпользователь должен иметь is_superuser=True."))
+            raise ValueError(_("The superuser must have is_superuser=True."))
         return self.create_user(email, password, **extra_fields)

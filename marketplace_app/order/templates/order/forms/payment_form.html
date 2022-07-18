@@ -17,8 +17,8 @@
 
 
 {% block order_form %}
- <p>Step {{ wizard.steps.step1 }} of 4</p>
- <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
+  <p>{% trans "step"|capfirst %} {{ wizard.steps.step1 }} {% trans "of" %} 4</p>
+  <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
 
   <form action="" method="post">{% csrf_token %}
     <div class="row">
@@ -32,17 +32,13 @@
                     {% endif %}
                 {% endfor %}
             </select>
-
         </div>
     </div>
-
-
 
     <div class="Order-footer">
         {% if wizard.steps.prev %}
             <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
         {% endif %}
-
         <button class="btn btn_success" name="wizard_goto_step" type="submit" value="confirm">{% trans "next step" %}</button>
     </div>
   </form>
