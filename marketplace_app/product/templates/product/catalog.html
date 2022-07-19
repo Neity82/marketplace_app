@@ -61,7 +61,7 @@
               <div class="form-group">
                 <div class="range Section-columnRange">
                   <input class="range-line" id="price" name="price" type="text" data-type="double" data-min="{{ min_price }}" data-max="{{ max_price }}" data-from="{% if filter_min_price %}{{ filter_min_price }}{% else %}{{ min_price }}{% endif %}" data-to="{% if filter_max_price %}{{ filter_max_price }}{% else %}{{ max_price }}{% endif %}"/>
-                  <div class="range-price">{% translate "price"|capfirst %}:&#32;
+                  <div class="range-price">{% translate "price" %}:&#32;
                     <div class="rangePrice"></div>
                   </div>
                 </div>
@@ -112,7 +112,7 @@
               {% endfor %}
               <div class="form-group">
                 <div class="buttons" onClick="javascript:document.filter.submit();">
-                  <span class="btn btn_square btn_dark btn_narrow">{% translate "filter"|capfirst %}</span>
+                  <span class="btn btn_square btn_dark btn_narrow">{% translate "filter" %}</span>
                 </div>
               </div>
             </form>

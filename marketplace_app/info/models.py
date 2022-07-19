@@ -10,28 +10,28 @@ class Banner(models.Model):
     title = models.CharField(
         verbose_name=_("title"),
         max_length=150,
-        help_text=_("banner title")
+        help_text=_("Banner title")
     )
 
     text = models.TextField(
         verbose_name=_("text"),
-        help_text=_("banner text")
+        help_text=_("Banner text")
     )
 
     image = models.ImageField(
         verbose_name=_("image"),
         upload_to=banner_image_path,
-        help_text=_("banner image")
+        help_text=_("Banner image")
     )
 
     url = models.URLField(
         verbose_name=_("URL"),
-        help_text=_("banner url")
+        help_text=_("Banner url")
     )
 
     is_active = models.BooleanField(
         verbose_name=_("active"),
-        help_text=_("banner is active")
+        help_text=_("Banner is active")
     )
 
     class Meta:
@@ -72,17 +72,17 @@ class SEOItem(models.Model):
     meta_title = models.CharField(
         verbose_name=_("meta title"),
         max_length=512,
-        help_text=_("for detail pages (products, shop etc) after meta title"
-                    "auto adding name (title) field of detail page")
+        help_text="For detail pages (products, shop etc) after meta title"
+                  "auto adding name (title) field of detail page"
     )
 
     meta_description = models.CharField(
         _("meta description"),
         max_length=512,
         blank=True,
-        help_text=_("for detail pages (products, shop etc)"
-                    "after meta description"
-                    "auto adding description field of detail page")
+        help_text="For detail pages (products, shop etc)"
+                  "after meta description"
+                  "auto adding description field of detail page"
     )
 
     title = models.CharField(

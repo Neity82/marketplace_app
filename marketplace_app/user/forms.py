@@ -3,7 +3,6 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.translation import gettext as _
-from django.utils.translation import ugettext_lazy
 
 from user.models import CustomUser
 
@@ -63,21 +62,27 @@ class UserProfileForm(forms.ModelForm):
         self.user = kwargs["instance"]
         super(UserProfileForm, self).__init__(*args, **kwargs)
 
-    avatar = forms.CharField(widget=forms.FileInput(attrs={"class": "form-input"}),
+    avatar = forms.CharField(label=_("avatar").capitalize(),
+                             widget=forms.FileInput(attrs={"class": "form-input"}),
                              required=False)
-    full_name = forms.CharField(widget=forms.TextInput(attrs={"class": "form-input"}),
+    full_name = forms.CharField(label=_("full name").capitalize(),
+                                widget=forms.TextInput(attrs={"class": "form-input"}),
                                 required=False)
-    phone = forms.CharField(widget=forms.TextInput(attrs={"class": "form-input phone"}),
+    phone = forms.CharField(label=_("phone").capitalize(),
+                            widget=forms.TextInput(attrs={"class": "form-input phone"}),
                             required=False)
-    email = forms.CharField(widget=forms.TextInput(attrs={"class": "form-input"}))
-    password1 = forms.CharField(widget=forms.TextInput(attrs={
+    email = forms.CharField(label=_("e-mail").capitalize(),
+                            widget=forms.TextInput(attrs={"class": "form-input"}))
+    password1 = forms.CharField(label=_("password").capitalize(),
+                                widget=forms.TextInput(attrs={
                                     "class": "form-input",
-                                    "placeholder": ugettext_lazy("Here you can change the password")
+                                    "placeholder": _("Here you can change the password")
                                 }),
                                 required=False)
-    password2 = forms.CharField(widget=forms.TextInput(attrs={
+    password2 = forms.CharField(label=_("confirm password").capitalize(),
+                                widget=forms.TextInput(attrs={
                                     "class": "form-input",
-                                    "placeholder": ugettext_lazy("Enter the password again")
+                                    "placeholder": _("Enter the password again")
                                 }),
                                 required=False)
 

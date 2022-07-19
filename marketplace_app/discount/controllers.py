@@ -19,16 +19,16 @@ def _get_discount_by_mechanism(base_cost: Decimal, mechanism: str,
     :return: Цена со скидкой
     :rtype: Decimal
     """
-    if mechanism == "P":
+    if mechanism == 'P':
         return Decimal(
-            "%.2f" % (Decimal('%.2f' % ((100 - value) / 100)) * base_cost)
+            '%.2f' % (Decimal('%.2f' % ((100 - value) / 100)) * base_cost)
         )
-    elif mechanism == "F":
-        return Decimal(f"{value}.00")
+    elif mechanism == 'F':
+        return Decimal(f'{value}.00')
     elif mechanism == 'S':
         return (base_cost - value)
 
-    return Decimal("0.00")
+    return Decimal('0.00')
 
 
 def get_basket_discount(basket_count: int,
@@ -42,12 +42,12 @@ def get_basket_discount(basket_count: int,
     :return: цена корзины со скидкой
     :rtype: Decimal
     """
-    discounted_price: Decimal = Decimal("0.00")
+    discounted_price: Decimal = Decimal('0.00')
     today: datetime = pytz.UTC.localize(datetime.today())
     basket_discounts: QuerySet[BasketDiscount] = BasketDiscount.objects \
         .select_related("discount_id").filter(
             Q(
-                discount_id__discount_type="BD",
+                discount_id__discount_type='BD',
                 discount_id__is_active=True
             ) & (
                 Q(

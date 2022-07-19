@@ -1,16 +1,15 @@
 {% extends 'admin/change_list.html' %}
-{% load i18n %}
 
 {% block object-tools %}
     <div class="actions">
-        <p>{% trans "clear cache"|capfirst %}</p>
+        <p>Clear cache</p>
         <form action="clear_cache/" method="POST">
             {% csrf_token %}
-            <button type="submit" name="cache" value="category_list" class="button">{% trans "category list"|capfirst %}</button>
-            <button type="submit" name="cache" value="product_list" class="button">{% trans "catalog"|capfirst %}</button>
-            <button type="submit" name="cache" value="top_product_list" class="button">{% trans "top-product list"|capfirst %}</button>
-            <button type="submit" name="cache" value="banner_list" class="button">{% trans "banner list"|capfirst %}</button>
-            <button type="submit" name="cache" value="product_detail" class="button">{% trans "product detail"|capfirst %}</button>
+            <button type="submit" name="cache" value="category_list" class="button">Category list</button>
+            <button type="submit" name="cache" value="product_list" class="button">Catalog</button>
+            <button type="submit" name="cache" value="top_product_list" class="button">Top-product list</button>
+            <button type="submit" name="cache" value="banner_list" class="button">Banner list</button>
+            <button type="submit" name="cache" value="product_detail" class="button">Product detail</button>
         </form>
     </div>
     <br />

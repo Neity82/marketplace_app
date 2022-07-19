@@ -17,8 +17,8 @@ def cart_init_data(request: WSGIRequest) -> dict:
     device = request.COOKIES.get("device", None)
     assert user, "can't get user from request!"
     return {
-        "user": user,
-        "device": device
+        'user': user,
+        'device': device
     }
 
 

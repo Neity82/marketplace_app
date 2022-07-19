@@ -32,7 +32,7 @@ class ShopDetailView(generic.DetailView):
             {"products": Product.get_popular(shop=self.get_object())}
         )
         kwargs.update(
-            {"stocks": Stock.get_products_in_stock_by_shop(self.get_object())},
+            {'stocks': Stock.get_products_in_stock_by_shop(self.get_object())},
         )
 
         return kwargs

@@ -1,5 +1,4 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 
 from product.models import ProductReview
 
@@ -13,7 +12,7 @@ class ProductReviewForm(forms.ModelForm):
                 "class": "form-textarea",
                 "name": "text",
                 "id": "text",
-                "placeholder": _("review").capitalize(),
+                "placeholder": "Review",
             }),
     )
 

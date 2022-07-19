@@ -14,7 +14,7 @@ class Discount(models.Model):
 
     discount_type = models.CharField(
         verbose_name=_("discount type"),
-        help_text=_("discount type"),
+        help_text=_("Discount type"),
         max_length=2,
         choices=DiscountType.choices,
         default=DiscountType.PRODUCT_DISCOUNT,
@@ -27,7 +27,7 @@ class Discount(models.Model):
 
     discount_mechanism = models.CharField(
         verbose_name=_("discount mechanism"),
-        help_text=_("discount mechanism"),
+        help_text=_("Discount mechanism"),
         max_length=1,
         choices=DiscountMechanism.choices,
         default=DiscountMechanism.PERCENT,
@@ -35,19 +35,19 @@ class Discount(models.Model):
 
     discount_value = models.PositiveIntegerField(
         verbose_name=_("discount value"),
-        help_text=_("discount value"),
+        help_text=_("Discount value"),
         default=0,
     )
 
     is_active = models.BooleanField(
         verbose_name=_("is active"),
-        help_text=_("there is active discount"),
+        help_text=_("There is active discount"),
         default=True,
     )
 
     description = models.TextField(
         verbose_name=_("description"),
-        help_text=_("discount description"),
+        help_text=_("Discount description"),
         max_length=1000,
     )
 
@@ -58,7 +58,7 @@ class Discount(models.Model):
 
     finish_at = models.DateTimeField(
         verbose_name=_("finish at"),
-        help_text=_("discount finish date"),
+        help_text=_("Discount finish date"),
         blank=True,
         null=True,
         default=None,
@@ -80,13 +80,13 @@ class ProductDiscount(models.Model):
         on_delete=models.CASCADE,
         related_name="product_discount",
         verbose_name=_("discount id"),
-        help_text=_("discount id"),
+        help_text=_("Discount id"),
     )
 
     product_id = models.ManyToManyField(
         "product.Product",
         verbose_name=_("product(s) id"),
-        help_text=_("product(s) id"),
+        help_text=_("Product(s) id"),
         related_name="product_discount",
         blank=True,
         default="",
@@ -95,7 +95,7 @@ class ProductDiscount(models.Model):
     category_id = models.ManyToManyField(
         "product.Category",
         verbose_name=_("category(ies) id"),
-        help_text=_("category(ies) id"),
+        help_text=_("Category(ies) id"),
         related_name="product_discount",
         blank=True,
         default="",
@@ -114,13 +114,13 @@ class SetDiscount(models.Model):
         on_delete=models.CASCADE,
         related_name="set_discount",
         verbose_name=_("discount id"),
-        help_text=_("discount id"),
+        help_text=_("Discount id"),
     )
 
     product_id_1 = models.ManyToManyField(
         "product.Product",
         verbose_name=_("product(s) 1 id"),
-        help_text=_("product(s) 1 id"),
+        help_text=_("Product(s) 1 id"),
         related_name="set_discount_1",
         blank=True,
         default="",
@@ -138,7 +138,7 @@ class SetDiscount(models.Model):
     product_id_2 = models.ManyToManyField(
         "product.Product",
         verbose_name=_("product(s) 2 id"),
-        help_text=_("product(s) 2 id"),
+        help_text=_("Product(s) 2 id"),
         related_name="set_discount_2",
         blank=True,
         default="",
@@ -147,7 +147,7 @@ class SetDiscount(models.Model):
     category_id_2 = models.ManyToManyField(
         "product.Category",
         verbose_name=_("category(ies) 2 id"),
-        help_text=_("category(ies) 2 id"),
+        help_text=_("Category(ies) 2 id"),
         related_name="set_discount_2",
         blank=True,
         default="",
@@ -164,29 +164,29 @@ class BasketDiscount(models.Model):
         on_delete=models.CASCADE,
         related_name="basket_discount",
         verbose_name=_("discount id"),
-        help_text=_("discount id"),
+        help_text=_("Discount id"),
     )
 
     min_products_count = models.PositiveIntegerField(
         verbose_name=_("minimum products count"),
-        help_text=_("minimum products count"),
+        help_text=_("Minimum products count"),
         default=0,
     )
 
     max_products_count = models.PositiveIntegerField(
         verbose_name=_("maximum products count"),
-        help_text=_("maximum products count"),
+        help_text=_("Maximum products count"),
         default=0,
     )
 
     min_basket_cost = models.PositiveIntegerField(
         verbose_name=_("minimum basket cost"),
-        help_text=_("minimum basket cost"),
+        help_text=_("Minimum basket cost"),
         default=0,
     )
 
     max_basket_cost = models.PositiveIntegerField(
         verbose_name=_("maximum basket cost"),
-        help_text=_("maximum basket cost"),
+        help_text=_("Maximum basket cost"),
         default=0,
     )

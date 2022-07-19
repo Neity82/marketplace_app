@@ -22,6 +22,7 @@ class Tag(models.Model):
 
     title = models.CharField(
         verbose_name=_("title"),
+        help_text=_("tag title"),
         max_length=50,
     )
 
@@ -53,11 +54,13 @@ class Category(SoftDeletes):
 
     title = models.CharField(
         verbose_name=_("title"),
+        help_text=_("category title"),
         max_length=50,
     )
 
     icon = models.ImageField(
         verbose_name=_("icon"),
+        help_text=_("category icon"),
         null=True,
         default=None,
         upload_to=category_icon_path,
@@ -65,6 +68,7 @@ class Category(SoftDeletes):
 
     sort_index = models.SmallIntegerField(
         verbose_name=_("sort index"),
+        help_text=_("sort index"),
         default=0
     )
 
@@ -142,6 +146,7 @@ class Attribute(models.Model):
     """
     title = models.CharField(
         verbose_name=_("title"),
+        help_text=_("Category title"),
         max_length=50,
     )
 
@@ -153,13 +158,14 @@ class Attribute(models.Model):
     type = models.CharField(
         verbose_name=_("field type"),
         max_length=1,
+        help_text=_("field type"),
         choices=AttributeType.choices,
         default=AttributeType.TEXT
     )
 
     category = models.ForeignKey(
         "Category",
-        verbose_name=_("attribute\'s category"),
+        verbose_name=_("'attribute\'s category'"),
         related_name="attribute",
         on_delete=models.CASCADE,
     )
@@ -209,7 +215,7 @@ class AttributeValue(models.Model):
 
     attribute = models.ForeignKey(
         "Attribute",
-        verbose_name=_("product\'s attribute"),
+        verbose_name=_("'product\'s attribute'"),
         related_name="product_attribute",
         on_delete=models.CASCADE,
     )
@@ -256,22 +262,26 @@ class Product(SoftDeletes):
 
     title = models.CharField(
         verbose_name=_("title"),
+        help_text=_("product title"),
         max_length=150,
     )
 
     image = models.ImageField(
         verbose_name=_("image"),
+        help_text=_("product image"),
         upload_to=product_image_path,
         blank=True,
     )
 
     short_description = models.CharField(
         verbose_name=_("short description"),
+        help_text=_("product short description"),
         max_length=150,
     )
 
     long_description = models.TextField(
         verbose_name=_("long description"),
+        help_text=_("product long description"),
         max_length=1500,
     )
 
@@ -293,6 +303,7 @@ class Product(SoftDeletes):
         on_delete=models.CASCADE,
         related_name="product",
         verbose_name=_("category"),
+        help_text=_("product category"),
     )
 
     created_at = models.DateTimeField(
@@ -311,12 +322,14 @@ class Product(SoftDeletes):
 
     rating = models.PositiveSmallIntegerField(
         verbose_name=_("rating"),
+        help_text=_("product rating"),
         choices=Rating.choices,
         default=Rating.ZERO,
     )
 
     sort_index = models.SmallIntegerField(
         verbose_name=_("sort index"),
+        help_text=_("sort index"),
         default=0
     )
 
@@ -561,11 +574,13 @@ class DailyOffer(models.Model):
         on_delete=models.CASCADE,
         related_name="daily_offer",
         verbose_name=_("product"),
+        help_text=_("daily\'s offer product"),
     )
     select_date = models.DateField(default=date.today)
 
     text = models.TextField(
         verbose_name=_("promo text"),
+        help_text=_("daily offer promo content"),
         max_length=1500,
         default=""
     )
@@ -611,12 +626,14 @@ class Stock(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("shop id"),
         related_name="stock",
+        help_text=_("stock\'s shop"),
     )
     product = models.ForeignKey(
         "Product",
         on_delete=models.CASCADE,
         verbose_name=_("product id"),
         related_name="stock",
+        help_text=_("stock\'s product"),
     )
     price = models.DecimalField(max_digits=9, decimal_places=2)
     count = models.PositiveIntegerField(default=0)
@@ -652,25 +669,29 @@ class ProductReview(models.Model):
     product = models.ForeignKey(
         "Product",
         on_delete=models.CASCADE,
-        verbose_name=_("product"),
+        verbose_name=_("user product view product"),
         related_name="user_product_view",
+        help_text=_("preview\'s product"),
     )
     user = models.ForeignKey(
         "user.CustomUser",
         on_delete=models.CASCADE,
-        verbose_name=_("user"),
+        verbose_name=_("user product view user"),
         related_name="user_product_view",
+        help_text=_("preview\'s user"),
     )
     date = models.DateField(auto_now_add=True)
 
     text = models.TextField(
         verbose_name=_("review content"),
+        help_text=_("review content"),
         max_length=1500,
         default=""
     )
 
     rating = models.PositiveSmallIntegerField(
         verbose_name=_("rating"),
+        help_text=_("product rating"),
         blank=True,
         default=0
         )
@@ -698,11 +719,13 @@ class ProductImage(models.Model):
     product = models.ForeignKey(
         Product,
         related_name="product",
-        verbose_name=_("product"),
+        verbose_name=_("product of image"),
+        help_text=_("product image"),
         on_delete=models.CASCADE,
     )
     image = models.ImageField(
         verbose_name=_("image"),
+        help_text=_("product image"),
         upload_to=product_image_path,
         blank=True,
     )

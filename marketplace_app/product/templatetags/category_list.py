@@ -16,7 +16,7 @@ def get_categories():
     """
     # Если есть кэш данного набора, то возвращаем его
     category_list_cache = cache.get(
-        "category_list",
+        'category_list',
         default=None
     )
     if category_list_cache is not None:
@@ -50,7 +50,7 @@ def get_categories():
         else DEFAULT_CACHE_TIME
     )
     cache.set(
-        "category_list",
+        'category_list',
         categories,
         category_list_cache_time
     )
@@ -63,12 +63,12 @@ def update_page(get_dict: dict, page: int):
     return "&".join([f"{key}={value}" for key, value in get_dict.items()])
 
 
-@register.filter(name="get_items")
+@register.filter(name='get_items')
 def get_items(list_: list, index: str):
     start_idx_str, stop_idx_str = index.split(sep=":")
     return list_[int(start_idx_str):int(stop_idx_str)]
 
 
-@register.filter(name="dict_key")
+@register.filter(name='dict_key')
 def dict_key(dict_: dict, key: Any):
     return dict_[key]

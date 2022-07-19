@@ -19,7 +19,7 @@
   <div class="Middle-top">
     <div class="wrap">
       <div class="Middle-header">
-        <h1 class="Middle-title">{% translate "discounts" %}</h1>
+        <h1 class="Middle-title">{% translate "DISCOUNTS" %}</h1>
         <ul class="breadcrumbs Middle-breadcrumbs">
           <li class="breadcrumbs-item">
             <a href="{% url 'product:home' %}">{% translate "home" %}</a>
@@ -38,13 +38,13 @@
         <div class="Card">
           {% comment %} <a class="Card-picture" href="{% url 'product:detail' %}"> {% endcomment %}
             {% if sale.discount_type == "PD" %}
-            <img src="{% static 'discount/img/percent_sale.jpg' %}" alt="{% translate 'percent sale' %}"/>
+            <img src="{% static 'discount/img/percent_sale.jpg' %}" alt="{% translate "percent sale" %}"/>
             {% elif sale.discount_type == "BD" %}
-            <img src="{% static 'discount/img/basket_sale.jpg' %}" alt="{% translate 'basket sale' %}"/>
+            <img src="{% static 'discount/img/basket_sale.jpg' %}" alt="{% translate "basket sale" %}"/>
             {% elif sale.discount_type == "SD" %}
-            <img src="{% static 'discount/img/set_sale.jpg' %}" alt="{% translate 'set sale' %}"/>
+            <img src="{% static 'discount/img/set_sale.jpg' %}" alt="{% translate "set sale" %}"/>
             {% else %}
-            <img src="{% static 'discount/img/base.jpg' %}" alt="{% translate 'unknown sale type' %}"/>
+            <img src="{% static 'discount/img/base.jpg' %}" alt="{% translate "unknown sale type" %}"/>
             {% endif %}
           {% comment %} </a> {% endcomment %}
           <div class="Card-date">
@@ -97,8 +97,4 @@
 
 {% block footer %}
   {% include "footer.html" %}
-{% endblock %}
-
-{% block scripts %}
-  {% include "scripts.html" %}
 {% endblock %}

@@ -35,30 +35,36 @@ class CustomUser(AbstractUser, SoftDeletes):
     email = models.EmailField(
         verbose_name=_("email"),
         unique=True,
+        help_text=_("User email")
     )
     first_name = models.CharField(
         verbose_name=_("first name"),
         max_length=150,
         blank=True,
+        help_text=_("User first name")
     )
     middle_name = models.CharField(
         verbose_name=_("middle name"),
         max_length=150,
         blank=True,
+        help_text=_("User middle name")
     )
     last_name = models.CharField(
         verbose_name=_("last name"),
         max_length=150,
         blank=True,
+        help_text=_("User last name")
     )
     phone = models.CharField(
         verbose_name=_("phone"),
         validators=[phone_regex],
+        help_text=_("User phone"),
         max_length=16,
         blank=True
     )
     avatar = models.ImageField(
         verbose_name=_("avatar"),
+        help_text=_("User avatar"),
         blank=True,
         upload_to=avatar_directory_path
     )
@@ -147,16 +153,19 @@ class UserProductView(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("user"),
         related_name="user_view",
+        help_text=_("The user who viewed the product")
     )
     product_id = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
         verbose_name=_("product"),
         related_name="product_view",
+        help_text=_("Viewed product")
     )
     datetime = models.DateTimeField(
         auto_created=True,
         verbose_name=_("datetime of addition"),
+        help_text=_("Viewing datetime")
     )
 
     class Meta:
@@ -236,13 +245,14 @@ class CompareEntity(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("product"),
         related_name="product_compare",
+        help_text=_("Product for comparison")
     )
 
     compare = models.ForeignKey(
         "Compare",
         on_delete=models.CASCADE,
         related_name="compare_entity",
-        verbose_name=_("compare\'s id")
+        verbose_name=_("compare\'s")
     )
 
     class Meta:
@@ -264,6 +274,7 @@ class Compare(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("user"),
         related_name="compare_user",
+        help_text=_("Compare user"),
         blank=True,
         null=True
     )

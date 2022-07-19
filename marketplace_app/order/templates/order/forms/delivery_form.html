@@ -16,7 +16,7 @@
 
 
 {% block order_form %}
-  <p>{% trans "step"|capfirst %} {{ wizard.steps.step1 }} {% trans "of" %} 4</p>
+  <p>Step {{ wizard.steps.step1 }} of 4</p>
   <input id="order-step" type="hidden"  value="{{ wizard.steps.step1 }}">
 
   <form action="" method="post">{% csrf_token %}
@@ -28,16 +28,20 @@
               <div>
                 <label class="toggle">
                   <input type="radio" name="delivery_form-delivery_type" value="{{ delivery.0 }}" checked="checked"/>
-                  <span class="toggle-box"></span>
-                  <span class="toggle-text">{{ delivery.1 }}</span>
+                  <span class="toggle-box">
+                  </span>
+                  <span class="toggle-text">{{ delivery.1 }}
+                  </span>
                 </label>
               </div>
             {% else %}
               <div>
                 <label class="toggle">
                   <input type="radio" name="delivery_form-delivery_type" value="{{ delivery.0 }}"/>
-                  <span class="toggle-box"></span>
-                  <span class="toggle-text">{{ delivery.1 }}</span>
+                  <span class="toggle-box">
+                  </span>
+                  <span class="toggle-text">{{ delivery.1 }}
+                  </span>
                 </label>
               </div>
             {% endif %}
@@ -45,12 +49,14 @@
         </div>
         <div class="form-group">
            {{ form.errors.city }}
-          <label class="form-label" for="city">{% trans 'city'|capfirst %}</label>
+          <label class="form-label" for="city">{% trans 'City' %}
+          </label>
           <input class="form-input" id="city" name="delivery_form-city" type="text" value="{{ form.data.city }}" required="required"/>
         </div>
         <div class="form-group">
            {{ form.errors.address }}
-          <label class="form-label" for="address">{% trans 'address'|capfirst %}</label>
+          <label class="form-label" for="address">{% trans 'Address' %}
+          </label>
           <input class="form-textarea" name="delivery_form-address" id="address" type="text" value="{{ form.data.address }}" required="required">
         </div>
       </div>

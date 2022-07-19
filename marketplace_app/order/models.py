@@ -19,6 +19,7 @@ class CartEntity(models.Model):
         Stock,
         on_delete=models.CASCADE,
         related_name="cart_entity",
+        help_text=_("Cart stock"),
         blank=True,
     )
 
@@ -56,15 +57,13 @@ class Cart(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("user"),
         related_name="cart_user",
+        help_text=_("Cart user"),
         blank=True,
         null=True,
     )
 
     device = models.CharField(
-        max_length=255,
-        verbose_name=_("device"),
-        help_text=_("cookie device value"),
-        blank=True, null=True
+        max_length=255, help_text=_("cookie device value"), blank=True, null=True
     )
 
     class Meta:
@@ -360,22 +359,22 @@ class DeliveryType(models.Model):
     """
 
     name = models.CharField(
-        max_length=50,
-        verbose_name=_("name"),
+        max_length=50, verbose_name=_("name"), help_text=_("Delivery name")
     )
     special_price = models.PositiveIntegerField(
         default=0,
         verbose_name=_("special price"),
+        help_text=_("Delivery special price"),
     )
 
     price = models.PositiveIntegerField(
-        default=200,
-        verbose_name=_("price"),
+        default=200, verbose_name=_("price"), help_text=_("Delivery price")
     )
 
     cart_sum = models.PositiveIntegerField(
         default=2000,
         verbose_name=_("cart price"),
+        help_text=_("Cart sum for special price"),
     )
 
     class Meta:
@@ -397,8 +396,9 @@ class Delivery(models.Model):
     delivery_type = models.ForeignKey(
         DeliveryType,
         on_delete=models.CASCADE,
-        verbose_name=_("delivery type"),
+        verbose_name=_("delivery_type"),
         related_name="delivery_delivery_type",
+        help_text=_("Delivery type"),
         null=True,
     )
     city = models.CharField(max_length=50, default="")
@@ -406,8 +406,8 @@ class Delivery(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=9, default=200)
 
     class Meta:
-        verbose_name = _("delivery item")
-        verbose_name_plural = _("delivery items")
+        verbose_name = _("Delivery item")
+        verbose_name_plural = _("Delivery items")
 
     objects = models.Manager()
 
@@ -449,10 +449,10 @@ class Order(SoftDeletes):
         on_delete=models.CASCADE,
         verbose_name=_("user"),
         related_name="order_info",
+        help_text=_("Order user"),
     )
     datetime = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name=_("order date"),
+        auto_now_add=True, verbose_name=_("order date"), help_text=_("Order date")
     )
     delivery_id = models.ForeignKey(
         Delivery,
@@ -460,6 +460,7 @@ class Order(SoftDeletes):
         null=True,
         verbose_name=_("delivery"),
         related_name="order_delivery",
+        help_text=_("Order delivery"),
     )
 
     class PaymentType(models.TextChoices):
@@ -470,11 +471,11 @@ class Order(SoftDeletes):
         max_length=50,
         choices=PaymentType.choices,
         verbose_name=_("payment type"),
+        help_text=_("Order payment"),
         default=PaymentType.CARD,
     )
     comment = models.TextField(
-        blank=True,
-        verbose_name=_("comment"),
+        blank=True, verbose_name=_("comment"), help_text=_("Order comment")
     )
 
     class State(models.TextChoices):
@@ -488,6 +489,7 @@ class Order(SoftDeletes):
         choices=State.choices,
         default=State.NOT_PAID,
         verbose_name=_("state"),
+        help_text=_("Order state"),
     )
 
     class Error(models.TextChoices):
@@ -502,6 +504,7 @@ class Order(SoftDeletes):
         choices=Error.choices,
         blank=True,
         verbose_name=_("error"),
+        help_text=_("Order error"),
     )
 
     class Meta:
@@ -624,25 +627,26 @@ class OrderEntity(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("stock"),
         related_name="order_entity_stock",
+        help_text=_("OrderEntity stock"),
     )
     order_id = models.ForeignKey(
         Order,
         on_delete=models.CASCADE,
         verbose_name=_("order"),
         related_name="order_entity_order",
+        help_text=_("OrderEntity order"),
     )
     price = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_("price"),
+        default=0, verbose_name=_("price"), help_text=_("OrderEntity price")
     )
     discounted_price = models.PositiveIntegerField(
         blank=True,
         null=True,
         verbose_name=_("discounted price"),
+        help_text=_("OrderEntity discounted price"),
     )
     count = models.PositiveIntegerField(
-        default=0,
-        verbose_name=_("count"),
+        default=0, verbose_name=_("count"), help_text=_("OrderEntity count")
     )
 
     class Meta:

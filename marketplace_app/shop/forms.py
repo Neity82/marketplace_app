@@ -1,7 +1,6 @@
 from django.core import mail
 from django import forms
-from django.utils.translation import ugettext_lazy
-
+from django.utils.translation import gettext_lazy as _
 from marketplace_app.settings import DEBUG
 from info.models import Settings
 
@@ -11,57 +10,65 @@ class FeedBackForm(forms.Form):
     """
 
     name = forms.CharField(
+        label=_("Your name"),
         min_length=5,
         max_length=150,
         required=True,
+        help_text=_("Your name"),
         widget=forms.TextInput(
             attrs={
                 "class": "form-input",
                 "id": "name",
                 "name": "name",
-                "placeholder": ugettext_lazy("name")
+                "placeholder": _("Name")
             }
         )
     )
 
     email = forms.CharField(
+        label=_("Your email"),
         min_length=5,
         max_length=150,
         required=True,
+        help_text=_("Your email"),
         widget=forms.TextInput(
             attrs={
                 "class": "form-input",
                 "id": "mail",
                 "name": "mail",
-                "placeholder": ugettext_lazy("e-mail")
+                "placeholder": _("Email")
             }
         )
     )
 
     site = forms.CharField(
+        label=_("Your site"),
         min_length=5,
         max_length=150,
         required=True,
+        help_text=_("Your site"),
         widget=forms.TextInput(
             attrs={
                 "class": "form-input",
                 "id": "site",
                 "name": "site",
-                "placeholder": ugettext_lazy("website")
+                "placeholder": _("Website")
             }
         )
     )
 
     message = forms.CharField(
+        label=_("Your message"),
         min_length=5,
         max_length=500,
         required=True,
+        help_text=_("Your message"),
         widget=forms.Textarea(
             attrs={
                 "class": "form-textarea",
                 "id": "message",
                 "name": "message",
-                "placeholder": ugettext_lazy("message")
+                "placeholder": _("Message")
             }
         )
     )
