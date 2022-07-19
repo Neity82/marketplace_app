@@ -8,8 +8,7 @@
 
 <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog mt-5">
-    <div class="modal-content">
-    </div>
+    <div class="modal-content"></div>
   </div>
 </div>
 
@@ -25,12 +24,10 @@
       <div class="row-block">
         <div class="row ControlPanel-rowSplit">
           <div class="row-block">
-            <a class="ControlPanel-title" href="free_delivery">{% translate "Free Delivery" %}
-            </a>
+            <a class="ControlPanel-title" href="free_delivery">{% translate "free delivery" %}</a>
           </div>
           <div class="row-block hide_700">
-            <span class="ControlPanel-title">{% translate "Follow Us" %}
-            </span>
+            <span class="ControlPanel-title">{% translate "follow us" %}</span>
             <ul class="menu menu_img menu_smallImg ControlPanel-menu">
               <li class="menu-item">
                 <a class="menu-link" href="#">
@@ -77,17 +74,17 @@
             </form>
             <span class="ControlPanel-title"> / </span>
             {% if user.is_authenticated %}
-            <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">{% translate "Account" %}
+            <a class="ControlPanel-title" href="{% url 'user:user_account' request.user.id %}">
+              {% translate "account"|capfirst %}
             </a>
             <span class="ControlPanel-title"> / </span>
-            <a id="logout-btn" class="ControlPanel-title" href="{% url 'user:logout' %}">{% translate "Log Out" %}
+            <a id="logout-btn" class="ControlPanel-title" href="{% url 'user:logout' %}">
+              {% translate "log out" %}
             </a>
             {% else %}
-            <button id="login_btn" class="ControlPanel-title link">{% translate "Login" %}
-            </button>
+            <button id="login_btn" class="ControlPanel-title link">{% translate "login" %}</button>
             <span class="ControlPanel-title"> / </span>
-            <button id="sign_up_btn" class="ControlPanel-title link">{% translate "Register" %}
-            </button>
+            <button id="sign_up_btn" class="ControlPanel-title link">{% translate "register" %}</button>
             {% endif %}
           </div>
         </div>
@@ -106,32 +103,24 @@
       <div class="menuModal" id="navigate">
         <ul class="menu menu_main">
           <li class="menu-item">
-            <a class="menu-link" href="{% url 'product:home' %}">{% translate "Home" %}
-            </a>
+            <a class="menu-link" href="{% url 'product:home' %}">{% translate "home" %}</a>
           </li>
           <li class="menu-item">
-            <span class="menu-label menu-label_danger">{% translate "New" %}
-            </span>
-            <a class="menu-link" href="{% url 'product:list' %}">{% translate "Catalog" %}
-            </a>
+            <span class="menu-label menu-label_danger">{% translate "new" %}</span>
+            <a class="menu-link" href="{% url 'product:list' %}">{% translate "catalog" %}</a>
           </li>
           <li class="menu-item">
-            <a class="menu-link" href="{% url 'shop:list' %}">{% translate "Shops" %}
-            </a>
+            <a class="menu-link" href="{% url 'shop:list' %}">{% translate "shops" %}</a>
           </li>
           <li class="menu-item">
-            <span class="menu-label menu-label_success">{% translate "Hot" %}
-            </span>
-            <a class="menu-link" href="{% url 'discount:list' %}">{% translate "Discounts" %}
-            </a>
+            <span class="menu-label menu-label_success">{% translate "hot" %}</span>
+            <a class="menu-link" href="{% url 'discount:list' %}">{% translate "discounts" %}</a>
           </li>
           <li class="menu-item">
-            <a class="menu-link" href="{% url 'shop:contacts_detail' %}">{% translate "Contacts" %}
-            </a>
+            <a class="menu-link" href="{% url 'shop:contacts_detail' %}">{% translate "contacts" %}</a>
           </li>
           <li class="menu-item">
-            <a class="menu-link" href="{% url 'info:about' %}">{% translate "About" %}
-            </a>
+            <a class="menu-link" href="{% url 'info:about' %}">{% translate "about" %}</a>
           </li>
         </ul>
       </div>
@@ -162,7 +151,7 @@
     </div>
     <div class="row-block Header-trigger">
       <a class="menuTrigger" href="#navigate">
-        <div class="menuTrigger-content">Показать навигацию</div>
+        <div class="menuTrigger-content">{% translate "show navigation"|capfirst %}</div>
         <span></span>
         <span></span>
         <span></span>
@@ -178,10 +167,8 @@
           <div class="CategoriesButton-icon">
             <img src="{% static 'assets/img/icons/allDep.svg' %}" alt="allDep.svg"/>
           </div>
-          <span class="CategoriesButton-text">{% translate "All Departments" %}
-          </span>
-          <div class="CategoriesButton-arrow">
-          </div>
+          <span class="CategoriesButton-text">{% translate "all departments" %}</span>
+          <div class="CategoriesButton-arrow"></div>
         </div>
 
         <div class="CategoriesButton-content">
@@ -228,7 +215,7 @@
           {% csrf_token %}
           <input class="search-input" id="query" name="query" type="text" value="{% if query %}{{ query }}{% endif %}" placeholder="{% translate 'What are you looking for ...' %}"/>
           <button class="search-button" type="submit" name="submit" id="search">
-            <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>{% translate "Search" %}
+            <img src="{% static 'assets/img/icons/search.svg' %}" alt="search.svg"/>{% translate "search"|capfirst %}
           </button>
         </form>
       </div>

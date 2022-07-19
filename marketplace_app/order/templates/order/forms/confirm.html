@@ -17,7 +17,7 @@
 
 
 {% block order_form %}
-  <p>Step 4 of 4</p>
+  <p>{% trans "step"|capfirst %} 4 {% trans "of" %} 4</p>
   <input id="order-step" type="hidden"  value="4">
 
   <form action="" method="post">{% csrf_token %}
@@ -26,48 +26,34 @@
         <div class="row">
           <div class="row-block">
             <div class="Order-info">
-              <div class="Order-infoType">{% trans 'Full name' %}:
-              </div>
-              <div class="Order-infoContent">{{ user_info_form.full_name }}
-              </div>
+              <div class="Order-infoType">{% trans 'full name'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ user_info_form.full_name }}</div>
             </div>
             <div class="Order-info">
-              <div class="Order-infoType">{% trans 'Phone' %}:
-              </div>
-              <div class="Order-infoContent">{{ user_info_form.phone}}
-              </div>
+              <div class="Order-infoType">{% trans 'phone'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ user_info_form.phone}}</div>
             </div>
             <div class="Order-info">
-              <div class="Order-infoType">Email:
-              </div>
-              <div class="Order-infoContent">{{ user_info_form.email }}
-              </div>
+              <div class="Order-infoType">{% trans 'e-mail'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ user_info_form.email }}</div>
             </div>
           </div>
           <div class="row-block">
             <div class="Order-info Order-info_delivery">
-              <div class="Order-infoType">{% trans 'Delivery type' %}:
-              </div>
-              <div class="Order-infoContent">{{ delivery_name }}
-              </div>
+              <div class="Order-infoType">{% trans 'delivery type'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ delivery_name }}</div>
             </div>
             <div class="Order-info">
-              <div class="Order-infoType">{% trans 'City' %}:
-              </div>
-              <div class="Order-infoContent">{{ delivery_form.city }}
-              </div>
+              <div class="Order-infoType">{% trans 'city'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ delivery_form.city }}</div>
             </div>
             <div class="Order-info">
-              <div class="Order-infoType">{% trans 'Address' %}:
-              </div>
-              <div class="Order-infoContent">{{ delivery_form.address }}
-              </div>
+              <div class="Order-infoType">{% trans 'address'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ delivery_form.address }}</div>
             </div>
             <div class="Order-info Order-info_pay">
-              <div class="Order-infoType">{% trans 'Payment' %}:
-              </div>
-              <div class="Order-infoContent">{{ payment_form.payment_type }}
-              </div>
+              <div class="Order-infoType">{% trans 'payment'|capfirst %}:</div>
+              <div class="Order-infoContent">{{ payment_form.payment_type }}</div>
             </div>
           </div>
         </div>
@@ -78,27 +64,21 @@
           <div class="Cart-product">
           <div class="Cart-block Cart-block_row">
             <div class="Cart-block Cart-block_pict">
-              <a class="Cart-pict" href="#">
+              <a class="Cart-pict" href="{% url 'product:detail' cart_entity.stock.product.id %}">
                 <img class="Cart-img" src="{{ cart_entity.stock.product.image.url }}" alt="card.jpg"/>
               </a>
             </div>
             <div class="Cart-block Cart-block_info">
-              <a class="Cart-title" href="#">{{ cart_entity.stock.product.title }}
-              </a>
-              <div class="Cart-desc">{{ cart_entity.stock.product.short_description }}
-              </div>
+              <a class="Cart-title" href="{% url 'product:detail' cart_entity.stock.product.id %}">{{ cart_entity.stock.product.title }}</a>
+              <div class="Cart-desc">{{ cart_entity.stock.product.short_description }}</div>
             </div>
 
             <div class="Cart-block Cart-block_price">
               {% if cart_entity.stock.product.discount.type %}
-                <div class="Cart-price Cart-price_old">{{ cart_entity.stock.price }}$
-                </div>
-
-                <div class="Cart-price">{{ cart_entity.stock.product.discount.price }}$
-                </div>
+                <div class="Cart-price Cart-price_old">{{ cart_entity.stock.price }}$</div>
+                <div class="Cart-price">{{ cart_entity.stock.product.discount.price }}$</div>
               {% else %}
-                <div class="Cart-price">{{ cart_entity.stock.price }}$
-                </div>
+                <div class="Cart-price">{{ cart_entity.stock.price }}$</div>
               {% endif %}
             </div>
           </div>
@@ -106,12 +86,12 @@
           </div>
           <div>
 
-          <div>
-              <span class="Cart-block Cart-block_seller">{% trans 'sold by' %}: {{ cart_entity.stock.shop.name }}</span>
+            <div>
+              <span class="Cart-block Cart-block_seller">{% trans 'sold by'|capfirst %}: {{ cart_entity.stock.shop.name }}</span>
             </div>
 
             <div>
-              <span class="Cart-block Cart-block_amount">{% trans 'quantity' %}: {{ cart_entity.quantity }} {% trans 'pc.' %}</span>
+              <span class="Cart-block Cart-block_amount">{% trans 'quantity'|capfirst %}: {{ cart_entity.quantity }} {% trans 'pc.' %}</span>
             </div>
 
           </div>
@@ -121,21 +101,19 @@
       <div class="Cart-total">
         <div class="Cart-block Cart-block_total">
           <div>
-            <span class="Cart-block Cart-block_amount">{% trans 'price' %}: {{ cart_sum }}$</span>
+            <span class="Cart-block Cart-block_amount">{% trans 'price'|capfirst %}: {{ cart_sum }}$</span>
           </div>
 
           <div>
-            <span class="Cart-block Cart-block_amount">{% trans 'delivery' %}: {{ delivery_sum }}$</span>
+            <span class="Cart-block Cart-block_amount">{% trans 'delivery'|capfirst %}: {{ delivery_sum }}$</span>
           </div>
 
-          <strong class="Cart-title">{% trans 'Total' %}:
-          </strong>
+          <strong class="Cart-title">{% trans 'total'|capfirst %}:</strong>
           <span class="Cart-price">{{ total_sum }}$</span>
         </div>
         <div class="Cart-block">
-
           <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="payment_form">{% trans "prev step" %}</button>
-          <button class="btn btn_success" name="wizard_goto_step" type="submit" value="done">{% trans "Checkout" %}</button>
+          <button class="btn btn_success" name="wizard_goto_step" type="submit" value="done">{% trans "checkout" %}</button>
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ class Payment(models.Model):
         ERROR = "error", _("Error")
 
     uuid = models.UUIDField(
-        _("id"),
+        verbose_name=_("id"),
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
@@ -28,26 +28,26 @@ class Payment(models.Model):
         verbose_name=_("order"),
     )
     card = models.CharField(
-        _("card number"),
+        verbose_name=_("card number"),
         max_length=9,
     )
     status = models.CharField(
-        _("status"),
+        verbose_name=_("status"),
         max_length=150,
         choices=Status.choices,
         default=Status.PROCESSING.value,
     )
     message = models.CharField(
-        _("message"),
+        verbose_name=_("message"),
         max_length=255,
         blank=True,
     )
     created_at = models.DateTimeField(
-        _("created at"),
+        verbose_name=_("created at"),
         auto_now_add=True,
     )
     updated_at = models.DateTimeField(
-        _("updated at"),
+        verbose_name=_("updated at"),
         auto_now=True,
     )
 
