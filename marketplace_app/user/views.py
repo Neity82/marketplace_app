@@ -10,6 +10,7 @@ from django.utils.translation import gettext as _
 from django.views import generic
 
 from order.models import Order
+from payments.models import Payment
 from product.models import AttributeValue
 from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
 from user.mixin import ResponseDataMixin
@@ -38,6 +39,7 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
         context["last_order"] = Order.get_last_order(user=self.request.user)
         context["product_view"] = UserProductView.get_product_view(user=self.request.user,
                                                                    limit=3)
+        context["payment"] = Payment.objects.filter(order=context["last_order"])
         return context
 
 
