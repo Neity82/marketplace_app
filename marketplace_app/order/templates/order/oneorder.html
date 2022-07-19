@@ -154,7 +154,7 @@
                 </div>
                 {% if order.state == 'not paid' %}
                 <div class="Cart-block">
-                  <a class="btn btn_primary btn_lg" href="{% url "order:payment" pk=order.pk %}">{% trans "To pay" %}</a>
+                  <a class="btn btn_primary btn_lg" href="{% url "order:payment" pk=order.pk %}">{% trans "to pay"|capfirst %}</a>
                 </div>
                 {% endif %}
               </div>
