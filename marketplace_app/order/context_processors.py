@@ -6,5 +6,5 @@ from order.mixins import cart_init_data
 
 def cart(request: WSGIRequest) -> dict:
     return {
-        'cart': Cart.get_cart(**cart_init_data(request))
+        "cart": Cart.get_cart(**cart_init_data(request))
     }

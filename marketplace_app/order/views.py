@@ -51,7 +51,7 @@ class CartView(CartMixin):
 
         response_data = self.prepare_response_data(
             success=success,
-            message=message,
+            message=message.capitalize(),
             cart_count=self.cart.count,
             price=self.cart.get_min_sum(),
         )
@@ -119,7 +119,7 @@ class AddToCartView(CartMixin):
         success, message = cart.add_to_cart(stock_id=stock_id, cnt=int(cnt))
         response_data = self.prepare_response_data(
             success=success,
-            message=message,
+            message=message.capitalize(),
             cart_count=cart.count,
             price=cart.get_min_sum(),
         )
@@ -140,7 +140,7 @@ class RemoveFromCartView(CartMixin):
         success, message = cart.remove_from_cart(stock_id=stock_id)
         response_data = self.prepare_response_data(
             success=success,
-            message=message,
+            message=message.capitalize(),
             cart_count=cart.count,
             price=cart.get_min_sum(),
         )
