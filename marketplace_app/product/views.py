@@ -252,6 +252,7 @@ class ProductListView(generic.ListView):
             in products
         }
 
+        self.context["tags"] = models.Tag.objects.all()
         self.context["min_price"] = int(min(prices.values()))
         self.context["max_price"] = int(max(prices.values()))
 
@@ -299,6 +300,13 @@ class ProductListView(generic.ListView):
             )
             result &= Q(stock__shop__id__in=self.query_params["shop"])
             self.context['selected_shops'] = self.query_params["shop"]
+        # Фильтр по магазину
+        if "tag" in self.query_params:
+            self.query_params["tag"] = list(
+                map(int, self.query_params["tag"])
+            )
+            result &= Q(tags__in=self.query_params["tag"])
+            self.context['selected_tags'] = self.query_params["tag"]
         return result
 
     def _get_attr_filters(self) -> List[Q]:
@@ -405,6 +413,8 @@ class ProductListView(generic.ListView):
         self.query_params.update({**request.GET.dict()})
         if "shop" in self.query_params:
             self.query_params["shop"] = request.GET.getlist("shop")
+        if "tag" in self.query_params:
+            self.query_params["tag"] = request.GET.getlist("tag")
         self.context: Dict[str, Any] = {}
         self.sort_by: str = self.query_params.pop("sort_by", "price")
         return super().get(request, *args, **kwargs)
@@ -423,6 +433,8 @@ class ProductListView(generic.ListView):
         # получаем необходимые
         if "shop" in self.query_params:
             self.query_params["shop"] = request.POST.getlist("shop")
+        if "tag" in self.query_params:
+            self.query_params["tag"] = request.POST.getlist("tag")
         for name in tuple(self.query_params.keys()):
             if (
                     name == "csrfmiddlewaretoken" or

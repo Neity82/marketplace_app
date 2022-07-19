@@ -103,7 +103,7 @@
                 <strong class="ProductCard-tagsTitle">{% trans 'tags' %}:
                 </strong>
                   {% for tag in product.tags.all %}
-                    <a href="to_tag_{{tag}}">{{ tag }}
+                    <a href='{% url "product:list" %}?tag={{tag.id}}'>{{ tag }}
                     </a>
                     {% if not forloop.last %}, {% endif %}
                   {% endfor %}

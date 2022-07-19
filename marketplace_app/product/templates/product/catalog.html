@@ -79,6 +79,15 @@
                 </select>
               </div>
               {% endif %}
+              {% if tags %}
+              <div class="form-group">
+                <select name='tag' size="4" multiple style="width: 100%;">
+                  {% for tag in tags %}
+                  <option value="{{ tag.id }}"{% if tag.id in selected_tags %} selected{% endif %}>{{ tag.title }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              {% endif %}
               {% for attribute in attributes %}
               {% with attribute.id as id %}
               <div class="form-group">
