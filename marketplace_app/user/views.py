@@ -162,7 +162,7 @@ class HistoryViews(LoginRequiredMixin, ResponseDataMixin, generic.ListView):
 
         response_data = self.prepare_response_data(
             success=success,
-            message=message
+            message=message.capitalize()
         )
 
         return HttpResponse(
@@ -230,7 +230,7 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
 
         response_data = self.prepare_response_data(
             success=success,
-            message=message,
+            message=message.capitalize(),
             head_count=count
         )
 
@@ -249,7 +249,7 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
 
         response_data = self.prepare_response_data(
             success=success,
-            message=message,
+            message=message.capitalize(),
             head_count=count
         )
 
