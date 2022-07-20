@@ -567,9 +567,9 @@ class ProductDetailView(FormMixin, DetailView):
 
         if "rating" in post_data:
             avg_rating = models.ProductReview.objects.filter(
-                product=product_item
+                product=product_item, rating__gt=0
             ).aggregate(
-                avg=Avg("rating", filter=F("rating"))
+                avg=Avg("rating")
             )
             product_item.rating = round(avg_rating["avg"])
             product_item.save()

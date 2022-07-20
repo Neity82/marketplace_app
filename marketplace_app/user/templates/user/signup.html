@@ -22,7 +22,11 @@
     {% for field in form %}
       <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {% render_field field class="form-control" placeholder=field.label %}
+        {% if field.label == "Phone" or field.label == "Телефон" %}
+          {% render_field field class="form-control form-input phone" inputmode="text" maxlength=18 %}
+        {% else %}
+          {% render_field field class="form-control" placeholder=field.label %}
+        {% endif %}
         <div class="{% if field.errors %} invalid{% endif %} form-error">
           {% for error in field.errors %}
             <p class="help-block">{{ error }}</p>
@@ -37,3 +41,8 @@
   </div>
 
 </form>
+
+
+{% block scripts %}
+  {% include "scripts.html" %}
+{% endblock %}

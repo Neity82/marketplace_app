@@ -39,6 +39,12 @@ def get_addition_info(request_info) -> Dict[str, str]:
         },
     }
 
+    if not request_info.app_names:
+        return {
+            "meta_title": "",
+            "meta_description": "",
+        }
+
     app_name: str = request_info.app_names[0]
     url_name: str = request_info.url_name
 
