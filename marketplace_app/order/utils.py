@@ -3,7 +3,7 @@ import typing
 from inspect import signature
 
 from django.db import connection
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 CART_URL_NAME = "cart"

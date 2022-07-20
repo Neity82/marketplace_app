@@ -1,0 +1,89 @@
+[
+{
+  "model": "django_celery_beat.crontabschedule",
+  "pk": 1,
+  "fields": {
+    "minute": "0",
+    "hour": "0",
+    "day_of_week": "*",
+    "day_of_month": "*",
+    "month_of_year": "*",
+    "timezone": "UTC"
+  }
+},
+{
+  "model": "django_celery_beat.crontabschedule",
+  "pk": 2,
+  "fields": {
+    "minute": "*/2",
+    "hour": "*",
+    "day_of_week": "*",
+    "day_of_month": "*",
+    "month_of_year": "*",
+    "timezone": "UTC"
+  }
+},
+{
+  "model": "django_celery_beat.periodictasks",
+  "pk": 1,
+  "fields": {
+    "last_update": "2022-07-20T09:45:06.840Z"
+  }
+},
+{
+  "model": "django_celery_beat.periodictask",
+  "pk": 1,
+  "fields": {
+    "name": "add_daily_offer",
+    "task": "product.tasks.add_daily_offer",
+    "interval": null,
+    "crontab": 1,
+    "solar": null,
+    "clocked": null,
+    "args": "[]",
+    "kwargs": "{}",
+    "queue": null,
+    "exchange": null,
+    "routing_key": null,
+    "headers": "{}",
+    "priority": null,
+    "expires": null,
+    "expire_seconds": null,
+    "one_off": false,
+    "start_time": null,
+    "enabled": true,
+    "last_run_at": null,
+    "total_run_count": 0,
+    "date_changed": "2022-07-20T09:38:17.813Z",
+    "description": "Добавляет товар дня в 00ч 00мин"
+  }
+},
+{
+  "model": "django_celery_beat.periodictask",
+  "pk": 2,
+  "fields": {
+    "name": "check_payments_statuses",
+    "task": "payments.tasks.check_payments_statuses",
+    "interval": null,
+    "crontab": 2,
+    "solar": null,
+    "clocked": null,
+    "args": "[]",
+    "kwargs": "{}",
+    "queue": null,
+    "exchange": null,
+    "routing_key": null,
+    "headers": "{}",
+    "priority": null,
+    "expires": null,
+    "expire_seconds": null,
+    "one_off": false,
+    "start_time": null,
+    "enabled": true,
+    "last_run_at": null,
+    "total_run_count": 0,
+    "date_changed": "2022-07-20T09:45:06.842Z",
+    "description": "Проверяет оплату заказов"
+  }
+}
+]

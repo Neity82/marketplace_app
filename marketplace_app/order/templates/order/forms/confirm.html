@@ -61,7 +61,7 @@
 
       <div class="Cart Cart_order">
         {% for cart_entity in cart.cart_entity.all %}
-          <div class="Cart-product">
+        <div class="Cart-product">
           <div class="Cart-block Cart-block_row">
             <div class="Cart-block Cart-block_pict">
               <a class="Cart-pict" href="{% url 'product:detail' cart_entity.stock.product.id %}">
@@ -83,20 +83,18 @@
             </div>
           </div>
 
-          </div>
-          <div>
-
-            <div>
-              <span class="Cart-block Cart-block_seller">{% trans 'sold by'|capfirst %}: {{ cart_entity.stock.shop.name }}</span>
-            </div>
-
-            <div>
-              <span class="Cart-block Cart-block_amount">{% trans 'quantity'|capfirst %}: {{ cart_entity.quantity }} {% trans 'pc.' %}</span>
-            </div>
-
-          </div>
-          {% endfor %}
         </div>
+        <div>
+          <div>
+            <span class="Cart-block Cart-block_seller">{% trans 'sold by'|capfirst %}: {{ cart_entity.stock.shop.name }}</span>
+          </div>
+
+          <div>
+            <span class="Cart-block Cart-block_amount">{% trans 'quantity'|capfirst %}: {{ cart_entity.quantity }} {% trans 'pc.' %}</span>
+          </div>
+        </div>
+          {% endfor %}
+      </div>
 
       <div class="Cart-total">
         <div class="Cart-block Cart-block_total">
@@ -113,7 +111,7 @@
         </div>
         <div class="Cart-block">
           <button class="btn btn_success order-prev-step" name="wizard_goto_step" type="submit" value="payment_form">{% trans "prev step" %}</button>
-          <button class="btn btn_success" name="wizard_goto_step" type="submit" value="done">{% trans "checkout" %}</button>
+          <button class="btn btn_success" name="wizard_goto_step" type="submit" value="done">{% trans "to pay" %}</button>
         </div>
       </div>
     </div>

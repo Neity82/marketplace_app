@@ -12,19 +12,19 @@
       <div class="row-block">
 
         <div class="form-group">
-          {{ form.errors.full_name }}
+          <div class="form-error">{{ form.errors.full_name }}</div>
           <label class="form-label" for="full_name">{% trans 'full name'|capfirst %}</label>
           <input class="form-input" id="full_name" name="user_info_form-full_name" type="text" value="{{ form.data.full_name }}" required="required"/>
         </div>
 
         <div class="form-group">
-            {{ form.errors.phone }}
+          <div class="form-error">{{ form.errors.phone }}</div>
           <label class="form-label" for="phone">{% trans 'phone'|capfirst %}</label>
           <input class="form-input" id="phone" name="user_info_form-phone" type="text" value="{{ form.data.phone }}" required="required"/>
         </div>
 
         <div class="form-group">
-          {{ form.errors.email }}
+          <div class="form-error">{{ form.errors.email }}</div>
           <label class="form-label" for="email">{% trans "e-mail"|capfirst %}</label>
           <input class="form-input" id="email" name="user_info_form-email" type="text" value="{{ form.data.email }}" data-validate="require" required="required"/>
         </div>
@@ -32,13 +32,13 @@
       {% if request.user.is_anonymous %}
         <div class="row-block">
         <div class="form-group">
-          {{ form.errors.password1 }}
+          <div class="form-error">{{ form.errors.password1 }}</div>
           <label class="form-label" for="password">{% trans 'password'|capfirst %}</label>
           <input class="form-input" id="password" name="user_info_form-password1" type="password" placeholder="{% trans 'type your password'|capfirst %}"/>
         </div>
 
         <div class="form-group">
-          {{ form.errors.password2 }}
+          <div class="form-error">{{ form.errors.password2 }}</div>
           <label class="form-label" for="passwordReply">{% trans 'confirm password'|capfirst %}</label>
           <input class="form-input" id="passwordReply" name="user_info_form-password2" type="password" placeholder="{% trans 'retype password'|capfirst %}"/>
         </div>
