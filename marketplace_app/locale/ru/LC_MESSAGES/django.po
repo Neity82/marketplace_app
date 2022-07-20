@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-18 14:35+0300\n"
+"POT-Creation-Date: 2022-07-20 13:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgid "there is active discount"
 msgstr "активная скидка"
 
 #: .\discount\models.py:49 .\info\models.py:116
-#: .\product\templates\product\product.html:118 .\shop\models.py:13
+#: .\product\templates\product\product.html:117 .\shop\models.py:13
 msgid "description"
 msgstr "описание"
 
@@ -300,7 +300,7 @@ msgid "name"
 msgstr "имя"
 
 #: .\info\models.py:121 .\product\models.py:195
-#: .\product\templates\product\product.html:247
+#: .\product\templates\product\product.html:246
 msgid "value"
 msgstr "значение"
 
@@ -408,7 +408,7 @@ msgstr "заказы"
 #: .\order\forms.py:33
 #, python-format
 msgid "%(value)s is incorrect"
-msgstr ""
+msgstr "%(value)s неверный"
 
 #: .\order\forms.py:59
 msgid "Password"
@@ -464,7 +464,7 @@ msgstr "специальная цена"
 #: .\order\models.py:373 .\order\models.py:636
 #: .\order\templates\order\forms\confirm.html:104
 #: .\product\templates\product\catalog.html:64
-#: .\product\templates\product\catalog.html:132
+#: .\product\templates\product\catalog.html:141
 #: .\user\templates\user\compare.html:227
 msgid "price"
 msgstr "цена"
@@ -584,11 +584,8 @@ msgid "total"
 msgstr "итого"
 
 #: .\order\templates\order\cart.html:121
-#: .\order\templates\order\forms\confirm.html:116
-#: .\order\templates\order\order.html:23 .\order\templates\order\order.html:29
-#: .\templates\footer.html:44
-msgid "checkout"
-msgstr "проверка"
+msgid "place order"
+msgstr "оформить заказ"
 
 #: .\order\templates\order\cart.html:129
 msgid "Cart is empty :("
@@ -677,6 +674,11 @@ msgstr "шт."
 msgid "prev step"
 msgstr "назад"
 
+#: .\order\templates\order\forms\confirm.html:116
+#: .\order\templates\order\oneorder.html:156
+msgid "to pay"
+msgstr "оплатить"
+
 #: .\order\templates\order\forms\delivery_form.html:65
 #: .\order\templates\order\forms\payment_form.html:42
 #: .\order\templates\order\forms\user_info_form.html:61
@@ -736,9 +738,10 @@ msgstr "ошибка оплаты"
 msgid "shop"
 msgstr "магазин"
 
-#: .\order\templates\order\oneorder.html:156
-msgid "to pay"
-msgstr "оплатить"
+#: .\order\templates\order\order.html:23 .\order\templates\order\order.html:29
+#: .\templates\footer.html:44
+msgid "checkout"
+msgstr "проверка"
 
 #: .\order\templates\order\order.html:40
 msgid "progress"
@@ -845,7 +848,7 @@ msgstr "изменено"
 #: .\payments\models.py:60
 #, python-brace-format
 msgid "{model} for {order}"
-msgstr ""
+msgstr "{model} из {order}"
 
 #: .\payments\templates\payments\payment_form.html:40
 msgid "сard number"
@@ -869,7 +872,7 @@ msgid "Waiting for payment confirmation by the payment system"
 msgstr "Ждем подтверждения оплаты платежной системой"
 
 #: .\product\admin.py:268 .\product\models.py:32
-#: .\product\templates\product\product.html:104
+#: .\product\templates\product\product.html:103
 msgid "tags"
 msgstr "теги"
 
@@ -884,7 +887,7 @@ msgstr "товар"
 msgid "products"
 msgstr "товары"
 
-#: .\product\forms.py:16 .\product\templates\product\catalog.html:136
+#: .\product\forms.py:16 .\product\templates\product\catalog.html:145
 msgid "review"
 msgstr "отзывы"
 
@@ -953,7 +956,7 @@ msgid "Rank of importance. 100 - most important"
 msgstr "Индекс важности атрибута, 100 - самый важный"
 
 #: .\product\models.py:182 .\product\models.py:183
-#: .\product\templates\product\product.html:245
+#: .\product\templates\product\product.html:244
 msgid "attribute"
 msgstr "атрибут"
 
@@ -1039,19 +1042,19 @@ msgid "product images"
 msgstr "изображения товара"
 
 #: .\product\templates\product\catalog.html:55
-#: .\product\templates\product\catalog.html:115
+#: .\product\templates\product\catalog.html:124
 msgid "filter"
 msgstr "фильтр"
 
-#: .\product\templates\product\catalog.html:124
+#: .\product\templates\product\catalog.html:133
 msgid "sort by:"
 msgstr "сортировать по"
 
-#: .\product\templates\product\catalog.html:128
+#: .\product\templates\product\catalog.html:137
 msgid "popularity"
 msgstr "популярность"
 
-#: .\product\templates\product\catalog.html:140
+#: .\product\templates\product\catalog.html:149
 msgid "novelty"
 msgstr "новизна"
 
@@ -1113,50 +1116,50 @@ msgstr "ограниченная серия"
 msgid "megano product"
 msgstr "товары мегано"
 
-#: .\product\templates\product\product.html:71
+#: .\product\templates\product\product.html:70
 msgid "the product is over"
 msgstr "товар закончился"
 
-#: .\product\templates\product\product.html:98
+#: .\product\templates\product\product.html:97
 msgid "add to cart"
 msgstr "добавить в корзину"
 
-#: .\product\templates\product\product.html:121 .\shop\apps.py:8
+#: .\product\templates\product\product.html:120 .\shop\apps.py:8
 #: .\shop\models.py:80 .\shop\templates\shop\shop_detail.html:28
 #: .\shop\templates\shop\shop_list.html:21
 #: .\shop\templates\shop\shop_list.html:27 .\templates\header.html:113
 msgid "shops"
 msgstr "магазины"
 
-#: .\product\templates\product\product.html:124
+#: .\product\templates\product\product.html:123
 msgid "additionaL info"
 msgstr "дополнительная информация"
 
-#: .\product\templates\product\product.html:127
+#: .\product\templates\product\product.html:126
 msgid "reviews"
 msgstr "отзывы"
 
-#: .\product\templates\product\product.html:135
+#: .\product\templates\product\product.html:134
 msgid "no reviews"
 msgstr "нет отзывов"
 
-#: .\product\templates\product\product.html:197
+#: .\product\templates\product\product.html:196
 msgid "add review"
 msgstr "добавить отзыв"
 
-#: .\product\templates\product\product.html:202
+#: .\product\templates\product\product.html:201
 msgid "login for review"
 msgstr "регистрация для отзыва"
 
-#: .\product\templates\product\product.html:207
+#: .\product\templates\product\product.html:206
 msgid "rate the product"
 msgstr "оцените продукт"
 
-#: .\product\templates\product\product.html:226
+#: .\product\templates\product\product.html:225
 msgid "submit review"
 msgstr "подтвердить отзыв"
 
-#: .\product\templates\product\product.html:285
+#: .\product\templates\product\product.html:284
 msgid "buy"
 msgstr "купить"
 
@@ -1530,7 +1533,7 @@ msgstr "все"
 msgid "Only differing characteristics"
 msgstr "Только различающиеся характеристики"
 
-#: .\user\templates\user\compare.html:222 .\user\views.py:206
+#: .\user\templates\user\compare.html:222 .\user\views.py:208
 msgid "Not enough data to compare"
 msgstr "Недостаточно данных для сравнения"
 
@@ -1555,22 +1558,20 @@ msgstr "Выберите аватар"
 msgid "save"
 msgstr "сохранить"
 
-#: .\user\templates\user\signup.html:8 .\user\templates\user\signup.html:36
+#: .\user\templates\user\signup.html:8 .\user\templates\user\signup.html:40
 msgid "sign up"
 msgstr "регистрация"
 
-#: .\user\views.py:76
+#: .\user\views.py:78
 msgid "Image file too large ( > 2mb )"
 msgstr "Размер файла слишком большой (больше 2 мб)"
 
-#: .\user\views.py:102
+#: .\user\views.py:104
 msgid "Profile saved successfully"
 msgstr "Профиль успешно сохранен"
 
-#: .\user\views.py:272
-msgid "Success: You were successfully logged in."
-msgstr "Вы успешно вошли в систему."
+#~ msgid "Success: You were successfully logged in."
+#~ msgstr "Вы успешно вошли в систему."
 
-#: .\user\views.py:286
-msgid "Success: Sign up succeeded. You can now Log in."
-msgstr "Регистрация прошла успешно. Теперь вы можете войти в систему."
+#~ msgid "Success: Sign up succeeded. You can now Log in."
+#~ msgstr "Регистрация прошла успешно. Теперь вы можете войти в систему."
