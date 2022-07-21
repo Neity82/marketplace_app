@@ -296,16 +296,3 @@ class SignUpView(BSModalCreateView):
     def post(self, request, *args, **kwargs):
         print(request.POST)
         return super(SignUpView, self).post(request, *args, **kwargs)
-
-
-class PasswordResetViewCustom(PasswordResetView):
-    success_url = reverse_lazy("user:password_reset_done")
-
-
-class PasswordResetDoneViewCustom(PasswordResetDoneView):
-    pass
-
-
-class PasswordResetConfirmViewCustom(PasswordResetConfirmView):
-    success_url = reverse_lazy("user:password_reset_complete")
-
