@@ -3,6 +3,8 @@ import json
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView, \
+    PasswordResetDoneView
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -287,3 +289,20 @@ class SignUpView(BSModalCreateView):
     template_name = "user/signup.html"
     # success_message = _("Success: Sign up succeeded. You can now Log in.")
     success_url = reverse_lazy("product:home")
+
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        return super(SignUpView, self).post(request, *args, **kwargs)
+
+
+class PasswordResetViewCustom(PasswordResetView):
+    success_url = reverse_lazy("user:password_reset_done")
+
+
+class PasswordResetDoneViewCustom(PasswordResetDoneView):
+    pass
+
+
+class PasswordResetConfirmViewCustom(PasswordResetConfirmView):
+    success_url = reverse_lazy("user:password_reset_complete")
+

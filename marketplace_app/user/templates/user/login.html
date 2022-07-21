@@ -33,7 +33,12 @@
   </div>
 
   <div class="modal-footer">
-    <button type="submit" class="btn btn_primary" formnovalidate="formnovalidate">{% trans "log in" %}</button>
+    <button type="submit" class="btn btn_primary" formnovalidate="formnovalidate" onClick="submitForm();">{% trans "log in" %}</button>
+    <a href="{% url 'user:password_reset' %}" id="reset-password-btn" class="btn btn_primary">{% translate "Password reset" %}</a>
   </div>
 
 </form>
+
+{% block scripts %}
+  {% include "scripts.html" %}
+{% endblock %}

@@ -26,6 +26,7 @@ urlpatterns = [
     path("", include("order.urls", namespace="order")),
     path("", include("discount.urls", namespace="discount")),
     path("", include("info.urls", namespace="info")),
+    path('', include('django.contrib.auth.urls')),
 ]
 
 urlpatterns += [

@@ -116,6 +116,8 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreationForm):
     """Форма для регистрации пользователей"""
+    phone = forms.CharField(label=ugettext_lazy(u"phone"), widget=forms.TextInput(attrs={"class": "form-input phone"}),
+                            required=False)
 
     class Meta:
         model = CustomUser
@@ -130,7 +132,12 @@ class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreatio
         ]
 
     def clean_phone(self):
-        phone = self.cleaned_data.get("phone")
+        phone_clean = self.cleaned_data.get("phone")
+
+        if not phone_clean:
+            return phone_clean
+
+        phone = "".join([i for i in phone_clean if i.isdigit()])[1:]
         if phone and CustomUser.objects.filter(phone=phone):
             raise forms.ValidationError(MESSAGES["clean_phone"])
         return phone

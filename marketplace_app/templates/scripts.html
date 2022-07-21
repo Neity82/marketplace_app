@@ -23,6 +23,11 @@
                 formURL: "{% url 'user:login' %}"
               });
     });
+    $(document).ready(function() {
+        $("#login_btn_reset").modalForm({
+                formURL: "{% url 'user:login' %}"
+              });
+    });
 
 
     $(document).ready(function() {
