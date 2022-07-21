@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-20 13:56+0300\n"
+"POT-Creation-Date: 2022-07-21 10:03+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -462,7 +462,7 @@ msgid "special price"
 msgstr "специальная цена"
 
 #: .\order\models.py:373 .\order\models.py:636
-#: .\order\templates\order\forms\confirm.html:104
+#: .\order\templates\order\forms\confirm.html:102
 #: .\product\templates\product\catalog.html:64
 #: .\product\templates\product\catalog.html:141
 #: .\user\templates\user\compare.html:227
@@ -495,7 +495,7 @@ msgstr "элементы доставки"
 msgid "order date"
 msgstr "дата заказа"
 
-#: .\order\models.py:461 .\order\templates\order\forms\confirm.html:108
+#: .\order\models.py:461 .\order\templates\order\forms\confirm.html:106
 #: .\order\templates\order\oneorder.html:140 .\templates\footer.html:50
 msgid "delivery"
 msgstr "доставка"
@@ -578,7 +578,7 @@ msgid "in stock"
 msgstr "на складе"
 
 #: .\order\templates\order\cart.html:112
-#: .\order\templates\order\forms\confirm.html:111
+#: .\order\templates\order\forms\confirm.html:109
 #: .\order\templates\order\oneorder.html:143
 msgid "total"
 msgstr "итого"
@@ -620,7 +620,8 @@ msgstr "полное имя"
 #: .\shop\templates\shop\contacts_detail.html:113
 #: .\shop\templates\shop\contacts_detail.html:116
 #: .\shop\templates\shop\shop_detail.html:101 .\templates\footer.html:89
-#: .\user\models.py:55 .\user\templates\user\profile.html:82
+#: .\user\forms.py:119 .\user\models.py:55
+#: .\user\templates\user\profile.html:82
 msgid "phone"
 msgstr "телефон"
 
@@ -654,27 +655,27 @@ msgstr "адрес"
 msgid "payment"
 msgstr "оплата"
 
-#: .\order\templates\order\forms\confirm.html:90
+#: .\order\templates\order\forms\confirm.html:89
 msgid "sold by"
 msgstr "продавец"
 
-#: .\order\templates\order\forms\confirm.html:94
+#: .\order\templates\order\forms\confirm.html:93
 msgid "quantity"
 msgstr "количество"
 
-#: .\order\templates\order\forms\confirm.html:94
+#: .\order\templates\order\forms\confirm.html:93
 #: .\order\templates\order\oneorder.html:129
 msgid "pc."
 msgstr "шт."
 
-#: .\order\templates\order\forms\confirm.html:115
+#: .\order\templates\order\forms\confirm.html:113
 #: .\order\templates\order\forms\delivery_form.html:61
 #: .\order\templates\order\forms\payment_form.html:40
 #: .\order\templates\order\forms\user_info_form.html:57
 msgid "prev step"
 msgstr "назад"
 
-#: .\order\templates\order\forms\confirm.html:116
+#: .\order\templates\order\forms\confirm.html:114
 #: .\order\templates\order\oneorder.html:156
 msgid "to pay"
 msgstr "оплатить"
@@ -695,7 +696,7 @@ msgid "type your password"
 msgstr "введите свой пароль"
 
 #: .\order\templates\order\forms\user_info_form.html:42
-#: .\user\templates\user\profile.html:107
+#: .\user\templates\user\profile.html:106
 msgid "confirm password"
 msgstr "подтвердите пароль"
 
@@ -1331,6 +1332,7 @@ msgid "log out"
 msgstr "выйти"
 
 #: .\templates\header.html:85
+#: .\templates\registration\password_reset_complete.html:31
 msgid "login"
 msgstr "авторизация"
 
@@ -1369,6 +1371,54 @@ msgstr "Что вы ищите  ..."
 #: .\templates\header.html:222
 msgid "search"
 msgstr "поиск"
+
+#: .\templates\registration\password_reset_complete.html:23
+#: .\templates\registration\password_reset_confirm.html:23
+#: .\templates\registration\password_reset_done.html:23
+msgid "password reset"
+msgstr "пароль"
+
+#: .\templates\registration\password_reset_complete.html:30
+msgid "Password reset complete"
+msgstr "Сброс пароля осущствлен"
+
+#: .\templates\registration\password_reset_confirm.html:31
+msgid "Change your Password"
+msgstr "Изменение пароля"
+
+#: .\templates\registration\password_reset_done.html:30
+msgid "Instructions Sent"
+msgstr "Инструкция направлена"
+
+#: .\templates\registration\password_reset_done.html:31
+msgid "Please check your email"
+msgstr "Пожалуйста проверьте указанную почту"
+
+#: .\templates\registration\password_reset_email.html:2
+#, python-format
+msgid ""
+"\n"
+"Hello,\n"
+"\n"
+"Reset your password on %(domain)s for %(user)s:\n"
+msgstr ""
+"\n"
+"Приветствую,\n"
+"\n"
+"Сброс вашего пароля на портале %(domain)s для %(user)s:\n"
+
+#: .\templates\registration\password_reset_form.html:23
+#: .\user\templates\user\login.html:37
+msgid "Password reset"
+msgstr "Сброс пароля"
+
+#: .\templates\registration\password_reset_form.html:31
+msgid "Reset your Password"
+msgstr "Сброс вашего пароля"
+
+#: .\templates\registration\password_reset_form.html:35
+msgid "Reset Password"
+msgstr "Сброс пароля"
 
 #: .\user\admin.py:44
 msgid "Personal information"
@@ -1533,7 +1583,7 @@ msgstr "все"
 msgid "Only differing characteristics"
 msgstr "Только различающиеся характеристики"
 
-#: .\user\templates\user\compare.html:222 .\user\views.py:208
+#: .\user\templates\user\compare.html:222 .\user\views.py:210
 msgid "Not enough data to compare"
 msgstr "Недостаточно данных для сравнения"
 
@@ -1554,7 +1604,7 @@ msgstr "авторизоваться"
 msgid "Choose an avatar"
 msgstr "Выберите аватар"
 
-#: .\user\templates\user\profile.html:116
+#: .\user\templates\user\profile.html:114
 msgid "save"
 msgstr "сохранить"
 
@@ -1562,11 +1612,11 @@ msgstr "сохранить"
 msgid "sign up"
 msgstr "регистрация"
 
-#: .\user\views.py:78
+#: .\user\views.py:80
 msgid "Image file too large ( > 2mb )"
 msgstr "Размер файла слишком большой (больше 2 мб)"
 
-#: .\user\views.py:104
+#: .\user\views.py:106
 msgid "Profile saved successfully"
 msgstr "Профиль успешно сохранен"
 
