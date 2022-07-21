@@ -287,7 +287,3 @@ class SignUpView(BSModalCreateView):
     template_name = "user/signup.html"
     # success_message = _("Success: Sign up succeeded. You can now Log in.")
     success_url = reverse_lazy("product:home")
-
-    def post(self, request, *args, **kwargs):
-        print(request.POST)
-        return super(SignUpView, self).post(request, *args, **kwargs)
