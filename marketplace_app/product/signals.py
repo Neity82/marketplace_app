@@ -3,7 +3,7 @@ from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_save
 from django.dispatch import receiver, Signal
 
-from .models import Category, Product
+from .models import Category, Product, ProductImage
 from user.models import UserProductView
 
 
@@ -15,7 +15,7 @@ def clear_category_list_cache(sender, instance, **kwargs):
             cache.delete(cache_key)
 
 
-@receiver(post_save, sender=Product)
+@receiver(post_save, sender=[Product, ProductImage])
 def clear_product_list_cache(sender, instance, **kwargs):
     for key_string in list(cache._cache.keys()):
         _, _, cache_key = key_string.split(sep=':')

@@ -328,3 +328,11 @@ class ProductReviewAdmin(admin.ModelAdmin):
         "text",
         "rating"
     )
+
+
+@admin.register(models.ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    list_display = (
+        "product",
+        "image",
+    )
