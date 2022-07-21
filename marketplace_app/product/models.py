@@ -715,12 +715,11 @@ class ProductImage(models.Model):
     @classmethod
     def get_product_pics(cls, product: Product) -> List[ProductImage]:
         product_images = ProductImage.objects.filter(product=product).all()
-        images_list = list(product_images)
         default_pic = ProductImage(
             product=product,
             image=product.image,
         )
-        while len(images_list) < 1:
-            images_list.append(default_pic)
+        images_list = [default_pic, ]
+        images_list.extend(product_images)
 
         return images_list
