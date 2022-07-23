@@ -51,7 +51,7 @@ class CartEntity(models.Model):
 class Cart(models.Model):
     """Модель корзины"""
 
-    user_id = models.ForeignKey(
+    user_id = models.OneToOneField(
         CustomUser,
         on_delete=models.CASCADE,
         verbose_name=_("user"),
@@ -64,7 +64,8 @@ class Cart(models.Model):
         max_length=255,
         verbose_name=_("device"),
         help_text=_("cookie device value"),
-        blank=True, null=True
+        blank=True,
+        null=True,
     )
 
     class Meta:
@@ -108,7 +109,9 @@ class Cart(models.Model):
         result = True
         message = utils.ADD_TO_CART_SUCCESS
 
-        cart_entity = CartEntity.objects.filter(cart_id=self.pk, stock_id=stock_id).first()
+        cart_entity = CartEntity.objects.filter(
+            cart_id=self.pk, stock_id=stock_id
+        ).first()
         if cart_entity:
             if cart_entity.stock.count > cart_entity.quantity:
                 cart_entity.quantity = F("quantity") + cnt
@@ -170,6 +173,78 @@ class Cart(models.Model):
         :return: успех операции, сообщение
         """
 
+        def merge(stock: Stock, shop_id: int) -> (bool, str):
+            new_stock = (
+                Stock.objects.filter(product_id=stock.product.id, shop_id=shop_id)
+                .select_related("shop")
+                .first()
+            )
+
+            if stock.shop.pk != new_stock.shop.pk:
+
+                if new_stock.id not in Stock.objects.filter(
+                    cart_entity__cart_id=self.pk
+                ).values_list("id", flat=True):
+                    _result, _message = _merge_new_cart_stocks(cart_entity, new_stock)
+
+                else:
+                    _result, _message = _merge_existence_cart_stocks(
+                        new_stock_id=new_stock.id, cart_id=self.pk
+                    )
+            else:
+                _result = True
+                _message = utils.CHANGE_SHOP_CART_SAME_SHOP
+            return _result, _message
+
+        def _merge_new_cart_stocks(
+            _cart_entity: CartEntity, _new_stock: Stock
+        ) -> (bool, str):
+            _result = False
+            if _cart_entity.quantity >= _new_stock.count:
+                new_quantity = _new_stock.count
+                _message = utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
+            else:
+                new_quantity = _cart_entity.quantity
+                _message = utils.CHANGE_SHOP_CART_SUCCESS
+                _result = True
+
+            _cart_entity.stock = _new_stock
+            _cart_entity.quantity = new_quantity
+            _cart_entity.save(
+                update_fields=[
+                    "stock",
+                    "quantity",
+                ]
+            )
+            return _result, _message
+
+        def _merge_existence_cart_stocks(
+            new_stock_id: int, cart_id: int
+        ) -> (bool, str):
+            _result = False
+            new_cart_entity = CartEntity.objects.filter(
+                stock_id=new_stock_id, cart_id=cart_id
+            ).first()
+
+            if new_cart_entity.stock.count >= (
+                new_cart_entity.quantity + cart_entity.quantity
+            ):
+                new_cart_entity.quantity = F("quantity") + cart_entity.quantity
+                _message = utils.CHANGE_SHOP_CART_SUCCESS
+                _result = True
+            else:
+                new_cart_entity.quantity = (
+                    F("quantity")
+                    - new_cart_entity.quantity
+                    + new_cart_entity.stock.count
+                )
+                _message = (
+                    utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % cart_entity.quantity
+                )
+            new_cart_entity.save()
+            cart_entity.delete()
+            return _result, _message
+
         result = False
         message = utils.CHANGE_SHOP_CART_FAIL
 
@@ -182,64 +257,7 @@ class Cart(models.Model):
             )
 
             if cart_entity:
-                new_stock = (
-                    Stock.objects.filter(product_id=stock.product.id, shop_id=shop_id)
-                    .select_related("shop")
-                    .first()
-                )
-
-                if stock.shop.pk != new_stock.shop.pk:
-
-                    if new_stock.id not in Stock.objects.filter(
-                        cart_entity__cart_id=self.pk
-                    ).values_list("id", flat=True):
-
-                        if cart_entity.quantity >= new_stock.count:
-                            new_quantity = new_stock.count
-                            message = (
-                                utils.UPDATE_CART_QUANTITY_LIMIT_MERGED % new_quantity
-                            )
-                        else:
-                            new_quantity = cart_entity.quantity
-                            message = utils.CHANGE_SHOP_CART_SUCCESS
-                            result = True
-
-                        cart_entity.stock = new_stock
-                        cart_entity.quantity = new_quantity
-                        cart_entity.save(
-                            update_fields=[
-                                "stock",
-                                "quantity",
-                            ]
-                        )
-                    else:
-                        new_cart_entity = CartEntity.objects.filter(
-                            stock_id=new_stock.id, cart_id=self.pk
-                        ).first()
-
-                        if new_cart_entity.stock.count >= (
-                            new_cart_entity.quantity + cart_entity.quantity
-                        ):
-                            new_cart_entity.quantity = (
-                                F("quantity") + cart_entity.quantity
-                            )
-                            message = utils.CHANGE_SHOP_CART_SUCCESS
-                            result = True
-                        else:
-                            new_cart_entity.quantity = (
-                                F("quantity")
-                                - new_cart_entity.quantity
-                                + new_cart_entity.stock.count
-                            )
-                            message = (
-                                utils.UPDATE_CART_QUANTITY_LIMIT_MERGED
-                                % cart_entity.quantity
-                            )
-                        new_cart_entity.save()
-                        cart_entity.delete()
-                else:
-                    result = True
-                    message = utils.CHANGE_SHOP_CART_SAME_SHOP
+                result, message = merge(stock, shop_id)
         return result, message
 
     def _get_sums(self) -> (Decimal, Decimal):
@@ -250,8 +268,9 @@ class Cart(models.Model):
         old_sum = Decimal(0.0)
         product_discount_sum = Decimal(0.0)
 
-        cart_objects: QuerySet[CartEntity] = \
-            CartEntity.objects.filter(cart=self).select_related("stock")
+        cart_objects: QuerySet[CartEntity] = CartEntity.objects.filter(
+            cart=self
+        ).select_related("stock")
         for cart_entity in cart_objects:
             old_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
             if cart_entity.stock.product.discount:
@@ -260,13 +279,13 @@ class Cart(models.Model):
                     * cart_entity.quantity
                 )
             else:
-                product_discount_sum += Decimal(cart_entity.stock.price) * cart_entity.quantity
+                product_discount_sum += (
+                    Decimal(cart_entity.stock.price) * cart_entity.quantity
+                )
 
         basket_discount_sum = Decimal(0.0)
         if len(cart_objects) > 0:
-            basket_discount_sum = get_basket_discount(
-                len(cart_objects), old_sum
-            )
+            basket_discount_sum = get_basket_discount(len(cart_objects), old_sum)
             if basket_discount_sum != 0:
                 return old_sum, min(product_discount_sum, basket_discount_sum)
         return old_sum, product_discount_sum
@@ -286,7 +305,7 @@ class Cart(models.Model):
         return total
 
     @staticmethod
-    def update_instance(instance: "Cart", **kwargs) -> None:
+    def update_instance(instance: "Cart", **kwargs) -> "Cart":
         """Обновляем объект корзины из kwargs"""
         updated = False
         for attr, value in kwargs.items():
@@ -295,6 +314,35 @@ class Cart(models.Model):
                 updated = True
         if updated:
             instance.save()
+        return instance
+
+    @classmethod
+    def merge_carts(cls, user_cart: "Cart", anon_cart: "Cart", **kwargs) -> "Cart":
+        """
+        Соединяем корзины анонимного пользователя и авторизованного при авторизации
+        """
+        user_cart_stocks = Stock.objects.filter(cart_entity__cart_id=user_cart)
+        if user_cart != anon_cart:
+            for cart_entity in CartEntity.objects.filter(
+                cart_id=anon_cart
+            ).select_related("stock", "stock__shop"):
+                if cart_entity.stock in user_cart_stocks:
+                    user_cart_entity = CartEntity.objects.get(
+                        cart_id=user_cart, stock_id=cart_entity.stock
+                    )
+                    user_cart_entity.quantity = (
+                        user_cart_entity.quantity + cart_entity.quantity
+                        if user_cart_entity.quantity + cart_entity.quantity
+                        <= cart_entity.stock.count
+                        else cart_entity.stock.count
+                    )
+                    user_cart_entity.save(update_fields=["quantity"])
+                else:
+                    cart_entity.cart = user_cart
+                    cart_entity.save(update_fields=["cart"])
+            user_cart = cls.update_instance(user_cart, **kwargs)
+            anon_cart.delete()
+        return user_cart
 
     @classmethod
     def _get_anonymous_cart(cls, device: str) -> "Cart":
@@ -315,15 +363,17 @@ class Cart(models.Model):
         Получаем или создаем корзину для авторизованного пользователя
         :return: объект Корзины
         """
-        instance = (
-            Cart.objects.filter(Q(user_id=user) | Q(device=device))
-            .order_by("user_id")
-            .first()
-        )
+        instance = Cart.objects.filter(user_id=user).first()
         if instance is None:
             instance = Cart.objects.create(device=device, user_id=user)
         else:
-            cls.update_instance(instance, device=device, user_id=user)
+            anon_carts = Cart.objects.filter(device=device).order_by("-user_id")
+            if len(anon_carts) > 1:
+                cls.merge_carts(
+                    instance, anon_carts.first(), device=device, user_id=user
+                )
+            else:
+                cls.update_instance(instance, device=device, user_id=user)
         return instance
 
     @classmethod
@@ -590,7 +640,6 @@ class Order(SoftDeletes):
     ) -> "Order":
         """Создание заказа"""
         with transaction.atomic():
-
             order = Order.objects.create(
                 user_id=user,
                 delivery_id=delivery,
