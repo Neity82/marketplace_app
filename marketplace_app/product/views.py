@@ -377,6 +377,8 @@ class ProductListView(generic.ListView):
         ).filter(collected_filter))
         # Здесь мы получили набор продуктов соответствующий
         # выбранной категории или строке поиска
+        if not result:
+            return result
         prices: Dict[int, Decimal] = self._get_prices_shops(result)
         result = result.filter(self._get_base_filters(prices))
         # Здесь мы получили объекты отфильтрованные по базовому набору

@@ -1,7 +1,8 @@
 """marketplace_app.user URL Configuration
 """
-from django.contrib.auth.views import LogoutView
-from django.urls import path
+from django.conf.urls import url
+from django.urls import path, reverse_lazy
+from django.contrib.auth import views as auth_views
 
 from user import views
 
@@ -14,7 +15,6 @@ urlpatterns = [
     path("user/<int:pk>/views/", views.HistoryViews.as_view(), name="user_views"),
     path("compare/category/<int:pk>/", views.CompareProduct.as_view(), name="compare_list"),
     path("login/", views.CustomLoginView.as_view(), name="login"),
-    path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
+    path("logout/", auth_views.LogoutView.as_view(next_page="/"), name="logout"),
     path("signup/", views.SignUpView.as_view(), name="signup"),
-
 ]

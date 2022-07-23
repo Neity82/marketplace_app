@@ -22,7 +22,7 @@
     {% for field in form %}
       <div class="form-group">
         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {% if field.label == "Phone" or field.label == "Телефон" %}
+        {% if field.label == "phone" or field.label == "телефон" %}
           {% render_field field class="form-control form-input phone" inputmode="text" maxlength=18 %}
         {% else %}
           {% render_field field class="form-control" placeholder=field.label %}
