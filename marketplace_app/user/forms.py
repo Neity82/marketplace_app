@@ -1,10 +1,14 @@
 from bootstrap_modal_forms.mixins import CreateUpdateAjaxMixin, PopRequestMixin
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.core.mail import get_connection, EmailMultiAlternatives
+from django.core.mail.backends.smtp import EmailBackend
+from django.template import loader
 from django.utils.translation import gettext as _
 from django.utils.translation import ugettext_lazy
 
+from info.models import Settings
 from user.models import CustomUser
 
 MESSAGES = {
@@ -71,15 +75,15 @@ class UserProfileForm(forms.ModelForm):
                             required=False)
     email = forms.CharField(widget=forms.TextInput(attrs={"class": "form-input"}))
     password1 = forms.CharField(widget=forms.TextInput(attrs={
-                                    "class": "form-input",
-                                    "placeholder": ugettext_lazy("Here you can change the password")
-                                }),
-                                required=False)
+        "class": "form-input",
+        "placeholder": ugettext_lazy("Here you can change the password")
+    }),
+        required=False)
     password2 = forms.CharField(widget=forms.TextInput(attrs={
-                                    "class": "form-input",
-                                    "placeholder": ugettext_lazy("Enter the password again")
-                                }),
-                                required=False)
+        "class": "form-input",
+        "placeholder": ugettext_lazy("Enter the password again")
+    }),
+        required=False)
 
     class Meta:
         model = CustomUser
@@ -116,7 +120,8 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreationForm):
     """Форма для регистрации пользователей"""
-    phone = forms.CharField(label=ugettext_lazy(u"phone"), widget=forms.TextInput(attrs={"class": "form-input phone"}),
+    phone = forms.CharField(label=ugettext_lazy(u"phone"),
+                            widget=forms.TextInput(attrs={"class": "form-input phone"}),
                             required=False)
 
     class Meta:
@@ -141,3 +146,36 @@ class CustomUserCreationForm(PopRequestMixin, CreateUpdateAjaxMixin, UserCreatio
         if phone and CustomUser.objects.filter(phone=phone):
             raise forms.ValidationError(MESSAGES["clean_phone"])
         return phone
+
+
+class PasswordResetCustomForm(PasswordResetForm):
+
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        """
+        Send a django.core.mail.EmailMultiAlternatives to `to_email` using
+        `anymail.backends.postmark.EmailBackend`.
+        """
+        subject = loader.render_to_string(subject_template_name, context)
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        body = loader.render_to_string(email_template_name, context)
+        use_tls = Settings.objects.filter(name="feedback_mailing_tls_usage").first().value
+        use_ssl = Settings.objects.filter(name="feedback_mailing_ssl_usage").first().value
+        custom_backend = EmailBackend(
+            host=Settings.objects.filter(name="feedback_mailing_host").first().value,
+            port=Settings.objects.filter(name="feedback_mailing_port").first().value,
+            username=Settings.objects.filter(name="feedback_mailing_login").first().value,
+            password=Settings.objects.filter(name="feedback_mailing_password").first().value,
+            use_tls=use_tls == "True",
+            use_ssl=use_ssl == "True",
+        )
+
+        from_email = Settings.objects.filter(name="feedback_mailing_login").first().value
+        email_message = EmailMultiAlternatives(subject, body, from_email, [to_email],
+                                               connection=custom_backend)
+        if html_email_template_name is not None:
+            html_email = loader.render_to_string(html_email_template_name, context)
+            email_message.attach_alternative(html_email, 'text/html')
+
+        email_message.send()
