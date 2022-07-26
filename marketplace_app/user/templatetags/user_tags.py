@@ -16,8 +16,8 @@ def get_rating(rating: int) -> range:
     Функция принимает рейтинг товара и возвращает range
     для отрисовки количества звезд в шаблоне
     """
-    if rating:
-        return range(rating)
+
+    return range(rating)
 
 
 @register.simple_tag(name="not_stars")
@@ -26,9 +26,9 @@ def get_rating(rating: int) -> range:
     Функция принимает рейтинг товара и возвращает range
     для отрисовки неактивных звезд в шаблоне
     """
-    if rating:
-        count = 5 - rating
-        return range(count)
+
+    count = 5 - rating
+    return range(count)
 
 
 @register.simple_tag(name="value_dict")
