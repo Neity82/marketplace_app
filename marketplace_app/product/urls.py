@@ -3,7 +3,7 @@
 from django.urls import path
 from product.views import IndexView, ProductListView, ProductDetailView
 
-app_name = 'product'
+app_name = "product"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="home"),

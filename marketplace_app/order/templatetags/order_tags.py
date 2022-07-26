@@ -15,5 +15,5 @@ def phone_normalize(phone: int) -> str:
     :rtype: str
     """
 
-    phone: str = f'+7({phone[:3]}) {phone[3:6]}-{phone[6:8]}-{phone[8:]}'
+    phone: str = f"+7({phone[:3]}) {phone[3:6]}-{phone[6:8]}-{phone[8:]}"
     return phone

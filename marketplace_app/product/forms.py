@@ -14,12 +14,10 @@ class ProductReviewForm(forms.ModelForm):
                 "name": "text",
                 "id": "text",
                 "placeholder": _("review").capitalize(),
-            }),
+            }
+        ),
     )
 
     class Meta:
         model = ProductReview
         fields = "__all__"
-
-
-

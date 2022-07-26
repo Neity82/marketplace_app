@@ -25,10 +25,7 @@ class CustomUser(AbstractUser, SoftDeletes):
     - avatar - аватар пользователя
     """
 
-    phone_regex = RegexValidator(
-        regex=r"^\d{10}$",
-        message=_("Invalid format")
-    )
+    phone_regex = RegexValidator(regex=r"^\d{10}$", message=_("Invalid format"))
 
     username = None
 
@@ -52,15 +49,10 @@ class CustomUser(AbstractUser, SoftDeletes):
         blank=True,
     )
     phone = models.CharField(
-        verbose_name=_("phone"),
-        validators=[phone_regex],
-        max_length=16,
-        blank=True
+        verbose_name=_("phone"), validators=[phone_regex], max_length=16, blank=True
     )
     avatar = models.ImageField(
-        verbose_name=_("avatar"),
-        blank=True,
-        upload_to=avatar_directory_path
+        verbose_name=_("avatar"), blank=True, upload_to=avatar_directory_path
     )
 
     USERNAME_FIELD = "email"
@@ -167,11 +159,12 @@ class UserProductView(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f'{self.product_id}'
+        return f"{self.product_id}"
 
     @classmethod
-    def get_product_view(cls, user: CustomUser, limit: int = None) -> \
-            List['UserProductView']:
+    def get_product_view(
+        cls, user: CustomUser, limit: int = None
+    ) -> List["UserProductView"]:
         """
         Метод получения списка просмотренных товаров
 
@@ -185,10 +178,7 @@ class UserProductView(models.Model):
 
         queryset: List[UserProductView] = UserProductView.objects.filter(
             user_id=user
-        ).select_related(
-            "product_id",
-            "product_id__category"
-        )
+        ).select_related("product_id", "product_id__category")
         return queryset[:limit]
 
     @classmethod
@@ -210,12 +200,9 @@ class UserProductView(models.Model):
 
         if user.is_authenticated:
             if UserProductView.objects.filter(
-                    user_id=user, product_id=product
+                user_id=user, product_id=product
             ).exists():
-                UserProductView.objects.filter(
-                    user_id=user,
-                    product_id=product
-                ).update(
+                UserProductView.objects.filter(user_id=user, product_id=product).update(
                     datetime=timezone.now()
                 )
 
@@ -223,7 +210,7 @@ class UserProductView(models.Model):
                 UserProductView.objects.create(
                     user_id=user,
                     product_id=Product.objects.get(id=product),
-                    datetime=timezone.now()
+                    datetime=timezone.now(),
                 )
         return result, message
 
@@ -242,7 +229,7 @@ class CompareEntity(models.Model):
         "Compare",
         on_delete=models.CASCADE,
         related_name="compare_entity",
-        verbose_name=_("compare\'s id")
+        verbose_name=_("compare's id"),
     )
 
     class Meta:
@@ -252,7 +239,11 @@ class CompareEntity(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        user = getattr(self.compare, "user_id") if getattr(self.compare, "user_id") else "Unknown"
+        user = (
+            getattr(self.compare, "user_id")
+            if getattr(self.compare, "user_id")
+            else "Unknown"
+        )
         return f"Compare entity: user {user}, product: {self.product}"
 
 
@@ -265,7 +256,7 @@ class Compare(models.Model):
         verbose_name=_("user"),
         related_name="compare_user",
         blank=True,
-        null=True
+        null=True,
     )
 
     device = models.CharField(
@@ -273,7 +264,7 @@ class Compare(models.Model):
         verbose_name=_("device"),
         help_text=_("cookie device value"),
         blank=True,
-        null=True
+        null=True,
     )
 
     class Meta:
@@ -287,7 +278,7 @@ class Compare(models.Model):
     objects = models.Manager()
 
     @classmethod
-    def get_compare_list(cls, compare_id: "Compare") -> QuerySet['CompareEntity']:
+    def get_compare_list(cls, compare_id: "Compare") -> QuerySet["CompareEntity"]:
         """
         Список товаров для сравнения
 
@@ -314,7 +305,7 @@ class Compare(models.Model):
         user = getattr(request, "user", None)
         device = request.COOKIES.get("device", None)
 
-        assert user, "can\'t get user from request!"
+        assert user, "can't get user from request!"
         # assert device, 'no "device", check static!'
 
         if user.is_anonymous:
@@ -387,21 +378,15 @@ class Compare(models.Model):
         result: bool = True
         message: str = _("successfully added")
 
-        count: int = CompareEntity.objects.filter(
-                    compare_id=self.pk
-                ).count()
+        count: int = CompareEntity.objects.filter(compare_id=self.pk).count()
 
         if count < 4:
             compare_entity = CompareEntity.objects.filter(
-                compare=self.pk,
-                product=product_id
+                compare=self.pk, product=product_id
             ).exists()
 
             if compare_entity is False:
-                CompareEntity.objects.create(
-                    compare_id=self.pk,
-                    product_id=product_id
-                )
+                CompareEntity.objects.create(compare_id=self.pk, product_id=product_id)
             else:
                 result: bool = False
                 message: str = _("has already been added before")
@@ -423,8 +408,7 @@ class Compare(models.Model):
         message: str = _("failed to remove")
 
         compare_entity = CompareEntity.objects.filter(
-            compare=self.pk,
-            product=product_id
+            compare=self.pk, product=product_id
         )
 
         if compare_entity.exists():
@@ -459,13 +443,14 @@ class Compare(models.Model):
         :return: Словарь из объекта Категории и количества товаров в категории
         :rtype: Dict[Category, int]
         """
-        compare_list: QuerySet[CompareEntity] = cls.get_compare_list(compare_id=compare_id)
+        compare_list: QuerySet[CompareEntity] = cls.get_compare_list(
+            compare_id=compare_id
+        )
 
-        category_list = [Category.objects.get(pk=item.product.category_id)
-                         for item in compare_list]
+        category_list = [
+            Category.objects.get(pk=item.product.category_id) for item in compare_list
+        ]
         categories = {}
         for item in set(category_list):
             categories[item] = compare_list.filter(product__category=item).count()
         return categories
-
-

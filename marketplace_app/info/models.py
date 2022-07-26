@@ -7,31 +7,23 @@ from info.utils import banner_image_path
 
 class Banner(models.Model):
     """Модель баннер"""
+
     title = models.CharField(
-        verbose_name=_("title"),
-        max_length=150,
-        help_text=_("banner title")
+        verbose_name=_("title"), max_length=150, help_text=_("banner title")
     )
 
-    text = models.TextField(
-        verbose_name=_("text"),
-        help_text=_("banner text")
-    )
+    text = models.TextField(verbose_name=_("text"), help_text=_("banner text"))
 
     image = models.ImageField(
         verbose_name=_("image"),
         upload_to=banner_image_path,
-        help_text=_("banner image")
+        help_text=_("banner image"),
     )
 
-    url = models.URLField(
-        verbose_name=_("URL"),
-        help_text=_("banner url")
-    )
+    url = models.URLField(verbose_name=_("URL"), help_text=_("banner url"))
 
     is_active = models.BooleanField(
-        verbose_name=_("active"),
-        help_text=_("banner is active")
+        verbose_name=_("active"), help_text=_("banner is active")
     )
 
     class Meta:
@@ -42,9 +34,7 @@ class Banner(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return "{title}".format(
-            title=self.title
-        )
+        return "{title}".format(title=self.title)
 
     @classmethod
     def get_banners(cls, limit: int = 3) -> List["Banner"]:
@@ -56,33 +46,33 @@ class Banner(models.Model):
         :return: Список баннеров
         :rtype: List[Banner]
         """
-        queryset: List[Banner] = Banner.objects.filter(
-            is_active=True
-        ).order_by("?")
+        queryset: List[Banner] = Banner.objects.filter(is_active=True).order_by("?")
         return queryset[:limit]
 
 
 class SEOItem(models.Model):
     """Модель переопределения обозначений url"""
-    path_name = models.CharField(
-        verbose_name=_("path name"),
-        max_length=512
-    )
+
+    path_name = models.CharField(verbose_name=_("path name"), max_length=512)
 
     meta_title = models.CharField(
         verbose_name=_("meta title"),
         max_length=512,
-        help_text=_("for detail pages (products, shop etc) after meta title"
-                    "auto adding name (title) field of detail page")
+        help_text=_(
+            "for detail pages (products, shop etc) after meta title"
+            "auto adding name (title) field of detail page"
+        ),
     )
 
     meta_description = models.CharField(
         _("meta description"),
         max_length=512,
         blank=True,
-        help_text=_("for detail pages (products, shop etc)"
-                    "after meta description"
-                    "auto adding description field of detail page")
+        help_text=_(
+            "for detail pages (products, shop etc)"
+            "after meta description"
+            "auto adding description field of detail page"
+        ),
     )
 
     title = models.CharField(
@@ -99,28 +89,17 @@ class SEOItem(models.Model):
         verbose_name_plural = _("SEO items")
 
     def __str__(self):
-        return "{path_name}".format(
-            path_name=self.path_name
-        )
+        return "{path_name}".format(path_name=self.path_name)
 
 
 class Settings(models.Model):
     """Модель хранения настроек проекта"""
-    name = models.CharField(
-        verbose_name=_("name"),
-        max_length=50,
-        unique=True
-    )
 
-    description = models.CharField(
-        verbose_name=_("description"),
-        max_length=250
-    )
+    name = models.CharField(verbose_name=_("name"), max_length=50, unique=True)
 
-    value = models.CharField(
-        verbose_name=_("value"),
-        max_length=150
-    )
+    description = models.CharField(verbose_name=_("description"), max_length=250)
+
+    value = models.CharField(verbose_name=_("value"), max_length=150)
 
     class Meta:
         ordering = ("description",)
@@ -128,7 +107,4 @@ class Settings(models.Model):
         verbose_name_plural = _("settings")
 
     def __str__(self):
-        return "{descr} ({name})".format(
-            name=self.name,
-            descr=self.description
-        )
+        return "{descr} ({name})".format(name=self.name, descr=self.description)

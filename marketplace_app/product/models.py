@@ -63,10 +63,7 @@ class Category(SoftDeletes):
         upload_to=category_icon_path,
     )
 
-    sort_index = models.SmallIntegerField(
-        verbose_name=_("sort index"),
-        default=0
-    )
+    sort_index = models.SmallIntegerField(verbose_name=_("sort index"), default=0)
 
     admin_objects = models.Manager()
 
@@ -81,8 +78,7 @@ class Category(SoftDeletes):
         """Рекурсивно получаем тайтлы категорий и их родителей"""
         title = getattr(self, "title")
         parent = getattr(self, "parent")
-        return (f"{parent.get_category_recur()}{self.SEP}{title}"
-                if parent else title)
+        return f"{parent.get_category_recur()}{self.SEP}{title}" if parent else title
 
     @classmethod
     def get_popular(cls, limit: int = 3) -> QuerySet[Product]:
@@ -95,19 +91,17 @@ class Category(SoftDeletes):
         :rtype: QuerySet[Category]
         """
 
-        queryset: QuerySet[Product] = Category.objects.prefetch_related(
-            "product"
-        ).filter(
-            product__stock__count__gt=0,
-        ).distinct().annotate(
-            min_price=Min("product__stock__price"),
-            selling=Coalesce(
-                Sum("product__stock__order_entity_stock__count"),
-                0
+        queryset: QuerySet[Product] = (
+            Category.objects.prefetch_related("product")
+            .filter(
+                product__stock__count__gt=0,
             )
-        ).order_by(
-            "-sort_index",
-            "-selling"
+            .distinct()
+            .annotate(
+                min_price=Min("product__stock__price"),
+                selling=Coalesce(Sum("product__stock__order_entity_stock__count"), 0),
+            )
+            .order_by("-sort_index", "-selling")
         )
 
         return queryset[:limit]
@@ -115,6 +109,7 @@ class Category(SoftDeletes):
 
 class Unit(models.Model):
     """Модель: Единица измерения для атрибута"""
+
     title = models.CharField(
         max_length=16,
         verbose_name=_("unit title"),
@@ -140,6 +135,7 @@ class Attribute(models.Model):
     """
     Модель: характеристика
     """
+
     title = models.CharField(
         verbose_name=_("title"),
         max_length=50,
@@ -154,12 +150,12 @@ class Attribute(models.Model):
         verbose_name=_("field type"),
         max_length=1,
         choices=AttributeType.choices,
-        default=AttributeType.TEXT
+        default=AttributeType.TEXT,
     )
 
     category = models.ForeignKey(
         "Category",
-        verbose_name=_("attribute\'s category"),
+        verbose_name=_("attribute's category"),
         related_name="attribute",
         on_delete=models.CASCADE,
     )
@@ -190,11 +186,9 @@ class AttributeValue(models.Model):
     """
     Модель: значение характеристики
     """
+
     value = models.CharField(
-        max_length=255,
-        verbose_name=_("value"),
-        null=True,
-        default=None
+        max_length=255, verbose_name=_("value"), null=True, default=None
     )
 
     unit = models.ForeignKey(
@@ -209,7 +203,7 @@ class AttributeValue(models.Model):
 
     attribute = models.ForeignKey(
         "Attribute",
-        verbose_name=_("product\'s attribute"),
+        verbose_name=_("product's attribute"),
         related_name="product_attribute",
         on_delete=models.CASCADE,
     )
@@ -234,21 +228,23 @@ class AttributeValue(models.Model):
     objects = models.Manager()
 
     @classmethod
-    def get_all_attributes_of_product(cls, product: Product) \
-            -> QuerySet[AttributeValue]:
-        return AttributeValue.objects.filter(product=product)\
-                                     .order_by("-attribute__rank")
+    def get_all_attributes_of_product(
+        cls, product: Product
+    ) -> QuerySet[AttributeValue]:
+        return AttributeValue.objects.filter(product=product).order_by(
+            "-attribute__rank"
+        )
 
 
 DiscountDict = TypedDict(
-        "DiscountDict",
-        {
-            "type": Optional[str],
-            "value": Optional[int],
-            "price": Optional[Decimal],
-            "base": Optional[Decimal],
-        }
-    )
+    "DiscountDict",
+    {
+        "type": Optional[str],
+        "value": Optional[int],
+        "price": Optional[Decimal],
+        "base": Optional[Decimal],
+    },
+)
 
 
 class Product(SoftDeletes):
@@ -315,10 +311,7 @@ class Product(SoftDeletes):
         default=Rating.ZERO,
     )
 
-    sort_index = models.SmallIntegerField(
-        verbose_name=_("sort index"),
-        default=0
-    )
+    sort_index = models.SmallIntegerField(verbose_name=_("sort index"), default=0)
 
     admin_objects = models.Manager()
 
@@ -335,22 +328,21 @@ class Product(SoftDeletes):
         )
 
     @property
-    def _price(self) -> Optional['Decimal']:
+    def _price(self) -> Optional["Decimal"]:
         """Метод для получения средней цены
 
         :return: Значение средней цены
         :rtype: Optional[Decimal]
         """
-        avg_price = Stock.objects.filter(
-            product=self.pk,
-            count__gt=0
-        ).aggregate(avg=Avg("price"))["avg"]
+        avg_price = Stock.objects.filter(product=self.pk, count__gt=0).aggregate(
+            avg=Avg("price")
+        )["avg"]
         if avg_price is None:
             return None
         return Decimal(round(avg_price, 2))
 
     def _get_discounted_price(
-            self, base_price: 'Decimal', discount: 'Discount'
+        self, base_price: "Decimal", discount: "Discount"
     ) -> Decimal:
         """Метод получения скидочной цены
 
@@ -363,19 +355,11 @@ class Product(SoftDeletes):
         """
         if discount.discount_mechanism == "P":
             return Decimal(
-                round(
-                    (
-                            base_price *
-                            (100 - discount.discount_value) / 100
-                    ),
-                    2
-                )
+                round((base_price * (100 - discount.discount_value) / 100), 2)
             )
         elif discount.discount_mechanism == "S":
             result: Decimal = (
-                Decimal(
-                    round((base_price - discount.discount_value), 2)
-                )
+                Decimal(round((base_price - discount.discount_value), 2))
                 if base_price - discount.discount_value >= 1
                 else Decimal("1.00")
             )
@@ -391,12 +375,12 @@ class Product(SoftDeletes):
         :return: Словарь с механизмом скидки и скидочной стоимостью
         :rtype: Dict[str, Union[str, Decimal]]
         """
-        base_price: Optional['Decimal'] = self._price
+        base_price: Optional["Decimal"] = self._price
         result: DiscountDict = {
             "type": None,
             "value": None,
             "price": base_price,
-            "base": base_price
+            "base": base_price,
         }
         if base_price is None:
             return result
@@ -404,50 +388,44 @@ class Product(SoftDeletes):
         categories_list: list = [self.category_id]
         if self.category.parent_id is not None:
             categories_list += [self.category.parent_id]
-        discounts: QuerySet[ProductDiscount] = ProductDiscount.objects \
-            .select_related("discount_id").filter(
+        discounts: QuerySet[ProductDiscount] = ProductDiscount.objects.select_related(
+            "discount_id"
+        ).filter(
             (
                 Q(
                     product_id=self,
                     discount_id__discount_type="PD",
-                    discount_id__is_active=True
-                ) | Q(
+                    discount_id__is_active=True,
+                )
+                | Q(
                     category_id__in=categories_list,
                     discount_id__discount_type="PD",
-                    discount_id__is_active=True
+                    discount_id__is_active=True,
                 )
-            ) & (
-                Q(
-                    discount_id__start_at__lte=today,
-                    discount_id__finish_at=None
-                ) | Q(
-                    discount_id__start_at__lte=today,
-                    discount_id__finish_at__gt=today
-                )
+            )
+            & (
+                Q(discount_id__start_at__lte=today, discount_id__finish_at=None)
+                | Q(discount_id__start_at__lte=today, discount_id__finish_at__gt=today)
             )
         )
         if not discounts:
             return result
-        discount_percent: QuerySet[ProductDiscount] = discounts.filter(
-            discount_id__discount_mechanism="P"
-        ).order_by(
-            "-discount_id__discount_value"
-        ).first()
-        discount_sum: QuerySet[ProductDiscount] = discounts.filter(
-            discount_id__discount_mechanism="S"
-        ).order_by(
-            "-discount_id__discount_value"
-        ).first()
-        discount_fix: QuerySet[ProductDiscount] = discounts.filter(
-            discount_id__discount_mechanism="F"
-        ).order_by(
-            "discount_id__discount_value"
-        ).first()
-        max_discount_list = [
-            discount_percent,
-            discount_sum,
-            discount_fix
-        ]
+        discount_percent: QuerySet[ProductDiscount] = (
+            discounts.filter(discount_id__discount_mechanism="P")
+            .order_by("-discount_id__discount_value")
+            .first()
+        )
+        discount_sum: QuerySet[ProductDiscount] = (
+            discounts.filter(discount_id__discount_mechanism="S")
+            .order_by("-discount_id__discount_value")
+            .first()
+        )
+        discount_fix: QuerySet[ProductDiscount] = (
+            discounts.filter(discount_id__discount_mechanism="F")
+            .order_by("discount_id__discount_value")
+            .first()
+        )
+        max_discount_list = [discount_percent, discount_sum, discount_fix]
         for obj in max_discount_list:
             if obj is None:
                 continue
@@ -461,8 +439,9 @@ class Product(SoftDeletes):
         return result
 
     @classmethod
-    def get_popular(cls, shop: Union[Shop, None] = None, limit: int = 8) -> \
-            QuerySet[Product]:
+    def get_popular(
+        cls, shop: Union[Shop, None] = None, limit: int = 8
+    ) -> QuerySet[Product]:
         """
         Метод для получения списка популярных товаров в количестве limit.
         Популярность определяется сначала по "индексу сортировки",
@@ -476,16 +455,15 @@ class Product(SoftDeletes):
         :rtype: QuerySet[Product]
         """
 
-        queryset: QuerySet[Product] = Product.objects.prefetch_related(
-            "stock"
-        ).filter(
-            stock__count__gt=0
-        ).distinct().annotate(
-            avg_price=Avg("stock__price"),
-            selling=Coalesce(Sum("stock__order_entity_stock__count"), 0)
-        ).order_by(
-            "sort_index",
-            "selling"
+        queryset: QuerySet[Product] = (
+            Product.objects.prefetch_related("stock")
+            .filter(stock__count__gt=0)
+            .distinct()
+            .annotate(
+                avg_price=Avg("stock__price"),
+                selling=Coalesce(Sum("stock__order_entity_stock__count"), 0),
+            )
+            .order_by("sort_index", "selling")
         )
 
         if shop:
@@ -494,14 +472,11 @@ class Product(SoftDeletes):
         return queryset[:limit]
 
     def get_shops(self):
-        return Shop.objects.filter(stock__product__id=self.pk)\
-                           .only("name", "id")
+        return Shop.objects.filter(stock__product__id=self.pk).only("name", "id")
 
     @classmethod
     def get_limited_edition(
-            cls,
-            daily_offer: Union[DailyOffer, None] = None,
-            limit: int = 16
+        cls, daily_offer: Union[DailyOffer, None] = None, limit: int = 16
     ) -> QuerySet[Product]:
         """
         Метод для получения списка товаров ограниченного тиража
@@ -514,17 +489,17 @@ class Product(SoftDeletes):
         :rtype: QuerySet[Product]
         """
 
-        queryset: QuerySet[Product] = Product.objects.prefetch_related(
-            "stock"
-        ).filter(
-            is_limited=True, stock__count__gt=0
-        ).distinct().annotate(
-            avg_price=Avg("stock__price")
-        ).order_by("?").select_related("category__parent")
+        queryset: QuerySet[Product] = (
+            Product.objects.prefetch_related("stock")
+            .filter(is_limited=True, stock__count__gt=0)
+            .distinct()
+            .annotate(avg_price=Avg("stock__price"))
+            .order_by("?")
+            .select_related("category__parent")
+        )
 
         if daily_offer:
-            queryset = queryset.exclude(
-                id=daily_offer.product_id)
+            queryset = queryset.exclude(id=daily_offer.product_id)
 
         return queryset[:limit]
 
@@ -540,15 +515,14 @@ class Product(SoftDeletes):
         :rtype: List[Product]
         """
 
-        queryset: List[Product] = Product.objects.prefetch_related(
-            "stock",
-            "product_discount"
-        ).filter(
-            stock__count__gt=0,
-            product_discount__discount_id__is_active=True
-        ).distinct().annotate(
-            avg_price=Avg("stock__price")
-        ).order_by("?").select_related("category__parent")
+        queryset: List[Product] = (
+            Product.objects.prefetch_related("stock", "product_discount")
+            .filter(stock__count__gt=0, product_discount__discount_id__is_active=True)
+            .distinct()
+            .annotate(avg_price=Avg("stock__price"))
+            .order_by("?")
+            .select_related("category__parent")
+        )
 
         return queryset[:limit]
 
@@ -564,11 +538,7 @@ class DailyOffer(models.Model):
     )
     select_date = models.DateField(default=date.today)
 
-    text = models.TextField(
-        verbose_name=_("promo text"),
-        max_length=1500,
-        default=""
-    )
+    text = models.TextField(verbose_name=_("promo text"), max_length=1500, default="")
 
     objects = models.Manager()
 
@@ -579,7 +549,7 @@ class DailyOffer(models.Model):
     def __str__(self) -> str:
         return (
             f'Daily offer: product: {getattr(self.product, "title")} '
-            f'on: {self.select_date}'
+            f"on: {self.select_date}"
         )
 
     @classmethod
@@ -593,9 +563,7 @@ class DailyOffer(models.Model):
 
         queryset: QuerySet[DailyOffer] = DailyOffer.objects.filter(
             select_date=date.today()
-        ).select_related(
-            "product__category"
-        )
+        ).select_related("product__category")
 
         if queryset.exists():
             daily_offer: DailyOffer = queryset.latest("select_date")
@@ -628,8 +596,10 @@ class Stock(models.Model):
         verbose_name_plural = _("stocks")
 
     def __str__(self):
-        return f'Stock: product: {getattr(self.product, "title")} ' \
-               f'shop: {getattr(self.shop, "name", None)}'
+        return (
+            f'Stock: product: {getattr(self.product, "title")} '
+            f'shop: {getattr(self.shop, "name", None)}'
+        )
 
     @property
     def pk(self) -> int:
@@ -664,26 +634,22 @@ class ProductReview(models.Model):
     date = models.DateField(auto_now_add=True)
 
     text = models.TextField(
-        verbose_name=_("review content"),
-        max_length=1500,
-        default=""
+        verbose_name=_("review content"), max_length=1500, default=""
     )
 
     rating = models.PositiveSmallIntegerField(
-        verbose_name=_("rating"),
-        blank=True,
-        default=0
-        )
+        verbose_name=_("rating"), blank=True, default=0
+    )
 
     objects = models.Manager()
 
     class Meta:
-        verbose_name = _("user\'s review")
-        verbose_name_plural = _("user\'s review")
+        verbose_name = _("user's review")
+        verbose_name_plural = _("user's review")
 
     def __str__(self) -> str:
         return (
-            f'{self.date}: user: {self.user}, '
+            f"{self.date}: user: {self.user}, "
             f'product: {getattr(self.product, "title")}'
         )
 
@@ -693,7 +659,7 @@ class ProductReview(models.Model):
 
 
 class ProductImage(models.Model):
-    """Модель: Изображения продукта """
+    """Модель: Изображения продукта"""
 
     product = models.ForeignKey(
         Product,
@@ -719,7 +685,9 @@ class ProductImage(models.Model):
             product=product,
             image=product.image,
         )
-        images_list = [default_pic, ]
+        images_list = [
+            default_pic,
+        ]
         images_list.extend(product_images)
 
         return images_list

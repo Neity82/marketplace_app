@@ -10,7 +10,6 @@ from user.models import CustomUser
 
 
 class ProductListTest(ProductDetailMixin):
-
     def test_get(self) -> None:
         for product_num in PRODUCT_DATA.keys():
             url = self.base_url + f"{product_num}/"
@@ -63,9 +62,10 @@ class ProductListTest(ProductDetailMixin):
             url = self.base_url + f"{product_id}/"
             response = self.client.get(url)
             self.assertContains(response, "Test text for review", count=REVIEW_CNT)
-            self.assertContains(response,
-                                f"{USER_DATA['first_name']} {USER_DATA['last_name']}",
-                                count=REVIEW_CNT)
+            self.assertContains(
+                response,
+                f"{USER_DATA['first_name']} {USER_DATA['last_name']}",
+                count=REVIEW_CNT,
+            )
             product = Product.objects.get(id=1)
             self.assertEqual(product.rating, 4)
-

@@ -25,8 +25,11 @@ def get_urls(resolver: Union[str, URLResolver] = None, namespace=None):
     result_list = []
     for item in resolver.url_patterns:
         if isinstance(item, URLPattern):
-            if item.name is None or not resolver.namespace or resolver.namespace.startswith(
-                    "admin"):
+            if (
+                item.name is None
+                or not resolver.namespace
+                or resolver.namespace.startswith("admin")
+            ):
                 continue
             result_list.append(f"{namespace or resolver.namespace}:{item.name}")
         elif isinstance(item, URLResolver):

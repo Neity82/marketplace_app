@@ -26,49 +26,49 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4(r-gu$)q!a3%wf!pv#6y2$%=)%3fgguhlx%sn(jw3l-)7_t)t'
+SECRET_KEY = "django-insecure-4(r-gu$)q!a3%wf!pv#6y2$%=)%3fgguhlx%sn(jw3l-)7_t)t"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.get_value('DEBUG', default=1)
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", '127.0.0.1').split(" ")
+DEBUG = env.get_value("DEBUG", default=1)
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1").split(" ")
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'modeltranslation',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'discount.apps.DiscountConfig',
-    'bootstrap_modal_forms',
-    'widget_tweaks',
-    'info.apps.InfoConfig',
-    'order.apps.OrderConfig',
-    'product.apps.ProductConfig',
-    'shop.apps.ShopConfig',
-    'user.apps.UserConfig',
+    "modeltranslation",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "discount.apps.DiscountConfig",
+    "bootstrap_modal_forms",
+    "widget_tweaks",
+    "info.apps.InfoConfig",
+    "order.apps.OrderConfig",
+    "product.apps.ProductConfig",
+    "shop.apps.ShopConfig",
+    "user.apps.UserConfig",
     # 'modeltranslation',
-    'django_celery_beat',
-    'import_export_celery',
-    'import_export',
-    'payments.apps.PaymentsConfig',
-    'timestamps',
+    "django_celery_beat",
+    "import_export_celery",
+    "import_export",
+    "payments.apps.PaymentsConfig",
+    "timestamps",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'author.middlewares.AuthorDefaultBackendMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "author.middlewares.AuthorDefaultBackendMiddleware",
 ]
 
 ROOT_URLCONF = "marketplace_app.urls"
@@ -82,51 +82,52 @@ TEMPLATES_USER_DIR = os.path.join(BASE_DIR, "user", "templates")
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
             TEMPLATES_PRODUCT_DIR,
             TEMPLATES_INFO_DIR,
             TEMPLATES_DISCOUNT_DIR,
             TEMPLATES_ORDER_DIR,
             TEMPLATES_SHOP_DIR,
-            TEMPLATES_USER_DIR
+            TEMPLATES_USER_DIR,
         ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'info.views.seo_data',
-                'order.context_processors.cart',
-                'info.context_processors.cache_time',
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "info.views.seo_data",
+                "order.context_processors.cart",
+                "info.context_processors.cache_time",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'marketplace_app.wsgi.application'
+WSGI_APPLICATION = "marketplace_app.wsgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': env.get_value('DB_ENGINE', default='django.db.backends.postgresql_psycopg2'),
-        'NAME': env.get_value('DB_NAME', default='default'),
-        'USER': env.get_value('DB_USER', default='admin'),
-        'PASSWORD': env.get_value('DB_PASSWORD', default='password'),
-        'HOST': env.get_value('DB_HOST', default='127.0.0.1'),
-        'PORT': env.get_value('DB_PORT', default='5432'),
-        'TEST': {
-            'NAME': f'test_{env.get_value("DB_NAME", default="test_default")}',
-            'USER': env.get_value('DB_USER', default='test_admin'),
+    "default": {
+        "ENGINE": env.get_value(
+            "DB_ENGINE", default="django.db.backends.postgresql_psycopg2"
+        ),
+        "NAME": env.get_value("DB_NAME", default="default"),
+        "USER": env.get_value("DB_USER", default="admin"),
+        "PASSWORD": env.get_value("DB_PASSWORD", default="password"),
+        "HOST": env.get_value("DB_HOST", default="127.0.0.1"),
+        "PORT": env.get_value("DB_PORT", default="5432"),
+        "TEST": {
+            "NAME": f'test_{env.get_value("DB_NAME", default="test_default")}',
+            "USER": env.get_value("DB_USER", default="test_admin"),
         },
     }
-
 }
 
 # Password validation
@@ -134,16 +135,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -151,9 +152,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -162,11 +163,11 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = [
-    ('en', 'English'),
-    ('ru', 'Русский'),
+    ("en", "English"),
+    ("ru", "Русский"),
 ]
 
-LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
+LOCALE_PATHS = [os.path.join(BASE_DIR, "locale")]
 
 
 # Static files (CSS, JavaScript, Images)
@@ -174,12 +175,12 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, "static"),
     STATIC_DISCOUNT_DIR,
 ]
 
@@ -187,20 +188,20 @@ STATIC_DISCOUNT_DIR = os.path.join(BASE_DIR, "discount", "static")
 
 STATICFILES_DIRS += [STATIC_DISCOUNT_DIR]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 IMPORT_FILE_ROOT = os.path.join(BASE_DIR, "import_files")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'user.CustomUser'
+AUTH_USER_MODEL = "user.CustomUser"
 
 # LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
 # LOGOUT_REDIRECT_URL = '/login/'
 
 # REDIS related settings
@@ -221,11 +222,13 @@ IMPORT_EXPORT_CELERY_INIT_MODULE = "marketplace_app.celery"
 
 def resource_product():
     from product.resources import ProductResource
+
     return ProductResource
 
 
 def resource_stock():
     from product.resources import StockResource
+
     return StockResource
 
 
@@ -239,7 +242,9 @@ IMPORT_EXPORT_CELERY_MODELS = {
         "app_label": "product",
         "model_name": "Product",
         "resource": resource_product,
-    }
+    },
 }
 
-INTERNAL_IPS = ["127.0.0.1",]
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

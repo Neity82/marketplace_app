@@ -24,4 +24,8 @@ class AttributeTranslationOptions(TranslationOptions):
 
 @register(Product)
 class ProductTranslationOptions(TranslationOptions):
-    fields = ("title", "short_description", "long_description", )
+    fields = (
+        "title",
+        "short_description",
+        "long_description",
+    )

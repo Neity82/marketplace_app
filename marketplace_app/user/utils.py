@@ -6,10 +6,7 @@ def avatar_directory_path(instance, filename) -> str:
     """Функция формирует путь для размещения фотографии/аватара пользователя"""
 
     extension = os.path.splitext(filename)
-    return "avatar/user_{id}/{extension}".format(
-        id=instance.id,
-        extension=extension
-    )
+    return "avatar/user_{id}/{extension}".format(id=instance.id, extension=extension)
 
 
 def full_name_analysis(full_name: str) -> Dict[str, str]:
@@ -26,7 +23,7 @@ def full_name_analysis(full_name: str) -> Dict[str, str]:
     user_name_data: Dict[str, str] = {
         "first_name": "",
         "last_name": "",
-        "middle_name": ""
+        "middle_name": "",
     }
 
     if full_name:

@@ -15,56 +15,40 @@ class CompareEntityInline(admin.StackedInline):
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     """Представление модели пользователь в интерфейсе администратора"""
+
     change_form_template = "admin/undelete_change_form.html"
 
     form = CustomUserChangeForm
     add_form = CustomUserAddForm
     save_on_top = True
 
-    list_display = [
-        "id",
-        "email",
-        "last_name",
-        "first_name",
-        "middle_name",
-        "phone"
-    ]
-    list_display_links = [
-        "id",
-        "email"
-    ]
+    list_display = ["id", "email", "last_name", "first_name", "middle_name", "phone"]
+    list_display_links = ["id", "email"]
 
-    list_filter = (DeletedFilter, )
+    list_filter = (DeletedFilter,)
 
     fieldsets = (
-        (None, {
-            "fields": ("email",
-                       "password")
-        }),
-        (_("Personal information"), {
-            "fields": ("last_name",
-                       "first_name",
-                       "middle_name",
-                       "phone",
-                       "avatar")
-        }),
-        (_("Permission"), {
-            "fields": ("is_staff",
-                       "is_active",
-                       "is_superuser",
-                       "groups",
-                       "user_permissions")
-        }),
-        (_("Important dates"), {
-            "fields": ("last_login",
-                       "date_joined")
-        }),
+        (None, {"fields": ("email", "password")}),
+        (
+            _("Personal information"),
+            {"fields": ("last_name", "first_name", "middle_name", "phone", "avatar")},
+        ),
+        (
+            _("Permission"),
+            {
+                "fields": (
+                    "is_staff",
+                    "is_active",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                )
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
-        (None, {
-            "classes": ("wide",),
-            "fields": ("email", "password1", "password2")}
-         ),
+        (None, {"classes": ("wide",), "fields": ("email", "password1", "password2")}),
     )
 
     search_fields = ("email",)
@@ -90,5 +74,3 @@ class CompareAdmin(admin.ModelAdmin):
     list_display = ["id", "user_id"]
     list_display_links = ["id"]
     inlines = [CompareEntityInline]
-
-
