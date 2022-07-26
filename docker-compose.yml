@@ -2,18 +2,12 @@ version: '3.7'
 
 services:
 
-
-  redis:
-    image: redis:latest
-    ports:
-      - '6379:6379'
-
   web:
     build: ./marketplace_app
     command: sh -c "bin/init.sh && gunicorn marketplace_app.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - ./marketplace_app:/usr/src/app
-      - static:/usr/src/app/static
+      - static:/usr/src/app/staticfiles
       - media:/usr/src/app/media
     expose:
       - 8000
@@ -42,6 +36,47 @@ services:
       - static:/var/www/html/static
       - media:/var/www/html/media
       - ./nginx:/etc/nginx/conf.d
+
+  redis:
+    image: redis:latest
+    expose:
+      - 6379
+
+  celery:
+    build: ./marketplace_app
+    command: celery -A marketplace_app worker -l info
+    env_file:
+      - .env.app.dev
+    restart: on-failure
+    volumes:
+      - ./marketplace_app:/usr/src/app
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - db
+      - redis
+      - web
+
+  beat:
+    build: ./marketplace_app
+    command: celery -A marketplace_app beat -l info
+    env_file:
+      - .env.app.dev
+    restart: on-failure
+    volumes:
+      - ./marketplace_app:/usr/src/app
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - db
+      - redis
+      - web
 
 volumes:
   postgres_data:

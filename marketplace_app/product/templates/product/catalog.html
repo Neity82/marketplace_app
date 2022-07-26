@@ -55,6 +55,7 @@
             <strong class="Section-title">{% translate "filter"|capfirst %}</strong>
           </header>
           <div class="Section-columnContent">
+            {% if produts %}
             <form class="form" name="filter" action="{{ request.get_full_path }}" method="post">
               {% csrf_token %}
               {% if min_price and max_price %}
@@ -125,6 +126,7 @@
                 </div>
               </div>
             </form>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -151,21 +153,25 @@
           </div>
         </div>
         <div class="Cards">
-          {% for product in products|get_items:"0:4" %}
-          <div class="Card">
-            {% include "card.html" %}
-          </div>
-          {% endfor %}
-          {% for product in products|get_items:"4:6" %}
-          <div class="Card hide_md">
-            {% include "card.html" %}
-          </div>
-          {% endfor %}
-          {% for product in products|get_items:"6:8" %}
-          <div class="Card hide_md hide_1450">
-            {% include "card.html" %}
-          </div>
-          {% endfor %}
+          {% if products %}
+            {% for product in products|get_items:"0:4" %}
+            <div class="Card">
+              {% include "card.html" %}
+            </div>
+            {% endfor %}
+            {% for product in products|get_items:"4:6" %}
+            <div class="Card hide_md">
+              {% include "card.html" %}
+            </div>
+            {% endfor %}
+            {% for product in products|get_items:"6:8" %}
+            <div class="Card hide_md hide_1450">
+              {% include "card.html" %}
+            </div>
+            {% endfor %}
+          {% else %}
+            {% translate "there isn't matching products"|capfirst %}
+          {% endif %}
         </div>
         <div class="Pagination">
           <div class="Pagination-ins">

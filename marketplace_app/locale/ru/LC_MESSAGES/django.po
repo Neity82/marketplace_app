@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-21 10:03+0500\n"
+"POT-Creation-Date: 2022-07-23 07:57+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -207,7 +207,7 @@ msgstr "информация"
 
 #: .\info\models.py:11 .\product\models.py:24 .\product\models.py:55
 #: .\product\models.py:144 .\product\models.py:258
-#: .\product\templates\product\catalog.html:71
+#: .\product\templates\product\catalog.html:72
 msgid "title"
 msgstr "название"
 
@@ -463,8 +463,8 @@ msgstr "специальная цена"
 
 #: .\order\models.py:373 .\order\models.py:636
 #: .\order\templates\order\forms\confirm.html:102
-#: .\product\templates\product\catalog.html:64
-#: .\product\templates\product\catalog.html:141
+#: .\product\templates\product\catalog.html:65
+#: .\product\templates\product\catalog.html:143
 #: .\user\templates\user\compare.html:227
 msgid "price"
 msgstr "цена"
@@ -888,7 +888,7 @@ msgstr "товар"
 msgid "products"
 msgstr "товары"
 
-#: .\product\forms.py:16 .\product\templates\product\catalog.html:145
+#: .\product\forms.py:16 .\product\templates\product\catalog.html:147
 msgid "review"
 msgstr "отзывы"
 
@@ -1043,21 +1043,25 @@ msgid "product images"
 msgstr "изображения товара"
 
 #: .\product\templates\product\catalog.html:55
-#: .\product\templates\product\catalog.html:124
+#: .\product\templates\product\catalog.html:125
 msgid "filter"
 msgstr "фильтр"
 
-#: .\product\templates\product\catalog.html:133
+#: .\product\templates\product\catalog.html:135
 msgid "sort by:"
 msgstr "сортировать по"
 
-#: .\product\templates\product\catalog.html:137
+#: .\product\templates\product\catalog.html:139
 msgid "popularity"
 msgstr "популярность"
 
-#: .\product\templates\product\catalog.html:149
+#: .\product\templates\product\catalog.html:151
 msgid "novelty"
 msgstr "новизна"
+
+#: .\product\templates\product\catalog.html:173
+msgid "there isn't matching products"
+msgstr "Не найдено подходящих продуктов"
 
 #: .\product\templates\product\index.html:67
 #: .\user\templates\user\historyorder.html:46
@@ -1583,7 +1587,7 @@ msgstr "все"
 msgid "Only differing characteristics"
 msgstr "Только различающиеся характеристики"
 
-#: .\user\templates\user\compare.html:222 .\user\views.py:210
+#: .\user\templates\user\compare.html:222 .\user\views.py:208
 msgid "Not enough data to compare"
 msgstr "Недостаточно данных для сравнения"
 
@@ -1612,11 +1616,11 @@ msgstr "сохранить"
 msgid "sign up"
 msgstr "регистрация"
 
-#: .\user\views.py:80
+#: .\user\views.py:78
 msgid "Image file too large ( > 2mb )"
 msgstr "Размер файла слишком большой (больше 2 мб)"
 
-#: .\user\views.py:106
+#: .\user\views.py:104
 msgid "Profile saved successfully"
 msgstr "Профиль успешно сохранен"
 

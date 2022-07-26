@@ -207,10 +207,13 @@ LOGIN_REDIRECT_URL = '/'
 REDIS_HOST = "127.0.0.1"
 # REDIS_HOST = "redis"
 REDIS_PORT = "6379"
-CELERY_BROKER_URL = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+CELERY_BROKER_URL = env.get_value(
+    "CELERY_BROKER_URL", default="redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+)
 CELERY_BROKER_TRANSPORT_OPTIONS = {"visibility_timeout": 3600}
-CELERY_RESULT_BACKEND = "redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
-
+CELERY_RESULT_BACKEND = env.get_value(
+    "CELERY_RESULT_BACKEND", default="redis://" + REDIS_HOST + ":" + REDIS_PORT + "/0"
+)
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 IMPORT_EXPORT_CELERY_INIT_MODULE = "marketplace_app.celery"

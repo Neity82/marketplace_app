@@ -172,6 +172,7 @@
                                 .text($element.closest('.selectList-item')
                                     .find('.selectList-text').text())
                         }
+
                         changeTitle($this, $radio.filter('[checked="checked"]'));
                         $radio.on('change', function() {
                             changeTitle($this, $(this));
@@ -544,9 +545,11 @@
                         clearInterval(timeinterval);
                     }
                 }
+
                 updateClock();
                 var timeinterval = setInterval(updateClock, 1000);
             }
+
             return {
                 init: function() {
                     $blocks.each(function() {
@@ -1080,8 +1083,8 @@
 
     // get click-events on all objects with Amount-add class
     // increment product's count in cart
-    $(document).on('click', '.Amount-add', function(event) {
-        let amountButtons = document.querySelectorAll('.Amount-add');
+    $(document).on('click', '.Amount-add, .Amount-remove', function(event) {
+        let amountButtons = document.querySelectorAll('.Amount-add, .Amount-remove');
         event.preventDefault();
         const target = event.currentTarget;
         if (target) {
@@ -1150,7 +1153,7 @@
 
     // get click-events on all objects with Cart-block_seller class
     // change product's shop
-    $(document).on('click', '.Cart-block_seller', function(event) {
+    $('.Cart-block_seller').on('change', function(event) {
         let shopOptions = document.querySelectorAll('.Cart-block_seller');
         event.preventDefault();
         const target = event.currentTarget;
