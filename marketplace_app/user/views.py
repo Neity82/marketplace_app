@@ -3,6 +3,7 @@ import json
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordResetView
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -12,7 +13,12 @@ from django.views import generic
 from order.models import Order
 from payments.models import Payment
 from product.models import AttributeValue
-from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
+from user.forms import (
+    UserProfileForm,
+    CustomAuthenticationForm,
+    CustomUserCreationForm,
+    PasswordResetCustomForm,
+)
 from user.mixin import ResponseDataMixin
 from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis
@@ -287,3 +293,7 @@ class SignUpView(BSModalCreateView):
     template_name = "user/signup.html"
     # success_message = _("Success: Sign up succeeded. You can now Log in.")
     success_url = reverse_lazy("product:home")
+
+
+class PasswordResetViewCustom(PasswordResetView):
+    form_class = PasswordResetCustomForm

@@ -109,6 +109,38 @@
                   {% endfor %}
               </div>
             </div>
+            <div class="ProductCard-footer">
+              <div class="Rating">
+                            <div class="Rating-stars">
+                              {% stars rating=product.rating as range %}
+                              {% for i in range %}
+                              <span class="Rating-review-star Rating-review-star_view">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                  <g>
+                                    <g>
+                                      <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                    </g>
+                                  </g>
+                                </svg>
+                              </span>
+                              {% endfor %}
+                              {% not_stars rating=product.rating as range %}
+                              {% for i in range %}
+                              <span class="Rating-review-star">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
+                                  <g>
+                                    <g>
+                                      <path fill="#ffc000" d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"></path>
+                                    </g>
+                                  </g>
+                                </svg>
+                              </span>
+                              {% endfor %}
+                            </div>
+                            <div class="Rating-title">
+                            </div>
+                          </div>
+            </div>
           </div>
         </div>
         <div class="Tabs Tabs_default">
