@@ -37,6 +37,7 @@ def validate_char_fields(value):
 
 class UserInfoForm(forms.Form):
     """Форма информации о пользователе при оформлении заказа"""
+
     full_name = forms.CharField(
         validators=[
             validate_char_fields,
@@ -73,6 +74,7 @@ class UserInfoForm(forms.Form):
 
 class DeliveryTypeChoices:
     """Варианты типа доставки при оформлении заказа"""
+
     # TODO костыль для миграций, джанго очень не любит подобные обращения в таблицу из модулей
     @db_table_exists("order_deliverytype")
     def get_choices(self) -> list:

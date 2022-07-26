@@ -8,6 +8,7 @@ class CustomUserManager(BaseUserManager):
     где электронная почта - это уникальный идентификатор
     для аутентификации вместо имени пользователя.
     """
+
     def create_user(self, email, password, **extra_fields):
         """
         Создает и сохраняет пользователя

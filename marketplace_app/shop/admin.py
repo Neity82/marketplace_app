@@ -20,7 +20,7 @@ class TranslationAdminMedia:
 @admin.register(Shop)
 class ShopAdmin(TranslationAdmin, TranslationAdminMedia):
     ordering = ("name",)
-    list_display = ("display_image", "name",  "phone")
+    list_display = ("display_image", "name", "phone")
 
     @staticmethod
     def display_image(obj):

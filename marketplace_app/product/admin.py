@@ -72,12 +72,7 @@ class AttributeAdmin(TranslationAdmin, TranslationAdminMedia):
         "help_text",
         "rank",
     )
-    list_filter = (
-        "category",
-        "title_en",
-        "title_ru",
-        "rank"
-    )
+    list_filter = ("category", "title_en", "title_ru", "rank")
 
 
 @admin.register(models.Unit)
@@ -104,7 +99,6 @@ class UnitAdmin(TranslationAdmin, TranslationAdminMedia):
 
 
 class ChildInlineFormSet(BaseInlineFormSet):
-
     def __init__(self, *args, **kwargs):
         super(ChildInlineFormSet, self).__init__(*args, **kwargs)
         self.queryset = self.queryset.order_by("-attribute__rank")
@@ -168,13 +162,8 @@ class CategoryAdmin(TranslationAdmin, TranslationAdminMedia):
         "title_ru",
         "parent",
     )
-    fields = (
-        "title",
-        "parent",
-        "icon",
-        "sort_index"
-    )
-    list_filter = (DeletedFilter, )
+    fields = ("title", "parent", "icon", "sort_index")
+    list_filter = (DeletedFilter,)
 
     @staticmethod
     def admin_manager():
@@ -204,7 +193,7 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "tags_display",
         "category",
         "created_at",
-        "sort_index"
+        "sort_index",
     )
     list_display_links = (
         "id",
@@ -233,8 +222,8 @@ class ProductAdmin(TranslationAdmin, TranslationAdminMedia):
         "is_deleted",
     )
     list_filter = (
-        'category',
-        'is_limited',
+        "category",
+        "is_limited",
         DeletedFilter,
     )
 
@@ -321,13 +310,7 @@ class StockAdmin(admin.ModelAdmin):
 
 @admin.register(models.ProductReview)
 class ProductReviewAdmin(admin.ModelAdmin):
-    list_display = (
-        "date",
-        "user",
-        "product",
-        "text",
-        "rating"
-    )
+    list_display = ("date", "user", "product", "text", "rating")
 
 
 @admin.register(models.ProductImage)

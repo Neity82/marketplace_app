@@ -9,4 +9,7 @@ class SEOTranslationOptions(TranslationOptions):
 
 @register(Banner)
 class BannerTranslationOptions(TranslationOptions):
-    fields = ("title", "text", )
+    fields = (
+        "title",
+        "text",
+    )

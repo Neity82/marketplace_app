@@ -45,7 +45,9 @@ def get_value(product: Product, attr: Attribute) -> Dict[str, Union[str, Unit]]:
     """
 
     value_dict: Dict = {}
-    result: AttributeValue = AttributeValue.objects.filter(product=product, attribute=attr).first()
+    result: AttributeValue = AttributeValue.objects.filter(
+        product=product, attribute=attr
+    ).first()
     if result.value is None:
         value_dict["value"] = "---"
     else:
@@ -76,10 +78,7 @@ def is_hide(compare: QuerySet[CompareEntity], attr: Attribute) -> bool:
     products_id: List[int] = [item.product_id for item in compare]
     list_attr_values: QuerySet[AttributeValue] = AttributeValue.objects.values_list(
         "value", flat=True
-    ).filter(
-        product_id__in=products_id,
-        attribute=attr
-    )
+    ).filter(product_id__in=products_id, attribute=attr)
 
     if len(set(list_attr_values)) == 1:
         hide = True
@@ -100,5 +99,3 @@ def get_count(request: WSGIRequest) -> int:
     compare = Compare.get_compare(request)
     result = Compare.count(compare_id=compare.id)
     return result
-
-

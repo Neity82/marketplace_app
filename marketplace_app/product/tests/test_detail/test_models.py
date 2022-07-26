@@ -4,7 +4,6 @@ from product.tests.test_detail.mixins import ProductDetailMixin, PRODUCT_DATA
 
 
 class ProductListTest(ProductDetailMixin):
-
     def test_product_info(self) -> None:
         for product_num, product_data in PRODUCT_DATA.items():
             product_data_db = Product.objects.get(id=product_num)
@@ -23,10 +22,14 @@ class ProductListTest(ProductDetailMixin):
             attribute_data = AttributeValue.objects.filter(product__id=product_num)
             self.assertEqual(len(attribute_data), 24)
 
-            attributes_list = [(item.attribute.title.capitalize(), str(item.value))
-                               for item in attribute_data]
+            attributes_list = [
+                (item.attribute.title.capitalize(), str(item.value))
+                for item in attribute_data
+            ]
             for attr_title, attr_value in product_data["attributes"].items():
-                self.assertTrue((attr_title.capitalize(), str(attr_value)) in attributes_list)
+                self.assertTrue(
+                    (attr_title.capitalize(), str(attr_value)) in attributes_list
+                )
 
     def test_product_in_shop(self) -> None:
         for product_num, product_data in PRODUCT_DATA.items():

@@ -11,6 +11,7 @@ from modeltranslation.admin import TranslationAdmin
 @admin.register(Banner)
 class BannerAdmin(TranslationAdmin):
     """Класс регистрации в админке модели Banner"""
+
     list_display = ("id", "title", "is_active")
     list_editable = ("is_active",)
 
@@ -27,8 +28,8 @@ class BannerAdmin(TranslationAdmin):
 
 @admin.register(Settings)
 class SettingsAdmin(admin.ModelAdmin):
-    """Класс регистрации в админке модели Settings
-    """
+    """Класс регистрации в админке модели Settings"""
+
     change_list_template = "info/settings_change_list.html"
     list_display = ("__str__", "value")
 
@@ -40,19 +41,17 @@ class SettingsAdmin(admin.ModelAdmin):
         return action_urls + urls
 
     def clear_cache(self, request: HttpRequest) -> HttpResponseRedirect:
-        """Функция для сброса кэша
-        """
+        """Функция для сброса кэша"""
         key: str = request.POST.get("cache", None)
         if key is not None:
             for key_string in list(cache._cache.keys()):
-                _, _, cache_key = key_string.split(sep=':')
+                _, _, cache_key = key_string.split(sep=":")
                 if key in cache_key:
                     cache.delete(cache_key)
         return HttpResponseRedirect(
             reverse(
                 "admin:{app_label}_{model_name}_changelist".format(
-                    app_label=self.opts.app_label,
-                    model_name=self.opts.model_name
+                    app_label=self.opts.app_label, model_name=self.opts.model_name
                 )
             )
         )
