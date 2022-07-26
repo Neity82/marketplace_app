@@ -13,8 +13,12 @@ from django.views import generic
 from order.models import Order
 from payments.models import Payment
 from product.models import AttributeValue
-from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm, \
-    PasswordResetCustomForm
+from user.forms import (
+    UserProfileForm,
+    CustomAuthenticationForm,
+    CustomUserCreationForm,
+    PasswordResetCustomForm,
+)
 from user.mixin import ResponseDataMixin
 from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis

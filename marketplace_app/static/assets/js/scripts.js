@@ -1081,46 +1081,6 @@
         return quantityText
     }
 
-    // get click-events on all objects with Amount-add class
-    // increment product's count in cart
-    // $(document).on('click', '.Amount-add, .Amount-remove', function(event) {
-    //     let amountButtons = document.querySelectorAll('.Amount-add, .Amount-remove');
-    //     event.preventDefault();
-    //     const target = event.currentTarget;
-    //     if (target) {
-    //         amountButtons.forEach((item) => {
-    //             if (target === item) {
-    //                 let InputElement = target.parentNode.getElementsByTagName('input').amount;
-    //                 let quantity = InputElement.value;
-    //                 let maxQuantity = InputElement.max;
-    //                 if (parseInt(quantity) <= parseInt(maxQuantity)) {
-    //                     $.ajax({
-    //                         type: 'POST',
-    //                         beforeSend: setCSRFHeader,
-    //                         url: target.href,
-    //                         data: {
-    //                             'stock_id': target.value,
-    //                             'quantity': quantity,
-    //                             'method': 'post'
-    //                         },
-    //                         success: function(response) {
-    //                             popUp(response.message, response.type);
-    //                             setTimeout(() => window.location.reload(), 1000);
-    //                         },
-    //                         error: function(xhr, errmsg, err) {
-    //                             popUp(err, 'error');
-    //                         }
-    //                     });
-    //                 } else {
-    //                     setInputValue(InputElement, maxQuantity);
-    //                     let quantityText = getQuantityFromParentNode(InputElement);
-    //                     alertify.warning(`${quantityText}!`);
-    //                 }
-    //             }
-    //         });
-    //     }
-    //
-    // });
 
     // get click-events on all objects with Cart-delete class
     // delete product from cart
