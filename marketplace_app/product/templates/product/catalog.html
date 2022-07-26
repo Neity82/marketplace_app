@@ -55,7 +55,7 @@
             <strong class="Section-title">{% translate "filter"|capfirst %}</strong>
           </header>
           <div class="Section-columnContent">
-            {% if produts %}
+            {% if products %}
             <form class="form" name="filter" action="{{ request.get_full_path }}" method="post">
               {% csrf_token %}
               {% if min_price and max_price %}
