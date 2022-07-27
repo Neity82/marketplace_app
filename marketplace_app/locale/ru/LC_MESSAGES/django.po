@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-23 07:57+0500\n"
+"POT-Creation-Date: 2022-07-26 11:04+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -294,7 +294,7 @@ msgstr "SEO элемент"
 msgid "SEO items"
 msgstr "SEO элементы"
 
-#: .\info\models.py:110 .\order\models.py:364 .\shop\forms.py:22
+#: .\info\models.py:110 .\order\models.py:414 .\shop\forms.py:22
 #: .\shop\models.py:8
 msgid "name"
 msgstr "имя"
@@ -394,14 +394,15 @@ msgstr "список баннеров"
 msgid "product detail"
 msgstr "детальная страница товара"
 
-#: .\order\apps.py:8 .\order\models.py:508 .\order\models.py:631
+#: .\order\apps.py:8 .\order\models.py:558 .\order\models.py:680
 #: .\order\templates\order\oneorder.html:21
 #: .\order\templates\order\oneorder.html:30 .\payments\models.py:28
+#: .\user\templates\user\account.html:58
 #: .\user\templates\user\historyorder.html:44
 msgid "order"
 msgstr "заказ"
 
-#: .\order\apps.py:9 .\order\models.py:509
+#: .\order\apps.py:9 .\order\models.py:559
 msgid "orders"
 msgstr "заказы"
 
@@ -434,7 +435,7 @@ msgstr "сущность в корзине"
 msgid "cart entities"
 msgstr "сущности в корзине"
 
-#: .\order\models.py:57 .\order\models.py:450 .\product\models.py:661
+#: .\order\models.py:57 .\order\models.py:500 .\product\models.py:661
 #: .\user\apps.py:8 .\user\models.py:72 .\user\models.py:148
 #: .\user\models.py:265
 msgid "user"
@@ -448,20 +449,20 @@ msgstr "устройство"
 msgid "cookie device value"
 msgstr "значение устройства cookie"
 
-#: .\order\models.py:71 .\order\templates\order\cart.html:25
+#: .\order\models.py:72 .\order\templates\order\cart.html:25
 #: .\order\templates\order\cart.html:32
 msgid "cart"
 msgstr "корзина"
 
-#: .\order\models.py:72
+#: .\order\models.py:73
 msgid "carts"
 msgstr "корзины"
 
-#: .\order\models.py:368
+#: .\order\models.py:418
 msgid "special price"
 msgstr "специальная цена"
 
-#: .\order\models.py:373 .\order\models.py:636
+#: .\order\models.py:423 .\order\models.py:685
 #: .\order\templates\order\forms\confirm.html:102
 #: .\product\templates\product\catalog.html:65
 #: .\product\templates\product\catalog.html:143
@@ -469,107 +470,107 @@ msgstr "специальная цена"
 msgid "price"
 msgstr "цена"
 
-#: .\order\models.py:378
+#: .\order\models.py:428
 msgid "cart price"
 msgstr "цена корзины"
 
-#: .\order\models.py:382 .\order\models.py:400
+#: .\order\models.py:432 .\order\models.py:450
 #: .\order\templates\order\forms\confirm.html:43
 #: .\order\templates\order\order.html:51
 msgid "delivery type"
 msgstr "тип доставки"
 
-#: .\order\models.py:383
+#: .\order\models.py:433
 msgid "delivery types"
 msgstr "типы доставки"
 
-#: .\order\models.py:409
+#: .\order\models.py:459
 msgid "delivery item"
 msgstr "элемент доставки"
 
-#: .\order\models.py:410
+#: .\order\models.py:460
 msgid "delivery items"
 msgstr "элементы доставки"
 
-#: .\order\models.py:455 .\order\templates\order\oneorder.html:46
+#: .\order\models.py:505 .\order\templates\order\oneorder.html:46
 msgid "order date"
 msgstr "дата заказа"
 
-#: .\order\models.py:461 .\order\templates\order\forms\confirm.html:106
+#: .\order\models.py:511 .\order\templates\order\forms\confirm.html:106
 #: .\order\templates\order\oneorder.html:140 .\templates\footer.html:50
 msgid "delivery"
 msgstr "доставка"
 
-#: .\order\models.py:466
+#: .\order\models.py:516
 msgid "Card"
 msgstr "Карта"
 
-#: .\order\models.py:467
+#: .\order\models.py:517
 msgid "Some accounts"
 msgstr "Некоторый аккаунт"
 
-#: .\order\models.py:472 .\order\templates\order\order.html:56
+#: .\order\models.py:522 .\order\templates\order\order.html:56
 msgid "payment type"
 msgstr "тип оплаты"
 
-#: .\order\models.py:477
+#: .\order\models.py:527
 msgid "comment"
 msgstr "комментарий"
 
-#: .\order\models.py:481
+#: .\order\models.py:531
 msgid "Paid"
 msgstr "Оплачен"
 
-#: .\order\models.py:482
+#: .\order\models.py:532
 msgid "Not paid"
 msgstr "Не оплачен"
 
-#: .\order\models.py:483
+#: .\order\models.py:533
 msgid "Delivered"
 msgstr "Доставлен"
 
-#: .\order\models.py:484
+#: .\order\models.py:534
 msgid "Received"
 msgstr "Получен"
 
-#: .\order\models.py:490
+#: .\order\models.py:540
 msgid "state"
 msgstr "статус"
 
-#: .\order\models.py:495
+#: .\order\models.py:545
 msgid ""
 "Payment has not been completed, because you are suspected of intolerance"
 msgstr "Оплата не была завершена, потому что вы подозреваетесь в нетерпимости"
 
-#: .\order\models.py:497
+#: .\order\models.py:547
 msgid "There are not enough funds in your account"
 msgstr "На вашем счете недостаточно средств"
 
-#: .\order\models.py:498
+#: .\order\models.py:548
 msgid "Oops... Something went wrong"
 msgstr "Упс... что-то пошло не так"
 
-#: .\order\models.py:504
+#: .\order\models.py:554
 msgid "error"
 msgstr "ошибка"
 
-#: .\order\models.py:625 .\product\models.py:627
+#: .\order\models.py:674 .\product\models.py:627
 msgid "stock"
 msgstr "склад"
 
-#: .\order\models.py:641
+#: .\order\models.py:690
 msgid "discounted price"
 msgstr "цена позиции со скидкой"
 
-#: .\order\models.py:645
+#: .\order\models.py:694
 msgid "count"
 msgstr "количество"
 
-#: .\order\models.py:649
+#: .\order\models.py:698
 msgid "order entity"
 msgstr "позиция заказа"
 
-#: .\order\models.py:650
+#: .\order\models.py:699
 msgid "orders entity"
 msgstr "позиции заказа"
 
@@ -1064,6 +1065,7 @@ msgid "there isn't matching products"
 msgstr "Не найдено подходящих продуктов"
 
 #: .\product\templates\product\index.html:67
+#: .\user\templates\user\account.html:60
 #: .\user\templates\user\historyorder.html:46
 msgid "from"
 msgstr "от"

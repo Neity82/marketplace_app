@@ -55,9 +55,9 @@
                   <div class="row">
                     <div class="row-block">
                       <a class="Order-title" href="{% url 'order:order-detail' pk=last_order.pk %}">
-                        Заказ&#32;
+                        {% trans "order"|capfirst %}&#32;
                         <span class="Order-numberOrder">№{{ last_order.id }}</span>
-                        &#32;от&#32;
+                        &#32;{% trans "from" %}&#32;
                         <span class="Order-dateOrder">{{ last_order.datetime.date|date:"d.m.Y" }}</span>
                       </a>
                       <div class="Account-editLink">
