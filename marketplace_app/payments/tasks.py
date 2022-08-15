@@ -11,7 +11,7 @@ MESSAGES = {
         "Вам отключили SWIFT.",
         "Вы в санкционном списке США.",
     ],
-    "success": "Оплата прошла успешно"
+    "success": "Оплата прошла успешно",
 }
 
 
@@ -32,6 +32,8 @@ def check_payments_statuses():
 
             if acquirer_resp == 5:
                 payment.status = "error"
-                payment.message = MESSAGES["error"][random.randint(0, len(MESSAGES["error"]) - 1)]
+                payment.message = MESSAGES["error"][
+                    random.randint(0, len(MESSAGES["error"]) - 1)
+                ]
 
         Payment.objects.bulk_update(payments, fields=["status", "message"])

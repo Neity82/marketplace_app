@@ -52,9 +52,11 @@ def get_addition_info(request_info) -> Dict[str, str]:
         "meta_title": "",
         "meta_description": "",
     }
-    if "pk" in request_info.kwargs and \
-            app_name in addition_info_map and \
-            url_name in addition_info_map[app_name]:
+    if (
+        "pk" in request_info.kwargs
+        and app_name in addition_info_map
+        and url_name in addition_info_map[app_name]
+    ):
         pk: int = request_info.kwargs["pk"]
         addition_info = addition_info_map[app_name][url_name](pk)
     return addition_info

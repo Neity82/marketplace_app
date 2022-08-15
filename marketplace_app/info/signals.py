@@ -10,4 +10,3 @@ from info.models import Banner
 def clear_banner_list_cache(sender, instance, **kwargs):
     key = make_template_fragment_key("banner_list")
     cache.delete(key)
-

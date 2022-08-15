@@ -151,10 +151,10 @@ class RemoveFromCartView(CartMixin):
 
 class OrderDetail(generic.DetailView):
     """
-        Представление страницы oneorder.html
+    Представление страницы oneorder.html
 
-        - детальная информация заказа
-        - возможность оплатить заказ, если не оплачен
+    - детальная информация заказа
+    - возможность оплатить заказ, если не оплачен
     """
 
     model = order_models.Order
@@ -164,8 +164,7 @@ class OrderDetail(generic.DetailView):
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
 
-        if (not obj.user_id == self.request.user and not
-                self.request.user.is_superuser):
+        if not obj.user_id == self.request.user and not self.request.user.is_superuser:
             raise Http404
 
         return obj
@@ -284,7 +283,11 @@ class OrderView(SessionWizardView):
         """Получаем индекс шага"""
         index = super().get_step_index(step)
         if index is None and step in (self.confirm_step, self.done_step):
-            return self.confirm_step_index if step == self.confirm_step else self.done_step_index
+            return (
+                self.confirm_step_index
+                if step == self.confirm_step
+                else self.done_step_index
+            )
         return index
 
     def get_step_number(self, step: str = None) -> int:
@@ -309,7 +312,7 @@ class OrderView(SessionWizardView):
         def remove_prefix(text: str, prefix: str) -> str:
             if text and prefix:
                 if text.startswith(prefix):
-                    return text[len(prefix) + 1:]
+                    return text[len(prefix) + 1 :]
                 return text
 
         goto_step = self.storage.current_step
@@ -400,7 +403,9 @@ class OrderView(SessionWizardView):
         cart = context.get(self.cart_key)
 
         delivery_type_pk = delivery_data.pop("delivery_type")
-        delivery_type_obj = order_models.DeliveryType.objects.filter(id=delivery_type_pk).first()
+        delivery_type_obj = order_models.DeliveryType.objects.filter(
+            id=delivery_type_pk
+        ).first()
         delivery_price = order_models.Delivery.get_delivery_sum(
             cart=cart, delivery_type_obj=delivery_type_obj
         )
@@ -412,7 +417,7 @@ class OrderView(SessionWizardView):
             cart=cart,
             delivery=delivery_obj,
             payment_type=payment_data.get("payment_type"),
-            user=getattr(self.request, 'user'),
+            user=getattr(self.request, "user"),
         )
         self.storage.reset()
         kwargs.update(pk=getattr(order, "id"))

@@ -16,10 +16,7 @@ def cart_init_data(request: WSGIRequest) -> dict:
     user = getattr(request, "user", None)
     device = request.COOKIES.get("device", None)
     assert user, "can't get user from request!"
-    return {
-        "user": user,
-        "device": device
-    }
+    return {"user": user, "device": device}
 
 
 class CartMixin(View):

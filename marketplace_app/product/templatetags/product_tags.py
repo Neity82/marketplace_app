@@ -13,10 +13,10 @@ def price_format(price: int) -> str:
 
     Пример: int(633,33333333) -> str(633.33)
     """
-    return '{:.2f}'.format(price)
+    return "{:.2f}".format(price)
 
 
-@register.simple_tag(name='get_image')
+@register.simple_tag(name="get_image")
 def get_image(category: Category) -> ImageFieldFile:
     """
     Функция принимает категорию и возвращает изображение
@@ -27,7 +27,5 @@ def get_image(category: Category) -> ImageFieldFile:
     :return: Изображение
     :rtype: ImageFieldFile
     """
-    product: Product = Product.objects.filter(
-        category=category
-    ).first()
+    product: Product = Product.objects.filter(category=category).first()
     return product.image

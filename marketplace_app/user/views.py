@@ -3,6 +3,7 @@ import json
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordResetView
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse, reverse_lazy
@@ -12,7 +13,12 @@ from django.views import generic
 from order.models import Order
 from payments.models import Payment
 from product.models import AttributeValue
-from user.forms import UserProfileForm, CustomAuthenticationForm, CustomUserCreationForm
+from user.forms import (
+    UserProfileForm,
+    CustomAuthenticationForm,
+    CustomUserCreationForm,
+    PasswordResetCustomForm,
+)
 from user.mixin import ResponseDataMixin
 from user.models import CustomUser, UserProductView, Compare
 from user.utils import full_name_analysis
@@ -37,8 +43,9 @@ class UserAccount(LoginRequiredMixin, generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["page_active"] = "account_active"
         context["last_order"] = Order.get_last_order(user=self.request.user)
-        context["product_view"] = UserProductView.get_product_view(user=self.request.user,
-                                                                   limit=3)
+        context["product_view"] = UserProductView.get_product_view(
+            user=self.request.user, limit=3
+        )
         context["payment"] = Payment.objects.filter(order=context["last_order"])
         return context
 
@@ -61,11 +68,13 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(UserProfile, self).get_form_kwargs()
-        kwargs.update({
-            "initial": {
-                "full_name": self.request.user.get_full_name,
+        kwargs.update(
+            {
+                "initial": {
+                    "full_name": self.request.user.get_full_name,
+                }
             }
-        })
+        )
         return kwargs
 
     def form_valid(self, form):
@@ -74,11 +83,14 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         if self.request.FILES:
             avatar = self.request.FILES["avatar"]
             if avatar.size > 2 * 1024 * 1024:
-                messages.error(self.request,
-                               _("Image file too large ( > 2mb )"),
-                               extra_tags="error")
-                return HttpResponseRedirect(reverse("user:user_profile",
-                                                    kwargs={"pk": user.pk}))
+                messages.error(
+                    self.request,
+                    _("Image file too large ( > 2mb )"),
+                    extra_tags="error",
+                )
+                return HttpResponseRedirect(
+                    reverse("user:user_profile", kwargs={"pk": user.pk})
+                )
             user.avatar = avatar
         else:
             avatar = self.request.user.avatar
@@ -104,7 +116,9 @@ class UserProfile(LoginRequiredMixin, generic.UpdateView):
         messages_text = _("Profile saved successfully")
         messages.success(self.request, messages_text, extra_tags="success")
 
-        return HttpResponseRedirect(reverse('user:user_profile', kwargs={"pk": user.pk}))
+        return HttpResponseRedirect(
+            reverse("user:user_profile", kwargs={"pk": user.pk})
+        )
 
 
 class HistoryOrders(LoginRequiredMixin, generic.ListView):
@@ -158,27 +172,24 @@ class HistoryViews(LoginRequiredMixin, ResponseDataMixin, generic.ListView):
 
         product_id = kwargs["pk"]
         success, message = UserProductView.add_object(
-            user=self.request.user,
-            product=product_id
+            user=self.request.user, product=product_id
         )
 
         response_data = self.prepare_response_data(
-            success=success,
-            message=message.capitalize()
+            success=success, message=message.capitalize()
         )
 
         return HttpResponse(
-            json.dumps(response_data, default=str),
-            content_type="application/json"
+            json.dumps(response_data, default=str), content_type="application/json"
         )
 
 
 class CompareProduct(ResponseDataMixin, generic.ListView):
     """
-        Представление страницы compare.html
+    Представление страницы compare.html
 
-        - список товаров для сравнения,
-        ограничен 4 товарами
+    - список товаров для сравнения,
+    ограничен 4 товарами
     """
 
     model = Compare
@@ -202,7 +213,8 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
 
         if self.object_list.count() > 0:
             context["attributes"] = AttributeValue.get_all_attributes_of_product(
-                self.object_list[0].product_id)
+                self.object_list[0].product_id
+            )
 
         else:
             messages_text = _("Not enough data to compare")
@@ -231,14 +243,11 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
         count = Compare.count(compare_id=compare.id)
 
         response_data = self.prepare_response_data(
-            success=success,
-            message=message.capitalize(),
-            head_count=count
+            success=success, message=message.capitalize(), head_count=count
         )
 
         return HttpResponse(
-            json.dumps(response_data, default=str),
-            content_type="application/json"
+            json.dumps(response_data, default=str), content_type="application/json"
         )
 
     def delete(self, request: WSGIRequest, *args, **kwargs) -> HttpResponse:
@@ -250,14 +259,11 @@ class CompareProduct(ResponseDataMixin, generic.ListView):
         count = Compare.count(compare_id=compare.id)
 
         response_data = self.prepare_response_data(
-            success=success,
-            message=message.capitalize(),
-            head_count=count
+            success=success, message=message.capitalize(), head_count=count
         )
 
         return HttpResponse(
-            json.dumps(response_data, default=str),
-            content_type="application/json"
+            json.dumps(response_data, default=str), content_type="application/json"
         )
 
 
@@ -277,13 +283,17 @@ class CustomLoginView(BSModalLoginView):
 
 class SignUpView(BSModalCreateView):
     """
-        Представление страницы signup.html
+    Представление страницы signup.html
 
-        - регистрация пользователя, представляет собой
-        всплывающее окно
+    - регистрация пользователя, представляет собой
+    всплывающее окно
     """
 
     form_class = CustomUserCreationForm
     template_name = "user/signup.html"
     # success_message = _("Success: Sign up succeeded. You can now Log in.")
     success_url = reverse_lazy("product:home")
+
+
+class PasswordResetViewCustom(PasswordResetView):
+    form_class = PasswordResetCustomForm

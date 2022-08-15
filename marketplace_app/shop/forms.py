@@ -7,8 +7,7 @@ from info.models import Settings
 
 
 class FeedBackForm(forms.Form):
-    """Форма обратной связи на странице контактов
-    """
+    """Форма обратной связи на странице контактов"""
 
     name = forms.CharField(
         min_length=5,
@@ -19,9 +18,9 @@ class FeedBackForm(forms.Form):
                 "class": "form-input",
                 "id": "name",
                 "name": "name",
-                "placeholder": ugettext_lazy("name")
+                "placeholder": ugettext_lazy("name"),
             }
-        )
+        ),
     )
 
     email = forms.CharField(
@@ -33,9 +32,9 @@ class FeedBackForm(forms.Form):
                 "class": "form-input",
                 "id": "mail",
                 "name": "mail",
-                "placeholder": ugettext_lazy("e-mail")
+                "placeholder": ugettext_lazy("e-mail"),
             }
-        )
+        ),
     )
 
     site = forms.CharField(
@@ -47,9 +46,9 @@ class FeedBackForm(forms.Form):
                 "class": "form-input",
                 "id": "site",
                 "name": "site",
-                "placeholder": ugettext_lazy("website")
+                "placeholder": ugettext_lazy("website"),
             }
-        )
+        ),
     )
 
     message = forms.CharField(
@@ -61,44 +60,47 @@ class FeedBackForm(forms.Form):
                 "class": "form-textarea",
                 "id": "message",
                 "name": "message",
-                "placeholder": ugettext_lazy("message")
+                "placeholder": ugettext_lazy("message"),
             }
-        )
+        ),
     )
 
     def send_email(self) -> None:
-        """Метод отправки письма из формы обратной связи
-        """
+        """Метод отправки письма из формы обратной связи"""
         connection: "EmailBackend" = None
         if DEBUG:
             connection = mail.get_connection(
                 backend="django.core.mail.backends.console.EmailBackend"
             )
         else:
-            host: str = Settings.objects.only("value")\
-                                        .get(name="feedback_mailing_host")\
-                                        .value
-            port: str = Settings.objects.only("value")\
-                                        .get(name="feedback_mailing_port")\
-                                        .value
-            username: str = \
-                Settings.objects.only("value")\
-                                .get(name="feedback_mailing_login")\
-                                .value
-            password: str = \
-                Settings.objects.only("value")\
-                                .get(name="feedback_mailing_password")\
-                                .value
-            tls_str: str = Settings.objects.only("value")\
-                                           .get(name="feedback_mailing_tls_usage")\
-                                           .value
+            host: str = (
+                Settings.objects.only("value").get(name="feedback_mailing_host").value
+            )
+            port: str = (
+                Settings.objects.only("value").get(name="feedback_mailing_port").value
+            )
+            username: str = (
+                Settings.objects.only("value").get(name="feedback_mailing_login").value
+            )
+            password: str = (
+                Settings.objects.only("value")
+                .get(name="feedback_mailing_password")
+                .value
+            )
+            tls_str: str = (
+                Settings.objects.only("value")
+                .get(name="feedback_mailing_tls_usage")
+                .value
+            )
             tls: bool = True if tls_str.lower() == "y" else False
-            ssl_str: str = \
-                Settings.objects.only("value")\
-                                .get(name="feedback_mailing_ssl_usage")\
-                                .value
+            ssl_str: str = (
+                Settings.objects.only("value")
+                .get(name="feedback_mailing_ssl_usage")
+                .value
+            )
             ssl: bool = True if ssl_str.lower() == "y" else False
             from django.core.mail.backends.smtp import EmailBackend
+
             connection = EmailBackend(
                 host=host,
                 port=port,
@@ -107,12 +109,11 @@ class FeedBackForm(forms.Form):
                 use_tls=tls,
                 use_ssl=ssl,
                 timeout=10,
-                fail_silently=False
+                fail_silently=False,
             )
-        reciever: str = \
-            Settings.objects.only("value")\
-                            .get(name="feedback_mailing_email")\
-                            .value
+        reciever: str = (
+            Settings.objects.only("value").get(name="feedback_mailing_email").value
+        )
         body: str = "{name}\n{site}\n{msg}".format(
             name=self.cleaned_data["name"],
             site=self.cleaned_data["site"],

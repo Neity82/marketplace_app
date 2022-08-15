@@ -13,6 +13,7 @@ Product = apps.get_model(app_label="product", model_name="Product")
 
 class ShopListView(generic.ListView):
     """Представление списка магазинов"""
+
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = "shops"
@@ -21,6 +22,7 @@ class ShopListView(generic.ListView):
 
 class ShopDetailView(generic.DetailView):
     """Представление объекта магазина"""
+
     model = Shop
     queryset = Shop.objects.all()
     context_object_name = "shop"
@@ -28,9 +30,7 @@ class ShopDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         kwargs.setdefault("view", self)
         kwargs.update({"shop": self.get_object()})
-        kwargs.update(
-            {"products": Product.get_popular(shop=self.get_object())}
-        )
+        kwargs.update({"products": Product.get_popular(shop=self.get_object())})
         kwargs.update(
             {"stocks": Stock.get_products_in_stock_by_shop(self.get_object())},
         )
@@ -40,6 +40,7 @@ class ShopDetailView(generic.DetailView):
 
 class ContactsDetailView(generic.DetailView):
     """Класс рендеринта страницы контактов по запросу методом GET"""
+
     template_name = "shop/contacts_detail.html"
     context_object_name = "shop"
 
@@ -56,6 +57,7 @@ class ContactsDetailView(generic.DetailView):
 
 class ContactsFormView(generic.detail.SingleObjectMixin, generic.FormView):
     """Класс рендеринга страницы контактов магазина по запросу методом POST"""
+
     template_name = "shop/contacts_detail.html"
     context_object_name = "shop"
     form_class = FeedBackForm
